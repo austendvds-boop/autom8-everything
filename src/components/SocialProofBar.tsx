@@ -23,7 +23,7 @@ export default function SocialProofBar() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          Trusted by 500+ businesses
+          Trusted by 25+ businesses
         </motion.p>
         
         <div className="relative overflow-hidden">

@@ -84,7 +84,7 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Join 500+ businesses saving 20+ hours per week
+          Join 25+ businesses saving 20+ hours per week
         </motion.p>
 
         <motion.div
