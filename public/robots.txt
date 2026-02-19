@@ -1,0 +1,5 @@
+# robots.txt for autom8-everything
+User-agent: *
+Allow: /
+
+Sitemap: https://autom8-everything.vercel.app/sitemap.xml

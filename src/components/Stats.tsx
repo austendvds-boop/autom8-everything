@@ -10,8 +10,8 @@ type Stat = {
 };
 
 const stats: Stat[] = [
-  { value: 10000, suffix: "+", label: "Hours Saved This Year" },
-  { value: 500, suffix: "+", label: "Businesses Automated" },
+  { value: 500, suffix: "+", label: "Hours Saved This Year" },
+  { value: 25, suffix: "+", label: "Businesses Automated" },
   { value: 99.9, suffix: "%", label: "Uptime Guaranteed" },
   { value: 4.9, suffix: "/5", label: "Average Rating" },
 ];
