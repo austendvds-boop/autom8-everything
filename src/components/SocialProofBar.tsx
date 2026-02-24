@@ -3,12 +3,12 @@
 import { motion } from "framer-motion";
 
 const logos = [
-  { name: "TechCorp", color: "#8B5CF6" },
-  { name: "DataFlow", color: "#06B6D4" },
-  { name: "CloudSync", color: "#A78BFA" },
-  { name: "AutoMax", color: "#10B981" },
-  { name: "SmartOps", color: "#F59E0B" },
-  { name: "Innovate", color: "#EF4444" },
+  { name: "Home Services", color: "#8B5CF6" },
+  { name: "Healthcare", color: "#06B6D4" },
+  { name: "Legal", color: "#A78BFA" },
+  { name: "Real Estate", color: "#10B981" },
+  { name: "Contractors", color: "#F59E0B" },
+  { name: "Local Retail", color: "#EF4444" },
 ];
 
 const duplicatedLogos = [...logos, ...logos, ...logos];
@@ -23,7 +23,7 @@ export default function SocialProofBar() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          Trusted by 25+ businesses
+Trusted by local businesses across service industries
         </motion.p>
         
         <div className="relative overflow-hidden">

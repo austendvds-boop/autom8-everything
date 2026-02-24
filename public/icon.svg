@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Autom8 mark">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="#0A0A0F" />
+  <rect x="8" y="8" width="112" height="112" rx="24" fill="url(#g)" opacity="0.18" />
+  <g fill="none" stroke-linecap="round" stroke-width="13">
+    <ellipse cx="64" cy="42" rx="24" ry="18" stroke="#8B5CF6" />
+    <ellipse cx="64" cy="84" rx="27" ry="20" stroke="#06B6D4" />
+  </g>
+  <rect x="1" y="1" width="126" height="126" rx="29" fill="none" stroke="rgba(255,255,255,0.18)" />
+</svg>

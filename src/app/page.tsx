@@ -1,32 +1,20 @@
-"use client";
+import type { Metadata } from "next";
+import HomePageClient from "./HomePageClient";
+import { buildMetadata } from "@/lib/seo";
 
-import { ReactLenis } from "lenis/react";
-import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
-import SocialProofBar from "@/components/SocialProofBar";
-import ServicesBento from "@/components/ServicesBento";
-import HowItWorks from "@/components/HowItWorks";
-import Testimonials from "@/components/Testimonials";
-import Stats from "@/components/Stats";
-import FAQ from "@/components/FAQ";
-import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
+export const metadata: Metadata = buildMetadata({
+  title: "Websites and Tools That Get You More Calls and Booked Jobs",
+  description:
+    "We build the site, set up smart follow-up, and run monthly SEO so local businesses get more calls, more booked jobs, and less missed follow-up.",
+  path: "/",
+  keywords: [
+    "local business website design",
+    "lead follow up system",
+    "small business SEO services",
+    "get more calls from website",
+  ],
+});
 
 export default function Home() {
-  return (
-    <ReactLenis root>
-      <main className="min-h-screen bg-[#0A0A0F]">
-        <Navigation />
-        <Hero />
-        <SocialProofBar />
-        <ServicesBento />
-        <HowItWorks />
-        <Testimonials />
-        <Stats />
-        <FAQ />
-        <CTA />
-        <Footer />
-      </main>
-    </ReactLenis>
-  );
+  return <HomePageClient />;
 }

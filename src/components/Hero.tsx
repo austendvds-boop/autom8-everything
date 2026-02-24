@@ -1,29 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function Hero() {
-  const [typedText, setTypedText] = useState("");
-  const fullText = "everything";
-
-  useEffect(() => {
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index <= fullText.length) {
-        setTypedText(fullText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 100);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden mesh-bg">
-      {/* Animated gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute w-[600px] h-[600px] rounded-full opacity-30"
@@ -32,10 +15,7 @@ export default function Hero() {
             top: "10%",
             left: "10%",
           }}
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-          }}
+          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
@@ -45,81 +25,49 @@ export default function Hero() {
             bottom: "10%",
             right: "10%",
           }}
-          animate={{
-            x: [0, -30, 0],
-            y: [0, -50, 0],
-          }}
+          animate={{ x: [0, -30, 0], y: [0, -50, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        {/* Main headline */}
-        <div className="mb-6">
-          <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-semibold tracking-tight leading-none" style={{ fontFamily: 'var(--font-playfair), serif' }}>
-            <motion.span
-              className="text-white"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              autom
-            </motion.span>
-            <motion.span
-              className="text-[#8B5CF6] inline-block"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1,
-                filter: [
-                  "drop-shadow(0 0 10px rgba(139, 92, 246, 0.5))",
-                  "drop-shadow(0 0 25px rgba(139, 92, 246, 0.8))",
-                  "drop-shadow(0 0 10px rgba(139, 92, 246, 0.5))",
-                ],
-              }}
-              transition={{ 
-                duration: 0.8, 
-                delay: 0.3,
-                scale: { type: "spring", stiffness: 200, damping: 15 },
-                filter: { duration: 2, repeat: Infinity }
-              }}
-            >
-              8
-            </motion.span>
-            <br />
-            <motion.span
-              className="text-white"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              {typedText}
-              <motion.span
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 0.8, repeat: Infinity }}
-                className="inline-block w-1 h-[0.7em] bg-[#8B5CF6] ml-1 align-middle"
-              />
-            </motion.span>
-          </h1>
-        </div>
+        <motion.div
+          className="mb-8 flex justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+        >
+          <BrandLogo
+            size="md"
+            showDescriptor={false}
+            className="rounded-full border border-white/10 bg-black/30 px-3 py-2 backdrop-blur"
+          />
+        </motion.div>
 
-        {/* Subheadline */}
+        <motion.h1
+          className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-tight mb-6"
+          style={{ fontFamily: "var(--font-playfair), serif" }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          Websites and tools that get you more calls and booked jobs.
+        </motion.h1>
+
         <motion.p
-          className="text-lg md:text-xl text-[#A1A1AA] max-w-2xl mx-auto mb-10"
+          className="text-lg md:text-xl text-[#A1A1AA] max-w-3xl mx-auto mb-10"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
-          From chaos to autopilot. The automation system for modern businesses.
+          We build the site, set up smart follow-up, and run monthly SEO so your business keeps growing.
         </motion.p>
 
-        {/* CTA Buttons */}
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.35 }}
         >
           <Link href="/contact">
             <motion.button
@@ -128,10 +76,10 @@ export default function Hero() {
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              Start Free Trial
+              Book a Strategy Call
             </motion.button>
           </Link>
-          
+
           <Link href="/services">
             <motion.button
               className="group px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-lg flex items-center gap-2"
@@ -148,26 +96,6 @@ export default function Hero() {
               </motion.span>
             </motion.button>
           </Link>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 rounded-full border-2 border-white/30 flex justify-center pt-2"
-          >
-            <motion.div
-              className="w-1.5 h-3 rounded-full bg-[#8B5CF6]"
-              animate={{ y: [0, 12, 0], opacity: [1, 0.5, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </motion.div>
         </motion.div>
       </div>
     </section>

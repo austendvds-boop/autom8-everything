@@ -74,7 +74,7 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          Ready to Automate Everything?
+Want more leads without more chaos?
         </motion.h2>
 
         <motion.p
@@ -84,10 +84,11 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Join 25+ businesses saving 20+ hours per week
+          Book a quick call and we will map out the fastest way to get better leads and stop missed follow-up.
         </motion.p>
 
         <motion.div
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -96,9 +97,15 @@ export default function CTA() {
           <Link href="/contact">
             <MagneticButton>
               <span className="inline-block px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow">
-                Start Your Free Trial
+Book Your Strategy Call
               </span>
             </MagneticButton>
+          </Link>
+          <Link
+            href="/services"
+            className="inline-block px-8 py-4 rounded-full border border-white/40 text-white font-semibold text-lg hover:bg-white/10 transition-colors"
+          >
+See Services & Pricing
           </Link>
         </motion.div>
 
@@ -109,7 +116,7 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          No credit card required · 14-day free trial · Cancel anytime
+          Simple plan: launch first, then monthly support as you grow.
         </motion.p>
       </div>
     </section>

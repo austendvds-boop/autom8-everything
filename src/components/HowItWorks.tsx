@@ -13,28 +13,23 @@ type Step = {
 const steps: Step[] = [
   {
     number: "01",
-    title: "We Discover",
-    description: "We analyze your current workflows and identify automation opportunities.",
+    title: "Quick Call",
+    description: "We learn how you get leads now and where calls or jobs are slipping through.",
     icon: Search,
   },
   {
     number: "02",
-    title: "We Build",
-    description: "Custom automation workflows tailored to your business.",
+    title: "We Build It",
+    description: "We launch your site and lead follow-up setup so new leads get a fast response.",
     icon: Wrench,
   },
   {
     number: "03",
-    title: "You Scale",
-    description: "Watch your business grow while we handle the repetitive work.",
+    title: "You Keep Growing",
+    description: "We keep improving your SEO and reviews so your phone keeps ringing.",
     icon: Rocket,
   },
 ];
-
-const stepVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0 },
-};
 
 export default function HowItWorks() {
   return (
@@ -54,10 +49,10 @@ export default function HowItWorks() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-semibold mb-4" style={{ fontFamily: 'var(--font-playfair), serif' }}>
-            How It <span className="gradient-text">Works</span>
+            Our Simple <span className="gradient-text">3-Step Process</span>
           </h2>
           <p className="text-[#A1A1AA] text-lg max-w-2xl mx-auto">
-            Three simple steps to transform your business operations.
+            Three simple steps to help you get more leads and book more work.
           </p>
         </motion.div>
 
@@ -65,7 +60,7 @@ export default function HowItWorks() {
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isLast = index === steps.length - 1;
-            
+
             return (
               <motion.div
                 key={step.number}
@@ -111,9 +106,7 @@ export default function HowItWorks() {
 
                   {/* Content */}
                   <h3 className="text-2xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-[#A1A1AA] leading-relaxed">
-                    {step.description}
-                  </p>
+                  <p className="text-[#A1A1AA] leading-relaxed">{step.description}</p>
                 </div>
               </motion.div>
             );

@@ -1,0 +1,92 @@
+.c-copy-root {
+  --c-paper: #e8e4dd;
+  --c-red: #e63b2e;
+  --c-offwhite: #f5f3ee;
+  --c-black: #111111;
+  font-family: var(--font-space-grotesk), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: var(--c-black);
+  color: var(--c-offwhite);
+  line-height: 1.4;
+}
+
+.c-serif {
+  font-family: var(--font-dm-serif-italic), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.c-mono {
+  font-family: var(--font-space-mono), "Courier New", monospace;
+}
+
+.c-grid-frame {
+  background-image:
+    linear-gradient(rgba(230, 59, 46, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(230, 59, 46, 0.11) 1px, transparent 1px);
+  background-size: 26px 26px;
+  background-position: center;
+}
+
+.c-panel {
+  border: 1px solid rgba(230, 59, 46, 0.5);
+  background: rgba(17, 17, 17, 0.92);
+  padding: 1.1rem;
+}
+
+.c-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--c-red);
+  background: var(--c-red);
+  color: var(--c-offwhite);
+  padding: 0.62rem 0.9rem;
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.c-cta:hover {
+  background: var(--c-paper);
+  color: var(--c-black);
+  transform: translateY(-1px);
+}
+
+.c-cta:focus-visible {
+  outline: 2px solid var(--c-paper);
+  outline-offset: 2px;
+}
+
+.c-archive-card {
+  border-left: 4px solid var(--c-red);
+}
+
+@media (min-width: 640px) {
+  .c-panel {
+    padding: 1.35rem;
+  }
+
+  .c-cta {
+    font-size: 0.76rem;
+    padding: 0.68rem 1rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .c-panel {
+    padding: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-cta {
+    transition: none;
+  }
+
+  .c-cta:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,170 @@
+.b-copy-root {
+  --b-obsidian: #0d0d12;
+  --b-champagne: #c9a84c;
+  --b-ivory: #faf8f5;
+  --b-slate: #2a2a35;
+  --b-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --b-radius-lg: 2rem;
+  --b-radius-xl: 3rem;
+}
+
+.b-noise-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23noise)' opacity='0.82'/%3E%3C/svg%3E");
+}
+
+.b-shell,
+.b-island {
+  border-radius: var(--b-radius-lg);
+}
+
+.b-island {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.b-button {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  padding: 0.7rem 1.15rem;
+  font-size: 0.83rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: rgba(13, 13, 18, 0.78);
+  color: var(--b-ivory);
+  transition: transform 0.35s var(--b-ease), border-color 0.35s var(--b-ease);
+}
+
+.b-button-slide {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.08), rgba(201, 168, 76, 0.92), rgba(201, 168, 76, 0.1));
+  transform: translateX(-102%);
+  transition: transform 0.5s var(--b-ease);
+}
+
+.b-button:hover {
+  transform: scale(1.03) translateY(-1px);
+  border-color: rgba(201, 168, 76, 0.85);
+}
+
+.b-button:hover .b-button-slide {
+  transform: translateX(0);
+}
+
+.b-magnetic {
+  will-change: transform;
+}
+
+.b-lift {
+  transition: transform 0.35s var(--b-ease), border-color 0.35s var(--b-ease);
+}
+
+.b-lift:hover {
+  transform: translateY(-1px);
+  border-color: rgba(201, 168, 76, 0.7);
+}
+
+.b-cursor {
+  animation: bCursorBlink 0.9s steps(2, jump-none) infinite;
+}
+
+.b-live-dot {
+  display: inline-flex;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 999px;
+  background: #65d46e;
+  box-shadow: 0 0 0 0 rgba(101, 212, 110, 0.6);
+  animation: bPulse 1.8s infinite;
+}
+
+.b-op-dot {
+  display: inline-flex;
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 999px;
+  background: #57d56e;
+  box-shadow: 0 0 0 0 rgba(87, 213, 110, 0.7);
+  animation: bPulse 1.8s infinite;
+}
+
+.b-shimmer {
+  background-size: 220% 100%;
+  animation: bShimmer 2.2s linear infinite;
+}
+
+.b-wave {
+  stroke-dasharray: 350;
+  stroke-dashoffset: 350;
+  animation: bWave 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes bCursorBlink {
+  0%,
+  48% {
+    opacity: 1;
+  }
+  52%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes bPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(87, 213, 110, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(87, 213, 110, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(87, 213, 110, 0);
+  }
+}
+
+@keyframes bShimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -80% 0;
+  }
+}
+
+@keyframes bWave {
+  from {
+    stroke-dashoffset: 350;
+  }
+  to {
+    stroke-dashoffset: 20;
+  }
+}
+
+@media (min-width: 900px) {
+  .b-shell {
+    border-radius: var(--b-radius-xl);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .b-button,
+  .b-lift,
+  .b-button-slide,
+  .b-cursor,
+  .b-live-dot,
+  .b-op-dot,
+  .b-shimmer,
+  .b-wave {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

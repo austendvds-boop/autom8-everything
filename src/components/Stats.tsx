@@ -7,16 +7,17 @@ type Stat = {
   value: number;
   suffix: string;
   label: string;
+  decimals?: number;
 };
 
 const stats: Stat[] = [
-  { value: 500, suffix: "+", label: "Hours Saved This Year" },
-  { value: 25, suffix: "+", label: "Businesses Automated" },
-  { value: 99.9, suffix: "%", label: "Uptime Guaranteed" },
-  { value: 4.9, suffix: "/5", label: "Average Rating" },
+  { value: 25, suffix: "+", label: "Local Businesses Served" },
+  { value: 500, suffix: "+", label: "Hours Given Back to Teams" },
+  { value: 24, suffix: " hrs", label: "Typical Lead Response Setup" },
+  { value: 5, suffix: "/5", label: "Client Satisfaction Rating", decimals: 1 },
 ];
 
-function Counter({ value, suffix, label, inView }: { value: number; suffix: string; label: string; inView: boolean }) {
+function Counter({ value, suffix, label, inView, decimals }: { value: number; suffix: string; label: string; inView: boolean; decimals?: number }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -40,7 +41,8 @@ function Counter({ value, suffix, label, inView }: { value: number; suffix: stri
     return () => clearInterval(timer);
   }, [inView, value]);
 
-  const displayValue = value >= 100 ? Math.floor(count) : count;
+  const baseDisplayValue = value >= 100 ? Math.floor(count) : count;
+  const displayValue = typeof decimals === "number" ? baseDisplayValue.toFixed(decimals) : baseDisplayValue;
 
   return (
     <div className="text-center">
@@ -76,6 +78,7 @@ export default function Stats() {
                 suffix={stat.suffix}
                 label={stat.label}
                 inView={inView}
+                decimals={stat.decimals}
               />
             </motion.div>
           ))}

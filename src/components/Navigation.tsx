@@ -1,13 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import BrandLogo from "@/components/BrandLogo";
 
 const navLinks = [
   { href: "/services", label: "Services" },
+  { href: "/locations", label: "Locations" },
+  { href: "/automations", label: "Case Studies" },
+  { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
-  { href: "/automations", label: "Automations" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -24,34 +27,15 @@ export default function Navigation() {
     <>
       <motion.header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "glass h-14" : "h-20 bg-transparent"
+          isScrolled ? "glass h-16" : "h-20 bg-transparent"
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-1">
-            <span className="text-2xl font-semibold tracking-tight" style={{ fontFamily: 'var(--font-playfair), serif' }}>
-              autom
-            </span>
-            <motion.span
-              className="text-2xl font-semibold text-[#8B5CF6]"
-              animate={{
-                filter: [
-                  "drop-shadow(0 0 5px rgba(139, 92, 246, 0.5))",
-                  "drop-shadow(0 0 15px rgba(139, 92, 246, 0.8))",
-                  "drop-shadow(0 0 5px rgba(139, 92, 246, 0.5))",
-                ],
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              8
-            </motion.span>
-          </Link>
+        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between gap-3">
+          <BrandLogo size="sm" showDescriptor={false} className="shrink-0" />
 
-          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
@@ -65,7 +49,6 @@ export default function Navigation() {
             ))}
           </nav>
 
-          {/* CTA Button */}
           <div className="hidden md:block">
             <Link href="/contact">
               <motion.button
@@ -74,12 +57,11 @@ export default function Navigation() {
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                Start Automating
+                Build Strategy Call
               </motion.button>
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -109,7 +91,6 @@ export default function Navigation() {
         </div>
       </motion.header>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -120,6 +101,7 @@ export default function Navigation() {
             transition={{ duration: 0.3 }}
           >
             <nav className="flex flex-col items-center justify-center h-full gap-8">
+              <BrandLogo size="md" showDescriptor className="mb-4" />
               {navLinks.map((link, index) => (
                 <motion.div
                   key={link.href}
@@ -130,7 +112,7 @@ export default function Navigation() {
                   <Link
                     href={link.href}
                     className="text-3xl font-semibold"
-                    style={{ fontFamily: 'var(--font-playfair), serif' }}
+                    style={{ fontFamily: "var(--font-playfair), serif" }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
@@ -147,7 +129,7 @@ export default function Navigation() {
                   className="mt-8 px-8 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Start Automating
+                  Build Strategy Call
                 </Link>
               </motion.div>
             </nav>

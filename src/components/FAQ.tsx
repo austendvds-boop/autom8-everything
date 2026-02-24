@@ -11,28 +11,28 @@ type FAQItem = {
 
 const faqs: FAQItem[] = [
   {
+    question: "Can you help us get more calls and booked jobs?",
+    answer: "Yes. That is the main goal. We improve your website, speed up follow-up, and help more local people find you on Google.",
+  },
+  {
+    question: "Do you build websites and lead follow-up tools?",
+    answer: "Yes. We build both. Your site and lead tools work together so every new lead gets a fast response.",
+  },
+  {
+    question: "Can you replace our current website without hurting Google rankings?",
+    answer: "Yes. We move important pages carefully and keep SEO basics in place during the switch.",
+  },
+  {
     question: "How long does setup take?",
-    answer: "Most setups are completed within 1-2 weeks. The timeline depends on the complexity of your workflows and the number of integrations required. We provide a detailed roadmap during the discovery phase.",
+    answer: "Most projects launch in about 2 to 6 weeks. We give you a clear timeline before we start.",
   },
   {
-    question: "Do I need technical skills?",
-    answer: "Not at all! Our team handles all the technical implementation. You simply tell us what you want to automate, and we build it. We also provide easy-to-use dashboards so you can manage your automations without code.",
+    question: "Do you offer monthly support?",
+    answer: "Yes. After launch, we can handle monthly SEO, content updates, and ongoing improvements.",
   },
   {
-    question: "What tools do you integrate with?",
-    answer: "We integrate with 100+ tools including Salesforce, HubSpot, Pipedrive, Zoho, Google Workspace, Microsoft 365, Slack, Zapier, Mailchimp, ConvertKit, ActiveCampaign, and many more. Custom integrations are also available.",
-  },
-  {
-    question: "Is my data secure?",
-    answer: "Absolutely. We use enterprise-grade encryption (AES-256), SOC 2 Type II certified infrastructure, and comply with GDPR and CCPA. Your data is never shared with third parties without your explicit consent.",
-  },
-  {
-    question: "What's the pricing model?",
-    answer: "We offer flexible pricing based on your needs - from starter packages for small businesses to enterprise solutions. All plans include a 14-day free trial with no credit card required.",
-  },
-  {
-    question: "Can I cancel anytime?",
-    answer: "Yes! You can cancel your subscription at any time with no penalties or hidden fees. We believe in earning your business every month.",
+    question: "Will this work with the software we already use?",
+    answer: "Usually yes. We connect with most common tools and fill any gaps with simple custom setup.",
   },
 ];
 
