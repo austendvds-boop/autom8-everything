@@ -434,6 +434,40 @@ net-craft.com
 - Implement production GA4/GTM IDs + verify key events.
 - Execute citation submissions and outreach cadence.
 
-*Document Version: 1.1*  
+## Current Indexable Page Map (2026-02-23)
+- Total sitemap URLs: **45**
+- Static/core: home, services hub + 7 service pages, about, automations, blog hub, locations hub, contact, privacy, terms, security.
+- Blog detail pages live (22):
+  - what-is-business-automation
+  - how-to-automate-small-business
+  - how-to-choose-automation-agency
+  - automation-agency-pricing-guide
+  - best-automation-agency-for-small-business
+  - automation-agency-vs-diy
+  - crm-automation-best-practices
+  - email-automation-workflows-small-business
+  - business-process-automation-examples
+  - small-business-automation-ideas
+  - zapier-vs-make-small-business
+  - gohighlevel-vs-hubspot-automation
+  - zapier-consultant-near-me-phoenix
+  - gohighlevel-setup-service-checklist
+  - phoenix-automation-agency-guide
+  - scottsdale-web-design-and-automation
+  - tempe-small-business-automation
+  - glendale-az-automation-services
+  - automation-roi-calculator-framework
+  - local-seo-automation-for-service-businesses
+  - website-automation-services-overview
+  - business-automation-consultant-near-me
+- Location detail pages live (6): phoenix, scottsdale, glendale, tempe, mesa, chandler.
+
+## Next Content Priorities
+1. Add Gilbert + Peoria + Surprise location pages once unique local proof points are available.
+2. Add 6–8 deeper BOFU posts (pricing, timelines, migration risk, implementation case studies).
+3. Refresh top 6 posts quarterly with real KPI snapshots and internal links to newest service/location pages.
+4. Publish 2 local case studies with city-specific schema + testimonial proof.
+
+*Document Version: 1.2*  
 *Created: February 2025*  
 *Updated: February 2026*

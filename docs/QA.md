@@ -56,3 +56,15 @@
 - [x] 5) OG + Twitter tags render in page source
 - [x] 6) Internal links sane + sitemap includes key pages
 - [x] 7) Evidence documented (implemented vs verified)
+
+## New Release Gate: Sitemap URL 200 Check
+- Required on every release: every URL emitted by `/sitemap.xml` must return HTTP 200.
+- Verification command pattern:
+  1) `npm run build`
+  2) `npm run start -- -p 4010`
+  3) Run Node checker to parse sitemap and request each URL from localhost.
+- Latest verification (2026-02-23):
+  - `TOTAL 45`
+  - `BAD 0`
+- Regression fixed in this pass:
+  - Dynamic route params in Next.js 16 must be awaited (`params: Promise<{slug:string}>`) in both `/blog/[slug]` and `/locations/[slug]` pages + metadata functions.

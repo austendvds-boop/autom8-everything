@@ -10,8 +10,9 @@ export function generateStaticParams() {
   return locationPages.map((location) => ({ slug: location.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const location = getLocationBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const location = getLocationBySlug(slug);
 
   if (!location) {
     return buildMetadata({
@@ -33,8 +34,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   });
 }
 
-export default function LocationDetailPage({ params }: { params: { slug: string } }) {
-  const location = getLocationBySlug(params.slug);
+export default async function LocationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const location = getLocationBySlug(slug);
 
   if (!location) {
     notFound();
