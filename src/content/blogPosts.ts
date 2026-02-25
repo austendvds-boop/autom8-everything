@@ -921,6 +921,74 @@ const seedBlogPosts: SeedBlogPost[] = [
       },
     ],
   },
+  {
+    slug: "hvac-business-automation",
+    title: "HVAC Business Automation: The Complete Guide for Phoenix Contractors",
+    metaDescription:
+      "Learn how to automate your HVAC business — from dispatch and lead follow-up to seasonal campaigns and review generation. Built for Phoenix-area contractors.",
+    focusKeyword: "hvac business automation",
+    category: "Automation Strategy",
+    publishedAt: "2026-02-24",
+    readingMinutes: 12,
+    intro:
+      "Phoenix HVAC contractors run some of the highest-volume service operations in the country. Summer AC demand alone can double call volume overnight. Yet most shops still route leads through a single dispatcher's cell phone, chase invoices manually, and forget to follow up on estimates. This guide breaks down every workflow worth automating in an HVAC business — from the first inbound call to the five-star review — with specific tools, timelines, and examples built around the Phoenix market.",
+    sections: [
+      {
+        heading: "Why HVAC is the perfect industry for automation",
+        paragraphs: [
+          "HVAC businesses are high-frequency, appointment-driven operations with predictable seasonal spikes.",
+          "Automation removes repetitive coordination work so dispatchers focus on exceptions and techs focus on repairs."
+        ]
+      },
+      {
+        heading: "Lead capture and speed-to-lead automation",
+        paragraphs: [
+          "The highest-ROI workflow is speed-to-lead: immediate confirmation, CRM record creation, and dispatcher routing.",
+          "Connect website forms, Google profiles, ads, and directories into one intake pipeline."
+        ]
+      },
+      {
+        heading: "Dispatch and scheduling automation",
+        paragraphs: [
+          "Use rule-based dispatch to assign the right tech by skill, location, and calendar availability.",
+          "Give customers proactive ETA updates and auto-handle cancellations with instant rescheduling offers."
+        ]
+      },
+      {
+        heading: "Estimate follow-up and close-rate automation",
+        paragraphs: [
+          "Automated 14-21 day follow-up sequences recover stalled replacement estimates.",
+          "Use financing options, rebates, and social proof to increase close rate without discounting."
+        ]
+      },
+      {
+        heading: "Seasonal campaign and maintenance automation",
+        paragraphs: [
+          "Automate spring and fall campaigns with customer segmentation and direct booking links.",
+          "Maintenance-plan enrollment and renewals create recurring revenue and smoother seasonality."
+        ]
+      },
+      {
+        heading: "Review generation and payment automation",
+        paragraphs: [
+          "Send review requests within 1-2 hours of job completion to improve local reputation velocity.",
+          "Generate invoices on job completion and send pay-now links immediately to tighten cash flow."
+        ]
+      }
+    ],
+    faqs: [
+      {
+        question: "What's the best CRM for HVAC automation?",
+        answer:
+          "ServiceTitan is strong for larger shops; GoHighLevel is often best-value for smaller teams. Housecall Pro and Jobber are solid mid-range options."
+      },
+      {
+        question: "How long before HVAC automation shows ROI?",
+        answer:
+          "Most teams see measurable wins from speed-to-lead within 2-4 weeks, with broader ROI in 60-90 days."
+      }
+    ],
+  },
 ];
 
 const categoryTags: Record<BlogPost["category"], string[]> = {

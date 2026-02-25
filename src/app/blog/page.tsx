@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { getAllBlogPosts } from "@/content/blogPosts";
+import { getAllPosts } from "@/lib/blog";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -18,9 +18,9 @@ export const metadata: Metadata = buildMetadata({
   ],
 });
 
-const posts = getAllBlogPosts();
-const featuredPosts = posts.filter((post) => post.featured).slice(0, 4);
-const trendingPosts = [...posts].sort((a, b) => b.trendingScore - a.trendingScore).slice(0, 6);
+const posts = getAllPosts();
+const featuredPosts = posts.slice(0, 4);
+const trendingPosts = posts.slice(0, 6);
 const categories = [...new Set(posts.map((post) => post.category))];
 const tags = [...new Set(posts.flatMap((post) => post.tags))].slice(0, 18);
 

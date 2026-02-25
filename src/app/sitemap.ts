@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllBlogPosts } from "@/content/blogPosts";
+import { getAllPosts } from "@/lib/blog";
 import { locationPages } from "@/content/locations";
 import { siteUrl } from "@/lib/seo";
 
@@ -25,7 +25,7 @@ const staticRoutes = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const blogRoutes = getAllBlogPosts().map((post) => `/blog/${post.slug}`);
+  const blogRoutes = getAllPosts().map((post) => `/blog/${post.slug}`);
   const locationRoutes = locationPages.map((location) => `/locations/${location.slug}`);
 
   return [...staticRoutes, ...blogRoutes, ...locationRoutes].map((route, index) => ({
