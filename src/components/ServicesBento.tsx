@@ -7,12 +7,14 @@ import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 const products = [
   {
+    label: "Cadence",
     title: "Never Miss Another Customer Call",
     description:
-      "Your phone gets answered 24/7. Appointments get booked. You get a summary of every call. Live in 5 minutes.",
+      "Cadence answers calls 24/7, books appointments, handles FAQs, and sends you a summary after every call. Live in 5 minutes.",
     icon: PhoneCall,
     badge: "NEW · FREE TRIAL",
-    price: "$199/mo after free trial",
+    price: "Cadence — $199/mo",
+    priceSubtext: "after free trial",
     primaryCta: { href: "/cadence/get-started", label: "Start Free Trial" },
     secondaryCta: { href: "/services/cadence", label: "Learn More" },
     featured: true,
@@ -75,7 +77,11 @@ export default function ServicesBento() {
           <div className="relative z-10">
             <div className="flex flex-wrap items-center gap-3 mb-4">
               <span className="text-xs tracking-wide px-3 py-1 rounded-full border border-[#8B5CF6]/40 text-[#A78BFA]">{featured.badge}</span>
-              <span className="text-sm text-[#A1A1AA]">{featured.price}</span>
+              <span className="text-xs uppercase tracking-[0.16em] text-[#C4B5FD]">{featured.label}</span>
+            </div>
+            <div className="mb-4">
+              <p className="text-xl md:text-2xl font-semibold text-white">{featured.price}</p>
+              <p className="text-xs text-[#A1A1AA] mt-1">{featured.priceSubtext}</p>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-[#8B5CF6]/20 flex items-center justify-center mb-4">
               <FeaturedIcon className="w-6 h-6 text-[#8B5CF6]" />
