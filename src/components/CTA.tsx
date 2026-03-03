@@ -39,10 +39,10 @@ export default function CTA() {
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...(prefersReducedMotion ? revealReduced : reveal)}>
           <Link href="/cadence/get-started" className="inline-block px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow">
-            Start Your Free Trial
+            Start Free Trial
           </Link>
           <Link href="/contact" className="inline-block px-8 py-4 rounded-full border border-white/40 text-white font-semibold text-lg hover:bg-white/10 transition-colors">
-            Book a Quick Call
+            Book a Call
           </Link>
         </motion.div>
 

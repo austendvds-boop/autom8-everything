@@ -1,5 +1,50 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-03 — CTA architecture consolidation (homepage/nav/pricing/contact/product pages)
+
+### Scope completed
+- Implemented the website-architecture consolidation blueprint end-to-end while preserving the existing premium visual system.
+- Enforced CTA taxonomy on core funnel pages:
+  - Hero primary CTA is now `See Plans` → `/pricing`.
+  - Hero secondary CTA added: `Start Free Trial` → `/cadence/get-started`.
+  - Homepage bottom CTA label normalized: `Book a Call`.
+  - Contact page label normalized: `Book a Call` (mailto destination kept intentionally).
+- Standardized ServicesBento CTA behavior across all 5 product cards:
+  - Cadence: `Start Free Trial` + `Learn More`.
+  - Website: `See Plans` → `/pricing`.
+  - SEO: `See Plans` → `/pricing`.
+  - Review Funnel: `Learn More` → `/services/review-funnel`.
+  - Custom Apps: `Tell Us What You Need` → `/contact`.
+- Elevated `/pricing` into canonical plan-detail page with all 5 products and consistent CTA pattern:
+  - Added rows for Cadence, Website, Review Funnel, SEO, and Custom Apps.
+  - Added per-row inclusion bullets and consistent `Learn More` links to product detail pages.
+  - Primary CTAs now standardized to `Start Free Trial` (Cadence) and `Book a Call` (consultative offers).
+  - Replaced intake-footer wording with: "Not sure which plan fits? Tell us about your business..."
+- Removed conflicting/retired labels from active code paths (`View Packages`, `View Website Packages`, `Book a Quick Call`, `Book a 15-Minute Call`, `Go to intake form`, `See What We Can Do`).
+- Cleaned product-detail conversion flow to match page-role map:
+  - Website/SEO/Review pages now route pricing-intent CTA to `/pricing` via `See Plans`.
+  - Custom Apps product CTA normalized to `Book a Call`.
+  - Website detail page no longer hosts full tier tables; now concise pricing anchor + canonical `/pricing` handoff.
+
+### Files changed
+- `src/components/Hero.tsx`
+- `src/components/ServicesBento.tsx`
+- `src/components/CTA.tsx`
+- `src/components/PricingOverview.tsx`
+- `src/app/pricing/page.tsx`
+- `src/app/contact/ContactPageClient.tsx`
+- `src/app/services/website-creation/page.tsx`
+- `src/app/services/review-funnel/page.tsx`
+- `src/app/services/seo-content/page.tsx`
+- `src/app/services/custom-apps/page.tsx`
+- `src/app/services/cadence/page.tsx`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run lint` ✅
+- `npm run build` ✅
+- Note: pre-existing Next.js warning remains about inferred workspace root due to multiple lockfiles.
+
 ## 2026-03-03 — Enterprise product cards implemented + homepage pricing redundancy removed
 
 ### Scope completed

@@ -40,8 +40,8 @@ export default function CustomAppsPage() {
       <section className="py-20 bg-[#12121A]">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>Pricing</h2>
-          <p className="text-[#A1A1AA]">Custom pricing. Tell us what you need and we&apos;ll give you a flat quote.</p>
-          <Link href="/contact" className="inline-block mt-8 px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">Tell Us What You Need</Link>
+          <p className="text-[#A1A1AA]">Custom quote. Tell us what you need and we&apos;ll scope a flat price.</p>
+          <Link href="/contact" className="inline-block mt-8 px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">Book a Call</Link>
         </div>
       </section>
       <Footer />

@@ -42,7 +42,7 @@ export default function SeoContentPage() {
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>Pricing</h2>
           <p className="text-[#A1A1AA]">From $500/mo. Final scope depends on locations and market competition.</p>
-          <Link href="/contact" className="inline-block mt-8 px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">Book a Quick Call</Link>
+          <Link href="/pricing" className="inline-block mt-8 px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">See Plans</Link>
         </div>
       </section>
       <Footer />

@@ -196,7 +196,7 @@ export default function CadencePage() {
               href="/cadence/get-started"
               className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
             >
-              Start Your Free Trial
+              Start Free Trial
             </Link>
           </div>
         </div>

@@ -12,16 +12,16 @@ const tiers = [
     cta: { label: "Start Free Trial", href: "/cadence/get-started" },
   },
   {
-    title: "Website Packages",
+    title: "Website Plans",
     product: "Launch • Scale • Custom",
     price: "Launch $799 · Scale $1,499 · Custom $2,499+",
-    cta: { label: "View Website Packages", href: "/services/website-creation" },
+    cta: { label: "See Plans", href: "/pricing" },
   },
   {
     title: "Grow Every Month",
     product: "SEO + Monthly Content",
     price: "From $500/mo",
-    cta: { label: "Book a Quick Call", href: "/contact" },
+    cta: { label: "Book a Call", href: "/contact" },
   },
 ];
 
@@ -50,7 +50,7 @@ export default function PricingOverview() {
               <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">{tier.title}</p>
               <h3 className="text-xl font-semibold mb-2">{tier.product}</h3>
               <p className="text-[#A1A1AA] mb-4 text-[15px] leading-relaxed">{tier.price}</p>
-              {tier.title === "Website Packages" && (
+              {tier.title === "Website Plans" && (
                 <>
                   <ul className="space-y-2 text-[#A1A1AA] text-sm mb-4">
                     <li>• Launch: quick launch essentials</li>
@@ -68,7 +68,7 @@ export default function PricingOverview() {
         </div>
 
         <motion.p className="text-center text-[#A1A1AA] mt-8" {...(prefersReducedMotion ? revealReduced : reveal)}>
-          Not sure where to start? <Link href="/contact" className="text-[#A78BFA] hover:text-[#8B5CF6]">Take 2 minutes to tell us about your business.</Link>
+          Not sure where to start? <Link href="/contact" className="text-[#A78BFA] hover:text-[#8B5CF6]">Tell Us What You Need.</Link>
         </motion.p>
       </div>
     </section>

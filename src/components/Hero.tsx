@@ -44,12 +44,20 @@ export default function Hero() {
         </motion.p>
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...revealPreset}>
-          <Link href="#services">
+          <Link href="/pricing">
             <motion.button
               className="px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] via-[#A78BFA] to-[#06B6D4] text-white font-semibold text-lg shadow-lg"
               {...buttonHover}
             >
-              See What We Can Do
+              See Plans
+            </motion.button>
+          </Link>
+          <Link href="/cadence/get-started">
+            <motion.button
+              className="px-8 py-4 rounded-full border border-white/25 text-white font-semibold text-lg hover:border-[#8B5CF6]/60 transition-colors"
+              {...buttonHover}
+            >
+              Start Free Trial
             </motion.button>
           </Link>
         </motion.div>

@@ -47,7 +47,7 @@ const products: Product[] = [
     priceAriaLabel: "Price: from 799 dollars one time with three available tiers",
     microProof: "Launch in 2 weeks",
     icon: Globe,
-    cta: { href: "/services/website-creation", label: "View Packages" },
+    cta: { href: "/pricing", label: "See Plans" },
   },
   {
     tier: "primary",
@@ -59,7 +59,7 @@ const products: Product[] = [
     priceAriaLabel: "Price: from 500 dollars per month with no long term contracts",
     microProof: "Results within 90 days",
     icon: TrendingUp,
-    cta: { href: "/services/seo-content", label: "Get Started" },
+    cta: { href: "/pricing", label: "See Plans" },
   },
   {
     tier: "secondary",
@@ -79,7 +79,7 @@ const products: Product[] = [
     productName: "Tailored Tools",
     valueProp: "Dashboards, booking systems, internal tools — built around how you work.",
     price: "Custom quote",
-    priceContext: "scoped after discovery call",
+    priceContext: "scoped after a call",
     priceAriaLabel: "Price: custom quote scoped after a discovery call",
     microProof: "Your workflow, not ours",
     icon: Wrench,

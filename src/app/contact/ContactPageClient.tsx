@@ -118,7 +118,7 @@ export default function ContactPageClient() {
                     <p className="flex items-center gap-3"><MapPin className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.city}, {businessProfile.state}</p>
                     <p className="flex items-center gap-3"><Clock className="w-5 h-5 text-[#8B5CF6]" />Response within 24 hours</p>
                   </div>
-                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%2015-minute%20call`} className="inline-block mt-6 px-6 py-3 rounded-lg border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Book a 15-Minute Call</Link>
+                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%20call`} className="inline-block mt-6 px-6 py-3 rounded-lg border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Book a Call</Link>
                 </div>
               </div>
             </div>
