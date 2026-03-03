@@ -94,12 +94,12 @@
   - Step 3 valid formats allows progression to Step 4.
   - Step 4 focused on area code requirement (`###`) and submit button state tied to that field.
 
-## 2026-03-03 � Featured Cadence card copy + emphasis refinement
+## 2026-03-03 � Featured Cadence card copy + emphasis refinement
 
 ### Scope completed
 - Updated only the featured Cadence card in the homepage product grid (`src/components/ServicesBento.tsx`).
 - Added explicit visible product label: `Cadence`.
-- Made pricing more prominent with exact text `Cadence � $199/mo` and subtext `after free trial`.
+- Made pricing more prominent with exact text `Cadence � $199/mo` and subtext `after free trial`.
 - Expanded description to plain-language explanation of call answering, booking, FAQs, and call summaries.
 - Preserved CTA structure and labels: `Start Free Trial` (primary) and `Learn More` (secondary).
 
@@ -108,3 +108,34 @@
 
 ### Verification
 - `npm run build` ?
+
+## 2026-03-03 — Website pricing switched to explicit 3-tier structure
+
+### Scope completed
+- Replaced website custom/starting-price messaging with explicit tier pricing in all requested surfaces:
+  - `/pricing`
+  - `/services/website-creation`
+  - homepage pricing overview snippet (`src/components/PricingOverview.tsx`)
+- Locked tier names and prices implemented exactly:
+  - Launch — $799
+  - Scale — $1,499
+  - Custom — $2,499+
+- Added plain-language tier bullets covering:
+  - Launch: quick launch essentials
+  - Scale: conversion-focused + integrations
+  - Custom: bespoke functionality/workflows
+- Added migration note where website pricing is shown: existing site clone/migration is an upcharge and quoted after review.
+
+### Files changed
+- `src/app/pricing/page.tsx`
+- `src/app/services/website-creation/page.tsx`
+- `src/components/PricingOverview.tsx`
+- `docs/CODER-CONTEXT.md`
+
+### Key decisions
+- Kept existing visual theme/layout patterns (same card styles, spacing system, and CTA patterns) and scoped edits only to website pricing/tier content.
+- Updated website service page metadata description so SERP snippet aligns with new pricing tiers.
+
+### Verification
+- `npm run build` ✅
+- Note: pre-existing Next.js warning remains about inferred workspace root due to multiple lockfiles.

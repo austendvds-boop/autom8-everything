@@ -34,10 +34,15 @@ export default function PricingPage() {
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-[#111118] p-8">
-            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Build Your Foundation</p>
-            <h2 className="text-2xl font-semibold mb-2">Website + Review Funnel</h2>
-            <p className="text-[#A1A1AA] mb-6">Starting at $2,500 for website projects. Review funnels from $149/mo.</p>
-            <Link href="/contact" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold">Get a Quote</Link>
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Website Creation Tiers</p>
+            <h2 className="text-2xl font-semibold mb-4">Pick the Website Package That Fits</h2>
+            <ul className="space-y-3 text-[#A1A1AA] text-sm mb-5">
+              <li><span className="text-white font-medium">Launch — $799:</span> Quick launch essentials to get online fast.</li>
+              <li><span className="text-white font-medium">Scale — $1,499:</span> Conversion-focused pages with key integrations.</li>
+              <li><span className="text-white font-medium">Custom — $2,499+:</span> Bespoke functionality and workflow setup.</li>
+            </ul>
+            <p className="text-[#A1A1AA] text-sm mb-6">Existing site clone/migration is an upcharge, quoted after review.</p>
+            <Link href="/services/website-creation" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold">View Website Packages</Link>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-[#111118] p-8">

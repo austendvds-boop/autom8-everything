@@ -12,10 +12,10 @@ const tiers = [
     cta: { label: "Start Free Trial", href: "/cadence/get-started" },
   },
   {
-    title: "Build Your Foundation",
-    product: "Website + Review Funnel",
-    price: "Custom quote — most projects $2,500–$8,000",
-    cta: { label: "Get a Quote", href: "/contact" },
+    title: "Website Packages",
+    product: "Launch • Scale • Custom",
+    price: "Launch $799 · Scale $1,499 · Custom $2,499+",
+    cta: { label: "View Website Packages", href: "/services/website-creation" },
   },
   {
     title: "Grow Every Month",
@@ -49,7 +49,17 @@ export default function PricingOverview() {
             >
               <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">{tier.title}</p>
               <h3 className="text-xl font-semibold mb-2">{tier.product}</h3>
-              <p className="text-[#A1A1AA] mb-6 text-[15px] leading-relaxed">{tier.price}</p>
+              <p className="text-[#A1A1AA] mb-4 text-[15px] leading-relaxed">{tier.price}</p>
+              {tier.title === "Website Packages" && (
+                <>
+                  <ul className="space-y-2 text-[#A1A1AA] text-sm mb-4">
+                    <li>• Launch: quick launch essentials</li>
+                    <li>• Scale: conversion-focused + integrations</li>
+                    <li>• Custom: bespoke functionality/workflows</li>
+                  </ul>
+                  <p className="text-[#A1A1AA] text-xs mb-6">Existing site clone/migration is an upcharge, quoted after review.</p>
+                </>
+              )}
               <Link href={tier.cta.href} className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">
                 {tier.cta.label}
               </Link>
