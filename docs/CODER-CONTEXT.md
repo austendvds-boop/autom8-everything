@@ -1,5 +1,20 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-03 — SocialProofBar rating card made explicitly star-first
+
+### Scope completed
+- Updated only the trust/rating card (third card) in `src/components/SocialProofBar.tsx`.
+- Shifted the visual hierarchy so five gold stars are the dominant element.
+- Removed the larger text-forward treatment in favor of minimal supporting copy (`Client Rating`).
+- Preserved subtle premium twinkle/glow motion and existing reduced-motion-safe behavior.
+
+### Files changed
+- `src/components/SocialProofBar.tsx`
+
+### Verification
+- `npm run build` ✅
+
+
 ## 2026-03-03 — Homepage reliability metric card converted to premium star-rating motif
 
 ### Scope completed

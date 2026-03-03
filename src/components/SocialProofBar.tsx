@@ -36,31 +36,27 @@ export default function SocialProofBar() {
             {...revealStagger(2, prefersReducedMotion)}
           >
             <div
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(245,158,11,0.22),transparent_58%)]"
-                aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(245,158,11,0.24),transparent_62%)]"
+              aria-hidden="true"
             />
-            <div className="relative flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm text-[#A1A1AA]">Top-rated reliability</p>
-                <p className="text-lg font-semibold text-white">Trusted by every launch week</p>
-              </div>
-
-              <div className="inline-flex items-center gap-1" role="img" aria-label="Five star reliability rating">
+            <div className="relative flex flex-col items-start gap-2">
+              <div className="inline-flex items-center gap-1.5" role="img" aria-label="Five star client rating">
                 {[0, 1, 2, 3, 4].map((starIndex) => (
                   <motion.span
                     key={starIndex}
                     className={prefersReducedMotion ? "" : "star-twinkle"}
-                    animate={prefersReducedMotion ? undefined : { opacity: [0.9, 1, 0.9], scale: [1, 1.04, 1] }}
+                    animate={prefersReducedMotion ? undefined : { opacity: [0.9, 1, 0.9], scale: [1, 1.05, 1] }}
                     transition={
                       prefersReducedMotion
                         ? undefined
-                        : { duration: 3.4, repeat: Infinity, ease: "easeInOut", delay: starIndex * 0.22 }
+                        : { duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: starIndex * 0.18 }
                     }
                   >
-                    <Star className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" aria-hidden="true" />
+                    <Star className="h-6 w-6 fill-[#F59E0B] text-[#F59E0B]" aria-hidden="true" />
                   </motion.span>
                 ))}
               </div>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">Client Rating</p>
             </div>
           </motion.div>
         </div>
