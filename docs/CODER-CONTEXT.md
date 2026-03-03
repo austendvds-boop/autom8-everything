@@ -1,5 +1,35 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-03 — ServicesBento non-hero card uniformity pass (homepage product grid)
+
+### Scope completed
+- Kept Cadence as the featured hero card with no structural role changes.
+- Consolidated all 4 non-hero cards to one shared internal skeleton and spacing rhythm:
+  - eyebrow
+  - icon
+  - title
+  - description
+  - pricing line + context
+  - micro-proof
+  - bottom-anchored CTA row
+- Removed tier-based layout divergence (`primary` vs `secondary`) from non-hero rendering so all four cards now share identical padding, typography sizing, min-height, and CTA placement behavior.
+- Replaced non-button text-link CTA treatment on secondary cards with real pill buttons so all four non-hero cards use the same button shape, height, and spacing.
+- Updated non-hero CTA intent/labels per requested direction:
+  - Websites: `See Plans` → `/pricing` (unchanged)
+  - SEO: `See Plans` → `/pricing` (unchanged)
+  - Review: `See Plans` → `/pricing` (changed from Learn More)
+  - Custom Apps: `Book Call` → `/contact` (changed from Tell Us What You Need)
+- Preserved existing Autom8 premium visual language (palette, card surfaces, glow, hover motion, typography family).
+
+### Files changed
+- `src/components/ServicesBento.tsx`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run lint` ✅ (`EXIT:0`)
+- `npm run build` ✅
+- Note: pre-existing Next.js warning remains about inferred workspace root due to multiple lockfiles.
+
 ## 2026-03-03 — CTA architecture consolidation (homepage/nav/pricing/contact/product pages)
 
 ### Scope completed

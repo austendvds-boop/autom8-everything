@@ -71,7 +71,7 @@ const products: Product[] = [
     priceAriaLabel: "Price: from 149 dollars per month per location",
     microProof: "Avg 4.8 star increase",
     icon: Star,
-    cta: { href: "/services/review-funnel", label: "Learn More" },
+    cta: { href: "/pricing", label: "See Plans" },
   },
   {
     tier: "secondary",
@@ -83,7 +83,7 @@ const products: Product[] = [
     priceAriaLabel: "Price: custom quote scoped after a discovery call",
     microProof: "Your workflow, not ours",
     icon: Wrench,
-    cta: { href: "/contact", label: "Tell Us What You Need" },
+    cta: { href: "/contact", label: "Book Call" },
   },
 ];
 
@@ -182,15 +182,12 @@ export default function ServicesBento() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {nonHero.map((product, index) => {
             const Icon = product.icon;
-            const isPrimary = product.tier === "primary";
 
             return (
               <motion.article
                 key={product.productName}
                 aria-label={product.productName}
-                className={`group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-6 md:p-8 hover:border-[#8B5CF6]/40 hover:shadow-[0_0_80px_rgba(139,92,246,0.10)] transition-all duration-300 ${
-                  isPrimary ? "min-h-[280px]" : "min-h-[240px]"
-                }`}
+                className="group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-6 md:p-8 min-h-[300px] hover:border-[#8B5CF6]/40 hover:shadow-[0_0_80px_rgba(139,92,246,0.10)] transition-all duration-300"
                 {...revealStagger(index + 1, prefersReducedMotion)}
                 {...(prefersReducedMotion ? {} : cardHover)}
                 whileHover={prefersReducedMotion ? {} : { y: -4 }}
@@ -214,10 +211,7 @@ export default function ServicesBento() {
                   <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-5">{product.valueProp}</p>
                   <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-5" />
 
-                  <p
-                    aria-label={product.priceAriaLabel}
-                    className={`${isPrimary ? "text-xl" : "text-lg"} font-bold text-white`}
-                  >
+                  <p aria-label={product.priceAriaLabel} className="text-xl font-bold text-white">
                     {product.price}
                   </p>
                   <p className="text-xs text-[#71717A] mt-1 mb-4">{product.priceContext}</p>
@@ -227,21 +221,14 @@ export default function ServicesBento() {
                     <span>{product.microProof}</span>
                   </div>
 
-                  {isPrimary ? (
+                  <div className="mt-auto pt-2">
                     <Link
                       href={product.cta.href}
-                      className="inline-flex items-center justify-center min-h-11 px-5 py-2.5 rounded-full bg-[#8B5CF6] text-white text-sm font-semibold hover:bg-[#7C3AED] transition-colors mt-auto"
+                      className="inline-flex items-center justify-center min-h-11 px-5 py-2.5 rounded-full bg-[#8B5CF6] text-white text-sm font-semibold hover:bg-[#7C3AED] transition-colors"
                     >
                       {product.cta.label}
                     </Link>
-                  ) : (
-                    <Link
-                      href={product.cta.href}
-                      className="inline-flex items-center min-h-11 py-2 text-[#A78BFA] hover:text-[#8B5CF6] font-medium text-sm mt-auto"
-                    >
-                      {product.cta.label} →
-                    </Link>
-                  )}
+                  </div>
                 </div>
               </motion.article>
             );
