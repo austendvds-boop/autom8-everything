@@ -380,3 +380,31 @@
 ### Notes
 - Local preview only; no deployment performed.
 - Next workspace-root lockfile warning remains non-blocking.
+
+## 2026-03-03 — Cadence AI Voice Page + Site Integration
+
+### Completed
+- Added full Cadence service page at `src/app/services/cadence/page.tsx` with:
+  - Hero section + CTA
+  - 3-step how-it-works section
+  - 6 feature cards
+  - competitor comparison table
+  - pricing block
+  - FAQ section
+  - bottom CTA
+  - `buildMetadata`, `buildServiceSchema`, and `buildFaqSchema`
+- Added homepage highlight component at `src/components/CadenceHighlight.tsx` (dark two-column layout, pitch + pricing card, motion reveal).
+- Updated `src/app/services/ServicesPageClient.tsx` to add Cadence as the first card in Supporting Service Pages.
+- Updated `src/app/HomePageClient.tsx` to import/render `<CadenceHighlight />` directly between `<ServicesBento />` and `<WhoItsFor />`.
+- Updated `src/components/Footer.tsx` product links to include `Cadence AI Voice` → `/services/cadence`.
+
+### Validation
+- `npm run build` ✅ passed (TypeScript clean, no TS errors).
+
+### Git / Deploy
+- Commit: `cbfddd6`
+- Branch: `master`
+- Pushed to: `origin/master`
+- Vercel production deployment: `https://autom8-everything-10j4g6ei2-austs-projects-ee024705.vercel.app`
+- Aliased production URL: `https://autom8everything.com`
+- Verified route responds: `https://autom8everything.com/services/cadence` (HTTP 200).
