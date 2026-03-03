@@ -1,5 +1,29 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-03 — Enterprise product cards implemented + homepage pricing redundancy removed
+
+### Scope completed
+- Rebuilt `src/components/ServicesBento.tsx` to match the enterprise product card blueprint:
+  - Introduced explicit card tiers (`hero`, `primary`, `secondary`) and full per-card hierarchy (eyebrow → product name → value prop → pricing anchor + context → micro-proof → CTA).
+  - Kept Cadence as dominant hero card with integrated pricing module, dual CTAs, premium gradient/glow treatment, and plain-language copy.
+  - Applied Playfair to all product names, added pricing divider lines, micro-proof chips with check icon, and integrated pricing anchors on all five cards.
+  - Preserved reduced-motion behavior (no transform lift/press when `useReducedMotion()` is true) while keeping color/opacity transitions.
+  - Added accessibility improvements: each card rendered as `<article aria-label="...">`; each pricing anchor has explicit `aria-label` text for screen readers.
+- Updated `src/app/HomePageClient.tsx`:
+  - Removed homepage `<PricingOverview />` import/render ("Simple, Transparent Pricing" section no longer appears on homepage).
+  - Confirmed no homepage `CadenceHighlight` render.
+  - Adjusted section order to `ServicesBento -> WhoItsFor -> HowItWorks -> Testimonials -> FAQ -> CTA` per current blueprint direction.
+
+### Files changed
+- `src/components/ServicesBento.tsx`
+- `src/app/HomePageClient.tsx`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run lint` ✅
+- `npm run build` ✅
+- Note: pre-existing Next.js warning remains about inferred workspace root due to multiple lockfiles.
+
 ## 2026-03-03 — SocialProofBar rating card made explicitly star-first
 
 ### Scope completed

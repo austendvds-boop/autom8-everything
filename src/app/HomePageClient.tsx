@@ -8,7 +8,6 @@ import ServicesBento from "@/components/ServicesBento";
 import HowItWorks from "@/components/HowItWorks";
 import WhoItsFor from "@/components/WhoItsFor";
 import Testimonials from "@/components/Testimonials";
-import PricingOverview from "@/components/PricingOverview";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -27,10 +26,9 @@ export default function HomePageClient() {
         <Hero />
         <SocialProofBar />
         <ServicesBento />
-        <HowItWorks />
         <WhoItsFor />
+        <HowItWorks />
         <Testimonials />
-        <PricingOverview />
         <FAQ />
         <CTA />
         <Footer />
