@@ -33,3 +33,28 @@
 - `npm run build` ✅
 - `npm run lint` ✅
 - Build warning persists from pre-existing workspace lockfile root detection (`Next.js inferred workspace root`).
+
+## 2026-03-03 — Cadence onboarding validation moved to input step
+
+### Scope completed
+- Updated `/cadence/get-started` to validate fields at the step where users enter them (instead of surfacing Step 3 format issues on final submit).
+- Added inline, human-readable field error messages and accessible `aria-invalid` + `aria-describedby` wiring for each input/textarea.
+- Kept backend validation untouched; added frontend mapping for backend error keys/messages to user-friendly text.
+
+### Files changed
+- `src/app/cadence/get-started/CadenceGetStartedClient.tsx`
+
+### Key decisions
+- Step-level validation now runs continuously from form state (`validateStep`) so Continue buttons are blocked until current-step requirements/formats are valid.
+- Field-level validation runs on blur, then re-validates on subsequent changes for touched fields (immediate feedback, no late surprise).
+- Step 3 optional fields (`transfer_number`, `booking_url`) are validated only when non-empty.
+- Step 4 submit gate validates area code only and no longer introduces new Step 3 format surprises.
+- Backend error strings like `Invalid owner_phone` are normalized/mapped to friendly copy before rendering.
+
+### Verification
+- `npm run build` ✅
+- Manual path check (`/cadence/get-started`, local dev):
+  - Step 1/2 Continue remains disabled until required fields are valid.
+  - Step 3 with invalid `owner_phone`, `owner_email`, or `booking_url` shows inline readable messages and keeps Continue disabled.
+  - Step 3 valid formats allows progression to Step 4.
+  - Step 4 focused on area code requirement (`###`) and submit button state tied to that field.
