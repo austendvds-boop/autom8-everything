@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, useReducedMotion } from "framer-motion";
 import BrandLogo from "@/components/BrandLogo";
+import { buttonHover } from "@/lib/motion";
 
 const navLinks = [
   { href: "/services", label: "Services" },
@@ -18,6 +19,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
+  const prefersReducedMotion = useReducedMotion();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 50);
@@ -26,14 +28,20 @@ export default function Navigation() {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "glass h-16" : "h-20 bg-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-3 md:px-4 ${
+          isScrolled ? "pt-3" : "pt-0"
         }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial={prefersReducedMotion ? { opacity: 0 } : { y: -100 }}
+        animate={prefersReducedMotion ? { opacity: 1 } : { y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between gap-3">
+        <div
+          className={`h-16 flex items-center justify-between gap-3 transition-all duration-300 border border-transparent ${
+            isScrolled
+              ? "glass max-w-4xl mx-auto rounded-full border-white/10 px-5"
+              : "max-w-7xl mx-auto px-6"
+          }`}
+        >
           <BrandLogo size="sm" showDescriptor={false} className="shrink-0" />
 
           <nav className="hidden md:flex items-center gap-8">
@@ -53,9 +61,7 @@ export default function Navigation() {
             <Link href="/contact">
               <motion.button
                 className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium text-sm"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                {...buttonHover}
               >
                 Build Strategy Call
               </motion.button>
@@ -75,10 +81,7 @@ export default function Navigation() {
                 }}
                 className="w-full h-0.5 bg-white origin-left"
               />
-              <motion.span
-                animate={{ opacity: isMobileMenuOpen ? 0 : 1 }}
-                className="w-full h-0.5 bg-white"
-              />
+              <motion.span animate={{ opacity: isMobileMenuOpen ? 0 : 1 }} className="w-full h-0.5 bg-white" />
               <motion.span
                 animate={{
                   rotate: isMobileMenuOpen ? -45 : 0,
@@ -119,11 +122,7 @@ export default function Navigation() {
                   </Link>
                 </motion.div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
                 <Link
                   href="/contact"
                   className="mt-8 px-8 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium"

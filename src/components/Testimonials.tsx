@@ -1,9 +1,10 @@
 "use client";
 
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Star } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
+import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 type Testimonial = {
   quote: ReactNode;
@@ -72,33 +73,24 @@ const testimonials: Testimonial[] = [
 const duplicatedTestimonials = [...testimonials, ...testimonials];
 
 export default function Testimonials() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <section className="py-24 relative overflow-hidden mesh-bg">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-4xl md:text-5xl font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
+    <section className="py-40 relative overflow-hidden mesh-bg">
+      <div className="max-w-6xl mx-auto px-6">
+        <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Proof That This <span className="gradient-text">Works</span>
           </h2>
-          <p className="text-[#A1A1AA] text-lg max-w-2xl mx-auto">
-            Real owner feedback from local businesses we support.
-          </p>
+          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">Real owner feedback from local businesses we support.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           {proofStats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              className="bg-[#12121A] border border-white/5 rounded-xl p-5 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: index * 0.08 }}
+              className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 text-center"
+              {...revealStagger(index, prefersReducedMotion)}
             >
               <p className="text-3xl font-bold gradient-text mb-1">{stat.value}</p>
               <p className="text-[#A1A1AA] text-sm">{stat.label}</p>
@@ -109,20 +101,24 @@ export default function Testimonials() {
         <div className="relative overflow-hidden">
           <motion.div
             className="flex gap-6"
-            animate={{ x: [0, -50 * testimonials.length * 4] }}
-            transition={{ duration: testimonials.length * 5, repeat: Infinity, ease: "linear" }}
+            animate={prefersReducedMotion ? undefined : { x: [0, -50 * testimonials.length * 4] }}
+            transition={{ duration: testimonials.length * 7, repeat: Infinity, ease: "linear" }}
             style={{ width: `${duplicatedTestimonials.length * 400}px` }}
           >
             {duplicatedTestimonials.map((testimonial, index) => (
-              <motion.div key={index} className="flex-shrink-0 w-[350px] md:w-[400px]" whileHover={{ y: -5 }}>
-                <div className="bg-[#12121A] border border-white/5 rounded-2xl p-6 h-full">
+              <motion.div
+                key={index}
+                className="flex-shrink-0 w-[350px] md:w-[400px]"
+                {...(prefersReducedMotion ? {} : cardHover)}
+              >
+                <div className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 h-full">
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-5 h-5 fill-[#F59E0B] text-[#F59E0B]" />
                     ))}
                   </div>
 
-                  <p className="text-[#A1A1AA] mb-6 leading-relaxed">
+                  <p className="text-[#A1A1AA] mb-6 leading-relaxed text-[15px]">
                     <span aria-hidden="true">“</span>
                     {testimonial.quote}
                     <span aria-hidden="true">”</span>

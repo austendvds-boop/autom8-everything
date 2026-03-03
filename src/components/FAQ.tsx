@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import { reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 type FAQItem = {
   question: string;
@@ -38,18 +39,14 @@ const faqs: FAQItem[] = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="py-24 bg-[#12121A]" id="faq">
-      <div className="max-w-3xl mx-auto px-6">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-4xl md:text-5xl font-semibold mb-4" style={{ fontFamily: 'var(--font-playfair), serif' }}>
+    <section className="py-32 bg-transparent relative" id="faq">
+      <div className="section-glow section-glow--mixed -top-20 right-0" />
+      <div className="max-w-3xl mx-auto px-6 relative z-10">
+        <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
         </motion.div>
@@ -57,27 +54,16 @@ export default function FAQ() {
         <div className="space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
-            
+
             return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.4 }}
-              >
+              <motion.div key={index} {...revealStagger(index, prefersReducedMotion)}>
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full text-left p-6 bg-[#1A1A23] border border-white/5 rounded-xl hover:border-[#8B5CF6]/30 transition-colors group"
+                  className="w-full text-left p-6 bg-[#111118] border border-white/[0.04] rounded-2xl hover:border-[#8B5CF6]/30 hover:shadow-[0_0_80px_rgba(139,92,246,0.08)] transition-all group"
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <span className="font-semibold text-lg text-white group-hover:text-[#8B5CF6] transition-colors">
-                      {faq.question}
-                    </span>
-                    <motion.div
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
+                    <span className="font-semibold text-lg text-white group-hover:text-[#8B5CF6] transition-colors">{faq.question}</span>
+                    <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
                       {isOpen ? (
                         <Minus className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" />
                       ) : (
@@ -85,7 +71,7 @@ export default function FAQ() {
                       )}
                     </motion.div>
                   </div>
-                  
+
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div
@@ -95,9 +81,7 @@ export default function FAQ() {
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >
-                        <p className="pt-4 text-[#A1A1AA] leading-relaxed">
-                          {faq.answer}
-                        </p>
+                        <p className="pt-4 text-[#A1A1AA] leading-relaxed text-[15px]">{faq.answer}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>

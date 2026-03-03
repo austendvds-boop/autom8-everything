@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
+import { reveal, revealReduced } from "@/lib/motion";
 
 function MagneticButton({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLButtonElement>(null);
@@ -46,58 +47,47 @@ function MagneticButton({ children }: { children: React.ReactNode }) {
 }
 
 export default function CTA() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <section className="py-32 relative overflow-hidden min-h-[70vh] flex items-center justify-center">
-      {/* Animated gradient background */}
+    <section className="py-40 relative overflow-hidden min-h-[70vh] flex items-center justify-center">
       <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6] via-[#A78BFA] to-[#06B6D4]">
         <motion.div
           className="absolute inset-0 opacity-30"
-          animate={{
-            background: [
-              "radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.5) 0%, transparent 50%)",
-              "radial-gradient(circle at 70% 60%, rgba(6, 182, 212, 0.5) 0%, transparent 50%)",
-              "radial-gradient(circle at 40% 80%, rgba(167, 139, 250, 0.5) 0%, transparent 50%)",
-              "radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.5) 0%, transparent 50%)",
-            ],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          animate={
+            prefersReducedMotion
+              ? undefined
+              : {
+                  background: [
+                    "radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.5) 0%, transparent 50%)",
+                    "radial-gradient(circle at 70% 60%, rgba(6, 182, 212, 0.5) 0%, transparent 50%)",
+                    "radial-gradient(circle at 40% 80%, rgba(167, 139, 250, 0.5) 0%, transparent 50%)",
+                    "radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.5) 0%, transparent 50%)",
+                  ],
+                }
+          }
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <motion.h2
           className="text-5xl md:text-7xl font-semibold text-white mb-6"
-          style={{ fontFamily: 'var(--font-playfair), serif' }}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          style={{ fontFamily: "var(--font-playfair), serif" }}
+          {...(prefersReducedMotion ? revealReduced : reveal)}
         >
-Want more leads without more chaos?
+          Want more leads without more chaos?
         </motion.h2>
 
-        <motion.p
-          className="text-xl md:text-2xl text-white/80 mb-10"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+        <motion.p className="text-xl md:text-2xl text-white/80 mb-10" {...(prefersReducedMotion ? revealReduced : reveal)}>
           Book a quick call and we will map out the fastest way to get better leads and stop missed follow-up.
         </motion.p>
 
-        <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
+        <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...(prefersReducedMotion ? revealReduced : reveal)}>
           <Link href="/contact">
             <MagneticButton>
               <span className="inline-block px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow">
-Book Your Strategy Call
+                Book Your Strategy Call
               </span>
             </MagneticButton>
           </Link>
@@ -105,17 +95,11 @@ Book Your Strategy Call
             href="/services"
             className="inline-block px-8 py-4 rounded-full border border-white/40 text-white font-semibold text-lg hover:bg-white/10 transition-colors"
           >
-See Services & Pricing
+            See Services & Pricing
           </Link>
         </motion.div>
 
-        <motion.p
-          className="mt-8 text-white/60 text-sm"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
+        <motion.p className="mt-8 text-white/60 text-sm" {...(prefersReducedMotion ? revealReduced : revealReduced)}>
           Simple plan: launch first, then monthly support as you grow.
         </motion.p>
       </div>

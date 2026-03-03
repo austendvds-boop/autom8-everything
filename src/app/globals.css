@@ -49,6 +49,15 @@
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Motion tokens */
+  --motion-reveal-duration: 0.7s;
+  --motion-reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-hover-duration: 0.3s;
+  --motion-hover-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-stagger-text: 0.06s;
+  --motion-stagger-card: 0.1s;
+  --motion-scroll-offset: 30px;
 }
 
 @theme inline {
@@ -75,6 +84,11 @@ body {
   color: var(--color-text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid #8B5CF6;
+  outline-offset: 2px;
 }
 
 /* Custom Scrollbar */
@@ -128,13 +142,27 @@ body {
 /* Mesh Background */
 .mesh-bg {
   background: 
-    radial-gradient(at 40% 20%, rgba(139, 92, 246, 0.3) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(6, 182, 212, 0.2) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(167, 139, 250, 0.2) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(6, 182, 212, 0.2) 0px, transparent 50%),
+    radial-gradient(at 40% 20%, rgba(139, 92, 246, 0.21) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(6, 182, 212, 0.14) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(167, 139, 250, 0.14) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(139, 92, 246, 0.105) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(6, 182, 212, 0.14) 0px, transparent 50%),
     var(--color-bg-primary);
 }
+
+.section-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.section-glow--purple { background: #8B5CF6; }
+.section-glow--cyan { background: #06B6D4; }
+.section-glow--mixed { background: linear-gradient(135deg, #8B5CF6, #06B6D4); }
 
 /* Grid Pattern */
 .grid-pattern {
