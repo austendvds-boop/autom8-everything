@@ -42,6 +42,14 @@ const initialState: FormState = {
   preferred_area_code: ""
 };
 
+function parseJsonSafe<T>(text: string): T | null {
+  try {
+    return text ? (JSON.parse(text) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function CadenceGetStartedClient() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(initialState);
@@ -68,16 +76,24 @@ export default function CadenceGetStartedClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
       });
-      if (!startRes.ok) throw new Error("Failed to save onboarding details");
-      const startData = (await startRes.json()) as { session_id: string };
+      const startText = await startRes.text();
+      const startJson = parseJsonSafe<{ session_id?: string; error?: string }>(startText);
+      if (!startRes.ok || !startJson?.session_id) {
+        throw new Error(startJson?.error || `Failed to save onboarding details (${startRes.status})`);
+      }
+      const startData = startJson as { session_id: string };
 
       const checkoutRes = await fetch(`${API_BASE}/api/onboarding/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: startData.session_id })
       });
-      if (!checkoutRes.ok) throw new Error("Failed to create checkout");
-      const checkoutData = (await checkoutRes.json()) as { checkout_url: string };
+      const checkoutText = await checkoutRes.text();
+      const checkoutJson = parseJsonSafe<{ checkout_url?: string; error?: string }>(checkoutText);
+      if (!checkoutRes.ok || !checkoutJson?.checkout_url) {
+        throw new Error(checkoutJson?.error || `Failed to create checkout (${checkoutRes.status})`);
+      }
+      const checkoutData = checkoutJson as { checkout_url: string };
 
       window.localStorage.setItem("cadence_onboarding_session_id", startData.session_id);
       window.location.href = checkoutData.checkout_url;
