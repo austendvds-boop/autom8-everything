@@ -1,5 +1,17 @@
 # CODER-CONTEXT.md
 
+## 2026-03-03 — Hero copy/CTA focused update
+
+### Completed
+- Updated homepage hero copy in `src/components/Hero.tsx` only:
+  - Headline: `Simple tools to help your business grow.`
+  - Subhead: `We build and run the systems that bring in more calls, better leads, and more booked jobs — without the tech headache.`
+- Kept a single hero CTA button: `See What We Can Do`.
+- Removed the secondary hero CTA/button (`Try Cadence Free — AI Phone Answering`) while preserving the existing hero visual style, motion, and layout structure.
+
+### Validation
+- `npm run build` ✅
+
 ## 2026-02-21 — Branding + Metadata Pass
 
 ### Completed
