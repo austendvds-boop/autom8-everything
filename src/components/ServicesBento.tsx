@@ -20,6 +20,9 @@ type Product = {
   cta: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
   badge?: string;
+  hoverBorderClass?: string;
+  hoverGlowClass?: string;
+  hoverOverlayClass?: string;
 };
 
 const products: Product[] = [
@@ -27,9 +30,9 @@ const products: Product[] = [
     tier: "hero",
     eyebrow: "AI Voice Agent",
     productName: "Cadence",
-    valueProp: "Never miss another customer call. AI answers 24/7, books appointments, handles FAQs.",
+    valueProp: "AI answers calls, books jobs, and handles FAQs 24/7.",
     price: "$199/mo",
-    priceContext: "after 7-day free trial · no contracts",
+    priceContext: "after 7-day free trial | no contracts",
     priceAriaLabel: "Price: 199 dollars per month after a seven day free trial with no contracts",
     microProof: "Live in 5 minutes",
     icon: PhoneCall,
@@ -41,49 +44,61 @@ const products: Product[] = [
     tier: "primary",
     eyebrow: "Web Development",
     productName: "Websites That Convert",
-    valueProp: "Fast, clean sites designed to show up on Google and get you more calls.",
+    valueProp: "High-converting websites built fast to drive more local calls.",
     price: "From $799",
-    priceContext: "one-time · 3 tiers available",
+    priceContext: "one-time | 3 tiers available",
     priceAriaLabel: "Price: from 799 dollars one time with three available tiers",
     microProof: "Launch in 2 weeks",
     icon: Globe,
     cta: { href: "/pricing", label: "See Plans" },
+    hoverBorderClass: "hover:border-[#8B5CF6]/35",
+    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)]",
+    hoverOverlayClass: "group-hover:from-[#8B5CF6]/[0.04]",
   },
   {
     tier: "primary",
     eyebrow: "Search & Content",
     productName: "Monthly SEO",
-    valueProp: "Blog posts, ranking improvements, and local visibility — every month.",
+    valueProp: "Monthly SEO and content that steadily grows qualified local traffic.",
     price: "From $500/mo",
-    priceContext: "monthly · no long-term contracts",
+    priceContext: "monthly | no long-term contracts",
     priceAriaLabel: "Price: from 500 dollars per month with no long term contracts",
     microProof: "Results within 90 days",
     icon: TrendingUp,
     cta: { href: "/pricing", label: "See Plans" },
+    hoverBorderClass: "hover:border-[#06B6D4]/35",
+    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(6,182,212,0.32),0_0_78px_rgba(6,182,212,0.12)]",
+    hoverOverlayClass: "group-hover:from-[#06B6D4]/[0.05]",
   },
   {
     tier: "secondary",
     eyebrow: "Reputation",
     productName: "Review Autopilot",
-    valueProp: "Automatically collect 5-star reviews. Catch bad experiences privately.",
+    valueProp: "Automate review requests and protect your reputation privately.",
     price: "From $149/mo",
     priceContext: "per location",
     priceAriaLabel: "Price: from 149 dollars per month per location",
     microProof: "Avg 4.8 star increase",
     icon: Star,
     cta: { href: "/pricing", label: "See Plans" },
+    hoverBorderClass: "hover:border-[#A78BFA]/35",
+    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(167,139,250,0.30),0_0_78px_rgba(167,139,250,0.12)]",
+    hoverOverlayClass: "group-hover:from-[#A78BFA]/[0.05]",
   },
   {
     tier: "secondary",
     eyebrow: "Custom Build",
-    productName: "Tailored Tools",
-    valueProp: "Dashboards, booking systems, internal tools — built around how you work.",
+    productName: "Custom Apps",
+    valueProp: "Custom systems built around your workflow, team, and goals.",
     price: "Custom quote",
     priceContext: "scoped after a call",
     priceAriaLabel: "Price: custom quote scoped after a discovery call",
     microProof: "Your workflow, not ours",
     icon: Wrench,
     cta: { href: "/contact", label: "Book Call" },
+    hoverBorderClass: "hover:border-[#7C3AED]/35",
+    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(124,58,237,0.30),0_0_78px_rgba(124,58,237,0.12)]",
+    hoverOverlayClass: "group-hover:from-[#7C3AED]/[0.05]",
   },
 ];
 
@@ -122,7 +137,7 @@ export default function ServicesBento() {
           whileTap={prefersReducedMotion ? {} : { y: -2 }}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/[0.06] via-transparent to-[#06B6D4]/[0.04]" />
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr,auto] gap-8 md:gap-10 items-start">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr,auto] gap-6 md:gap-8 items-start">
             <div className="flex flex-col">
               <div className="flex flex-wrap items-center gap-3 mb-2">
                 <span className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">{hero.eyebrow}</span>
@@ -144,8 +159,8 @@ export default function ServicesBento() {
                 {hero.productName}
               </h3>
 
-              <p className="text-[#A1A1AA] text-[15px] leading-relaxed max-w-2xl mb-5">{hero.valueProp}</p>
-              <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-5" />
+              <p className="text-[#A1A1AA] text-[15px] leading-relaxed max-w-2xl mb-4">{hero.valueProp}</p>
+              <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-4" />
 
               <div className="flex flex-col sm:flex-row gap-3 mt-auto">
                 <Link
@@ -167,10 +182,13 @@ export default function ServicesBento() {
 
             <div className="bg-[#0A0A0F]/40 rounded-2xl p-6 md:min-w-[240px] shadow-[inset_0_0_40px_rgba(139,92,246,0.04)]">
               <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-2">Pricing</p>
-              <p aria-label={hero.priceAriaLabel} className="text-3xl font-bold text-white">
+              <p
+                aria-label={hero.priceAriaLabel}
+                className="text-4xl font-extrabold text-white/95 group-hover:text-white transition-colors duration-300"
+              >
                 {hero.price}
               </p>
-              <p className="text-xs text-[#71717A] mt-1 mb-4">{hero.priceContext}</p>
+              <p className="text-xs text-[#71717A] mt-1 mb-3">{hero.priceContext}</p>
               <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium">
                 <Check className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>{hero.microProof}</span>
@@ -187,13 +205,15 @@ export default function ServicesBento() {
               <motion.article
                 key={product.productName}
                 aria-label={product.productName}
-                className="group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-6 md:p-8 min-h-[300px] hover:border-[#8B5CF6]/40 hover:shadow-[0_0_80px_rgba(139,92,246,0.10)] transition-all duration-300"
+                className={`group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-6 md:p-8 min-h-[320px] ${product.hoverBorderClass ?? "hover:border-[#8B5CF6]/35"} ${product.hoverGlowClass ?? "hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)]"} transition-all duration-300`}
                 {...revealStagger(index + 1, prefersReducedMotion)}
                 {...(prefersReducedMotion ? {} : cardHover)}
-                whileHover={prefersReducedMotion ? {} : { y: -4 }}
+                whileHover={prefersReducedMotion ? {} : { y: -2 }}
                 whileTap={prefersReducedMotion ? {} : { y: -2 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/0 to-transparent group-hover:from-[#8B5CF6]/[0.04] transition-opacity duration-500" />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/0 to-transparent ${product.hoverOverlayClass ?? "group-hover:from-[#8B5CF6]/[0.04]"} transition-opacity duration-500`}
+                />
                 <div className="relative z-10 h-full flex flex-col">
                   <div className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-2">{product.eyebrow}</div>
 
@@ -208,10 +228,13 @@ export default function ServicesBento() {
                     {product.productName}
                   </h3>
 
-                  <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-5">{product.valueProp}</p>
+                  <p className="text-[#A1A1AA] text-[15px] leading-relaxed line-clamp-2 mb-5">{product.valueProp}</p>
                   <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-5" />
 
-                  <p aria-label={product.priceAriaLabel} className="text-xl font-bold text-white">
+                  <p
+                    aria-label={product.priceAriaLabel}
+                    className="text-2xl md:text-3xl font-extrabold text-white/90 group-hover:text-white transition-colors duration-300"
+                  >
                     {product.price}
                   </p>
                   <p className="text-xs text-[#71717A] mt-1 mb-4">{product.priceContext}</p>
