@@ -66,7 +66,7 @@ export default function CadencePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <Link
-              href="/contact"
+              href="/cadence/get-started"
               className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
             >
               Start Free Trial
@@ -193,7 +193,7 @@ export default function CadencePage() {
               <li>✓ Live transfer to your phone</li>
             </ul>
             <Link
-              href="/contact"
+              href="/cadence/get-started"
               className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
             >
               Start Your Free Trial
@@ -225,7 +225,7 @@ export default function CadencePage() {
           </h2>
           <p className="text-[#A1A1AA] text-lg mb-8">Set up in 5 minutes. No credit card required for the trial.</p>
           <Link
-            href="/contact"
+            href="/cadence/get-started"
             className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
           >
             Start Free Trial

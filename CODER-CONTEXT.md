@@ -408,3 +408,27 @@
 - Vercel production deployment: `https://autom8-everything-10j4g6ei2-austs-projects-ee024705.vercel.app`
 - Aliased production URL: `https://autom8everything.com`
 - Verified route responds: `https://autom8everything.com/services/cadence` (HTTP 200).
+
+## 2026-03-03 — Cadence SaaS onboarding wizard + welcome flow
+
+### Completed
+- Added onboarding route and 4-step wizard:
+  - `src/app/cadence/get-started/page.tsx`
+  - `src/app/cadence/get-started/CadenceGetStartedClient.tsx`
+- Wizard collects Phase 1 blueprint fields and calls backend endpoints:
+  - `POST /api/onboarding/start`
+  - `POST /api/onboarding/checkout`
+  - redirects user to returned Stripe Checkout URL
+- Added welcome/status route that polls provisioning state:
+  - `src/app/cadence/welcome/page.tsx`
+  - `src/app/cadence/welcome/CadenceWelcomeClient.tsx`
+  - displays status + assigned number + failure error when present
+- Updated `src/app/services/cadence/page.tsx` CTA buttons to route users to `/cadence/get-started`.
+- Updated `.env.example` with `NEXT_PUBLIC_CADENCE_API_URL`.
+
+### Validation
+- `npm run build` ✅ (non-blocking Next workspace root warning about multiple lockfiles)
+
+### Git
+- Commit: `<pending>`
+- Push: `<pending>`
