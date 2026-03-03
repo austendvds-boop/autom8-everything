@@ -5,6 +5,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import SocialProofBar from "@/components/SocialProofBar";
 import ServicesBento from "@/components/ServicesBento";
+import CadenceHighlight from "@/components/CadenceHighlight";
 import WhoItsFor from "@/components/WhoItsFor";
 import Testimonials from "@/components/Testimonials";
 import HowItWorks from "@/components/HowItWorks";
@@ -20,6 +21,7 @@ export default function HomePageClient() {
         <Hero />
         <SocialProofBar />
         <ServicesBento />
+        <CadenceHighlight />
         <WhoItsFor />
         <Testimonials />
         <HowItWorks />

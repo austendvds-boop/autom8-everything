@@ -141,6 +141,11 @@ Supporting Service Pages
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 {
+                  href: "/services/cadence",
+                  title: "Cadence AI Voice Agent",
+                  description: "AI receptionist that answers your calls 24/7, books appointments, and handles FAQs. Live in 5 minutes.",
+                },
+                {
                   href: "/services/ai-automation",
                   title: "AI Automation Services",
                   description: "Deploy practical AI agents and AI-assisted workflows inside your existing stack.",

@@ -9,6 +9,7 @@ const footerLinks = {
   product: [
     { label: "Automation Services", href: "/services" },
     { label: "AI Automation", href: "/services/ai-automation" },
+    { label: "Cadence AI Voice", href: "/services/cadence" },
     { label: "CRM Automation", href: "/services/crm-automation" },
     { label: "Business Process Automation", href: "/services/business-process-automation" },
     { label: "GoHighLevel Setup", href: "/services/gohighlevel-setup" },

@@ -2,10 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
 
-const rootDir = process.cwd();
+const rootDir = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
 const queuePath = path.join(rootDir, "scripts/blog-keyword-queue.json");
 const outputDir = path.join(rootDir, "content/blog");
-const apiKeyPath = "C:/Users/austen/.openclaw/credentials/moonshot-api-key.txt";
+const gatewayUrl = "http://localhost:18789/v1/chat/completions";
+const gatewayTokenPath = "C:/Users/austen/.openclaw/credentials/openclaw-gateway-token.txt";
 
 const categories = ["Automation Strategy", "CRM Automation", "Local SEO", "Comparisons", "Phoenix Local"];
 
@@ -54,17 +55,17 @@ function pickImage(keyword) {
   return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80";
 }
 
-async function generateBody(keyword, apiKey) {
+async function generateBody(keyword, gatewayToken) {
   const prompt = `Write a 500-600 word SEO blog post for autom8everything.com, a Phoenix Arizona automation agency. Topic: ${keyword}. Include: what the topic is, why local Phoenix businesses care, how Autom8 Everything helps, CTA to contact. No emojis. Plain professional tone. Output ONLY the markdown content (no code blocks, no commentary).`;
 
-  const response = await fetch("https://api.moonshot.cn/v1/chat/completions", {
+  const response = await fetch(gatewayUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${gatewayToken}`,
     },
     body: JSON.stringify({
-      model: "moonshot-v1-8k",
+      model: "moonshot/kimi-k2.5",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     }),
@@ -72,7 +73,7 @@ async function generateBody(keyword, apiKey) {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Moonshot API error ${response.status}: ${text}`);
+    throw new Error(`Gateway API error ${response.status}: ${text}`);
   }
 
   const json = await response.json();
@@ -89,8 +90,8 @@ function makeMetaDescription(keyword) {
 }
 
 async function main() {
-  if (!fs.existsSync(apiKeyPath)) {
-    console.log("Missing API key at credentials/moonshot-api-key.txt");
+  if (!fs.existsSync(gatewayTokenPath)) {
+    console.log("Missing gateway token at credentials/openclaw-gateway-token.txt");
     process.exit(0);
   }
 
@@ -116,8 +117,8 @@ async function main() {
   const metaDescription = makeMetaDescription(keyword);
   const featuredImage = pickImage(keyword);
 
-  const apiKey = fs.readFileSync(apiKeyPath, "utf8").trim();
-  const body = await generateBody(keyword, apiKey);
+  const gatewayToken = fs.readFileSync(gatewayTokenPath, "utf8").trim();
+  const body = await generateBody(keyword, gatewayToken);
 
   if (!body) {
     throw new Error("Moonshot returned empty content");
