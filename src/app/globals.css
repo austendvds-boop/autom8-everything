@@ -198,6 +198,19 @@ body {
   100% { background-position: 200% 0; }
 }
 
+@keyframes star-twinkle {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.18));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.34));
+  }
+}
+
+.star-twinkle {
+  animation: star-twinkle 3.4s ease-in-out infinite;
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }

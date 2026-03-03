@@ -1,5 +1,25 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-03 — Homepage reliability metric card converted to premium star-rating motif
+
+### Scope completed
+- Updated only the homepage social proof metric card area in `src/components/SocialProofBar.tsx`.
+- Replaced the old numeric reliability metric treatment with a star-rating trust motif and subtle motion glow/twinkle.
+- Preserved existing theme surface, typography, and spacing system (no broad redesign).
+
+### Files changed
+- `src/components/SocialProofBar.tsx`
+- `src/app/globals.css`
+
+### Key decisions
+- Kept the first two stat cards unchanged and scoped the redesign to the third trust/reliability card only.
+- Added five-star icon row with restrained shimmer/twinkle and amber radial glow for premium visual emphasis.
+- Added reduced-motion-safe behavior by disabling Framer star motion when `useReducedMotion()` is true; CSS animations also respect existing global `prefers-reduced-motion` guard.
+- Maintained contrast with white primary text and `#A1A1AA` secondary text on the existing dark card surface.
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-03 — Homepage-only Huly-inspired refresh
 
 ### Scope completed
