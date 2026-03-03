@@ -5,10 +5,10 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import SocialProofBar from "@/components/SocialProofBar";
 import ServicesBento from "@/components/ServicesBento";
-import CadenceHighlight from "@/components/CadenceHighlight";
+import HowItWorks from "@/components/HowItWorks";
 import WhoItsFor from "@/components/WhoItsFor";
 import Testimonials from "@/components/Testimonials";
-import HowItWorks from "@/components/HowItWorks";
+import PricingOverview from "@/components/PricingOverview";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -27,10 +27,10 @@ export default function HomePageClient() {
         <Hero />
         <SocialProofBar />
         <ServicesBento />
-        <CadenceHighlight />
+        <HowItWorks />
         <WhoItsFor />
         <Testimonials />
-        <HowItWorks />
+        <PricingOverview />
         <FAQ />
         <CTA />
         <Footer />

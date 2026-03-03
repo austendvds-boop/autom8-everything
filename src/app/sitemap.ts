@@ -5,22 +5,21 @@ import { siteUrl } from "@/lib/seo";
 
 const staticRoutes = [
   "",
-  "/services",
-  "/services/ai-automation",
-  "/services/crm-automation",
-  "/services/local-seo-automation",
-  "/services/business-process-automation",
-  "/services/email-automation-services",
-  "/services/zapier-consulting",
-  "/services/gohighlevel-setup",
+  "/pricing",
+  "/services/cadence",
+  "/services/website-creation",
+  "/services/review-funnel",
+  "/services/seo-content",
+  "/services/custom-apps",
   "/about",
-  "/automations",
   "/blog",
   "/locations",
   "/contact",
   "/privacy",
   "/terms",
   "/security",
+  "/cadence/get-started",
+  "/cadence/welcome",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -32,6 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteUrl}${route}`,
     lastModified: now,
     changeFrequency: route.startsWith("/blog/") ? "weekly" : "monthly",
-    priority: index === 0 ? 1 : route.startsWith("/services") || route.startsWith("/locations") ? 0.9 : 0.8,
+    priority: index === 0 ? 1 : route.startsWith("/services") || route.startsWith("/locations") || route === "/pricing" ? 0.9 : 0.8,
   }));
 }

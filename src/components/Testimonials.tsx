@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Star } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
-import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
+import { cardHover, reveal, revealReduced } from "@/lib/motion";
 
 type Testimonial = {
   quote: ReactNode;
@@ -14,24 +14,11 @@ type Testimonial = {
   image: string;
 };
 
-const proofStats = [
-  { value: "25+", label: "Local businesses supported" },
-  { value: "24 hrs", label: "Typical follow-up setup window" },
-  { value: "5.0/5", label: "Client satisfaction rating" },
-];
-
 const testimonials: Testimonial[] = [
   {
     quote: (
       <>
-        <BrandLogo
-          as="span"
-          size="xs"
-          showMark={false}
-          showDescriptor={false}
-          className="mr-1 align-[-0.1em]"
-          screenReaderText="Autom8"
-        />
+        <BrandLogo as="span" size="xs" showMark={false} showDescriptor={false} className="mr-1 align-[-0.1em]" screenReaderText="Autom8" />
         helped us reply to new leads faster, and we stopped losing jobs to slow follow-up.
       </>
     ),
@@ -80,23 +67,10 @@ export default function Testimonials() {
       <div className="max-w-6xl mx-auto px-6">
         <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Proof That This <span className="gradient-text">Works</span>
+            What Business Owners <span className="gradient-text">Say</span>
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">Real owner feedback from local businesses we support.</p>
+          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">Real feedback from local businesses we support.</p>
         </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-          {proofStats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 text-center"
-              {...revealStagger(index, prefersReducedMotion)}
-            >
-              <p className="text-3xl font-bold gradient-text mb-1">{stat.value}</p>
-              <p className="text-[#A1A1AA] text-sm">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
 
         <div className="relative overflow-hidden">
           <motion.div
@@ -106,11 +80,7 @@ export default function Testimonials() {
             style={{ width: `${duplicatedTestimonials.length * 400}px` }}
           >
             {duplicatedTestimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className="flex-shrink-0 w-[350px] md:w-[400px]"
-                {...(prefersReducedMotion ? {} : cardHover)}
-              >
+              <motion.div key={index} className="flex-shrink-0 w-[350px] md:w-[400px]" {...(prefersReducedMotion ? {} : cardHover)}>
                 <div className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 h-full">
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (

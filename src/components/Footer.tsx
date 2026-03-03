@@ -6,25 +6,24 @@ import BrandLogo from "@/components/BrandLogo";
 import { businessProfile } from "@/lib/business";
 
 const footerLinks = {
-  product: [
-    { label: "Automation Services", href: "/services" },
-    { label: "AI Automation", href: "/services/ai-automation" },
-    { label: "Cadence AI Voice", href: "/services/cadence" },
-    { label: "CRM Automation", href: "/services/crm-automation" },
-    { label: "Business Process Automation", href: "/services/business-process-automation" },
-    { label: "GoHighLevel Setup", href: "/services/gohighlevel-setup" },
+  products: [
+    { label: "AI Phone Answering", href: "/services/cadence" },
+    { label: "Website Creation", href: "/services/website-creation" },
+    { label: "Review Funnel", href: "/services/review-funnel" },
+    { label: "SEO & Content", href: "/services/seo-content" },
+    { label: "Custom Apps", href: "/services/custom-apps" },
+    { label: "Pricing", href: "/pricing" },
   ],
   company: [
-    { label: "Locations", href: "/locations" },
     { label: "About", href: "/about" },
-    { label: "Case Studies", href: "/automations" },
-    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
-  ],
-  legal: [
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
     { label: "Security", href: "/security" },
+  ],
+  resources: [
+    { label: "Blog", href: "/blog" },
+    { label: "Locations", href: "/locations" },
   ],
 };
 
@@ -42,9 +41,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
           <div className="md:col-span-2">
             <BrandLogo size="md" className="mb-4" />
-            <p className="text-[#A1A1AA] mb-3 max-w-xs">
-              From chaos to autopilot. The automation system for modern businesses.
-            </p>
+            <p className="text-[#A1A1AA] mb-3 max-w-xs">Websites, phone answering, reviews, and growth support for local businesses.</p>
             <p className="text-sm text-[#A1A1AA] mb-6 max-w-sm leading-relaxed">
               {businessProfile.name} • {businessProfile.city}, {businessProfile.state}
               {businessProfile.phoneDisplay ? ` • ${businessProfile.phoneDisplay}` : ""} • {businessProfile.email}
@@ -69,9 +66,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-4">Product</h4>
+            <h4 className="font-semibold text-white mb-4">Products</h4>
             <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
+              {footerLinks.products.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
                     {link.label}
@@ -95,9 +92,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-4">Legal</h4>
+            <h4 className="font-semibold text-white mb-4">Resources</h4>
             <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
+              {footerLinks.resources.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
                     {link.label}
@@ -111,13 +108,7 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[#52525B] text-sm flex flex-wrap items-center gap-1.5 justify-center md:justify-start">
             <span>© {new Date().getFullYear()}</span>
-            <BrandLogo
-              as="span"
-              size="xs"
-              showMark={false}
-              className="align-[-0.02em]"
-              screenReaderText="Autom8 Everything"
-            />
+            <BrandLogo as="span" size="xs" showMark={false} className="align-[-0.02em]" screenReaderText="Autom8 Everything" />
             <span>All rights reserved.</span>
           </p>
           <p className="text-[#52525B] text-sm">Built in Phoenix, AZ</p>

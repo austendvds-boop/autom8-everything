@@ -1,50 +1,8 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { reveal, revealReduced } from "@/lib/motion";
-
-function MagneticButton({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLButtonElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const springConfig = { stiffness: 300, damping: 20 };
-  const xSpring = useSpring(x, springConfig);
-  const ySpring = useSpring(y, springConfig);
-
-  const xOutput = useTransform(xSpring, [-100, 100], [-10, 10]);
-  const yOutput = useTransform(ySpring, [-100, 100], [-10, 10]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    x.set(e.clientX - centerX);
-    y.set(e.clientY - centerY);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.button
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ x: xOutput, y: yOutput }}
-      className="relative z-10"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-    >
-      {children}
-    </motion.button>
-  );
-}
 
 export default function CTA() {
   const prefersReducedMotion = useReducedMotion();
@@ -71,36 +29,25 @@ export default function CTA() {
       </div>
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <motion.h2
-          className="text-5xl md:text-7xl font-semibold text-white mb-6"
-          style={{ fontFamily: "var(--font-playfair), serif" }}
-          {...(prefersReducedMotion ? revealReduced : reveal)}
-        >
-          Want more leads without more chaos?
+        <motion.h2 className="text-5xl md:text-7xl font-semibold text-white mb-6" style={{ fontFamily: "var(--font-playfair), serif" }} {...(prefersReducedMotion ? revealReduced : reveal)}>
+          Ready to stop losing customers?
         </motion.h2>
 
         <motion.p className="text-xl md:text-2xl text-white/80 mb-10" {...(prefersReducedMotion ? revealReduced : reveal)}>
-          Book a quick call and we will map out the fastest way to get better leads and stop missed follow-up.
+          Pick the easiest next step for you.
         </motion.p>
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...(prefersReducedMotion ? revealReduced : reveal)}>
-          <Link href="/contact">
-            <MagneticButton>
-              <span className="inline-block px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow">
-                Book Your Strategy Call
-              </span>
-            </MagneticButton>
+          <Link href="/cadence/get-started" className="inline-block px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow">
+            Start Your Free Trial
           </Link>
-          <Link
-            href="/services"
-            className="inline-block px-8 py-4 rounded-full border border-white/40 text-white font-semibold text-lg hover:bg-white/10 transition-colors"
-          >
-            See Services & Pricing
+          <Link href="/contact" className="inline-block px-8 py-4 rounded-full border border-white/40 text-white font-semibold text-lg hover:bg-white/10 transition-colors">
+            Book a Quick Call
           </Link>
         </motion.div>
 
-        <motion.p className="mt-8 text-white/60 text-sm" {...(prefersReducedMotion ? revealReduced : revealReduced)}>
-          Simple plan: launch first, then monthly support as you grow.
+        <motion.p className="mt-8 text-white/70 text-sm" {...(prefersReducedMotion ? revealReduced : revealReduced)}>
+          No credit card for the trial. No pressure on the call.
         </motion.p>
       </div>
     </section>

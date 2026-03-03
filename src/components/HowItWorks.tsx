@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { LucideIcon, Search, Wrench, Rocket } from "lucide-react";
+import { LucideIcon, ClipboardList, Wrench, PhoneCall } from "lucide-react";
 import { reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 type Step = {
@@ -14,21 +15,21 @@ type Step = {
 const steps: Step[] = [
   {
     number: "01",
-    title: "Quick Call",
-    description: "We learn how you get leads now and where calls or jobs are slipping through.",
-    icon: Search,
+    title: "Tell Us What You Need",
+    description: "Fill out a quick form or book a 15-minute call. We'll ask where you're losing leads.",
+    icon: ClipboardList,
   },
   {
     number: "02",
-    title: "We Build It",
-    description: "We launch your site and lead follow-up setup so new leads get a fast response.",
+    title: "We Set Everything Up",
+    description: "We build your site, connect your phone answering, and launch your review funnel. Most teams are live in 2–4 weeks.",
     icon: Wrench,
   },
   {
     number: "03",
-    title: "You Keep Growing",
-    description: "We keep improving your SEO and reviews so your phone keeps ringing.",
-    icon: Rocket,
+    title: "Your Phone Starts Ringing",
+    description: "More calls, more reviews, and better Google rankings. We keep improving your setup every month.",
+    icon: PhoneCall,
   },
 ];
 
@@ -44,9 +45,9 @@ export default function HowItWorks() {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Our Simple <span className="gradient-text">3-Step Process</span>
+            How It <span className="gradient-text">Works</span>
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">Three simple steps to help you get more leads and book more work.</p>
+          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">Simple steps. Clear timeline. No technical work on your side.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -89,6 +90,12 @@ export default function HowItWorks() {
             );
           })}
         </div>
+
+        <motion.div className="text-center mt-12" {...(prefersReducedMotion ? revealReduced : reveal)}>
+          <Link href="/contact" className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">
+            Tell Us What You Need
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

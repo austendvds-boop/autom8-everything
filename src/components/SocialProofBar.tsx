@@ -1,18 +1,13 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { revealReduced } from "@/lib/motion";
+import { reveal, revealReduced, revealStagger } from "@/lib/motion";
 
-const logos = [
-  { name: "Home Services", color: "#8B5CF6" },
-  { name: "Healthcare", color: "#06B6D4" },
-  { name: "Legal", color: "#A78BFA" },
-  { name: "Real Estate", color: "#10B981" },
-  { name: "Contractors", color: "#F59E0B" },
-  { name: "Local Retail", color: "#EF4444" },
+const stats = [
+  { value: "25+", label: "Businesses Served" },
+  { value: "24-Hour", label: "Setup" },
+  { value: "5.0/5", label: "Client Rating" },
 ];
-
-const duplicatedLogos = [...logos, ...logos, ...logos];
 
 export default function SocialProofBar() {
   const prefersReducedMotion = useReducedMotion();
@@ -20,26 +15,21 @@ export default function SocialProofBar() {
   return (
     <section className="py-8 bg-[#0A0A0F] border-y border-white/5">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.p className="text-center text-[#52525B] text-sm uppercase tracking-widest mb-8" {...revealReduced}>
-          Trusted by local businesses across service industries
+        <motion.p className="text-center text-[#A1A1AA] text-sm uppercase tracking-widest mb-6" {...(prefersReducedMotion ? revealReduced : reveal)}>
+          Helping 25+ local businesses get more calls every month
         </motion.p>
 
-        <div className="relative overflow-hidden">
-          <motion.div
-            className="flex gap-16"
-            animate={prefersReducedMotion ? undefined : { x: [0, -33.33 * 100] }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          >
-            {duplicatedLogos.map((logo, index) => (
-              <div
-                key={index}
-                className="flex-shrink-0 flex items-center gap-2 grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300"
-              >
-                <div className="w-8 h-8 rounded-lg" style={{ background: logo.color }} />
-                <span className="text-xl font-semibold text-white whitespace-nowrap">{logo.name}</span>
-              </div>
-            ))}
-          </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              className="rounded-2xl border border-white/[0.06] bg-[#111118] px-6 py-4 text-center"
+              {...revealStagger(index, prefersReducedMotion)}
+            >
+              <p className="text-2xl font-bold gradient-text">{stat.value}</p>
+              <p className="text-sm text-[#A1A1AA]">{stat.label}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

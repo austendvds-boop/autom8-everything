@@ -9,22 +9,31 @@ import { motion } from "framer-motion";
 import { Mail, MapPin, Clock, Send, Check, Phone } from "lucide-react";
 import { businessProfile } from "@/lib/business";
 
+const helpOptions = ["Phone Answering", "Website", "Reviews", "SEO", "Not Sure Yet"];
+
 export default function ContactPageClient() {
   const [formState, setFormState] = useState({
     name: "",
     email: "",
     company: "",
+    phone: "",
+    helpWith: [] as string[],
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const toggleHelp = (option: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      helpWith: prev.helpWith.includes(option) ? prev.helpWith.filter((item) => item !== option) : [...prev.helpWith, option],
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
+    await new Promise((resolve) => setTimeout(resolve, 1200));
     setIsSubmitting(false);
     setIsSubmitted(true);
   };
@@ -36,22 +45,11 @@ export default function ContactPageClient() {
 
         <section className="pt-32 pb-20 mesh-bg">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <motion.h1
-              className="text-5xl md:text-7xl font-semibold mb-6"
-              style={{ fontFamily: "var(--font-playfair), serif" }}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              Contact <span className="gradient-text">Autom8 Everything</span>
+            <motion.h1 className="text-5xl md:text-7xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              Tell Us About <span className="gradient-text">Your Business</span>
             </motion.h1>
-            <motion.p
-              className="text-xl text-[#A1A1AA] max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              Get a custom automation roadmap for your business and see what can be automated in the next 30 days.
+            <motion.p className="text-xl text-[#A1A1AA] max-w-2xl mx-auto" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
+              Fill out this quick intake form and we&apos;ll recommend the best next step.
             </motion.p>
           </div>
         </section>
@@ -59,188 +57,70 @@ export default function ContactPageClient() {
         <section className="py-20">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
-                  <h2 className="text-2xl font-semibold mb-6">Send us a message</h2>
-
-                  {isSubmitted ? (
-                    <div className="text-center py-12">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#10B981]/20 flex items-center justify-center">
-                        <Check className="w-8 h-8 text-[#10B981]" />
-                      </div>
-                      <h3 className="text-xl font-semibold mb-2">Message Sent</h3>
-                      <p className="text-[#A1A1AA]">We will get back to you within 24 hours.</p>
+              <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
+                <h2 className="text-2xl font-semibold mb-6">Quick Intake Form</h2>
+                {isSubmitted ? (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#10B981]/20 flex items-center justify-center">
+                      <Check className="w-8 h-8 text-[#10B981]" />
                     </div>
-                  ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div>
-                        <label htmlFor="name" className="block text-sm text-[#A1A1AA] mb-2">
-                          Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          required
-                          value={formState.name}
-                          onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                          className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#8B5CF6] transition-colors"
-                          placeholder="John Doe"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="email" className="block text-sm text-[#A1A1AA] mb-2">
-                          Email *
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          required
-                          value={formState.email}
-                          onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                          className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#8B5CF6] transition-colors"
-                          placeholder="john@company.com"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="company" className="block text-sm text-[#A1A1AA] mb-2">
-                          Company
-                        </label>
-                        <input
-                          type="text"
-                          id="company"
-                          value={formState.company}
-                          onChange={(e) => setFormState({ ...formState, company: e.target.value })}
-                          className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#8B5CF6] transition-colors"
-                          placeholder="Your Company"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="message" className="block text-sm text-[#A1A1AA] mb-2">
-                          Message *
-                        </label>
-                        <textarea
-                          id="message"
-                          required
-                          rows={5}
-                          value={formState.message}
-                          onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                          className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#8B5CF6] transition-colors resize-none"
-                          placeholder="Tell us about your automation needs..."
-                        />
-                      </div>
-
-                      <motion.button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full py-4 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <motion.div
-                              animate={{ rotate: 360 }}
-                              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                            />
-                            Sending...
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-5 h-5" />
-                            Send Message
-                          </>
-                        )}
-                      </motion.button>
-                    </form>
-                  )}
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="space-y-6"
-              >
-                <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
-                  <h2 className="text-2xl font-semibold mb-6">NAP & Service Area</h2>
-
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-6 h-6 text-[#8B5CF6]" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Email</h3>
-                        <a href={`mailto:${businessProfile.email}`} className="text-[#A1A1AA] hover:text-[#8B5CF6] transition-colors">
-                          {businessProfile.email}
-                        </a>
-                      </div>
-                    </div>
-
-                    {businessProfile.phoneDisplay && businessProfile.phoneE164 ? (
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
-                          <Phone className="w-6 h-6 text-[#8B5CF6]" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold mb-1">Phone</h3>
-                          <a href={`tel:${businessProfile.phoneE164}`} className="text-[#A1A1AA] hover:text-[#8B5CF6] transition-colors">
-                            {businessProfile.phoneDisplay}
-                          </a>
-                        </div>
-                      </div>
-                    ) : null}
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-6 h-6 text-[#8B5CF6]" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Location</h3>
-                        <p className="text-[#A1A1AA]">{businessProfile.city}, {businessProfile.state}</p>
-                        <p className="text-[#A1A1AA]">{businessProfile.serviceAreaLabel}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
-                        <Clock className="w-6 h-6 text-[#8B5CF6]" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Response Time</h3>
-                        <p className="text-[#A1A1AA]">Within 24 hours</p>
-                      </div>
-                    </div>
+                    <h3 className="text-xl font-semibold mb-2">Thanks — we got it</h3>
+                    <p className="text-[#A1A1AA]">We&apos;ll follow up within 24 hours.</p>
                   </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    <input required value={formState.name} onChange={(e) => setFormState({ ...formState, name: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Name *" />
+                    <input type="email" required value={formState.email} onChange={(e) => setFormState({ ...formState, email: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Email *" />
+                    <input value={formState.company} onChange={(e) => setFormState({ ...formState, company: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Business name" />
+                    <input value={formState.phone} onChange={(e) => setFormState({ ...formState, phone: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Phone number (optional)" />
+
+                    <div>
+                      <p className="text-sm text-[#A1A1AA] mb-2">What do you need help with?</p>
+                      <div className="flex flex-wrap gap-2">
+                        {helpOptions.map((option) => (
+                          <button
+                            type="button"
+                            key={option}
+                            onClick={() => toggleHelp(option)}
+                            className={`px-3 py-2 rounded-full border text-sm ${
+                              formState.helpWith.includes(option)
+                                ? "border-[#8B5CF6] bg-[#8B5CF6]/20 text-white"
+                                : "border-white/15 text-[#A1A1AA]"
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <textarea required rows={5} value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg resize-none" placeholder="Anything else we should know? *" />
+
+                    <motion.button type="submit" disabled={isSubmitting} className="w-full py-4 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-50" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      {isSubmitting ? "Sending..." : <><Send className="w-5 h-5" /> Send Intake</>}
+                    </motion.button>
+                  </form>
+                )}
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
+                  <h3 className="text-xl font-semibold mb-4">Prefer to try something first?</h3>
+                  <p className="text-[#A1A1AA] mb-6">Start Cadence free and see live phone answering in minutes.</p>
+                  <Link href="/cadence/get-started" className="inline-block px-6 py-3 rounded-lg border border-[#8B5CF6] text-[#8B5CF6] font-semibold hover:bg-[#8B5CF6]/10 transition-colors">Start Free Trial</Link>
                 </div>
 
                 <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
-                  <h3 className="text-xl font-semibold mb-4">Free Consultation</h3>
-                  <p className="text-[#A1A1AA] mb-6">
-                    Not sure where to start? Book a free 30-minute consultation to discuss your automation and SEO priorities.
-                  </p>
-                  <a
-                    href={`mailto:${businessProfile.email}?subject=Free%20Consultation%20Request`}
-                    className="inline-block px-6 py-3 rounded-lg border border-[#8B5CF6] text-[#8B5CF6] font-semibold hover:bg-[#8B5CF6]/10 transition-colors"
-                  >
-                    Schedule Call
-                  </a>
-                  <p className="text-sm text-[#A1A1AA] mt-4">
-                    Want strategy first? Explore our <Link href="/blog" className="text-[#8B5CF6] hover:text-[#A78BFA]">latest automation insights</Link>.
-                  </p>
+                  <h2 className="text-2xl font-semibold mb-6">Business Info</h2>
+                  <div className="space-y-5 text-[#A1A1AA]">
+                    <p className="flex items-center gap-3"><Mail className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.email}</p>
+                    {businessProfile.phoneDisplay && <p className="flex items-center gap-3"><Phone className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.phoneDisplay}</p>}
+                    <p className="flex items-center gap-3"><MapPin className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.city}, {businessProfile.state}</p>
+                    <p className="flex items-center gap-3"><Clock className="w-5 h-5 text-[#8B5CF6]" />Response within 24 hours</p>
+                  </div>
+                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%2015-minute%20call`} className="inline-block mt-6 px-6 py-3 rounded-lg border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Book a 15-Minute Call</Link>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>

@@ -432,3 +432,46 @@
 ### Git
 - Commit: `<pending>`
 - Push: `<pending>`
+
+## 2026-03-03 — Homepage + IA rewrite (content architecture blueprint)
+
+### Completed
+- Reworked homepage IA order in `src/app/HomePageClient.tsx`:
+  - removed standalone `CadenceHighlight` from render
+  - reordered sections to: Hero → Social Proof → Product Grid → How It Works → Who It’s For → Testimonials → Pricing Overview → FAQ → CTA
+  - added new `PricingOverview` section component
+- Updated homepage conversion strategy and plain-language copy:
+  - `src/components/Hero.tsx`
+  - `src/components/SocialProofBar.tsx`
+  - `src/components/ServicesBento.tsx` (featured Cadence + 4 product cards)
+  - `src/components/HowItWorks.tsx`
+  - `src/components/WhoItsFor.tsx`
+  - `src/components/Testimonials.tsx`
+  - `src/components/FAQ.tsx`
+  - `src/components/CTA.tsx`
+- Added new `src/components/PricingOverview.tsx` with mixed pricing model and tiered CTAs.
+- Updated navigation and footer IA:
+  - `src/components/Navigation.tsx` now uses Products + Pricing top-level structure and `Start Free Trial` CTA.
+  - `src/components/Footer.tsx` now follows Products / Company / Resources structure.
+- Added new product pages:
+  - `src/app/services/website-creation/page.tsx`
+  - `src/app/services/review-funnel/page.tsx`
+  - `src/app/services/seo-content/page.tsx`
+  - `src/app/services/custom-apps/page.tsx`
+  - `src/app/pricing/page.tsx`
+- Implemented redirect and route consolidation:
+  - `src/app/services/page.tsx` now redirects to `/pricing`
+  - `next.config.ts` now includes permanent redirects from deprecated service slugs and `/automations`
+- Updated contact flow in `src/app/contact/ContactPageClient.tsx`:
+  - added intake-style checkboxes, optional phone field, and Cadence trial callout
+  - kept call booking path as secondary action
+- Updated sitemap routes in `src/app/sitemap.ts` for the new IA.
+
+### Validation
+- `npm run lint` ✅
+- `npm run build` ✅
+
+### Notes
+- Build still reports non-blocking Next workspace-root warning due multiple lockfiles.
+- Existing legacy route files remain in repo but are now covered by 301 redirects in `next.config.ts`.
+

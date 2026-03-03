@@ -5,35 +5,32 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 import { reveal, revealReduced, revealStagger } from "@/lib/motion";
 
-type FAQItem = {
-  question: string;
-  answer: string;
-};
-
-const faqs: FAQItem[] = [
+const faqs = [
   {
-    question: "Can you help us get more calls and booked jobs?",
-    answer: "Yes. That is the main goal. We improve your website, speed up follow-up, and help more local people find you on Google.",
+    question: "How much does this cost?",
+    answer:
+      "It depends on what you need. Phone answering is $199/mo with a free trial. Websites and review funnels have set project prices shared upfront. Monthly SEO starts at a flat rate.",
   },
   {
-    question: "Do you build websites and lead follow-up tools?",
-    answer: "Yes. We build both. Your site and lead tools work together so every new lead gets a fast response.",
+    question: "I already have a website. Can you work with it?",
+    answer:
+      "Yes. We can improve your current site or rebuild it on our platform. If we migrate your existing design, that migration is quoted separately as an add-on.",
   },
   {
-    question: "Can you replace our current website without hurting Google rankings?",
-    answer: "Yes. We move important pages carefully and keep SEO basics in place during the switch.",
+    question: "How fast can I get started?",
+    answer: "Cadence phone answering is live in 5 minutes. Website projects usually take 2–4 weeks.",
   },
   {
-    question: "How long does setup take?",
-    answer: "Most projects launch in about 2 to 6 weeks. We give you a clear timeline before we start.",
+    question: "Do I need to be tech-savvy?",
+    answer: "No. We handle setup and technical details. You get simple updates and clear next steps.",
   },
   {
-    question: "Do you offer monthly support?",
-    answer: "Yes. After launch, we can handle monthly SEO, content updates, and ongoing improvements.",
+    question: "Is there a long-term contract?",
+    answer: "No. Cadence and monthly support are month-to-month. Project work has a clear scope and timeline.",
   },
   {
-    question: "Will this work with the software we already use?",
-    answer: "Usually yes. We connect with most common tools and fill any gaps with simple custom setup.",
+    question: "What areas do you serve?",
+    answer: "We work with businesses across Phoenix and nationwide. Everything can be handled remotely.",
   },
 ];
 
@@ -54,7 +51,6 @@ export default function FAQ() {
         <div className="space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
-
             return (
               <motion.div key={index} {...revealStagger(index, prefersReducedMotion)}>
                 <button
@@ -64,11 +60,7 @@ export default function FAQ() {
                   <div className="flex items-center justify-between gap-4">
                     <span className="font-semibold text-lg text-white group-hover:text-[#8B5CF6] transition-colors">{faq.question}</span>
                     <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                      {isOpen ? (
-                        <Minus className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" />
-                      ) : (
-                        <Plus className="w-5 h-5 text-[#52525B] group-hover:text-[#8B5CF6] transition-colors" />
-                      )}
+                      {isOpen ? <Minus className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" /> : <Plus className="w-5 h-5 text-[#52525B] group-hover:text-[#8B5CF6] transition-colors" />}
                     </motion.div>
                   </div>
 

@@ -5,16 +5,16 @@ import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 const audiences = [
   {
-    title: "Owners who are tired of missed leads",
-    description: "You are getting inquiries, but slow follow-up means jobs slip away.",
+    title: "You're missing calls after hours",
+    description: "Customers call and get voicemail. They hang up and call the next company.",
   },
   {
-    title: "Teams with too much manual work",
-    description: "Your staff is busy copying info, sending reminders, and chasing updates.",
+    title: "Your website isn't bringing in leads",
+    description: "You have a site, but it doesn't rank on Google and doesn't convince people to call.",
   },
   {
-    title: "Businesses ready for steady growth",
-    description: "You want more calls every month, not random spikes that are hard to repeat.",
+    title: "You don't have time to figure out marketing",
+    description: "You're great at your work. You shouldn't need to become a tech expert to get customers.",
   },
 ];
 
@@ -26,11 +26,9 @@ export default function WhoItsFor() {
       <div className="max-w-6xl mx-auto px-6">
         <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Who This Is <span className="gradient-text">For</span>
+            Is This a Fit for <span className="gradient-text">You?</span>
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">
-            Built for local business owners who want more calls, more booked jobs, and less missed follow-up.
-          </p>
+          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">If any of these feel familiar, we can help.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
