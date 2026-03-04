@@ -20,6 +20,8 @@ const staticRoutes = [
   "/security",
   "/cadence/get-started",
   "/cadence/welcome",
+  "/onboarding",
+  "/onboarding/success",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
