@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Check, Globe, PhoneCall, Star, TrendingUp, Wrench } from "lucide-react";
+import { Check, Globe, MessageSquareHeart, PhoneCall, Search, Wrench } from "lucide-react";
 import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
 
-type ProductTier = "hero" | "primary" | "secondary";
+type ProductTier = "hero" | "small";
 
 type Product = {
   tier: ProductTier;
@@ -21,103 +21,81 @@ type Product = {
   cta: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
   badge?: string;
-  hoverBorderClass?: string;
-  hoverGlowClass?: string;
-  hoverOverlayClass?: string;
 };
 
 const products: Product[] = [
   {
     tier: "hero",
-    eyebrow: "AI Voice Agent",
+    eyebrow: "Featured",
     productName: "Cadence",
-    valueProp: "AI answers calls, books jobs, and handles FAQs 24/7.",
+    valueProp:
+      "Your voice receptionist answers calls day and night, handles common questions, and helps customers take the next step.",
     price: "$199/mo",
-    priceContext: "after 7-day free trial | no contracts",
-    priceAriaLabel: "Price: 199 dollars per month after a seven day free trial with no contracts",
-    microProof: "Live in 5 minutes",
+    priceContext: "7-day free trial • cancel anytime",
+    priceAriaLabel: "Price: 199 dollars per month with a seven day free trial",
+    microProof: "Setup takes just a few minutes",
     features: [
-      "Forward your calls — we answer in seconds",
-      "Custom-trained on your business",
-      "Instant call summaries to your phone",
-      "Setup in under 5 minutes",
+      "Answers missed and after-hours calls",
+      "Handles your common business questions",
+      "Sends call summaries to your phone",
+      "Books or routes calls based on your rules",
     ],
     icon: PhoneCall,
-    badge: "FREE TRIAL",
-    cta: { href: "/cadence/get-started", label: "Start Free Trial" },
+    badge: "7-DAY FREE TRIAL",
+    cta: { href: "/onboarding", label: "Start Free Trial" },
     secondaryCta: { href: "/services/cadence", label: "Learn More" },
   },
   {
-    tier: "primary",
-    eyebrow: "Web Development",
-    productName: "Web Development",
-    valueProp: "Conversion-focused websites built fast to drive more local calls.",
-    price: "$799+",
-    priceContext: "one-time build | final scope by package",
-    priceAriaLabel: "Price: 799 dollars and up for a one time website build",
-    microProof: "Launch in ~2 weeks",
-    features: ["Mobile-first design", "SEO-ready from day one", "Built to convert visitors into booked calls"],
+    tier: "small",
+    eyebrow: "Reviews",
+    productName: "Review Funnel",
+    valueProp:
+      "Ask for reviews automatically after each job and keep responses consistent so your reputation keeps growing.",
+    price: "Coming Soon",
+    priceContext: "Join the waitlist",
+    priceAriaLabel: "Review Funnel pricing is coming soon",
+    microProof: "Collect more 5-star reviews with less follow-up",
+    icon: MessageSquareHeart,
+    cta: { href: "/services/review-funnel", label: "See Review Funnel" },
+  },
+  {
+    tier: "small",
+    eyebrow: "Websites",
+    productName: "Website Creation",
+    valueProp:
+      "Professional sites built to turn visitors into calls, with Launch, Scale, and Custom options based on your stage.",
+    price: "From $1,500",
+    priceContext: "Launch / Scale / Custom tiers",
+    priceAriaLabel: "Website Creation starts at 1500 dollars",
+    microProof: "Clear offer pages built for real customers",
     icon: Globe,
-    cta: { href: "/pricing", label: "See Plans" },
-    hoverBorderClass: "hover:border-[#8B5CF6]/35",
-    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)]",
-    hoverOverlayClass: "group-hover:from-[#8B5CF6]/[0.04]",
+    cta: { href: "/services/websites", label: "See Website Tiers" },
   },
   {
-    tier: "primary",
-    eyebrow: "Search & Content",
-    productName: "Search & Content",
-    valueProp: "Monthly SEO and content that keeps your business showing up in local search.",
-    price: "$149/mo",
-    priceContext: "monthly plan | cancel anytime",
-    priceAriaLabel: "Price: 149 dollars per month for search and content",
-    microProof: "Steady local visibility",
-    features: ["Local keyword targeting", "Google Business Profile support", "Weekly content publishing"],
-    icon: TrendingUp,
-    cta: { href: "/pricing", label: "See Plans" },
-    hoverBorderClass: "hover:border-[#06B6D4]/35",
-    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(6,182,212,0.32),0_0_78px_rgba(6,182,212,0.12)]",
-    hoverOverlayClass: "group-hover:from-[#06B6D4]/[0.05]",
+    tier: "small",
+    eyebrow: "Growth",
+    productName: "SEO & Content",
+    valueProp:
+      "Monthly blog posts and local SEO work that helps your business show up in search and stay visible over time.",
+    price: "Monthly Retainer",
+    priceContext: "Contact us for scope",
+    priceAriaLabel: "SEO and Content is offered as a monthly retainer",
+    microProof: "Steady ranking gains with consistent publishing",
+    icon: Search,
+    cta: { href: "/services/seo-content", label: "See SEO & Content" },
   },
   {
-    tier: "secondary",
-    eyebrow: "Reputation",
-    productName: "Reputation",
-    valueProp: "Automate review requests and keep your public rating moving up.",
-    price: "$149/mo",
-    priceContext: "monthly per location",
-    priceAriaLabel: "Price: 149 dollars per month per location",
-    microProof: "Avg 4.8 star increase",
-    features: [
-      "Automated post-service review requests",
-      "Monitor & respond from one dashboard",
-      "Boost your Google star rating",
-    ],
-    icon: Star,
-    cta: { href: "/pricing", label: "See Plans" },
-    hoverBorderClass: "hover:border-[#A78BFA]/35",
-    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(167,139,250,0.30),0_0_78px_rgba(167,139,250,0.12)]",
-    hoverOverlayClass: "group-hover:from-[#A78BFA]/[0.05]",
-  },
-  {
-    tier: "secondary",
-    eyebrow: "Custom Apps",
+    tier: "small",
+    eyebrow: "Built for You",
     productName: "Custom Apps",
-    valueProp: "Custom systems built around your workflow, team, and goals.",
-    price: "Custom quote",
-    priceContext: "scoped after a call",
-    priceAriaLabel: "Price: custom quote scoped after a discovery call",
-    microProof: "Your workflow, not ours",
-    features: [
-      "Scrapers, dashboards, internal tools",
-      "Built exactly for your workflow",
-      "Ongoing support included",
-    ],
+    valueProp:
+      "Need something specific? We build custom tools for your workflow, from lead scrapers to internal dashboards.",
+    price: "Custom Quote",
+    priceContext: "Scoped after a short call",
+    priceAriaLabel: "Custom Apps pricing is provided by quote",
+    microProof: "Built around how your team already works",
     icon: Wrench,
-    cta: { href: "/contact", label: "Book Call" },
-    hoverBorderClass: "hover:border-[#7C3AED]/35",
-    hoverGlowClass: "hover:shadow-[0_0_0_1px_rgba(124,58,237,0.30),0_0_78px_rgba(124,58,237,0.12)]",
-    hoverOverlayClass: "group-hover:from-[#7C3AED]/[0.05]",
+    cta: { href: "/services/custom-apps", label: "Book a Consultation" },
   },
 ];
 
@@ -125,7 +103,7 @@ export default function ServicesBento() {
   const prefersReducedMotion = useReducedMotion();
   const revealPreset = prefersReducedMotion ? revealReduced : reveal;
   const hero = products.find((product) => product.tier === "hero");
-  const nonHero = products.filter((product) => product.tier !== "hero");
+  const nonHero = products.filter((product) => product.tier === "small");
 
   if (!hero) return null;
 
@@ -141,16 +119,16 @@ export default function ServicesBento() {
             className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4"
             style={{ fontFamily: "var(--font-playfair), serif" }}
           >
-            Everything Your Business Needs to <span className="gradient-text">Grow</span>
+            Products That Keep Your Business <span className="gradient-text">Running Smoothly</span>
           </h2>
           <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">
-            Pick what you need now. Add more later. No long-term contracts on any of it.
+            Start with one tool or combine a few. Everything is built to be simple for real business owners.
           </p>
         </motion.div>
 
         <motion.article
           aria-label={hero.productName}
-          className="group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(140deg,rgba(21,18,33,0.96),rgba(15,15,24,0.96))_padding-box,linear-gradient(135deg,rgba(139,92,246,0.72),rgba(6,182,212,0.42))_border-box] p-7 md:p-10 mb-3 md:mb-4 shadow-[0_0_0_1px_rgba(139,92,246,0.3),0_0_88px_rgba(139,92,246,0.16)] hover:shadow-[0_0_0_1px_rgba(167,139,250,0.42),0_0_120px_rgba(139,92,246,0.24)] transition-all duration-300"
+          className="group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(140deg,rgba(21,18,33,0.96),rgba(15,15,24,0.96))_padding-box,linear-gradient(135deg,rgba(139,92,246,0.72),rgba(6,182,212,0.42))_border-box] p-7 md:p-10 mb-4 shadow-[0_0_0_1px_rgba(139,92,246,0.3),0_0_88px_rgba(139,92,246,0.16)] hover:shadow-[0_0_0_1px_rgba(167,139,250,0.42),0_0_120px_rgba(139,92,246,0.24)] transition-all duration-300"
           {...revealStagger(0, prefersReducedMotion)}
           initial={false}
           {...(prefersReducedMotion ? {} : cardHover)}
@@ -164,7 +142,7 @@ export default function ServicesBento() {
               <div className="flex flex-wrap items-center gap-3 mb-3">
                 <span className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">{hero.eyebrow}</span>
                 {hero.badge && (
-                  <span className="inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.14em] font-semibold px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#7C3AED] via-[#8B5CF6] to-[#A78BFA] border border-[#DDD6FE]/70 ring-1 ring-[#DDD6FE]/35 text-white shadow-[0_0_30px_rgba(167,139,250,0.5)] animate-[pulse_2.8s_ease-in-out_infinite]">
+                  <span className="inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.14em] font-semibold px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#7C3AED] via-[#8B5CF6] to-[#A78BFA] border border-[#DDD6FE]/70 ring-1 ring-[#DDD6FE]/35 text-white shadow-[0_0_30px_rgba(167,139,250,0.5)]">
                     {hero.badge}
                   </span>
                 )}
@@ -174,10 +152,7 @@ export default function ServicesBento() {
                 <HeroIcon className="w-5 h-5 text-[#8B5CF6]" />
               </div>
 
-              <h3
-                className="text-2xl md:text-3xl font-bold text-white mb-3"
-                style={{ fontFamily: "var(--font-playfair), serif" }}
-              >
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-playfair), serif" }}>
                 {hero.productName}
               </h3>
 
@@ -190,8 +165,7 @@ export default function ServicesBento() {
               >
                 {hero.price}
               </p>
-              <p className="text-sm text-[#A78BFA] mt-1 mb-1">7-day free trial</p>
-              <p className="text-xs text-[#71717A] mb-4">{hero.priceContext}</p>
+              <p className="text-xs text-[#A78BFA] mt-2 mb-4">{hero.priceContext}</p>
 
               <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium mb-6">
                 <Check className="w-3.5 h-3.5" aria-hidden="true" />
@@ -217,7 +191,7 @@ export default function ServicesBento() {
             </div>
 
             <div className="rounded-2xl border border-white/[0.12] bg-[#0F0F18]/70 p-5 md:p-6 shadow-[inset_0_0_60px_rgba(139,92,246,0.1)]">
-              <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-4">Why teams pick Cadence</p>
+              <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-4">What Cadence handles</p>
               <ul className="space-y-3">
                 {heroFeatures.map((feature) => (
                   <li key={feature} className="flex items-start gap-2.5">
@@ -235,22 +209,19 @@ export default function ServicesBento() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {nonHero.map((product, index) => {
             const Icon = product.icon;
-            const productFeatures = Array.isArray(product.features) ? product.features : [];
 
             return (
               <motion.article
                 key={product.productName}
                 aria-label={product.productName}
-                className={`group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[340px] ${product.hoverBorderClass ?? "hover:border-[#8B5CF6]/35"} ${product.hoverGlowClass ?? "hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)]"} transition-all duration-300`}
+                className="group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[320px] hover:border-[#8B5CF6]/35 hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)] transition-all duration-300"
                 {...revealStagger(index + 1, prefersReducedMotion)}
                 initial={false}
                 {...(prefersReducedMotion ? {} : cardHover)}
                 whileHover={prefersReducedMotion ? {} : { y: -2 }}
                 whileTap={prefersReducedMotion ? {} : { y: -2 }}
               >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/0 to-transparent ${product.hoverOverlayClass ?? "group-hover:from-[#8B5CF6]/[0.04]"} transition-opacity duration-500`}
-                />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/0 to-transparent group-hover:from-[#8B5CF6]/[0.04] transition-opacity duration-500" />
                 <div className="relative z-10 h-full flex flex-col">
                   <div className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-2">{product.eyebrow}</div>
 
@@ -258,25 +229,11 @@ export default function ServicesBento() {
                     <Icon className="w-5 h-5 text-[#8B5CF6]" />
                   </div>
 
-                  <h3
-                    className="text-xl font-bold text-white mb-3"
-                    style={{ fontFamily: "var(--font-playfair), serif" }}
-                  >
+                  <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-playfair), serif" }}>
                     {product.productName}
                   </h3>
 
-                  <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-4">{product.valueProp}</p>
-
-                  <ul className="space-y-2.5 mb-5">
-                    {productFeatures.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2.5">
-                        <span className="mt-0.5 inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#A78BFA]">
-                          <Check className="h-3 w-3" aria-hidden="true" />
-                        </span>
-                        <span className="text-sm leading-relaxed text-[#D4D4D8]">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-5">{product.valueProp}</p>
 
                   <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-5" />
 

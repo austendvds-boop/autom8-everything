@@ -6,7 +6,7 @@ import { reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 const stats = [
   { value: "25+", label: "Businesses Served" },
-  { value: "24-Hour", label: "Setup" },
+  { value: "24/7", label: "Coverage for Calls & Follow-Up" },
 ];
 
 export default function SocialProofBar() {
@@ -15,8 +15,11 @@ export default function SocialProofBar() {
   return (
     <section className="py-8 bg-[#0A0A0F] border-y border-white/5">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.p className="text-center text-[#A1A1AA] text-sm uppercase tracking-widest mb-6" {...(prefersReducedMotion ? revealReduced : reveal)}>
-          Helping 25+ local businesses get more calls every month
+        <motion.p
+          className="text-center text-[#A1A1AA] text-sm uppercase tracking-widest mb-6"
+          {...(prefersReducedMotion ? revealReduced : reveal)}
+        >
+          Trusted by local teams that want growth without extra busywork
         </motion.p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -56,7 +59,7 @@ export default function SocialProofBar() {
                   </motion.span>
                 ))}
               </div>
-              <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">Client Rating</p>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">5-Star Client Feedback</p>
             </div>
           </motion.div>
         </div>

@@ -7,6 +7,7 @@ const staticRoutes = [
   "",
   "/pricing",
   "/services/cadence",
+  "/services/websites",
   "/services/website-creation",
   "/services/review-funnel",
   "/services/seo-content",

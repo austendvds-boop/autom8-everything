@@ -27,7 +27,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.p className="text-sm uppercase tracking-widest text-[#8B5CF6] mb-4" {...revealPreset}>
-          For local business owners in Phoenix &amp; beyond
+          Simple tools for local businesses
         </motion.p>
 
         <motion.h1
@@ -35,29 +35,28 @@ export default function Hero() {
           style={{ fontFamily: "var(--font-playfair), serif" }}
           {...revealPreset}
         >
-          Simple tools to help your business grow.
+          Get more calls and booked jobs without the tech headache.
         </motion.h1>
 
         <motion.p className="text-xl md:text-2xl text-[#A1A1AA] max-w-4xl mx-auto mb-10" {...revealPreset}>
-          We build and run the systems that bring in more calls, better leads, and more booked jobs — without the tech
-          headache.
+          Autom8 sets up your phone answering, reviews, website, and SEO so your business can grow while you stay focused on the work.
         </motion.p>
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...revealPreset}>
-          <Link href="/pricing">
+          <Link href="#services">
             <motion.button
               className="px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] via-[#A78BFA] to-[#06B6D4] text-white font-semibold text-lg shadow-lg"
               {...buttonHover}
             >
-              See Plans
+              Explore Our Tools
             </motion.button>
           </Link>
-          <Link href="/cadence/get-started">
+          <Link href="/onboarding">
             <motion.button
               className="px-8 py-4 rounded-full border border-white/25 text-white font-semibold text-lg hover:border-[#8B5CF6]/60 transition-colors"
               {...buttonHover}
             >
-              Start Free Trial
+              Get Started
             </motion.button>
           </Link>
         </motion.div>

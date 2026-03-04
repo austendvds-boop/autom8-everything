@@ -7,9 +7,9 @@ import BrandLogo from "@/components/BrandLogo";
 import { buttonHover } from "@/lib/motion";
 
 const productLinks = [
-  { href: "/services/cadence", label: "AI Phone Answering" },
-  { href: "/services/website-creation", label: "Website Creation" },
+  { href: "/services/cadence", label: "Cadence" },
   { href: "/services/review-funnel", label: "Review Funnel" },
+  { href: "/services/websites", label: "Website Creation" },
   { href: "/services/seo-content", label: "SEO & Content" },
   { href: "/services/custom-apps", label: "Custom Apps" },
 ];
@@ -78,12 +78,12 @@ export default function Navigation() {
           </nav>
 
           <div className="hidden md:block">
-            <Link href="/cadence/get-started">
+            <Link href="/onboarding">
               <motion.button
                 className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium text-sm"
                 {...buttonHover}
               >
-                Start Free Trial
+                Get Started
               </motion.button>
             </Link>
           </div>
@@ -135,11 +135,11 @@ export default function Navigation() {
               ))}
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
                 <Link
-                  href="/cadence/get-started"
+                  href="/onboarding"
                   className="mt-8 px-8 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Start Free Trial
+                  Get Started
                 </Link>
               </motion.div>
             </nav>

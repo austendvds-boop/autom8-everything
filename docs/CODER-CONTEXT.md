@@ -1,5 +1,69 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-03 — Full content overhaul (homepage, product pages, pricing, website tiers)
+
+### Scope completed
+- Rewrote homepage hero to outcome-first messaging with required phrase: **"without the tech headache"**.
+- Updated homepage CTA stack to product-first flow:
+  - Primary: `See What We Build` → `/pricing`
+  - Secondary: `Call Us` → `/contact`
+- Reworked product card grid to requested structure:
+  - 1 featured large card: **Cadence** (`$199/mo`, `7-day free trial`, CTA → `/onboarding`)
+  - 4 smaller cards: **Review Funnel**, **Website Creation**, **SEO & Content**, **Custom Apps**
+  - Custom Apps card CTA set to `Book a Consultation`
+- Improved trust/social section copy for clearer plain-language credibility messaging.
+- Cleaned footer product links so it now includes all product pages + `/onboarding`.
+
+### Product pages
+- Verified and rewrote all required product pages with consistent structure:
+  - Hero section
+  - 3-step “How It Works”
+  - Pricing section
+  - Primary CTA section
+  - FAQ section
+- Updated/created routes:
+  - `/services/cadence` (copy refreshed)
+  - `/services/review-funnel` (pricing now “Coming Soon / Contact Us”)
+  - `/services/websites` (**new canonical website page**)
+  - `/services/seo-content` (monthly retainer + contact pricing)
+  - `/services/custom-apps` (consultative pricing and CTA)
+- Set legacy route `/services/website-creation` to redirect to `/services/websites`.
+
+### Pricing page
+- Rebuilt `/pricing` content to include all products with requested positioning:
+  - Cadence: `$199/mo` + `7-day free trial`
+  - Review Funnel: `Coming Soon` + contact CTA
+  - Websites: Launch/Scale/Custom with explicit tiers
+  - SEO & Content: monthly retainer + `Contact Us`
+  - Custom Apps: consultative pricing + `Book a Consultation`
+- Applied website tier pricing requirements:
+  - **Launch** — `$1,500`
+  - **Scale** — `$3,500`
+  - **Custom** — `Let’s Talk`
+
+### Files changed
+- `src/components/Hero.tsx`
+- `src/components/ServicesBento.tsx`
+- `src/components/SocialProofBar.tsx`
+- `src/components/Footer.tsx`
+- `src/components/Navigation.tsx`
+- `src/components/CTA.tsx`
+- `src/app/services/cadence/page.tsx`
+- `src/app/services/review-funnel/page.tsx`
+- `src/app/services/websites/page.tsx` (new)
+- `src/app/services/website-creation/page.tsx` (redirect)
+- `src/app/services/seo-content/page.tsx`
+- `src/app/services/custom-apps/page.tsx`
+- `src/app/pricing/page.tsx`
+- `src/app/sitemap.ts`
+- `src/app/services/ServicesPageClient.tsx` (copy cleanup)
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+- Note: pre-existing Next.js warning remains about inferred workspace root due to multiple lockfiles.
+
+
 ## 2026-03-03 — ServicesBento non-hero card uniformity pass (homepage product grid)
 
 ### Scope completed

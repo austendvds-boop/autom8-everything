@@ -142,13 +142,13 @@ Supporting Service Pages
               {[
                 {
                   href: "/services/cadence",
-                  title: "Cadence AI Voice Agent",
+                  title: "Cadence Voice Receptionist",
                   description: "AI receptionist that answers your calls 24/7, books appointments, and handles FAQs. Live in 5 minutes.",
                 },
                 {
                   href: "/services/ai-automation",
                   title: "AI Automation Services",
-                  description: "Deploy practical AI agents and AI-assisted workflows inside your existing stack.",
+                  description: "Deploy practical automations inside your existing stack.",
                 },
                 {
                   href: "/services/crm-automation",

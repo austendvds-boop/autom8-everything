@@ -1,98 +1,49 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, Minus } from "lucide-react";
+import { Check } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Autom8 Pricing",
-  description: "Simple pricing for Cadence, websites, review funnels, SEO, and custom apps.",
+  title: "Pricing | Autom8 Everything",
+  description: "Simple pricing for Cadence, review funnel, websites, SEO/content, and custom apps.",
   path: "/pricing",
 });
 
-type CtaCell = {
-  label: string;
-  href: string;
-};
-
-type FeatureCell = {
-  status: "yes" | "no";
-  note?: string;
-};
-
-type CellValue = string | CtaCell | FeatureCell;
-
-type ComparisonRow = {
-  label: string;
-  values: CellValue[];
-  isCtaRow?: boolean;
-};
-
-const productHeaders = ["Cadence", "Websites", "Review Funnel", "SEO & Content", "Custom Apps"];
-
-const comparisonRows: ComparisonRow[] = [
+const websiteTiers = [
   {
-    label: "Price",
-    values: ["$199/mo", "From $799", "$149/mo", "From $500/mo", "Custom quote"],
+    name: "Launch",
+    price: "$1,500",
+    details: ["5 pages", "Mobile responsive", "Professional design", "Core SEO setup"],
   },
   {
-    label: "Best for",
-    values: ["Missing calls", "No website or bad one", "Few/no reviews", "Not showing up on Google", "Manual processes"],
+    name: "Scale",
+    price: "$3,500",
+    details: ["10+ pages", "Custom design", "SEO-focused structure", "Blog setup"],
+    featured: true,
   },
   {
-    label: "Setup",
-    values: ["5 minutes", "~2 weeks", "Less than a day", "1 week audit", "2-4 weeks"],
-  },
-  {
-    label: "Contract",
-    values: ["Month-to-month", "One-time + optional support", "Month-to-month", "Month-to-month", "Per-project"],
-  },
-  {
-    label: "Free trial",
-    values: [
-      { status: "yes", note: "7 days" },
-      { status: "no", note: "None" },
-      { status: "no", note: "None" },
-      { status: "no", note: "None" },
-      { status: "no", note: "None" },
-    ],
-  },
-  {
-    label: "CTA",
-    isCtaRow: true,
-    values: [
-      { label: "Start Free Trial", href: "/cadence/get-started" },
-      { label: "Learn More", href: "/services/website-creation" },
-      { label: "Learn More", href: "/services/review-funnel" },
-      { label: "Learn More", href: "/services/seo-content" },
-      { label: "Book a Call", href: "/contact" },
-    ],
+    name: "Custom",
+    price: "Let's Talk",
+    details: ["Bespoke build", "Advanced integrations", "Ongoing support", "Built for your workflow"],
   },
 ];
 
 const faqs = [
   {
-    question: "Can I combine services?",
-    answer: "Yes. You can run one service or stack multiple services at the same time.",
+    question: "Can I start with one product and add more later?",
+    answer: "Yes. Most clients start with one service and expand as they grow.",
   },
   {
-    question: "Do you require a long-term contract?",
-    answer: "No. Recurring plans are month-to-month. Website and custom app work is scoped per project.",
+    question: "Do you lock me into long contracts?",
+    answer: "No. Cadence and retainers are month-to-month. Builds are scoped project by project.",
   },
   {
-    question: "How do I get started?",
-    answer: "Use the links in the table to start, or book a call if you want a recommendation.",
+    question: "How do I choose the right starting point?",
+    answer: "Reach out and we will recommend the fastest win based on your business goals.",
   },
 ];
-
-function isCtaCell(value: CellValue): value is CtaCell {
-  return typeof value !== "string" && "href" in value;
-}
-
-function isFeatureCell(value: CellValue): value is FeatureCell {
-  return typeof value !== "string" && "status" in value;
-}
 
 export default function PricingPage() {
   return (
@@ -102,104 +53,78 @@ export default function PricingPage() {
       <section className="pt-32 pb-20 mesh-bg">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h1 className="text-5xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Autom8 Pricing
+            Pricing
           </h1>
           <p className="text-xl text-[#A1A1AA] max-w-3xl mx-auto">
-            Compare each product side by side. Start with one service and add more when you need them.
+            Straightforward pricing so you can pick the right product now and grow from there.
           </p>
         </div>
       </section>
 
-      <section className="pb-14">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="relative rounded-3xl border border-white/10 bg-[#111118]">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[920px] border-separate border-spacing-0">
-                <thead>
-                  <tr>
-                    <th className="px-5 py-4 text-left text-sm font-semibold uppercase tracking-wide text-[#A1A1AA] border-b border-white/10 bg-[#12121A]">
-                      Compare Plans
-                    </th>
-                    {productHeaders.map((header, index) => (
-                      <th
-                        key={header}
-                        className={`px-5 py-4 text-left text-base font-semibold border-b border-white/10 ${
-                          index === 0
-                            ? "bg-[#1A1230] text-white border-l border-r border-[#8B5CF6]/40"
-                            : "bg-[#12121A] text-white"
-                        }`}
-                      >
-                        {header}
-                      </th>
+      <section className="pb-20">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <article className="rounded-2xl border border-[#8B5CF6]/40 bg-[#12121A] p-8">
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Cadence</p>
+            <h2 className="text-3xl font-semibold mb-2">$199/mo</h2>
+            <p className="text-[#A1A1AA] mb-6">7-day free trial included.</p>
+            <Link href="/onboarding" className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+              Start Free Trial
+            </Link>
+          </article>
+
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8">
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Review Funnel</p>
+            <h2 className="text-3xl font-semibold mb-2">Coming Soon</h2>
+            <p className="text-[#A1A1AA] mb-6">Automated review collection and response support.</p>
+            <Link href="/contact" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
+              Contact Us
+            </Link>
+          </article>
+
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 md:col-span-2">
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-3">Website Creation</p>
+            <h2 className="text-3xl font-semibold mb-6">Launch / Scale / Custom</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {websiteTiers.map((tier) => (
+                <div
+                  key={tier.name}
+                  className={`rounded-xl p-5 border ${tier.featured ? "border-[#8B5CF6]/50 bg-[#0A0A0F]" : "border-white/10 bg-[#0F0F16]"}`}
+                >
+                  <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-1">{tier.name}</p>
+                  <p className="text-2xl font-semibold mb-3">{tier.price}</p>
+                  <ul className="space-y-2 text-sm text-[#A1A1AA]">
+                    {tier.details.map((detail) => (
+                      <li key={detail} className="flex items-start gap-2.5">
+                        <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden />
+                        <span>{detail}</span>
+                      </li>
                     ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonRows.map((row, rowIndex) => {
-                    const isLastRow = rowIndex === comparisonRows.length - 1;
-
-                    return (
-                      <tr key={row.label}>
-                        <th
-                          scope="row"
-                          className={`px-5 py-4 text-left text-sm font-semibold text-white/90 bg-[#0F0F16] ${
-                            isLastRow ? "" : "border-b border-white/10"
-                          }`}
-                        >
-                          {row.label}
-                        </th>
-
-                        {row.values.map((value, colIndex) => (
-                          <td
-                            key={`${row.label}-${colIndex}`}
-                            className={`px-5 py-4 text-sm align-middle ${
-                              isLastRow ? "" : "border-b border-white/10"
-                            } ${
-                              colIndex === 0
-                                ? "bg-[#160F28] border-l border-r border-[#8B5CF6]/40"
-                                : "bg-[#111118] text-[#E4E4E7]"
-                            }`}
-                          >
-                            {row.isCtaRow && isCtaCell(value) ? (
-                              <Link
-                                href={value.href}
-                                className={`inline-flex items-center gap-1 font-semibold transition-colors ${
-                                  colIndex === 0 ? "text-[#C4B5FD] hover:text-[#DDD6FE]" : "text-[#A78BFA] hover:text-[#C4B5FD]"
-                                }`}
-                              >
-                                {value.label} <span aria-hidden>→</span>
-                              </Link>
-                            ) : isFeatureCell(value) ? (
-                              <span className={`inline-flex items-center gap-2 ${colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}`}>
-                                {value.status === "yes" ? (
-                                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
-                                ) : (
-                                  <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
-                                )}
-                                {value.note ? <span>{value.note}</span> : null}
-                              </span>
-                            ) : (
-                              <span className={colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}>{value as string}</span>
-                            )}
-                          </td>
-                        ))}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                  </ul>
+                </div>
+              ))}
             </div>
-            <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#111118] to-transparent md:hidden" />
-          </div>
-          <p className="mt-3 text-center text-xs text-[#71717A] md:hidden">Scroll → to compare all plans</p>
+            <Link href="/services/websites" className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+              View Website Details
+            </Link>
+          </article>
 
-          <p className="mt-6 text-center text-[#A1A1AA]">
-            Need help choosing?{" "}
-            <Link href="/contact" className="text-[#A78BFA] hover:text-[#8B5CF6] font-semibold">
-              Tell us about your business
-            </Link>{" "}
-            and we&apos;ll recommend a starting point.
-          </p>
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8">
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">SEO & Content</p>
+            <h2 className="text-3xl font-semibold mb-2">Monthly Retainer</h2>
+            <p className="text-[#A1A1AA] mb-6">Contact us for a quote based on your market and goals.</p>
+            <Link href="/contact" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
+              Contact Us
+            </Link>
+          </article>
+
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8">
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Custom Apps</p>
+            <h2 className="text-3xl font-semibold mb-2">Custom Scope</h2>
+            <p className="text-[#A1A1AA] mb-6">Bespoke app builds for your exact workflow and business needs.</p>
+            <Link href="/contact" className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+              Book a Consultation
+            </Link>
+          </article>
         </div>
       </section>
 
@@ -208,7 +133,6 @@ export default function PricingPage() {
           <h2 className="text-3xl md:text-4xl font-semibold mb-8" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Frequently Asked Questions
           </h2>
-
           <div className="space-y-4">
             {faqs.map((faq) => (
               <div key={faq.question} className="rounded-2xl border border-white/10 bg-[#0A0A0F] p-6">

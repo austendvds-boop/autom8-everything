@@ -1,31 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { businessProfile } from "@/lib/business";
 
-const footerLinks = {
-  products: [
-    { label: "AI Phone Answering", href: "/services/cadence" },
-    { label: "Website Creation", href: "/services/website-creation" },
-    { label: "Review Funnel", href: "/services/review-funnel" },
-    { label: "SEO & Content", href: "/services/seo-content" },
-    { label: "Custom Apps", href: "/services/custom-apps" },
-    { label: "Pricing", href: "/pricing" },
-  ],
-  company: [
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-    { label: "Privacy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Security", href: "/security" },
-  ],
-  resources: [
-    { label: "Blog", href: "/blog" },
-    { label: "Locations", href: "/locations" },
-  ],
-};
+const productLinks = [
+  { label: "Cadence", href: "/services/cadence" },
+  { label: "Review Funnel", href: "/services/review-funnel" },
+  { label: "Website Creation", href: "/services/websites" },
+  { label: "SEO & Content", href: "/services/seo-content" },
+  { label: "Custom Apps", href: "/services/custom-apps" },
+  { label: "Onboarding", href: "/onboarding" },
+  { label: "Pricing", href: "/pricing" },
+];
+
+const companyLinks = [
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "Security", href: "/security" },
+];
 
 const socialLinks = [
   { icon: Twitter, href: businessProfile.social.twitter, label: "Twitter" },
@@ -38,10 +34,12 @@ export default function Footer() {
   return (
     <footer className="py-16 bg-[#0A0A0F] border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="md:col-span-2">
             <BrandLogo size="md" className="mb-4" />
-            <p className="text-[#A1A1AA] mb-3 max-w-xs">Websites, phone answering, reviews, and growth support for local businesses.</p>
+            <p className="text-[#A1A1AA] mb-3 max-w-sm">
+              Simple tools that help local businesses answer more calls, get more reviews, and stay visible online.
+            </p>
             <p className="text-sm text-[#A1A1AA] mb-6 max-w-sm leading-relaxed">
               {businessProfile.name} • {businessProfile.city}, {businessProfile.state}
               {businessProfile.phoneDisplay ? ` • ${businessProfile.phoneDisplay}` : ""} • {businessProfile.email}
@@ -68,7 +66,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-white mb-4">Products</h4>
             <ul className="space-y-3">
-              {footerLinks.products.map((link) => (
+              {productLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
                     {link.label}
@@ -81,20 +79,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-white mb-4">Company</h4>
             <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold text-white mb-4">Resources</h4>
-            <ul className="space-y-3">
-              {footerLinks.resources.map((link) => (
+              {companyLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
                     {link.label}
