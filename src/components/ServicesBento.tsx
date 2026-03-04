@@ -136,7 +136,7 @@ export default function ServicesBento() {
     <section className="py-32 bg-transparent relative" id="services">
       <div className="section-glow section-glow--purple top-8 right-0" />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <motion.div className="text-center mb-20" {...revealPreset}>
+        <motion.div className="text-center mb-20" {...revealPreset} initial={false}>
           <h2
             className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4"
             style={{ fontFamily: "var(--font-playfair), serif" }}
@@ -152,6 +152,7 @@ export default function ServicesBento() {
           aria-label={hero.productName}
           className="group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(#111118,#111118)_padding-box,linear-gradient(135deg,rgba(139,92,246,0.45),rgba(6,182,212,0.28))_border-box] p-7 md:p-10 mb-4 md:mb-5 shadow-[0_0_72px_rgba(139,92,246,0.1)] hover:shadow-[0_0_110px_rgba(139,92,246,0.18)] transition-all duration-300"
           {...revealStagger(0, prefersReducedMotion)}
+          initial={false}
           {...(prefersReducedMotion ? {} : cardHover)}
           whileHover={prefersReducedMotion ? {} : { y: -4 }}
           whileTap={prefersReducedMotion ? {} : { y: -2 }}
@@ -241,6 +242,7 @@ export default function ServicesBento() {
                 aria-label={product.productName}
                 className={`group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[340px] ${product.hoverBorderClass ?? "hover:border-[#8B5CF6]/35"} ${product.hoverGlowClass ?? "hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)]"} transition-all duration-300`}
                 {...revealStagger(index + 1, prefersReducedMotion)}
+                initial={false}
                 {...(prefersReducedMotion ? {} : cardHover)}
                 whileHover={prefersReducedMotion ? {} : { y: -2 }}
                 whileTap={prefersReducedMotion ? {} : { y: -2 }}
