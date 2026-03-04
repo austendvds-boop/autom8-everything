@@ -170,10 +170,25 @@ export default function OnboardingClient() {
       <section className="mesh-bg pb-20 pt-32">
         <div className="mx-auto max-w-3xl px-6">
           <p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6]">Cadence Onboarding</p>
-          <h1 className="mb-4 text-4xl font-semibold md:text-5xl">Set up your AI receptionist in 5 minutes.</h1>
-          <p className="mb-8 text-[#A1A1AA]">Answer a few quick questions, then finish checkout to go live.</p>
+          <h1 className="mb-4 text-4xl font-semibold md:text-5xl">Set Up Your AI Receptionist in One Phone Call</h1>
+          <p className="mb-6 text-[#A1A1AA] text-lg">
+            Call (480) 631-3993 — Cadence will walk you through setup and have your number live in minutes.
+          </p>
 
-          <div className="space-y-5 rounded-2xl border border-white/10 bg-[#12121A] p-6 md:p-8">
+          <div className="mb-8 rounded-2xl border border-[#8B5CF6]/40 bg-[#12121A] p-6 md:p-8 text-center">
+            <p className="text-sm uppercase tracking-wide text-[#A78BFA] mb-3">Phone-first setup</p>
+            <a
+              href="tel:+14806313993"
+              className="inline-flex w-full md:w-auto items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 text-lg md:text-2xl font-semibold text-white"
+            >
+              Call (480) 631-3993
+            </a>
+            <p className="mt-4 text-sm text-[#A1A1AA]">We’ll get your Cadence number live before you hang up.</p>
+          </div>
+
+          <p className="mb-4 text-[#D4D4D8] font-medium">Prefer to type? Fill out the form below.</p>
+
+          <div className="space-y-5 rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 md:p-8">
             <p className="text-sm text-[#8B5CF6]">Step {step} of 4</p>
 
             {step === 1 && (

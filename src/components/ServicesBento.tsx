@@ -33,7 +33,7 @@ const products: Product[] = [
     price: "$199/mo",
     priceContext: "7-day free trial • cancel anytime",
     priceAriaLabel: "Price: 199 dollars per month with a seven day free trial",
-    microProof: "Setup takes just a few minutes",
+    microProof: "Experience Cadence live — you'll be set up before you hang up.",
     features: [
       "Answers missed and after-hours calls",
       "Handles your common business questions",
@@ -42,7 +42,7 @@ const products: Product[] = [
     ],
     icon: PhoneCall,
     badge: "7-DAY FREE TRIAL",
-    cta: { href: "/onboarding", label: "Start Free Trial" },
+    cta: { href: "tel:+14806313993", label: "Call (480) 631-3993" },
     secondaryCta: { href: "/services/cadence", label: "Learn More" },
   },
   {

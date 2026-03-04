@@ -60,6 +60,13 @@ export default function Hero() {
             </motion.button>
           </Link>
         </motion.div>
+
+        <motion.p className="mt-6 text-base md:text-lg text-[#C4B5FD]" {...revealPreset}>
+          Want to see how Cadence handles your calls?{" "}
+          <a href="tel:+14806313993" className="font-semibold text-white hover:text-[#DDD6FE] transition-colors">
+            Call (480) 631-3993
+          </a>
+        </motion.p>
       </div>
     </section>
   );

@@ -79,19 +79,22 @@ export default function CadencePage() {
           <p className="text-xl text-[#A1A1AA] max-w-3xl">
             Cadence works like a voice receptionist for your business, so customers get help right away and you stop losing calls to voicemail.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 mt-8">
-            <Link
-              href="/onboarding"
-              className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
-            >
-              Start 7-Day Free Trial
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60"
-            >
-              See How It Works
-            </Link>
+          <div className="mt-8">
+            <p className="text-[#C4B5FD] mb-4 text-lg">Try it right now — call (480) 631-3993</p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href="tel:+14806313993"
+                className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold text-center"
+              >
+                Call (480) 631-3993
+              </a>
+              <Link
+                href="/onboarding"
+                className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 text-center"
+              >
+                Prefer to type? Use the web form
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -145,12 +148,20 @@ export default function CadencePage() {
               $199<span className="text-xl text-[#A1A1AA]">/month</span>
             </p>
             <p className="text-[#A1A1AA] mb-6">7-day free trial. Month-to-month. Cancel anytime.</p>
-            <Link
-              href="/onboarding"
-              className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
-            >
-              Start Free Trial
-            </Link>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <a
+                href="tel:+14806313993"
+                className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
+              >
+                Call (480) 631-3993
+              </a>
+              <Link
+                href="/onboarding"
+                className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60"
+              >
+                Prefer to type? Use the web form
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -176,13 +187,21 @@ export default function CadencePage() {
           <h2 className="text-3xl md:text-4xl font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Ready to stop missing calls?
           </h2>
-          <p className="text-[#A1A1AA] text-lg mb-8">Start your trial and go live fast.</p>
-          <Link
-            href="/onboarding"
-            className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
-          >
-            Get Started
-          </Link>
+          <p className="text-[#A1A1AA] text-lg mb-8">Try it right now — call (480) 631-3993.</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a
+              href="tel:+14806313993"
+              className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
+            >
+              Call (480) 631-3993
+            </a>
+            <Link
+              href="/onboarding"
+              className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60"
+            >
+              Prefer to type? Use the web form
+            </Link>
+          </div>
         </div>
       </section>
 
