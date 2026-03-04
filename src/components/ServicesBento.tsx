@@ -16,7 +16,7 @@ type Product = {
   priceContext: string;
   priceAriaLabel: string;
   microProof: string;
-  features: string[];
+  features?: string[];
   icon: React.ComponentType<{ className?: string }>;
   cta: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
@@ -50,13 +50,13 @@ const products: Product[] = [
   {
     tier: "primary",
     eyebrow: "Web Development",
-    productName: "Websites That Convert",
-    valueProp: "High-converting websites built fast to drive more local calls.",
-    price: "From $799",
-    priceContext: "one-time | 3 tiers available",
-    priceAriaLabel: "Price: from 799 dollars one time with three available tiers",
-    microProof: "Launch in 2 weeks",
-    features: ["Mobile-first design", "SEO-ready from day one", "Built to convert visitors to calls"],
+    productName: "Web Development",
+    valueProp: "Conversion-focused websites built fast to drive more local calls.",
+    price: "$799+",
+    priceContext: "one-time build | final scope by package",
+    priceAriaLabel: "Price: 799 dollars and up for a one time website build",
+    microProof: "Launch in ~2 weeks",
+    features: ["Mobile-first design", "SEO-ready from day one", "Built to convert visitors into booked calls"],
     icon: Globe,
     cta: { href: "/pricing", label: "See Plans" },
     hoverBorderClass: "hover:border-[#8B5CF6]/35",
@@ -66,17 +66,13 @@ const products: Product[] = [
   {
     tier: "primary",
     eyebrow: "Search & Content",
-    productName: "Monthly SEO",
-    valueProp: "Monthly SEO and content that steadily grows qualified local traffic.",
-    price: "From $500/mo",
-    priceContext: "monthly | no long-term contracts",
-    priceAriaLabel: "Price: from 500 dollars per month with no long term contracts",
-    microProof: "Results within 90 days",
-    features: [
-      "Weekly blog posts, auto-published",
-      "Google Business Profile management",
-      "Local keyword targeting",
-    ],
+    productName: "Search & Content",
+    valueProp: "Monthly SEO and content that keeps your business showing up in local search.",
+    price: "$149/mo",
+    priceContext: "monthly plan | cancel anytime",
+    priceAriaLabel: "Price: 149 dollars per month for search and content",
+    microProof: "Steady local visibility",
+    features: ["Local keyword targeting", "Google Business Profile support", "Weekly content publishing"],
     icon: TrendingUp,
     cta: { href: "/pricing", label: "See Plans" },
     hoverBorderClass: "hover:border-[#06B6D4]/35",
@@ -86,11 +82,11 @@ const products: Product[] = [
   {
     tier: "secondary",
     eyebrow: "Reputation",
-    productName: "Review Autopilot",
-    valueProp: "Automate review requests and protect your reputation privately.",
-    price: "From $149/mo",
-    priceContext: "per location",
-    priceAriaLabel: "Price: from 149 dollars per month per location",
+    productName: "Reputation",
+    valueProp: "Automate review requests and keep your public rating moving up.",
+    price: "$149/mo",
+    priceContext: "monthly per location",
+    priceAriaLabel: "Price: 149 dollars per month per location",
     microProof: "Avg 4.8 star increase",
     features: [
       "Automated post-service review requests",
@@ -105,7 +101,7 @@ const products: Product[] = [
   },
   {
     tier: "secondary",
-    eyebrow: "Custom Build",
+    eyebrow: "Custom Apps",
     productName: "Custom Apps",
     valueProp: "Custom systems built around your workflow, team, and goals.",
     price: "Custom quote",
@@ -134,6 +130,7 @@ export default function ServicesBento() {
   if (!hero) return null;
 
   const HeroIcon = hero.icon;
+  const heroFeatures = Array.isArray(hero.features) ? hero.features : [];
 
   return (
     <section className="py-32 bg-transparent relative" id="services">
@@ -220,7 +217,7 @@ export default function ServicesBento() {
             <div className="rounded-2xl border border-white/[0.08] bg-[#0A0A0F]/50 p-5 md:p-6 shadow-[inset_0_0_50px_rgba(139,92,246,0.06)]">
               <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-4">Why teams pick Cadence</p>
               <ul className="space-y-3">
-                {hero.features.map((feature) => (
+                {heroFeatures.map((feature) => (
                   <li key={feature} className="flex items-start gap-2.5">
                     <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#8B5CF6]/20 text-[#C4B5FD]">
                       <Check className="h-3 w-3" aria-hidden="true" />
@@ -236,7 +233,7 @@ export default function ServicesBento() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {nonHero.map((product, index) => {
             const Icon = product.icon;
-            const isCustomQuote = product.price.toLowerCase().includes("custom quote");
+            const productFeatures = Array.isArray(product.features) ? product.features : [];
 
             return (
               <motion.article
@@ -268,7 +265,7 @@ export default function ServicesBento() {
                   <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-4">{product.valueProp}</p>
 
                   <ul className="space-y-2.5 mb-5">
-                    {product.features.map((feature) => (
+                    {productFeatures.map((feature) => (
                       <li key={feature} className="flex items-start gap-2.5">
                         <span className="mt-0.5 inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#A78BFA]">
                           <Check className="h-3 w-3" aria-hidden="true" />
@@ -282,7 +279,7 @@ export default function ServicesBento() {
 
                   <p
                     aria-label={product.priceAriaLabel}
-                    className={`text-2xl md:text-[2rem] font-bold ${isCustomQuote ? "text-white/80" : "text-white/90"} group-hover:text-white transition-colors duration-300`}
+                    className="text-2xl md:text-[2rem] font-bold text-white/90 group-hover:text-white transition-colors duration-300"
                   >
                     {product.price}
                   </p>
