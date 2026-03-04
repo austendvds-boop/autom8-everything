@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CheckCircle2, Minus } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { buildMetadata } from "@/lib/seo";
@@ -15,7 +16,12 @@ type CtaCell = {
   href: string;
 };
 
-type CellValue = string | CtaCell;
+type FeatureCell = {
+  status: "yes" | "no";
+  note?: string;
+};
+
+type CellValue = string | CtaCell | FeatureCell;
 
 type ComparisonRow = {
   label: string;
@@ -44,7 +50,13 @@ const comparisonRows: ComparisonRow[] = [
   },
   {
     label: "Free trial",
-    values: ["✅ 7 days", "❌", "❌", "❌", "❌"],
+    values: [
+      { status: "yes", note: "7 days" },
+      { status: "no", note: "None" },
+      { status: "no", note: "None" },
+      { status: "no", note: "None" },
+      { status: "no", note: "None" },
+    ],
   },
   {
     label: "CTA",
@@ -61,21 +73,25 @@ const comparisonRows: ComparisonRow[] = [
 
 const faqs = [
   {
-    question: "Can I use multiple services?",
-    answer: "Yes. Most clients start with one and add more as they grow. No bundling required.",
+    question: "Can I combine services?",
+    answer: "Yes. You can run one service or stack multiple services at the same time.",
   },
   {
-    question: "Is there a long-term contract?",
-    answer: "No. Everything is month-to-month or one-time. Cancel anytime.",
+    question: "Do you require a long-term contract?",
+    answer: "No. Recurring plans are month-to-month. Website and custom app work is scoped per project.",
   },
   {
     question: "How do I get started?",
-    answer: "Pick a product above, or book a call and we'll figure out the right fit together.",
+    answer: "Use the links in the table to start, or book a call if you want a recommendation.",
   },
 ];
 
 function isCtaCell(value: CellValue): value is CtaCell {
-  return typeof value !== "string";
+  return typeof value !== "string" && "href" in value;
+}
+
+function isFeatureCell(value: CellValue): value is FeatureCell {
+  return typeof value !== "string" && "status" in value;
 }
 
 export default function PricingPage() {
@@ -86,10 +102,10 @@ export default function PricingPage() {
       <section className="pt-32 pb-20 mesh-bg">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h1 className="text-5xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Pricing That&apos;s Clear and Simple
+            Autom8 Pricing
           </h1>
           <p className="text-xl text-[#A1A1AA] max-w-3xl mx-auto">
-            One place to compare every Autom8 plan. Pick what fits now, then add more as you grow.
+            Compare each product side by side. Start with one service and add more when you need them.
           </p>
         </div>
       </section>
@@ -152,6 +168,15 @@ export default function PricingPage() {
                             >
                               {value.label} <span aria-hidden>→</span>
                             </Link>
+                          ) : isFeatureCell(value) ? (
+                            <span className={`inline-flex items-center gap-2 ${colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}`}>
+                              {value.status === "yes" ? (
+                                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
+                              ) : (
+                                <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
+                              )}
+                              {value.note ? <span>{value.note}</span> : null}
+                            </span>
                           ) : (
                             <span className={colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}>{value as string}</span>
                           )}
@@ -165,11 +190,11 @@ export default function PricingPage() {
           </div>
 
           <p className="mt-6 text-center text-[#A1A1AA]">
-            Not sure which plan fits?{" "}
+            Need help choosing?{" "}
             <Link href="/contact" className="text-[#A78BFA] hover:text-[#8B5CF6] font-semibold">
               Tell us about your business
             </Link>{" "}
-            and we&apos;ll recommend one.
+            and we&apos;ll recommend a starting point.
           </p>
         </div>
       </section>
