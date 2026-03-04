@@ -37,13 +37,13 @@ export default function HowItWorks() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="py-32 relative overflow-hidden bg-[#0A0A0F]">
+    <section className="pt-16 pb-24 md:pt-20 md:pb-24 relative overflow-hidden bg-[#0A0A0F]">
       <div className="absolute inset-0 opacity-30 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[#8B5CF6]/10 blur-[100px]" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-        <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
+        <motion.div className="text-center mb-12 md:mb-14" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             How It <span className="gradient-text">Works</span>
           </h2>
@@ -56,7 +56,7 @@ export default function HowItWorks() {
             const isLast = index === steps.length - 1;
 
             return (
-              <motion.div key={step.number} className="relative" {...revealStagger(index, prefersReducedMotion)}>
+              <motion.div key={step.number} className="relative" {...revealStagger(index, prefersReducedMotion)} initial={false}>
                 {!isLast && (
                   <div className="hidden md:block absolute top-16 left-full w-full h-0.5">
                     <motion.div
@@ -91,7 +91,7 @@ export default function HowItWorks() {
           })}
         </div>
 
-        <motion.div className="text-center mt-12" {...(prefersReducedMotion ? revealReduced : reveal)}>
+        <motion.div className="text-center mt-10 md:mt-12" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
           <Link href="/contact" className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">
             Tell Us What You Need
           </Link>

@@ -63,9 +63,9 @@ export default function Testimonials() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="py-40 relative overflow-hidden mesh-bg">
+    <section className="py-28 md:py-32 relative overflow-hidden mesh-bg">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
+        <motion.div className="text-center mb-14 md:mb-16" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             What Business Owners <span className="gradient-text">Say</span>
           </h2>

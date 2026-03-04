@@ -133,10 +133,10 @@ export default function ServicesBento() {
   const heroFeatures = Array.isArray(hero.features) ? hero.features : [];
 
   return (
-    <section className="py-32 bg-transparent relative" id="services">
+    <section className="pt-28 pb-16 md:pt-32 md:pb-20 bg-transparent relative" id="services">
       <div className="section-glow section-glow--purple top-8 right-0" />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <motion.div className="text-center mb-20" {...revealPreset} initial={false}>
+        <motion.div className="text-center mb-14 md:mb-16" {...revealPreset} initial={false}>
           <h2
             className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4"
             style={{ fontFamily: "var(--font-playfair), serif" }}
@@ -150,26 +150,27 @@ export default function ServicesBento() {
 
         <motion.article
           aria-label={hero.productName}
-          className="group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(#111118,#111118)_padding-box,linear-gradient(135deg,rgba(139,92,246,0.45),rgba(6,182,212,0.28))_border-box] p-7 md:p-10 mb-4 md:mb-5 shadow-[0_0_72px_rgba(139,92,246,0.1)] hover:shadow-[0_0_110px_rgba(139,92,246,0.18)] transition-all duration-300"
+          className="group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(140deg,rgba(21,18,33,0.96),rgba(15,15,24,0.96))_padding-box,linear-gradient(135deg,rgba(139,92,246,0.72),rgba(6,182,212,0.42))_border-box] p-7 md:p-10 mb-3 md:mb-4 shadow-[0_0_0_1px_rgba(139,92,246,0.3),0_0_88px_rgba(139,92,246,0.16)] hover:shadow-[0_0_0_1px_rgba(167,139,250,0.42),0_0_120px_rgba(139,92,246,0.24)] transition-all duration-300"
           {...revealStagger(0, prefersReducedMotion)}
           initial={false}
           {...(prefersReducedMotion ? {} : cardHover)}
           whileHover={prefersReducedMotion ? {} : { y: -4 }}
           whileTap={prefersReducedMotion ? {} : { y: -2 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/[0.06] via-transparent to-[#06B6D4]/[0.05]" />
+          <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.28),transparent_60%)] opacity-90 blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/[0.11] via-transparent to-[#06B6D4]/[0.08]" />
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-7 md:gap-10 items-start">
             <div className="flex flex-col">
               <div className="flex flex-wrap items-center gap-3 mb-3">
                 <span className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">{hero.eyebrow}</span>
                 {hero.badge && (
-                  <span className="inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.14em] font-semibold px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#8B5CF6]/35 to-[#A78BFA]/40 border border-[#C4B5FD]/60 text-[#F5F3FF] shadow-[0_0_24px_rgba(167,139,250,0.35)] animate-[pulse_2.4s_ease-in-out_infinite]">
+                  <span className="inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.14em] font-semibold px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#7C3AED] via-[#8B5CF6] to-[#A78BFA] border border-[#DDD6FE]/70 ring-1 ring-[#DDD6FE]/35 text-white shadow-[0_0_30px_rgba(167,139,250,0.5)] animate-[pulse_2.8s_ease-in-out_infinite]">
                     {hero.badge}
                   </span>
                 )}
               </div>
 
-              <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/[0.14] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/[0.22] shadow-[0_0_20px_rgba(139,92,246,0.24)] flex items-center justify-center mb-4">
                 <HeroIcon className="w-5 h-5 text-[#8B5CF6]" />
               </div>
 
@@ -215,7 +216,7 @@ export default function ServicesBento() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.08] bg-[#0A0A0F]/50 p-5 md:p-6 shadow-[inset_0_0_50px_rgba(139,92,246,0.06)]">
+            <div className="rounded-2xl border border-white/[0.12] bg-[#0F0F18]/70 p-5 md:p-6 shadow-[inset_0_0_60px_rgba(139,92,246,0.1)]">
               <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-4">Why teams pick Cadence</p>
               <ul className="space-y-3">
                 {heroFeatures.map((feature) => (

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Check, Minus } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
@@ -97,28 +98,36 @@ const pricingTiers = [
   },
 ];
 
-const comparisonRows = [
+type ComparisonStatus = { status: "yes" | "no"; note?: string };
+type ComparisonCell = string | ComparisonStatus;
+
+const comparisonRows: Array<{
+  feature: string;
+  autom8: ComparisonCell;
+  diy: ComparisonCell;
+  freelancer: ComparisonCell;
+}> = [
   {
     feature: "Built for leads",
-    autom8: "✅",
-    diy: "❌ Templates",
+    autom8: { status: "yes" },
+    diy: { status: "no", note: "Templates" },
     freelancer: "Maybe",
   },
   {
     feature: "SEO from day one",
-    autom8: "✅",
+    autom8: { status: "yes" },
     diy: "Basic",
     freelancer: "Extra cost",
   },
   {
     feature: "Mobile-first",
-    autom8: "✅",
-    diy: "✅",
+    autom8: { status: "yes" },
+    diy: { status: "yes" },
     freelancer: "Varies",
   },
   {
     feature: "Ongoing support",
-    autom8: "✅",
+    autom8: { status: "yes" },
     diy: "DIY",
     freelancer: "Per-hour",
   },
@@ -162,6 +171,23 @@ const faqs = [
       "All plans include post-launch support. After that, updates are quick and affordable.",
   },
 ];
+
+function renderComparisonCell(value: ComparisonCell, isAutom8Column = false) {
+  if (typeof value === "string") {
+    return <span className={isAutom8Column ? "text-[#8B5CF6] font-medium" : "text-[#A1A1AA]"}>{value}</span>;
+  }
+
+  return (
+    <span className={`inline-flex items-center gap-2 ${isAutom8Column ? "text-[#8B5CF6]" : "text-[#D4D4D8]"}`}>
+      {value.status === "yes" ? (
+        <Check className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
+      ) : (
+        <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
+      )}
+      {value.note ? <span>{value.note}</span> : null}
+    </span>
+  );
+}
 
 export const metadata: Metadata = buildMetadata({
   title: "Website Creation for Local Businesses | Autom8 Everything",
@@ -285,7 +311,10 @@ export default function WebsiteCreationPage() {
                 </div>
                 <ul className="space-y-3 text-[#A1A1AA] text-sm mb-8">
                   {tier.highlights.map((highlight) => (
-                    <li key={highlight}>✓ {highlight}</li>
+                    <li key={highlight} className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden />
+                      <span>{highlight}</span>
+                    </li>
                   ))}
                 </ul>
                 <Link
@@ -329,9 +358,9 @@ export default function WebsiteCreationPage() {
                   {comparisonRows.map((row) => (
                     <tr key={row.feature} className="border-t border-white/10">
                       <td className="p-4 text-[#A1A1AA]">{row.feature}</td>
-                      <td className="p-4 border-l border-white/10 text-[#8B5CF6] font-medium">{row.autom8}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.diy}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.freelancer}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.autom8, true)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.diy)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.freelancer)}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -112,82 +112,86 @@ export default function PricingPage() {
 
       <section className="pb-14">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="rounded-3xl border border-white/10 bg-[#111118] overflow-x-auto">
-            <table className="w-full min-w-[920px] border-separate border-spacing-0">
-              <thead>
-                <tr>
-                  <th className="px-5 py-4 text-left text-sm font-semibold uppercase tracking-wide text-[#A1A1AA] border-b border-white/10 bg-[#12121A]">
-                    Compare Plans
-                  </th>
-                  {productHeaders.map((header, index) => (
-                    <th
-                      key={header}
-                      className={`px-5 py-4 text-left text-base font-semibold border-b border-white/10 ${
-                        index === 0
-                          ? "bg-[#1A1230] text-white border-l border-r border-[#8B5CF6]/40"
-                          : "bg-[#12121A] text-white"
-                      }`}
-                    >
-                      {header}
+          <div className="relative rounded-3xl border border-white/10 bg-[#111118]">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[920px] border-separate border-spacing-0">
+                <thead>
+                  <tr>
+                    <th className="px-5 py-4 text-left text-sm font-semibold uppercase tracking-wide text-[#A1A1AA] border-b border-white/10 bg-[#12121A]">
+                      Compare Plans
                     </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map((row, rowIndex) => {
-                  const isLastRow = rowIndex === comparisonRows.length - 1;
-
-                  return (
-                    <tr key={row.label}>
+                    {productHeaders.map((header, index) => (
                       <th
-                        scope="row"
-                        className={`px-5 py-4 text-left text-sm font-semibold text-white/90 bg-[#0F0F16] ${
-                          isLastRow ? "" : "border-b border-white/10"
+                        key={header}
+                        className={`px-5 py-4 text-left text-base font-semibold border-b border-white/10 ${
+                          index === 0
+                            ? "bg-[#1A1230] text-white border-l border-r border-[#8B5CF6]/40"
+                            : "bg-[#12121A] text-white"
                         }`}
                       >
-                        {row.label}
+                        {header}
                       </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisonRows.map((row, rowIndex) => {
+                    const isLastRow = rowIndex === comparisonRows.length - 1;
 
-                      {row.values.map((value, colIndex) => (
-                        <td
-                          key={`${row.label}-${colIndex}`}
-                          className={`px-5 py-4 text-sm align-middle ${
+                    return (
+                      <tr key={row.label}>
+                        <th
+                          scope="row"
+                          className={`px-5 py-4 text-left text-sm font-semibold text-white/90 bg-[#0F0F16] ${
                             isLastRow ? "" : "border-b border-white/10"
-                          } ${
-                            colIndex === 0
-                              ? "bg-[#160F28] border-l border-r border-[#8B5CF6]/40"
-                              : "bg-[#111118] text-[#E4E4E7]"
                           }`}
                         >
-                          {row.isCtaRow && isCtaCell(value) ? (
-                            <Link
-                              href={value.href}
-                              className={`inline-flex items-center gap-1 font-semibold transition-colors ${
-                                colIndex === 0 ? "text-[#C4B5FD] hover:text-[#DDD6FE]" : "text-[#A78BFA] hover:text-[#C4B5FD]"
-                              }`}
-                            >
-                              {value.label} <span aria-hidden>→</span>
-                            </Link>
-                          ) : isFeatureCell(value) ? (
-                            <span className={`inline-flex items-center gap-2 ${colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}`}>
-                              {value.status === "yes" ? (
-                                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
-                              ) : (
-                                <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
-                              )}
-                              {value.note ? <span>{value.note}</span> : null}
-                            </span>
-                          ) : (
-                            <span className={colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}>{value as string}</span>
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                          {row.label}
+                        </th>
+
+                        {row.values.map((value, colIndex) => (
+                          <td
+                            key={`${row.label}-${colIndex}`}
+                            className={`px-5 py-4 text-sm align-middle ${
+                              isLastRow ? "" : "border-b border-white/10"
+                            } ${
+                              colIndex === 0
+                                ? "bg-[#160F28] border-l border-r border-[#8B5CF6]/40"
+                                : "bg-[#111118] text-[#E4E4E7]"
+                            }`}
+                          >
+                            {row.isCtaRow && isCtaCell(value) ? (
+                              <Link
+                                href={value.href}
+                                className={`inline-flex items-center gap-1 font-semibold transition-colors ${
+                                  colIndex === 0 ? "text-[#C4B5FD] hover:text-[#DDD6FE]" : "text-[#A78BFA] hover:text-[#C4B5FD]"
+                                }`}
+                              >
+                                {value.label} <span aria-hidden>→</span>
+                              </Link>
+                            ) : isFeatureCell(value) ? (
+                              <span className={`inline-flex items-center gap-2 ${colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}`}>
+                                {value.status === "yes" ? (
+                                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
+                                ) : (
+                                  <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
+                                )}
+                                {value.note ? <span>{value.note}</span> : null}
+                              </span>
+                            ) : (
+                              <span className={colIndex === 0 ? "text-white" : "text-[#D4D4D8]"}>{value as string}</span>
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#111118] to-transparent md:hidden" />
           </div>
+          <p className="mt-3 text-center text-xs text-[#71717A] md:hidden">Scroll → to compare all plans</p>
 
           <p className="mt-6 text-center text-[#A1A1AA]">
             Need help choosing?{" "}

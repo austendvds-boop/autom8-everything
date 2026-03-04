@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Check, Minus } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
@@ -52,29 +53,37 @@ const buildExamples = [
   },
 ];
 
-const comparisonRows = [
+type ComparisonStatus = { status: "yes" | "no"; note?: string };
+type ComparisonCell = string | ComparisonStatus;
+
+const comparisonRows: Array<{
+  feature: string;
+  autom8: ComparisonCell;
+  freelancer: ComparisonCell;
+  noCode: ComparisonCell;
+}> = [
   {
     feature: "Understands your business",
-    autom8: "✅ Deep discovery",
+    autom8: { status: "yes", note: "Deep discovery" },
     freelancer: "Spec-dependent",
     noCode: "You figure it out",
   },
   {
     feature: "Fixed pricing",
-    autom8: "✅",
+    autom8: { status: "yes" },
     freelancer: "Usually hourly",
     noCode: "Monthly subscription",
   },
   {
     feature: "Ongoing support",
-    autom8: "✅ Included",
+    autom8: { status: "yes", note: "Included" },
     freelancer: "Per-hour",
     noCode: "DIY",
   },
   {
     feature: "Custom to your workflow",
-    autom8: "✅",
-    freelancer: "✅",
+    autom8: { status: "yes" },
+    freelancer: { status: "yes" },
     noCode: "Limited",
   },
   {
@@ -85,7 +94,7 @@ const comparisonRows = [
   },
   {
     feature: "Scales with you",
-    autom8: "✅",
+    autom8: { status: "yes" },
     freelancer: "Rebuild needed",
     noCode: "Breaks at scale",
   },
@@ -117,6 +126,23 @@ const faqs = [
       "All builds include ongoing support. New features, tweaks, and updates are scoped and quoted clearly.",
   },
 ];
+
+function renderComparisonCell(value: ComparisonCell, isAutom8Column = false) {
+  if (typeof value === "string") {
+    return <span className={isAutom8Column ? "text-[#8B5CF6] font-medium" : "text-[#A1A1AA]"}>{value}</span>;
+  }
+
+  return (
+    <span className={`inline-flex items-center gap-2 ${isAutom8Column ? "text-[#8B5CF6]" : "text-[#D4D4D8]"}`}>
+      {value.status === "yes" ? (
+        <Check className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
+      ) : (
+        <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
+      )}
+      {value.note ? <span>{value.note}</span> : null}
+    </span>
+  );
+}
 
 export const metadata: Metadata = buildMetadata({
   title: "Custom Apps for Local Businesses | Autom8 Everything",
@@ -256,9 +282,9 @@ export default function CustomAppsPage() {
                   {comparisonRows.map((row) => (
                     <tr key={row.feature} className="border-t border-white/10">
                       <td className="p-4 text-[#A1A1AA]">{row.feature}</td>
-                      <td className="p-4 border-l border-white/10 text-[#8B5CF6] font-medium">{row.autom8}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.freelancer}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.noCode}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.autom8, true)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.freelancer)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.noCode)}</td>
                     </tr>
                   ))}
                 </tbody>

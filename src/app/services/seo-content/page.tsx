@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Check, Minus } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
@@ -53,28 +54,36 @@ const includedFeatures = [
   },
 ];
 
-const comparisonRows = [
+type ComparisonStatus = { status: "yes" | "no"; note?: string };
+type ComparisonCell = string | ComparisonStatus;
+
+const comparisonRows: Array<{
+  feature: string;
+  autom8: ComparisonCell;
+  agency: ComparisonCell;
+  diy: ComparisonCell;
+}> = [
   {
     feature: "Local focus",
-    autom8: "✅",
+    autom8: { status: "yes" },
     agency: "Sometimes",
     diy: "Maybe",
   },
   {
     feature: "Monthly content included",
-    autom8: "✅",
+    autom8: { status: "yes" },
     agency: "Extra cost",
     diy: "Your time",
   },
   {
     feature: "Transparent reporting",
-    autom8: "✅",
+    autom8: { status: "yes" },
     agency: "Varies",
     diy: "N/A",
   },
   {
     feature: "No long-term contract",
-    autom8: "✅",
+    autom8: { status: "yes" },
     agency: "6-12 months",
     diy: "N/A",
   },
@@ -118,6 +127,23 @@ const faqs = [
       "Yes. Month-to-month, no contracts. We keep you because it works, not because you're locked in.",
   },
 ];
+
+function renderComparisonCell(value: ComparisonCell, isAutom8Column = false) {
+  if (typeof value === "string") {
+    return <span className={isAutom8Column ? "text-[#8B5CF6] font-medium" : "text-[#A1A1AA]"}>{value}</span>;
+  }
+
+  return (
+    <span className={`inline-flex items-center gap-2 ${isAutom8Column ? "text-[#8B5CF6]" : "text-[#D4D4D8]"}`}>
+      {value.status === "yes" ? (
+        <Check className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
+      ) : (
+        <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
+      )}
+      {value.note ? <span>{value.note}</span> : null}
+    </span>
+  );
+}
 
 export const metadata: Metadata = buildMetadata({
   title: "SEO + Content for Local Businesses | Autom8 Everything",
@@ -220,12 +246,19 @@ export default function SeoContentPage() {
             <p className="text-5xl font-bold mb-2">From $500/mo</p>
             <p className="text-[#A1A1AA] mb-6">Scope depends on location count and market competition.</p>
             <ul className="text-left max-w-md mx-auto space-y-2 text-[#A1A1AA] text-sm mb-8">
-              <li>✓ Keyword research</li>
-              <li>✓ Weekly content</li>
-              <li>✓ On-page SEO</li>
-              <li>✓ GBP management</li>
-              <li>✓ Local citations</li>
-              <li>✓ Monthly reports</li>
+              {[
+                "Keyword research",
+                "Weekly content",
+                "On-page SEO",
+                "GBP management",
+                "Local citations",
+                "Monthly reports",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2.5">
+                  <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
             <Link
               href="/contact"
@@ -262,9 +295,9 @@ export default function SeoContentPage() {
                   {comparisonRows.map((row) => (
                     <tr key={row.feature} className="border-t border-white/10">
                       <td className="p-4 text-[#A1A1AA]">{row.feature}</td>
-                      <td className="p-4 border-l border-white/10 text-[#8B5CF6] font-medium">{row.autom8}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.agency}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.diy}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.autom8, true)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.agency)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.diy)}</td>
                     </tr>
                   ))}
                 </tbody>

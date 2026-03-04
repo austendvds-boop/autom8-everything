@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Check, Minus } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
@@ -46,7 +47,15 @@ const includedFeatures = [
   },
 ];
 
-const comparisonRows = [
+type ComparisonStatus = { status: "yes" | "no"; note?: string };
+type ComparisonCell = string | ComparisonStatus;
+
+const comparisonRows: Array<{
+  feature: string;
+  autom8: ComparisonCell;
+  competitor: ComparisonCell;
+  diy: ComparisonCell;
+}> = [
   {
     feature: "Setup complexity",
     autom8: "Done for you",
@@ -61,25 +70,25 @@ const comparisonRows = [
   },
   {
     feature: "Smart negative routing",
-    autom8: "✅",
-    competitor: "✅",
-    diy: "❌",
+    autom8: { status: "yes" },
+    competitor: { status: "yes" },
+    diy: { status: "no" },
   },
   {
     feature: "Automated requests",
-    autom8: "✅",
-    competitor: "✅",
-    diy: "❌",
+    autom8: { status: "yes" },
+    competitor: { status: "yes" },
+    diy: { status: "no" },
   },
   {
     feature: "No long-term contract",
-    autom8: "✅",
+    autom8: { status: "yes" },
     competitor: "Annual contracts",
     diy: "N/A",
   },
   {
     feature: "Local business focused",
-    autom8: "✅",
+    autom8: { status: "yes" },
     competitor: "Enterprise-first",
     diy: "N/A",
   },
@@ -111,6 +120,23 @@ const faqs = [
       "Yes. We write the initial templates, and you can adjust the tone and timing to match your brand.",
   },
 ];
+
+function renderComparisonCell(value: ComparisonCell, isAutom8Column = false) {
+  if (typeof value === "string") {
+    return <span className={isAutom8Column ? "text-[#8B5CF6] font-medium" : "text-[#A1A1AA]"}>{value}</span>;
+  }
+
+  return (
+    <span className={`inline-flex items-center gap-2 ${isAutom8Column ? "text-[#8B5CF6]" : "text-[#D4D4D8]"}`}>
+      {value.status === "yes" ? (
+        <Check className="h-4 w-4 shrink-0 text-[#8B5CF6]" aria-hidden />
+      ) : (
+        <Minus className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
+      )}
+      {value.note ? <span>{value.note}</span> : null}
+    </span>
+  );
+}
 
 export const metadata: Metadata = buildMetadata({
   title: "Review Funnel for Local Businesses | Autom8 Everything",
@@ -214,11 +240,18 @@ export default function ReviewFunnelPage() {
             </p>
             <p className="text-[#A1A1AA] mb-6">Setup included.</p>
             <ul className="text-left max-w-md mx-auto space-y-2 text-[#A1A1AA] text-sm mb-8">
-              <li>✓ Automated review requests</li>
-              <li>✓ Smart routing</li>
-              <li>✓ Monitoring dashboard</li>
-              <li>✓ Response templates</li>
-              <li>✓ Monthly reports</li>
+              {[
+                "Automated review requests",
+                "Smart routing",
+                "Monitoring dashboard",
+                "Response templates",
+                "Monthly reports",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2.5">
+                  <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
             <Link
               href="/contact"
@@ -255,9 +288,9 @@ export default function ReviewFunnelPage() {
                   {comparisonRows.map((row) => (
                     <tr key={row.feature} className="border-t border-white/10">
                       <td className="p-4 text-[#A1A1AA]">{row.feature}</td>
-                      <td className="p-4 border-l border-white/10 text-[#8B5CF6] font-medium">{row.autom8}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.competitor}</td>
-                      <td className="p-4 border-l border-white/10 text-[#A1A1AA]">{row.diy}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.autom8, true)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.competitor)}</td>
+                      <td className="p-4 border-l border-white/10">{renderComparisonCell(row.diy)}</td>
                     </tr>
                   ))}
                 </tbody>

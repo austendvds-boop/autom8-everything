@@ -22,9 +22,9 @@ export default function WhoItsFor() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="py-32 bg-[#0A0A0F]">
+    <section className="pt-14 pb-20 md:pt-20 md:pb-24 bg-[#0A0A0F]">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
+        <motion.div className="text-center mb-12 md:mb-14" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Is This a Fit for <span className="gradient-text">You?</span>
           </h2>
@@ -37,6 +37,7 @@ export default function WhoItsFor() {
               key={item.title}
               className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 hover:shadow-[0_0_80px_rgba(139,92,246,0.08)] transition-shadow duration-300"
               {...revealStagger(index, prefersReducedMotion)}
+              initial={false}
               {...(prefersReducedMotion ? {} : cardHover)}
             >
               <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
