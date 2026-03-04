@@ -84,8 +84,8 @@ export default async function LocationDetailPage({ params }: { params: Promise<{
           <div className="mt-10 rounded-2xl border border-white/10 bg-[#12121A] p-7">
             <h2 className="text-2xl font-semibold mb-3">Build your local automation system</h2>
             <p className="text-[#A1A1AA] mb-5">
-              Review our <Link href="/services" className="text-[#8B5CF6] hover:text-[#A78BFA]">service offerings</Link>, explore
-              <Link href="/services/local-seo-automation" className="text-[#8B5CF6] hover:text-[#A78BFA]"> local SEO automation</Link>, and
+              Review our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">service offerings</Link>, explore
+              <Link href="/services/seo-content" className="text-[#8B5CF6] hover:text-[#A78BFA]"> local SEO automation</Link>, and
               request your <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]">custom roadmap</Link>.
             </p>
             <Link

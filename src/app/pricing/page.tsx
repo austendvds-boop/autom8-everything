@@ -63,36 +63,36 @@ export default function PricingPage() {
 
       <section className="pb-20">
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <article className="rounded-2xl border border-[#8B5CF6]/40 bg-[#12121A] p-8">
+          <article className="rounded-2xl border border-[#8B5CF6]/40 bg-[#12121A] p-8 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Cadence</p>
             <h2 className="text-3xl font-semibold mb-2">$199/mo</h2>
             <p className="text-[#A1A1AA] mb-6">7-day free trial included.</p>
-            <Link href="/onboarding" className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+            <Link href="/onboarding" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
               Start Free Trial
             </Link>
           </article>
 
-          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8">
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Review Funnel</p>
             <h2 className="text-3xl font-semibold mb-2">Coming Soon</h2>
             <p className="text-[#A1A1AA] mb-6">Automated review collection and response support.</p>
-            <Link href="/contact" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
+            <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
               Contact Us
             </Link>
           </article>
 
-          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 md:col-span-2">
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 md:col-span-2 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-3">Website Creation</p>
             <h2 className="text-3xl font-semibold mb-6">Launch / Scale / Custom</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {websiteTiers.map((tier) => (
                 <div
                   key={tier.name}
-                  className={`rounded-xl p-5 border ${tier.featured ? "border-[#8B5CF6]/50 bg-[#0A0A0F]" : "border-white/10 bg-[#0F0F16]"}`}
+                  className={`rounded-xl p-5 border h-full flex flex-col ${tier.featured ? "border-[#8B5CF6]/50 bg-[#0A0A0F]" : "border-white/10 bg-[#0F0F16]"}`}
                 >
                   <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-1">{tier.name}</p>
                   <p className="text-2xl font-semibold mb-3">{tier.price}</p>
-                  <ul className="space-y-2 text-sm text-[#A1A1AA]">
+                  <ul className="space-y-2 text-sm text-[#A1A1AA] flex-1">
                     {tier.details.map((detail) => (
                       <li key={detail} className="flex items-start gap-2.5">
                         <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden />
@@ -103,25 +103,25 @@ export default function PricingPage() {
                 </div>
               ))}
             </div>
-            <Link href="/services/websites" className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+            <Link href="/services/websites" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
               View Website Details
             </Link>
           </article>
 
-          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8">
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">SEO & Content</p>
             <h2 className="text-3xl font-semibold mb-2">Monthly Retainer</h2>
             <p className="text-[#A1A1AA] mb-6">Contact us for a quote based on your market and goals.</p>
-            <Link href="/contact" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
+            <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
               Contact Us
             </Link>
           </article>
 
-          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8">
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Custom Apps</p>
             <h2 className="text-3xl font-semibold mb-2">Custom Scope</h2>
             <p className="text-[#A1A1AA] mb-6">Bespoke app builds for your exact workflow and business needs.</p>
-            <Link href="/contact" className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+            <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
               Book a Consultation
             </Link>
           </article>

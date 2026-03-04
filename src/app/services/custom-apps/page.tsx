@@ -138,7 +138,7 @@ export default function CustomAppsPage() {
             <p className="text-[#A1A1AA] mb-6">We quote each build after understanding your workflow and goals.</p>
             <Link
               href="/contact"
-              className="inline-block px-8 py-4 rounded-full bg-[#8B5CF6] text-white font-semibold hover:bg-[#7C3AED] transition-colors"
+              className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
             >
               Book a Consultation
             </Link>

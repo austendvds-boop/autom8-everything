@@ -108,7 +108,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <section className="mt-14 rounded-2xl border border-white/10 p-8 bg-[#12121A]">
             <h2 className="text-2xl font-semibold mb-4">Ready to implement this in your business?</h2>
             <p className="text-[#A1A1AA] mb-6">
-              Explore our <Link href="/services" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link>, review
+              Explore our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link>, review
               Phoenix-area coverage in the <Link href="/locations" className="text-[#8B5CF6] hover:text-[#A78BFA]">location hub</Link>, or
               <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]"> request a quote</Link>.
             </p>

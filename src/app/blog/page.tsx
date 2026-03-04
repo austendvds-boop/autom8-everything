@@ -47,11 +47,11 @@ export default function BlogPage() {
             <h2 className="text-2xl font-semibold mb-4">Featured guides</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {featuredPosts.map((post) => (
-                <article key={post.slug} className="rounded-xl border border-white/10 p-5 bg-[#0f0f15]">
+                <article key={post.slug} className="rounded-xl border border-white/10 p-5 bg-[#0f0f15] h-full flex flex-col">
                   <p className="text-xs text-[#8B5CF6] mb-2">{post.category}</p>
                   <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
                   <p className="text-sm text-[#A1A1AA] mb-3">{post.metaDescription}</p>
-                  <Link href={`/blog/${post.slug}`} className="text-[#8B5CF6] hover:text-[#A78BFA] text-sm">
+                  <Link href={`/blog/${post.slug}`} className="inline-flex mt-auto text-[#8B5CF6] hover:text-[#A78BFA] text-sm">
                     Read guide →
                   </Link>
                 </article>
@@ -109,7 +109,7 @@ export default function BlogPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {posts.map((post) => (
-                <article key={post.slug} className="bg-[#12121A] border border-white/10 rounded-2xl p-6">
+                <article key={post.slug} className="bg-[#12121A] border border-white/10 rounded-2xl p-6 h-full flex flex-col">
                   <p className="text-sm text-[#8B5CF6] mb-3">{post.category}</p>
                   <h3 className="text-xl font-semibold mb-3">{post.title}</h3>
                   <p className="text-[#A1A1AA] mb-4">{post.metaDescription}</p>
@@ -123,7 +123,7 @@ export default function BlogPage() {
                   <p className="text-xs text-[#71717A] mb-5">
                     Focus keyword: {post.focusKeyword} • {post.readingMinutes} min read
                   </p>
-                  <Link href={`/blog/${post.slug}`} className="text-[#8B5CF6] hover:text-[#A78BFA]">
+                  <Link href={`/blog/${post.slug}`} className="inline-flex mt-auto text-[#8B5CF6] hover:text-[#A78BFA]">
                     Read article →
                   </Link>
                 </article>
@@ -134,7 +134,7 @@ export default function BlogPage() {
           <div className="mt-14 rounded-2xl border border-white/10 p-8 bg-[#12121A]">
             <h2 className="text-2xl font-semibold mb-3">Need execution, not just ideas?</h2>
             <p className="text-[#A1A1AA] mb-6">
-              Explore our <Link href="/services" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link>, review
+              Explore our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link>, review
               Phoenix-area coverage in the <Link href="/locations" className="text-[#8B5CF6] hover:text-[#A78BFA]">location hub</Link>, and
               request a <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]">quote or strategy call</Link>.
             </p>

@@ -49,7 +49,7 @@ export default function LocationsPage() {
         <div className="max-w-4xl mx-auto px-6 mt-14 rounded-2xl border border-white/10 p-8 bg-[#12121A]">
           <h2 className="text-2xl font-semibold mb-3">Ready to implement in your market?</h2>
           <p className="text-[#A1A1AA] mb-6">
-            Review our <Link href="/services" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link>, learn tactics in the
+            Review our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link>, learn tactics in the
             <Link href="/blog" className="text-[#8B5CF6] hover:text-[#A78BFA]"> blog</Link>, and request your roadmap on the
             <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]"> contact page</Link>.
           </p>

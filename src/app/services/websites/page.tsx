@@ -137,21 +137,21 @@ export default function WebsitesPage() {
             {tiers.map((tier, index) => (
               <article
                 key={tier.name}
-                className={`rounded-2xl p-8 border ${
+                className={`rounded-2xl p-8 border h-full flex flex-col ${
                   index === 1 ? "border-[#8B5CF6]/45 bg-[#0A0A0F]" : "border-white/10 bg-[#0A0A0F]"
                 }`}
               >
                 <h3 className="text-2xl font-semibold mb-2">{tier.name}</h3>
                 <p className="text-[#A1A1AA] mb-4 min-h-[52px]">{tier.description}</p>
                 <p className="text-4xl font-bold mb-5">{tier.price}</p>
-                <ul className="space-y-2 text-[#D4D4D8] text-sm mb-8">
+                <ul className="space-y-2 text-[#D4D4D8] text-sm mb-8 flex-1">
                   {tier.highlights.map((item) => (
                     <li key={item}>• {item}</li>
                   ))}
                 </ul>
                 <Link
                   href="/contact"
-                  className={`inline-flex w-full justify-center px-5 py-3 rounded-full font-semibold ${
+                  className={`inline-flex w-full justify-center mt-auto px-5 py-3 rounded-full font-semibold ${
                     index === 1
                       ? "bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white"
                       : "border border-white/20 text-white hover:border-[#8B5CF6]/60 transition-colors"

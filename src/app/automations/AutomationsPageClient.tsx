@@ -146,7 +146,7 @@ export default function AutomationsPageClient() {
                 Want Similar <span className="gradient-text">Results</span>?
               </h2>
               <p className="text-[#A1A1AA] text-lg mb-8">
-                Review our <Link href="/services" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link> or learn implementation strategy in our <Link href="/blog" className="text-[#8B5CF6] hover:text-[#A78BFA]">blog</Link>.
+                Review our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link> or learn implementation strategy in our <Link href="/blog" className="text-[#8B5CF6] hover:text-[#A78BFA]">blog</Link>.
               </p>
               <Link
                 href="/contact"

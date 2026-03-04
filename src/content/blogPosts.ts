@@ -1009,7 +1009,7 @@ const categoryServiceLinks: Record<BlogPost["category"], BlogServiceLink[]> = {
     { href: "/services/gohighlevel-setup", label: "GoHighLevel Setup" },
   ],
   "Local SEO": [
-    { href: "/services/local-seo-automation", label: "Local SEO Automation" },
+    { href: "/services/seo-content", label: "Local SEO Automation" },
     { href: "/locations", label: "Phoenix Service Areas" },
   ],
   Comparisons: [
@@ -1018,7 +1018,7 @@ const categoryServiceLinks: Record<BlogPost["category"], BlogServiceLink[]> = {
   ],
   "Phoenix Local": [
     { href: "/locations/phoenix", label: "Phoenix Automation Services" },
-    { href: "/services/local-seo-automation", label: "Local SEO + Automation" },
+    { href: "/services/seo-content", label: "Local SEO + Automation" },
   ],
 };
 

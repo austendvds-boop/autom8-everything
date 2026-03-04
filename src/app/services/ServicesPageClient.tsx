@@ -156,7 +156,7 @@ Supporting Service Pages
                   description: "Automate lead routing, pipeline updates, and follow-up sequences across your CRM.",
                 },
                 {
-                  href: "/services/local-seo-automation",
+                  href: "/services/seo-content",
                   title: "Local SEO Automation Services",
                   description: "Improve local rankings with optimized pages, citations, and conversion-focused local signals.",
                 },
@@ -211,7 +211,7 @@ Supporting Service Pages
                   Build Strategy Call
                 </Link>
                 <Link
-                  href="/services/local-seo-automation"
+                  href="/services/seo-content"
                   className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60"
                 >
                   View Growth Plan

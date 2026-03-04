@@ -96,7 +96,7 @@ export default function ContactPageClient() {
 
                     <textarea required rows={5} value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg resize-none" placeholder="Anything else we should know? *" />
 
-                    <motion.button type="submit" disabled={isSubmitting} className="w-full py-4 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-50" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <motion.button type="submit" disabled={isSubmitting} className="w-full py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-50" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       {isSubmitting ? "Sending..." : <><Send className="w-5 h-5" /> Send Intake</>}
                     </motion.button>
                   </form>
@@ -107,7 +107,7 @@ export default function ContactPageClient() {
                 <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
                   <h3 className="text-xl font-semibold mb-4">Prefer to try something first?</h3>
                   <p className="text-[#A1A1AA] mb-6">Start Cadence free and see live phone answering in minutes.</p>
-                  <Link href="/cadence/get-started" className="inline-block px-6 py-3 rounded-lg border border-[#8B5CF6] text-[#8B5CF6] font-semibold hover:bg-[#8B5CF6]/10 transition-colors">Start Free Trial</Link>
+                  <Link href="/cadence/get-started" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Start Free Trial</Link>
                 </div>
 
                 <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
@@ -118,7 +118,7 @@ export default function ContactPageClient() {
                     <p className="flex items-center gap-3"><MapPin className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.city}, {businessProfile.state}</p>
                     <p className="flex items-center gap-3"><Clock className="w-5 h-5 text-[#8B5CF6]" />Response within 24 hours</p>
                   </div>
-                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%20call`} className="inline-block mt-6 px-6 py-3 rounded-lg border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Book a Call</Link>
+                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%20call`} className="inline-block mt-6 px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Book a Call</Link>
                 </div>
               </div>
             </div>

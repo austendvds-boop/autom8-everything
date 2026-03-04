@@ -67,7 +67,7 @@ export default function AboutPageClient() {
                 was built after seeing high-growth teams waste hours each week on repetitive tasks. We now design and deploy systems that automate execution while protecting quality and brand consistency.
               </p>
               <p className="text-[#A1A1AA] text-lg leading-relaxed">
-                We partner with businesses that want practical automation wins first, then scale into AI workflows and compounding SEO growth. Explore our <Link href="/services" className="text-[#8B5CF6] hover:text-[#A78BFA]">core services</Link> or review real client outcomes in <Link href="/automations" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation case studies</Link>.
+                We partner with businesses that want practical automation wins first, then scale into AI workflows and compounding SEO growth. Explore our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">core services</Link> or review real client outcomes in <Link href="/blog" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation case studies</Link>.
               </p>
             </motion.div>
           </div>

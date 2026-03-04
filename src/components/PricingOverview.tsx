@@ -44,7 +44,7 @@ export default function PricingOverview() {
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.title}
-              className="rounded-3xl border border-white/[0.04] bg-[#111118] p-8 hover:border-[#8B5CF6]/40 transition-colors"
+              className="rounded-3xl border border-white/[0.04] bg-[#111118] p-8 hover:border-[#8B5CF6]/40 transition-colors h-full flex flex-col"
               {...revealStagger(index, prefersReducedMotion)}
             >
               <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">{tier.title}</p>
@@ -60,7 +60,7 @@ export default function PricingOverview() {
                   <p className="text-[#A1A1AA] text-xs mb-6">Existing site clone/migration is an upcharge, quoted after review.</p>
                 </>
               )}
-              <Link href={tier.cta.href} className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">
+              <Link href={tier.cta.href} className="inline-flex w-fit mt-auto px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">
                 {tier.cta.label}
               </Link>
             </motion.div>

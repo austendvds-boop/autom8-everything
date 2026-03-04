@@ -138,7 +138,7 @@ export default function SeoContentPage() {
             <p className="text-[#A1A1AA] mb-6">Scope depends on your market, goals, and how much content you want each month.</p>
             <Link
               href="/contact"
-              className="inline-block px-8 py-4 rounded-full bg-[#8B5CF6] text-white font-semibold hover:bg-[#7C3AED] transition-colors"
+              className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
             >
               Contact Us
             </Link>

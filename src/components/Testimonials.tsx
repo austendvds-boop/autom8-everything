@@ -80,7 +80,7 @@ export default function Testimonials() {
             style={{ width: `${duplicatedTestimonials.length * 400}px` }}
           >
             {duplicatedTestimonials.map((testimonial, index) => (
-              <motion.div key={index} className="flex-shrink-0 w-[350px] md:w-[400px]" {...(prefersReducedMotion ? {} : cardHover)}>
+              <motion.div key={index} className="flex-shrink-0 w-[min(350px,calc(100vw-3rem))] md:w-[400px]" {...(prefersReducedMotion ? {} : cardHover)}>
                 <div className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 h-full">
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
