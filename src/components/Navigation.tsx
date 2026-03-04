@@ -77,7 +77,13 @@ export default function Navigation() {
             ))}
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href="https://cadence-m48n.onrender.com/login"
+              className="text-sm text-[#A1A1AA] hover:text-white transition-colors"
+            >
+              Client Login
+            </Link>
             <Link href="/onboarding">
               <motion.button
                 className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium text-sm"
