@@ -139,7 +139,21 @@ export default function Navigation() {
                   </Link>
                 </motion.div>
               ))}
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
+              <motion.div
+                className="mt-2 w-56 border-t border-white/10 pt-4 text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.68 }}
+              >
+                <Link
+                  href="https://cadence-m48n.onrender.com/login"
+                  className="text-sm text-[#A1A1AA] hover:text-white transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Client Login
+                </Link>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.78 }}>
                 <Link
                   href="/onboarding"
                   className="mt-8 px-8 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium"
