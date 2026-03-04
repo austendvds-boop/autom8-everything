@@ -16,6 +16,7 @@ type Product = {
   priceContext: string;
   priceAriaLabel: string;
   microProof: string;
+  features: string[];
   icon: React.ComponentType<{ className?: string }>;
   cta: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
@@ -35,6 +36,12 @@ const products: Product[] = [
     priceContext: "after 7-day free trial | no contracts",
     priceAriaLabel: "Price: 199 dollars per month after a seven day free trial with no contracts",
     microProof: "Live in 5 minutes",
+    features: [
+      "Forward your calls — we answer in seconds",
+      "Custom-trained on your business",
+      "Instant call summaries to your phone",
+      "Setup in under 5 minutes",
+    ],
     icon: PhoneCall,
     badge: "FREE TRIAL",
     cta: { href: "/cadence/get-started", label: "Start Free Trial" },
@@ -49,6 +56,7 @@ const products: Product[] = [
     priceContext: "one-time | 3 tiers available",
     priceAriaLabel: "Price: from 799 dollars one time with three available tiers",
     microProof: "Launch in 2 weeks",
+    features: ["Mobile-first design", "SEO-ready from day one", "Built to convert visitors to calls"],
     icon: Globe,
     cta: { href: "/pricing", label: "See Plans" },
     hoverBorderClass: "hover:border-[#8B5CF6]/35",
@@ -64,6 +72,11 @@ const products: Product[] = [
     priceContext: "monthly | no long-term contracts",
     priceAriaLabel: "Price: from 500 dollars per month with no long term contracts",
     microProof: "Results within 90 days",
+    features: [
+      "Weekly blog posts, auto-published",
+      "Google Business Profile management",
+      "Local keyword targeting",
+    ],
     icon: TrendingUp,
     cta: { href: "/pricing", label: "See Plans" },
     hoverBorderClass: "hover:border-[#06B6D4]/35",
@@ -79,6 +92,11 @@ const products: Product[] = [
     priceContext: "per location",
     priceAriaLabel: "Price: from 149 dollars per month per location",
     microProof: "Avg 4.8 star increase",
+    features: [
+      "Automated post-service review requests",
+      "Monitor & respond from one dashboard",
+      "Boost your Google star rating",
+    ],
     icon: Star,
     cta: { href: "/pricing", label: "See Plans" },
     hoverBorderClass: "hover:border-[#A78BFA]/35",
@@ -94,6 +112,11 @@ const products: Product[] = [
     priceContext: "scoped after a call",
     priceAriaLabel: "Price: custom quote scoped after a discovery call",
     microProof: "Your workflow, not ours",
+    features: [
+      "Scrapers, dashboards, internal tools",
+      "Built exactly for your workflow",
+      "Ongoing support included",
+    ],
     icon: Wrench,
     cta: { href: "/contact", label: "Book Call" },
     hoverBorderClass: "hover:border-[#7C3AED]/35",
@@ -130,25 +153,25 @@ export default function ServicesBento() {
 
         <motion.article
           aria-label={hero.productName}
-          className="group relative overflow-hidden bg-[#111118] border border-[#8B5CF6]/20 rounded-3xl p-6 md:p-10 mb-6 shadow-[0_0_60px_rgba(139,92,246,0.06)] hover:border-[#8B5CF6]/40 hover:shadow-[0_0_100px_rgba(139,92,246,0.14)] transition-all duration-300"
+          className="group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(#111118,#111118)_padding-box,linear-gradient(135deg,rgba(139,92,246,0.45),rgba(6,182,212,0.28))_border-box] p-7 md:p-10 mb-4 md:mb-5 shadow-[0_0_72px_rgba(139,92,246,0.1)] hover:shadow-[0_0_110px_rgba(139,92,246,0.18)] transition-all duration-300"
           {...revealStagger(0, prefersReducedMotion)}
           {...(prefersReducedMotion ? {} : cardHover)}
           whileHover={prefersReducedMotion ? {} : { y: -4 }}
           whileTap={prefersReducedMotion ? {} : { y: -2 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/[0.06] via-transparent to-[#06B6D4]/[0.04]" />
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr,auto] gap-6 md:gap-8 items-start">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/[0.06] via-transparent to-[#06B6D4]/[0.05]" />
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-7 md:gap-10 items-start">
             <div className="flex flex-col">
-              <div className="flex flex-wrap items-center gap-3 mb-2">
+              <div className="flex flex-wrap items-center gap-3 mb-3">
                 <span className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">{hero.eyebrow}</span>
                 {hero.badge && (
-                  <span className="text-xs tracking-wide px-3 py-1 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-[#A78BFA]">
+                  <span className="inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.14em] font-semibold px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#8B5CF6]/35 to-[#A78BFA]/40 border border-[#C4B5FD]/60 text-[#F5F3FF] shadow-[0_0_24px_rgba(167,139,250,0.35)] animate-[pulse_2.4s_ease-in-out_infinite]">
                     {hero.badge}
                   </span>
                 )}
               </div>
 
-              <div className="w-11 h-11 rounded-xl bg-[#8B5CF6]/[0.12] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/[0.14] flex items-center justify-center mb-4">
                 <HeroIcon className="w-5 h-5 text-[#8B5CF6]" />
               </div>
 
@@ -161,6 +184,20 @@ export default function ServicesBento() {
 
               <p className="text-[#A1A1AA] text-[15px] leading-relaxed max-w-2xl mb-4">{hero.valueProp}</p>
               <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-4" />
+
+              <p
+                aria-label={hero.priceAriaLabel}
+                className="text-4xl md:text-5xl font-extrabold text-white/95 group-hover:text-white transition-colors duration-300"
+              >
+                {hero.price}
+              </p>
+              <p className="text-sm text-[#A78BFA] mt-1 mb-1">7-day free trial</p>
+              <p className="text-xs text-[#71717A] mb-4">{hero.priceContext}</p>
+
+              <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium mb-6">
+                <Check className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>{hero.microProof}</span>
+              </div>
 
               <div className="flex flex-col sm:flex-row gap-3 mt-auto">
                 <Link
@@ -180,32 +217,32 @@ export default function ServicesBento() {
               </div>
             </div>
 
-            <div className="bg-[#0A0A0F]/40 rounded-2xl p-6 md:min-w-[240px] shadow-[inset_0_0_40px_rgba(139,92,246,0.04)]">
-              <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-2">Pricing</p>
-              <p
-                aria-label={hero.priceAriaLabel}
-                className="text-4xl font-extrabold text-white/95 group-hover:text-white transition-colors duration-300"
-              >
-                {hero.price}
-              </p>
-              <p className="text-xs text-[#71717A] mt-1 mb-3">{hero.priceContext}</p>
-              <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium">
-                <Check className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>{hero.microProof}</span>
-              </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0A0A0F]/50 p-5 md:p-6 shadow-[inset_0_0_50px_rgba(139,92,246,0.06)]">
+              <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-4">Why teams pick Cadence</p>
+              <ul className="space-y-3">
+                {hero.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5">
+                    <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#8B5CF6]/20 text-[#C4B5FD]">
+                      <Check className="h-3 w-3" aria-hidden="true" />
+                    </span>
+                    <span className="text-sm leading-relaxed text-[#D4D4D8]">{feature}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </motion.article>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {nonHero.map((product, index) => {
             const Icon = product.icon;
+            const isCustomQuote = product.price.toLowerCase().includes("custom quote");
 
             return (
               <motion.article
                 key={product.productName}
                 aria-label={product.productName}
-                className={`group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-6 md:p-8 min-h-[320px] ${product.hoverBorderClass ?? "hover:border-[#8B5CF6]/35"} ${product.hoverGlowClass ?? "hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)]"} transition-all duration-300`}
+                className={`group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[340px] ${product.hoverBorderClass ?? "hover:border-[#8B5CF6]/35"} ${product.hoverGlowClass ?? "hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)]"} transition-all duration-300`}
                 {...revealStagger(index + 1, prefersReducedMotion)}
                 {...(prefersReducedMotion ? {} : cardHover)}
                 whileHover={prefersReducedMotion ? {} : { y: -2 }}
@@ -228,12 +265,24 @@ export default function ServicesBento() {
                     {product.productName}
                   </h3>
 
-                  <p className="text-[#A1A1AA] text-[15px] leading-relaxed line-clamp-2 mb-5">{product.valueProp}</p>
+                  <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-4">{product.valueProp}</p>
+
+                  <ul className="space-y-2.5 mb-5">
+                    {product.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2.5">
+                        <span className="mt-0.5 inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#A78BFA]">
+                          <Check className="h-3 w-3" aria-hidden="true" />
+                        </span>
+                        <span className="text-sm leading-relaxed text-[#D4D4D8]">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
                   <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-5" />
 
                   <p
                     aria-label={product.priceAriaLabel}
-                    className="text-2xl md:text-3xl font-extrabold text-white/90 group-hover:text-white transition-colors duration-300"
+                    className={`text-2xl md:text-[2rem] font-bold ${isCustomQuote ? "text-white/80" : "text-white/90"} group-hover:text-white transition-colors duration-300`}
                   >
                     {product.price}
                   </p>
