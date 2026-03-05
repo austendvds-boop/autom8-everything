@@ -1,4 +1,18 @@
-# implementation-plan.md — Review Funnel Batches 1-2
+# implementation-plan.md — Review Funnel Batches 1-3
+
+## Batch 3 — Pricing UI + calendar limit enforcement
+
+- [x] Update `/services/review-funnel` pricing cards to Starter/Growth/Pro requirements
+- [x] Set Starter/Growth CTA to `Get Started` (`/review-funnel/signup`)
+- [x] Set Pro CTA to `Contact Us` (`mailto:aust@autom8everything.com`)
+- [x] Update `/review-funnel/signup` Step 4 cards to match tier pricing and limits
+- [x] Keep Starter/Growth on checkout and Pro as contact-only
+- [x] Enforce `calendar_limit` before creating new calendar watch connections
+- [x] Return friendly limit error message from calendar auth-url endpoint
+- [x] Show calendar limit error inline on settings calendar card
+- [x] Update docs (`UI-VERIFICATION.md`, `ralph-context.md`, `CODER-CONTEXT.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to origin/master
 
 ## Batch 2 retry — Deploy gate recovery
 

@@ -180,7 +180,7 @@ export default function SignupClient() {
 
   async function submitSignup(selectedPlan: Plan = form.plan) {
     if (selectedPlan === "pro") {
-      window.location.href = "mailto:hello@autom8everything.com?subject=Review%20Funnel%20Pro"
+      window.location.href = "mailto:aust@autom8everything.com?subject=Review%20Funnel%20Pro"
       return
     }
 
@@ -442,23 +442,23 @@ export default function SignupClient() {
                     {
                       key: "starter" as const,
                       title: "Starter",
-                      price: "$79/mo",
-                      features: ["1 Google Calendar", "150 review requests/mo", "Magic link login", "Full dashboard"],
-                      ctaLabel: "Start with Starter",
+                      price: "$79/month",
+                      features: ["1 connected calendar", "150 text messages per month", "Automatic review requests after every appointment"],
+                      ctaLabel: "Get Started",
                     },
                     {
                       key: "growth" as const,
                       title: "Growth",
-                      price: "$149/mo",
+                      price: "$149/month",
                       badge: "Most Popular",
-                      features: ["Up to 5 Google Calendars", "600 review requests/mo", "All Starter features"],
-                      ctaLabel: "Start with Growth",
+                      features: ["Up to 5 connected calendars", "600 text messages per month", "Automatic review requests after every appointment"],
+                      ctaLabel: "Get Started",
                     },
                     {
                       key: "pro" as const,
                       title: "Pro",
                       price: "Let's talk",
-                      features: ["Unlimited calendars", "Unlimited review requests", "All Growth features", "Priority support"],
+                      features: ["Unlimited calendars", "Custom message volume", "Priority support"],
                       ctaLabel: "Contact Us",
                     },
                   ].map((planOption) => {

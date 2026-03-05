@@ -2,6 +2,40 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-05 — Batch 3: Pricing UI + calendar limit enforcement
+
+#### Files modified
+- `src/app/services/review-funnel/page.tsx`
+- `src/app/review-funnel/signup/SignupClient.tsx`
+- `src/lib/review-funnel/services/calendar.ts`
+- `src/app/api/review-funnel/google/auth-url/route.ts`
+- `src/app/api/review-funnel/google/callback/route.ts`
+- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+#### Scope completed
+- Updated `/services/review-funnel` pricing cards to match required tiers:
+  - Starter: `$79/month`, `1 connected calendar`, `150 text messages per month`
+  - Growth: `$149/month`, `Up to 5 connected calendars`, `600 text messages per month`, `Most Popular`
+  - Pro: `Let's talk`, `Unlimited calendars`, `Custom message volume`, `Priority support`
+  - CTA updates: Starter/Growth `Get Started` to `/review-funnel/signup`; Pro `Contact Us` to `mailto:aust@autom8everything.com`
+- Updated `/review-funnel/signup` Step 4 plan cards to match the same pricing/limits and CTA behavior.
+  - Starter/Growth keep Stripe checkout path.
+  - Pro opens contact email only (no checkout).
+- Enforced calendar limit with user-friendly handling:
+  - Enforcement logic in `src/lib/review-funnel/services/calendar.ts` before watch creation (`createWatch`) using active watch count vs `rf_tenants.calendar_limit`.
+  - Added shared limit message: `You've reached your calendar limit for your current plan. Upgrade to connect more calendars.`
+  - Added pre-check in `GET /api/review-funnel/google/auth-url` so limit errors are returned before calendar connect redirect.
+  - Added inline calendar error display in `SettingsClient` -> `CalendarStatus` card so the message appears where users click Connect Calendar.
+- Sanitized calendar-connect failure messaging to plain-language output in callback/settings flow.
+
+#### Verification
+- `npm run build` ✅
+
+---
+
 ### 2026-03-05 — Batch 2 (rerun): Schema + Stripe backend refresh
 
 #### Scope completed
@@ -50,31 +84,3 @@
 
 #### Verification
 - `npm run build` ✅ (exit 0, 74 routes, all 4 new admin routes show as `ƒ Dynamic`)
-
----
-
-### 2026-03-05 — Batch 2: Calendar-based pricing + Stripe products + schema update
-
-#### Scope completed
-- Added tenant calendar-capacity support:
-  - `src/lib/review-funnel/db/schema.ts` now includes `calendarLimit` (`calendar_limit`, default `1`).
-  - Ran the required Vercel env fetch + `npx drizzle-kit push` flow (no `psql`).
-  - Drizzle reported legacy sequence dependency protection on `audit_log_id_seq`, but schema update applied.
-  - Verified `rf_tenants.calendar_limit` exists in DB and removed temporary `.env.local`.
-- Created new Stripe monthly prices and updated Vercel env values:
-  - Starter price: `price_1T7hMIBxWKNs26XE5RMWhTmX`
-  - Growth price: `price_1T7hMIBxWKNs26XEx6KV6naT`
-  - Deleted `RF_STRIPE_PRICE_PRO` from Vercel env.
-- Updated code pricing/plan behavior:
-  - Growth updated to `$149/mo` and `600` monthly requests.
-  - Pro is now contact-us (no checkout plan) with unlimited limits.
-  - Checkout API now accepts only `starter | growth`.
-- Updated UI pricing surfaces:
-  - `/review-funnel/signup` Step 4 cards and CTAs match new tiers.
-  - `/services/review-funnel` pricing cards updated with plain-language capacity copy.
-  - `/pricing` Review Funnel summary updated to Growth `$149/mo` and Pro contact-us.
-- Added calendar limit enforcement in `src/lib/review-funnel/services/calendar.ts`.
-
-#### Verification
-- `npm run build` ✅
-

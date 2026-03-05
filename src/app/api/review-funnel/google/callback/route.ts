@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
-import { handleCallback, parseGoogleOAuthState } from "@/lib/review-funnel/services/calendar"
+import {
+  CALENDAR_LIMIT_REACHED_MESSAGE,
+  handleCallback,
+  parseGoogleOAuthState,
+} from "@/lib/review-funnel/services/calendar"
 
 function buildDashboardRedirect(request: NextRequest, status: "connected" | "error", reason?: string) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || new URL(request.url).origin
@@ -13,12 +17,25 @@ function buildDashboardRedirect(request: NextRequest, status: "connected" | "err
   return NextResponse.redirect(redirectUrl)
 }
 
+function toCalendarRedirectReason(error: unknown): string {
+  if (error instanceof Error) {
+    const message = error.message.trim()
+
+    if (message === CALENDAR_LIMIT_REACHED_MESSAGE) {
+      return message
+    }
+  }
+
+  return "We couldn't connect your calendar. Please try again."
+}
+
 export async function GET(request: NextRequest) {
   const url = new URL(request.url)
 
   const oauthError = url.searchParams.get("error")
   if (oauthError) {
-    return buildDashboardRedirect(request, "error", oauthError)
+    const reason = oauthError === "access_denied" ? "Calendar connection was canceled." : "We couldn't connect your calendar. Please try again."
+    return buildDashboardRedirect(request, "error", reason)
   }
 
   const code = url.searchParams.get("code")
@@ -32,7 +49,6 @@ export async function GET(request: NextRequest) {
     await handleCallback(code, tenantId)
     return buildDashboardRedirect(request, "connected")
   } catch (error) {
-    const reason = error instanceof Error && error.message.trim().length > 0 ? error.message : "callback_failed"
-    return buildDashboardRedirect(request, "error", reason)
+    return buildDashboardRedirect(request, "error", toCalendarRedirectReason(error))
   }
 }

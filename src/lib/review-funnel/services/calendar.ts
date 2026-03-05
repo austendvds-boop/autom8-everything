@@ -23,6 +23,8 @@ const GOOGLE_WATCH_TTL_SECONDS = 7 * 24 * 60 * 60
 const COMPLETED_APPOINTMENT_LOOKBACK_MS = 24 * 60 * 60 * 1000
 const OAUTH_STATE_TTL_MS = 15 * 60 * 1000
 
+export const CALENDAR_LIMIT_REACHED_MESSAGE = "You've reached your calendar limit for your current plan. Upgrade to connect more calendars."
+
 type GoogleOAuthClient = ReturnType<typeof createOAuthClient>
 
 interface GoogleOAuthConfig {
@@ -185,6 +187,15 @@ async function countActiveWatches(tenantId: string): Promise<number> {
     .where(and(eq(rfCalendarWatches.tenantId, tenantId), eq(rfCalendarWatches.isActive, true)))
 
   return toCount(watchCount?.count)
+}
+
+export async function ensureCalendarConnectionAllowed(tenantId: string): Promise<void> {
+  const tenant = await ensureActiveTenant(tenantId)
+  const activeWatchCount = await countActiveWatches(tenant.id)
+
+  if (activeWatchCount >= tenant.calendarLimit) {
+    throw new Error(CALENDAR_LIMIT_REACHED_MESSAGE)
+  }
 }
 
 async function getGoogleTokenRow(tenantId: string): Promise<RfGoogleOauthToken | null> {
@@ -555,7 +566,7 @@ export async function createWatch(
     const activeWatchCount = await countActiveWatches(tenant.id)
 
     if (activeWatchCount >= tenant.calendarLimit) {
-      throw new Error("Upgrade your plan to connect more calendars")
+      throw new Error(CALENDAR_LIMIT_REACHED_MESSAGE)
     }
   }
 

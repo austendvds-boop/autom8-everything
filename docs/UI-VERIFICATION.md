@@ -21,14 +21,24 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
-## Batch 2 checks (calendar pricing redesign)
-- /review-funnel/signup (Step 4) shows:
-  - Starter: `$79/mo`, `1 Google Calendar`, `150 review requests/mo`, CTA `Start with Starter`
-  - Growth: `$149/mo`, `Up to 5 Google Calendars`, `600 review requests/mo`, badge `Most Popular`, CTA `Start with Growth`
-  - Pro: `Let's talk`, unlimited limits, CTA `Contact Us` (opens `mailto:hello@autom8everything.com`)
-- /services/review-funnel pricing cards use the same tier values and plain language (`1 location or staff calendar`)
-- /pricing Review Funnel summary line shows `Growth $149/mo` and `Pro is a contact-us plan`
-- If a tenant is at their calendar limit, Google Calendar connect should show: `Upgrade your plan to connect more calendars`
+## Batch 3 checks (pricing + calendar limit)
+- `/services/review-funnel`
+  - Pricing cards show Starter `$79/month`, Growth `$149/month`, Pro `Let's talk`
+  - Growth card shows `Most Popular`
+  - Starter/Growth include connected calendar + text message limits
+  - CTA buttons:
+    - Starter: `Get Started` -> `/review-funnel/signup`
+    - Growth: `Get Started` -> `/review-funnel/signup`
+    - Pro: `Contact Us` -> `mailto:aust@autom8everything.com`
+  - Verify copy has no technical jargon and reads clearly on mobile + desktop
+- `/review-funnel/signup` Step 4
+  - Plan cards match the same three tiers and limits from `/services/review-funnel`
+  - Starter + Growth buttons start Stripe checkout
+  - Pro button opens `Contact Us` email and does not start checkout
+- Calendar connect limit handling (`/review-funnel/dashboard/settings`, Calendar tab)
+  - When calendar count reaches the plan limit, Connect Calendar does not continue
+  - Inline error is shown in the calendar card:
+    - `You've reached your calendar limit for your current plan. Upgrade to connect more calendars.`
 
 ## Batch 3 checks (admin panel for Austen)
 - `/review-funnel/admin/login`:

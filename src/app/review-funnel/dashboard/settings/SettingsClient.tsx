@@ -87,6 +87,20 @@ function normalizePlan(plan: string): string {
   return plan.charAt(0).toUpperCase() + plan.slice(1)
 }
 
+function toCalendarConnectErrorMessage(message: string | null | undefined): string {
+  const normalizedMessage = message?.trim()
+
+  if (!normalizedMessage) {
+    return "We couldn't connect your calendar. Please try again."
+  }
+
+  if (normalizedMessage.includes("calendar limit") || normalizedMessage.includes("Upgrade your plan")) {
+    return "You've reached your calendar limit for your current plan. Upgrade to connect more calendars."
+  }
+
+  return "We couldn't connect your calendar. Please try again."
+}
+
 export default function SettingsClient() {
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile")
 
@@ -111,6 +125,7 @@ export default function SettingsClient() {
 
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [calendarErrorMessage, setCalendarErrorMessage] = useState<string | null>(null)
 
   const loadSettings = useCallback(async () => {
     setIsLoading(true)
@@ -178,6 +193,8 @@ export default function SettingsClient() {
     const reason = url.searchParams.get("reason")
 
     if (calendarParam === "connected") {
+      setActiveTab("calendar")
+      setCalendarErrorMessage(null)
       setStatusMessage("Google Calendar connected successfully.")
       url.searchParams.delete("calendar")
       url.searchParams.delete("reason")
@@ -186,7 +203,8 @@ export default function SettingsClient() {
     }
 
     if (calendarParam === "error") {
-      setErrorMessage(reason ? `Google Calendar connection failed: ${reason}` : "Google Calendar connection failed")
+      setActiveTab("calendar")
+      setCalendarErrorMessage(toCalendarConnectErrorMessage(reason))
       url.searchParams.delete("calendar")
       url.searchParams.delete("reason")
       window.history.replaceState({}, "", url.toString())
@@ -291,6 +309,7 @@ export default function SettingsClient() {
   async function handleCalendarConnect() {
     setIsCalendarBusy(true)
     setErrorMessage(null)
+    setCalendarErrorMessage(null)
 
     try {
       const response = await fetch("/api/review-funnel/google/auth-url", {
@@ -305,7 +324,7 @@ export default function SettingsClient() {
 
       window.location.assign(payload.url)
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Unable to connect Google Calendar")
+      setCalendarErrorMessage(toCalendarConnectErrorMessage(error instanceof Error ? error.message : null))
       setIsCalendarBusy(false)
     }
   }
@@ -314,6 +333,7 @@ export default function SettingsClient() {
     setIsCalendarBusy(true)
     setStatusMessage(null)
     setErrorMessage(null)
+    setCalendarErrorMessage(null)
 
     try {
       const response = await fetch("/api/review-funnel/google/disconnect", {
@@ -561,6 +581,7 @@ export default function SettingsClient() {
           isBusy={isCalendarBusy}
           onConnect={handleCalendarConnect}
           onDisconnect={handleCalendarDisconnect}
+          errorMessage={calendarErrorMessage}
         />
       ) : null}
 

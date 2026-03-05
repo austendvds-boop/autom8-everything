@@ -1,5 +1,39 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 3: pricing UI + calendar limit enforcement
+
+### Scope completed
+- Updated Review Funnel product pricing UI in `src/app/services/review-funnel/page.tsx`:
+  - Starter: `$79/month`, `1 connected calendar`, `150 text messages per month`, CTA `Get Started`.
+  - Growth: `$149/month`, `Up to 5 connected calendars`, `600 text messages per month`, `Most Popular`, CTA `Get Started`.
+  - Pro: `Let's talk`, `Unlimited calendars`, `Custom message volume`, `Priority support`, CTA `Contact Us` -> `mailto:aust@autom8everything.com`.
+- Updated signup wizard Step 4 in `src/app/review-funnel/signup/SignupClient.tsx` to match the same three tiers and CTA behavior.
+  - Starter/Growth continue to Stripe checkout.
+  - Pro remains contact-only (no checkout call) and now uses `mailto:aust@autom8everything.com`.
+- Enforced and surfaced calendar connection limits:
+  - `src/lib/review-funnel/services/calendar.ts`
+    - Added shared message constant:
+      - `You've reached your calendar limit for your current plan. Upgrade to connect more calendars.`
+    - `createWatch()` now throws that message when active watches are already at `tenant.calendarLimit`.
+    - Added `ensureCalendarConnectionAllowed(tenantId)` helper that checks active watch count against `rf_tenants.calendar_limit` before OAuth redirect.
+  - `src/app/api/review-funnel/google/auth-url/route.ts`
+    - Calls `ensureCalendarConnectionAllowed()` before generating the Google Calendar connect URL.
+    - Returns `400` with the friendly message when limit is reached.
+  - `src/app/api/review-funnel/google/callback/route.ts`
+    - Normalizes callback errors to plain-language reasons (no internal auth jargon).
+  - `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
+    - Added calendar-specific inline error state.
+    - Displays connect errors directly inside `CalendarStatus` where the user clicks Connect Calendar.
+    - Keeps limit message exact and user-friendly.
+- Updated UI verification checklist in `docs/UI-VERIFICATION.md` for:
+  - `/services/review-funnel` pricing checks
+  - `/review-funnel/signup` step 4 checks
+  - inline calendar-limit error checks in settings calendar tab
+- Updated `docs/ralph-context.md` with Batch 3 summary and enforcement location details.
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-05 - Review Funnel Batch 2 rerun: schema + Stripe backend refresh (no UI changes)
 
 ### Scope completed
