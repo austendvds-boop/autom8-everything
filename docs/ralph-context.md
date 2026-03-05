@@ -2,6 +2,17 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-05 — Batch 4 retry: commit/push gate recovery
+
+#### Scope completed
+- Retry run focused on clearing the commit gate failure (`no new commit detected on origin/master`).
+- Re-ran `npm run build` and confirmed it passes.
+- Confirmed `RF_ADMIN_SECRET` exists in Vercel for `production`, `preview`, and `development`.
+- Confirmed local admin secret file exists at `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt` (32-character value).
+- Created and pushed a fresh commit to `origin/master`.
+
+---
+
 ### 2026-03-05 — Batch 4: Review Funnel admin panel refresh (server-rendered list + stats)
 
 #### Files created
@@ -68,17 +79,6 @@
 - `src/app/api/review-funnel/google/callback/route.ts`
 - `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
 - `docs/ralph-context.md`
-
-#### Verification
-- `npm run build` ✅
-
----
-
-### 2026-03-05 — Batch 3: RF admin panel for Austen
-
-#### Scope completed
-- Added `RF_ADMIN_SECRET`-based admin auth, admin APIs, admin login page, tenant list/detail pages, and stats page.
-- Added reusable admin shell sidebar and updated docs for env vars + UI verification.
 
 #### Verification
 - `npm run build` ✅
