@@ -32,6 +32,7 @@
 
 #### Verification
 - `npm run build` ✅
+- Retry note: follow-up run completed commit + push verification after prior run failed Gate 1 (no new remote commit).
 
 ---
 

@@ -17,6 +17,7 @@
 
 ### Verification
 - `npm run build` ✅
+- Retry note: this run is the commit/push recovery pass after Gate 1 failed due no new `origin/master` commit.
 
 ## 2026-03-05 — Review Funnel Batch 3: pricing UI + calendar limit enforcement
 
