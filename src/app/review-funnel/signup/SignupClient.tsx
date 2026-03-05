@@ -403,8 +403,13 @@ export default function SignupClient() {
 
             {step === 3 && (
               <div className="space-y-4">
+                <p className="text-sm text-[#D4D4D8]">Customize what your customers see after their appointment.</p>
+
                 <div>
                   <label className="mb-2 block text-sm text-[#D4D4D8]">Primary color</label>
+                  <p className="mb-2 text-sm text-[#A1A1AA]">
+                    This colors your review page — the page your customers see after their appointment.
+                  </p>
                   <div className="flex items-center gap-3">
                     <input
                       type="color"
@@ -422,7 +427,11 @@ export default function SignupClient() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Promo offer text</label>
+                  <label className="mb-2 block text-sm text-[#D4D4D8]">Recovery offer for unhappy customers</label>
+                  <p className="mb-2 text-sm text-[#A1A1AA]">
+                    When a customer isn&apos;t thrilled, we&apos;ll show them this offer to win them back. Example: &quot;10% off your
+                    next visit&quot;
+                  </p>
                   <textarea
                     className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-4 py-3"
                     value={form.promoOffer}

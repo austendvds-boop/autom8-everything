@@ -1,5 +1,33 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 9: Signup copy clarity + checkout 405 hardening + Stripe price setup
+
+### Scope completed
+- Updated Step 3 copy in `src/app/review-funnel/signup/SignupClient.tsx` to be plain-language and benefit-first for non-technical owners:
+  - Added top explainer: "Customize what your customers see after their appointment."
+  - Added helper text under Primary color to explain where it appears.
+  - Renamed Promo offer label to "Recovery offer for unhappy customers" and added helper text with an example offer.
+- Hardened `POST /api/review-funnel/checkout` in `src/app/api/review-funnel/checkout/route.ts` to prevent POST requests from surfacing as 405 when runtime config import fails:
+  - Removed eager top-level Stripe service import.
+  - Added lazy dynamic import inside `POST` after payload validation.
+  - Added error normalization so missing env bootstrap failures now return a JSON 500 message (`Review Funnel checkout is not configured yet.`) instead of falling through to framework error-page handling.
+- Verified route behavior locally in dev:
+  - `POST /api/review-funnel/checkout` with `{}` returns `400` JSON payload validation errors.
+  - `POST /api/review-funnel/checkout` with a valid body and missing env returns `500` JSON error (not HTML/405).
+- Created Stripe products + recurring monthly prices in the shared Autom8 Stripe account:
+  - Starter (`$79/mo`): `price_1T7dboBxWKNs26XE1sSy0jmD`
+  - Growth (`$129/mo`): `price_1T7dbpBxWKNs26XETTV5H311`
+  - Pro (`$199/mo`): `price_1T7dbqBxWKNs26XEBCBOE8vO`
+
+### Files changed in this batch
+- `src/app/review-funnel/signup/SignupClient.tsx`
+- `src/app/api/review-funnel/checkout/route.ts`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-05 — Review Funnel Batch 7: Dashboard + settings implementation
 
 ### Scope completed

@@ -2,6 +2,28 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-05 — Batch 9: Signup Step 3 copy refresh + checkout 405 fix + Stripe prices
+
+#### Scope completed
+- Updated `/review-funnel/signup` Step 3 copy in `src/app/review-funnel/signup/SignupClient.tsx` to be clearer for non-technical owners:
+  - Added top explainer line for what this step controls.
+  - Added helper text for Primary color.
+  - Renamed promo field label to recovery-focused wording and added helper text + example.
+- Fixed checkout 405 symptom at `POST /api/review-funnel/checkout` by hardening `src/app/api/review-funnel/checkout/route.ts`:
+  - moved Stripe service import to a lazy dynamic import inside `POST`
+  - validation now runs before any Stripe/config module load
+  - module bootstrap failures now return JSON `500` error (`Review Funnel checkout is not configured yet.`) instead of falling through to framework `/500` handling that surfaced as 405 on POST
+- Created Stripe monthly price objects for Review Funnel plans:
+  - Starter: `price_1T7dboBxWKNs26XE1sSy0jmD`
+  - Growth: `price_1T7dbpBxWKNs26XETTV5H311`
+  - Pro: `price_1T7dbqBxWKNs26XEBCBOE8vO`
+
+#### Verification
+- Local route checks:
+  - invalid payload returns `400` JSON
+  - valid payload with missing runtime env returns `500` JSON (no POST 405)
+- `npm run build` ✅
+
 ### 2026-03-05 — Batch 8: Review Funnel product page live + polish pass
 
 #### Scope completed
@@ -83,35 +105,4 @@
 - `npm run build` ✅
 - `npm run lint` ❌ (pre-existing lint error in `src/lib/review-funnel/services/auth.ts` uses `require()` for `jsonwebtoken`)
 
-### 2026-03-04 — Batch 4: Stripe integration + checkout + billing routes
 
-#### Files created
-- `src/lib/review-funnel/services/stripe.ts`
-- `src/app/api/review-funnel/checkout/route.ts`
-- `src/app/api/review-funnel/webhooks/stripe/route.ts`
-- `src/app/api/review-funnel/settings/billing/route.ts`
-- `src/app/api/review-funnel/settings/billing/portal/route.ts`
-
-#### Files modified
-- `src/lib/review-funnel/config.ts`
-  - added `STRIPE_SECRET_KEY` env parsing support
-- `docs/ralph-context.md`
-- `docs/CODER-CONTEXT.md`
-
-#### Stripe service exports
-- `createCheckoutSession(params)`
-- `constructStripeWebhookEvent(payload, signature)`
-- `handleWebhookEvent(event)`
-- `createBillingPortalSession(tenantId)`
-
-#### Behavior implemented
-- Plan config added for Starter/Growth/Pro:
-  - Starter: `$79/mo`, `150 SMS`
-  - Growth: `$129/mo`, `500 SMS`
-  - Pro: `$199/mo`, `unlimited` (stored as sentinel `999999`)
-- Checkout flow (`POST /api/review-funnel/checkout`) validates payload, creates/reuses customer, creates subscription checkout session.
-- Stripe webhook flow handles `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, and `invoice.payment_failed`.
-- Billing routes expose plan snapshot and Stripe portal URL for authenticated tenants.
-
-#### Verification
-- `npm run build` ✅

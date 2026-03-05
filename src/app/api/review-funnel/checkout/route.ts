@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { createCheckoutSession, type CreateCheckoutSessionParams } from "@/lib/review-funnel/services/stripe"
 
 const checkoutRequestSchema = z.object({
   email: z.string().trim().email(),
@@ -17,10 +16,12 @@ const checkoutRequestSchema = z.object({
   promoOffer: z.string().trim().min(1).max(500).optional(),
 })
 
+type CheckoutRequest = z.infer<typeof checkoutRequestSchema>
+
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
-function toCheckoutParams(parsed: z.infer<typeof checkoutRequestSchema>): CreateCheckoutSessionParams {
+function toCheckoutParams(parsed: CheckoutRequest) {
   return {
     email: parsed.email,
     businessName: parsed.businessName,
@@ -31,6 +32,26 @@ function toCheckoutParams(parsed: z.infer<typeof checkoutRequestSchema>): Create
     primaryColor: parsed.primaryColor,
     promoOffer: parsed.promoOffer,
   }
+}
+
+function toCheckoutErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    const message = error.message.trim()
+
+    if (
+      message.includes("DATABASE_URL") ||
+      message.includes("RF_ENCRYPTION_KEY") ||
+      message.includes("RF_JWT_SECRET")
+    ) {
+      return "Review Funnel checkout is not configured yet."
+    }
+
+    if (message.length > 0) {
+      return message
+    }
+  }
+
+  return "Failed to create Stripe Checkout session"
 }
 
 export async function POST(request: Request) {
@@ -58,6 +79,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const { createCheckoutSession } = await import("@/lib/review-funnel/services/stripe")
     const session = await createCheckoutSession(toCheckoutParams(parsed.data))
 
     return NextResponse.json({
@@ -65,7 +87,6 @@ export async function POST(request: Request) {
       url: session.url,
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create Stripe Checkout session"
-    return NextResponse.json({ error: message }, { status: 500 })
+    return NextResponse.json({ error: toCheckoutErrorMessage(error) }, { status: 500 })
   }
 }
