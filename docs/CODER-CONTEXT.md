@@ -10,7 +10,7 @@
   - `src/app/api/review-funnel/auth/verify/route.ts`
   - `src/app/api/review-funnel/auth/logout/route.ts`
 - Updated dashboard layout to lazy-import `verifySession` only after checking for the session cookie so unauthenticated requests now redirect to `/review-funnel/login`.
-- Executed DB migration flow using `DATABASE_URL` from Vercel: wrote temporary `.env.local`, ran `npx drizzle-kit push --force`, then deleted `.env.local`.
+- Executed DB migration flow using `DATABASE_URL` from Vercel: wrote temporary `.env.local`, ran `npx drizzle-kit push`, then deleted `.env.local`.
 - Confirmed `rf_*` tables exist in `public`: `rf_calendar_watches`, `rf_google_oauth_tokens`, `rf_locations`, `rf_magic_links`, `rf_pending_sms`, `rf_review_requests`, `rf_sms_opt_outs`, `rf_sms_usage`, `rf_tenants`.
 - Created required docs:
   - `docs/ENV-VARS.md`
@@ -22,7 +22,7 @@
 - RF tables remain present and queryable.
 
 ### Verification
-- Route smoke checks using local `next start`:
+- Route smoke checks using local `next dev`:
   - `GET /review-funnel/login` -> `200`
   - `GET /review-funnel/signup` -> `200`
   - `GET /services/review-funnel` -> `200`

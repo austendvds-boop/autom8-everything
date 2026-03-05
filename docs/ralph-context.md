@@ -158,3 +158,14 @@
 #### Docs
 - Confirmed/updated `docs/ENV-VARS.md` and `docs/UI-VERIFICATION.md` to the required Batch 1 content.
 - `npm run build` passes.
+
+### 2026-03-05 - Batch 1 retry verification
+
+- Re-ran `npx drizzle-kit push` using temporary `.env.local` sourced from Vercel `DATABASE_URL`; removed `.env.local` afterward.
+- Confirmed `rf_*` tables still exist in `public`.
+- Re-verified routing behavior in local `next dev`:
+  - `/review-funnel/login` -> 200
+  - `/review-funnel/signup` -> 200
+  - `/services/review-funnel` -> 200
+  - `/review-funnel/dashboard` (no session) -> 307 to `/review-funnel/login`
+- `npm run build` passed.
