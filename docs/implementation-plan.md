@@ -54,3 +54,11 @@
 - [x] Update docs (`ENV-VARS.md`, `UI-VERIFICATION.md`, `CODER-CONTEXT.md`, `ralph-context.md`)
 - [x] Run `npm run build` and ensure pass
 - [x] Commit and push to origin/master
+
+## Batch 3 retry 2 - Deploy gate recovery
+
+- [x] Confirm latest `master` SHA on local and origin
+- [x] Trigger fresh production deployment for latest `master` via minimal safe push
+- [x] Verify latest Vercel production deployment is `READY` and commit SHA matches `master`
+- [x] Re-run `npm run build`
+
