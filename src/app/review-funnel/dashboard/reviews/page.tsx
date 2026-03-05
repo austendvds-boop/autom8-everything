@@ -3,7 +3,7 @@ import ReviewsClient from "./ReviewsClient"
 
 export const metadata: Metadata = {
   title: "Review Funnel Reviews",
-  description: "Browse, filter, and inspect every review request in your funnel.",
+  description: "Browse, filter, and inspect every review request for your business.",
 }
 
 export default function ReviewFunnelReviewsPage() {

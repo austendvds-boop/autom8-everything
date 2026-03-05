@@ -170,7 +170,7 @@ export default function SignupClient() {
 
   function goNextStep() {
     if (!canContinue) {
-      setError("Please complete this step before continuing")
+      setError("Please fill this out before you continue.")
       return
     }
 
@@ -236,7 +236,7 @@ export default function SignupClient() {
           <div className="rounded-2xl border border-white/10 bg-[#12121A] p-6 md:p-8 space-y-6">
             <div className="flex items-center justify-between text-sm text-[#A1A1AA]">
               <p>Step {step} of 4</p>
-              <p>{step === 1 ? "Business Info" : step === 2 ? "Google Business" : step === 3 ? "Branding" : "Plan"}</p>
+              <p>{step === 1 ? "Your Business" : step === 2 ? "Find Your Business" : step === 3 ? "Your Style" : "Pick a Plan"}</p>
             </div>
 
             {step === 1 && (
@@ -252,7 +252,7 @@ export default function SignupClient() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Owner name</label>
+                  <label className="mb-2 block text-sm text-[#D4D4D8]">Your name</label>
                   <input
                     className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-4 py-3"
                     value={form.ownerName}
@@ -262,7 +262,7 @@ export default function SignupClient() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Email</label>
+                  <label className="mb-2 block text-sm text-[#D4D4D8]">Best email</label>
                   <input
                     type="email"
                     className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-4 py-3"
@@ -273,7 +273,7 @@ export default function SignupClient() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Phone</label>
+                  <label className="mb-2 block text-sm text-[#D4D4D8]">Best phone number</label>
                   <input
                     className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-4 py-3"
                     value={form.phone}
@@ -287,7 +287,7 @@ export default function SignupClient() {
             {step === 2 && (
               <div className="space-y-4">
                 <div className="space-y-3" ref={autocompleteRef}>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Search your business on Google</label>
+                  <label className="mb-2 block text-sm text-[#D4D4D8]">Find your business on Google</label>
 
                   <div className="relative">
                     <input
@@ -337,7 +337,7 @@ export default function SignupClient() {
                           {isSearchingPlaces && (
                             <div className="flex items-center gap-3 px-4 py-3 text-sm text-[#A1A1AA]">
                               <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
-                              Searching...
+                              Looking for matches...
                             </div>
                           )}
 
@@ -346,7 +346,7 @@ export default function SignupClient() {
                           )}
 
                           {!isSearchingPlaces && !placesError && hasSearchedPlaces && places.length === 0 && (
-                            <p className="px-4 py-3 text-sm text-[#A1A1AA]">No businesses found</p>
+                            <p className="px-4 py-3 text-sm text-[#A1A1AA]">No match yet. Try adding your city name.</p>
                           )}
 
                           {!isSearchingPlaces && !placesError && places.length > 0 && (
@@ -376,27 +376,19 @@ export default function SignupClient() {
                   </div>
 
                   {form.googleSearch.trim().length > 0 && form.googleSearch.trim().length < 3 && (
-                    <p className="text-xs text-[#71717A]">Type at least 3 characters to search</p>
+                    <p className="text-xs text-[#71717A]">Type at least 3 letters to start searching.</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Google Place ID</label>
-                  <input
-                    className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-4 py-3"
-                    value={form.googlePlaceId}
-                    onChange={(event) => {
-                      const nextValue = event.target.value
-
-                      setForm((previous) => ({
-                        ...previous,
-                        googlePlaceId: nextValue,
-                        selectedPlaceLabel: "",
-                      }))
-                    }}
-                    placeholder="Paste Place ID if needed"
-                  />
-                  {form.selectedPlaceLabel && <p className="mt-2 text-sm text-[#A1A1AA]">Selected: {form.selectedPlaceLabel}</p>}
+                <div className="rounded-lg border border-white/10 bg-[#0A0A0F] p-4">
+                  <p className="text-sm font-medium text-[#D4D4D8]">Your Business</p>
+                  {form.selectedPlaceLabel ? (
+                    <p className="mt-1 text-sm text-[#A1A1AA]">{form.selectedPlaceLabel}</p>
+                  ) : (
+                    <p className="mt-1 text-sm text-[#A1A1AA]">
+                      Pick your business from the list above so we can send people to the right Google review page.
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -406,9 +398,9 @@ export default function SignupClient() {
                 <p className="text-sm text-[#D4D4D8]">Customize what your customers see after their appointment.</p>
 
                 <div>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Primary color</label>
+                  <label className="mb-2 block text-sm text-[#D4D4D8]">Your brand color</label>
                   <p className="mb-2 text-sm text-[#A1A1AA]">
-                    This colors your review page — the page your customers see after their appointment.
+                    This color shows up on the review page your customers see after their appointment.
                   </p>
                   <div className="flex items-center gap-3">
                     <input
@@ -427,9 +419,9 @@ export default function SignupClient() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm text-[#D4D4D8]">Recovery offer for unhappy customers</label>
+                  <label className="mb-2 block text-sm text-[#D4D4D8]">Special offer for feedback</label>
                   <p className="mb-2 text-sm text-[#A1A1AA]">
-                    When a customer isn&apos;t thrilled, we&apos;ll show them this offer to win them back. Example: &quot;10% off your
+                    If someone had a less-than-great visit, we&apos;ll show this offer to help win them back. Example: &quot;10% off your
                     next visit&quot;
                   </p>
                   <textarea
@@ -488,10 +480,10 @@ export default function SignupClient() {
                 </div>
 
                 <div className="rounded-lg border border-white/10 bg-[#0A0A0F] p-4 text-sm text-[#D4D4D8]">
-                  <p className="mb-1">Business: {form.businessName || "—"}</p>
-                  <p className="mb-1">Email: {form.email || "—"}</p>
-                  <p className="mb-1">Google Place ID: {form.googlePlaceId || "—"}</p>
-                  <p>Selected plan: {planLabel(form.plan)}</p>
+                  <p className="mb-1">Business Name: {form.businessName || "—"}</p>
+                  <p className="mb-1">Contact Email: {form.email || "—"}</p>
+                  <p className="mb-1">Your Business: {form.selectedPlaceLabel || form.businessName || "—"}</p>
+                  <p>Selected Plan: {planLabel(form.plan)}</p>
                 </div>
               </div>
             )}
@@ -508,7 +500,7 @@ export default function SignupClient() {
                 disabled={step === 1 || isSubmitting}
                 className="rounded-lg border border-white/20 px-5 py-3 disabled:opacity-50"
               >
-                Back
+                Go Back
               </button>
 
               {step < 4 && (
@@ -518,7 +510,7 @@ export default function SignupClient() {
                   disabled={!canContinue}
                   className="rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-3 font-semibold text-white disabled:opacity-50"
                 >
-                  Continue
+                  Next
                 </button>
               )}
 
@@ -530,10 +522,10 @@ export default function SignupClient() {
                   className="rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-3 font-semibold text-white disabled:opacity-50"
                 >
                   {isSubmitting
-                    ? "Starting checkout..."
+                    ? "Opening secure checkout..."
                     : form.plan === "pro"
-                      ? "Contact Us for Pro"
-                      : "Continue to Checkout"}
+                      ? "Talk to Us About Pro"
+                      : "Go to Secure Checkout"}
                 </button>
               )}
             </div>

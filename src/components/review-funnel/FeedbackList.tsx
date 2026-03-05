@@ -42,7 +42,7 @@ export default function FeedbackList({ items, isLoading }: FeedbackListProps) {
     <section className="rounded-2xl border border-white/10 bg-[#12121A] p-4 sm:p-5">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-white">Private feedback</h2>
-        <p className="text-sm text-[#A1A1AA]">1–4★ feedback submitted through the funnel.</p>
+        <p className="text-sm text-[#A1A1AA]">Lower-star feedback shared directly with your team.</p>
       </div>
 
       {isLoading ? (
@@ -63,10 +63,10 @@ export default function FeedbackList({ items, isLoading }: FeedbackListProps) {
 
               <div className="mt-4 flex flex-wrap gap-2 text-xs">
                 <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[#C4B5FD]">
-                  Promo shown: {item.promoShown ? "Yes" : "No"}
+                  Special offer shown: {item.promoShown ? "Yes" : "No"}
                 </span>
                 <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[#C4B5FD]">
-                  Promo redeemed: {item.promoRedeemed ? "Yes" : "No"}
+                  Special offer used: {item.promoRedeemed ? "Yes" : "No"}
                 </span>
               </div>
             </article>

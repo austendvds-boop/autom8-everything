@@ -178,7 +178,7 @@ export default function DashboardLayout({ businessName, children }: DashboardLay
               className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/15 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <LogOut className="h-4 w-4" />
-              {isLoggingOut ? "Logging out..." : "Logout"}
+              {isLoggingOut ? "Signing out..." : "Sign out"}
             </button>
           </div>
         </header>

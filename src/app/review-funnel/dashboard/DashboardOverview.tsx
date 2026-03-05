@@ -83,7 +83,7 @@ export default function DashboardOverview() {
       }
 
       if (!usageResponse.ok) {
-        throw new Error("Could not load SMS usage")
+        throw new Error("Could not load text message usage")
       }
 
       const stats = (await statsResponse.json()) as StatsPayload
@@ -168,7 +168,7 @@ export default function DashboardOverview() {
         <h2 className="text-2xl font-semibold text-white" style={{ fontFamily: "var(--font-playfair), serif" }}>
           Overview
         </h2>
-        <p className="mt-1 text-sm text-[#A1A1AA]">Track reviews, SMS performance, and customer conversion at a glance.</p>
+        <p className="mt-1 text-sm text-[#A1A1AA]">Track reviews, text message performance, and customer follow-through at a glance.</p>
       </section>
 
       {errorMessage ? (
@@ -192,12 +192,12 @@ export default function DashboardOverview() {
           subtitle={isLoading || !stats ? undefined : "Happy customers redirected to Google"}
         />
         <StatsCard
-          title="Conversion rate"
+          title="Response rate"
           value={isLoading || !stats ? "—" : `${stats.conversionRate.toFixed(1)}%`}
           subtitle={
             isLoading || !stats
               ? undefined
-              : `${stats.smsSentCount.toLocaleString()} SMS sent • ${stats.pageOpenedCount.toLocaleString()} opened`
+              : `${stats.smsSentCount.toLocaleString()} text messages sent • ${stats.pageOpenedCount.toLocaleString()} opened`
           }
         />
       </section>
@@ -206,7 +206,7 @@ export default function DashboardOverview() {
         <article className="rounded-2xl border border-white/10 bg-[#12121A] p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.16em] text-[#8B5CF6]">SMS usage</p>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#8B5CF6]">Text message usage</p>
               <h3 className="mt-2 text-lg font-semibold text-white">Current month usage</h3>
             </div>
 
@@ -227,8 +227,8 @@ export default function DashboardOverview() {
           {smsUsage ? (
             <p className="mt-3 text-sm text-[#A1A1AA]">
               {smsUsage.unlimited
-                ? `Unlimited plan active • ${smsUsage.used.toLocaleString()} SMS sent in ${smsUsage.month}`
-                : `${smsUsage.percent ?? 0}% of ${smsUsage.limit?.toLocaleString() ?? "0"} SMS used in ${smsUsage.month}`}
+                ? `Unlimited plan active • ${smsUsage.used.toLocaleString()} text messages sent in ${smsUsage.month}`
+                : `${smsUsage.percent ?? 0}% of ${smsUsage.limit?.toLocaleString() ?? "0"} text messages used in ${smsUsage.month}`}
             </p>
           ) : (
             <p className="mt-3 text-sm text-[#A1A1AA]">Loading usage details...</p>
@@ -264,7 +264,7 @@ export default function DashboardOverview() {
                   <th className="px-3 py-2 font-medium">Customer</th>
                   <th className="px-3 py-2 font-medium">Date</th>
                   <th className="px-3 py-2 font-medium">Rating</th>
-                  <th className="px-3 py-2 font-medium">SMS Status</th>
+                  <th className="px-3 py-2 font-medium">Text Status</th>
                   <th className="px-3 py-2 font-medium">Page Opened</th>
                 </tr>
               </thead>

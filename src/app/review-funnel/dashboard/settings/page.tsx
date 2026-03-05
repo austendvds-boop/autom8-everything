@@ -3,7 +3,7 @@ import SettingsClient from "./SettingsClient"
 
 export const metadata: Metadata = {
   title: "Review Funnel Settings",
-  description: "Configure Review Funnel profile, SMS, calendar, and billing settings.",
+  description: "Set up your business details, text messages, calendar, and billing.",
 }
 
 export default function ReviewFunnelSettingsPage() {

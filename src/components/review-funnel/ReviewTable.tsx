@@ -68,7 +68,7 @@ export default function ReviewTable({
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-white">All review requests</h2>
-          <p className="text-sm text-[#A1A1AA]">{totalItems} total records</p>
+          <p className="text-sm text-[#A1A1AA]">{totalItems} total requests</p>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export default function ReviewTable({
               <th className="px-3 py-2 font-medium">Customer</th>
               <th className="px-3 py-2 font-medium">Date</th>
               <th className="px-3 py-2 font-medium">Rating</th>
-              <th className="px-3 py-2 font-medium">SMS Status</th>
+              <th className="px-3 py-2 font-medium">Text Status</th>
               <th className="px-3 py-2 font-medium">Page Opened</th>
               <th className="px-3 py-2 font-medium" aria-label="Details" />
             </tr>

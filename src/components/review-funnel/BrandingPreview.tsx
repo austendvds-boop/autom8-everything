@@ -22,8 +22,8 @@ export default function BrandingPreview({
 
   return (
     <section className="rounded-2xl border border-white/10 bg-[#12121A] p-5">
-      <p className="text-xs uppercase tracking-[0.16em] text-[#8B5CF6]">Funnel preview</p>
-      <h3 className="mt-2 text-lg font-semibold text-white">Live branding snapshot</h3>
+      <p className="text-xs uppercase tracking-[0.16em] text-[#8B5CF6]">Preview</p>
+      <h3 className="mt-2 text-lg font-semibold text-white">How customers will see it</h3>
 
       <div className="mt-4 rounded-2xl border border-white/10 bg-[#0A0A0F] p-4">
         <div
@@ -38,7 +38,7 @@ export default function BrandingPreview({
           <p className="mt-3 rounded-lg bg-[#0A0A0F]/60 p-3 text-sm text-[#E4E4E7]">{promoOffer || "10% off your next visit"}</p>
           {promoCode?.trim() ? (
             <p className="mt-2 text-xs text-[#C4B5FD]">
-              Promo code: <span className="font-semibold tracking-wide text-white">{promoCode.trim()}</span>
+              Offer code: <span className="font-semibold tracking-wide text-white">{promoCode.trim()}</span>
             </p>
           ) : null}
         </div>

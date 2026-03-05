@@ -3,7 +3,7 @@ import FeedbackClient from "./FeedbackClient"
 
 export const metadata: Metadata = {
   title: "Review Funnel Feedback",
-  description: "Review private low-rating feedback captured before public reviews.",
+  description: "Read private lower-star feedback from customers so your team can follow up quickly.",
 }
 
 export default function ReviewFunnelFeedbackPage() {

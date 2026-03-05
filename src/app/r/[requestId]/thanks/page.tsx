@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Thanks for your feedback",
-  description: "Your response has been recorded. Thank you for taking the time to share feedback.",
+  description: "Thanks for sharing your feedback with us.",
   robots: {
     index: false,
     follow: false,
@@ -18,7 +18,7 @@ export default function FunnelThanksPage() {
           Thank you!
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-[#D4D4D8]">
-          Your feedback helps us keep improving the customer experience.
+          Thanks again — your feedback helps us keep getting better.
         </p>
       </div>
     </main>

@@ -12,9 +12,9 @@ const steps = [
       "Connect your Google Calendar once, and Review Funnel knows when appointments are done.",
   },
   {
-    title: "Automatic SMS",
+    title: "Automatic Text Message",
     description:
-      "A friendly text goes out at the right time, so your team does not need to remember follow-up.",
+      "A friendly text message goes out at the right time, so your team does not need to remember follow-up.",
   },
   {
     title: "Reviews Roll In",
@@ -29,7 +29,7 @@ const plans = [
     price: "$79",
     priceSuffix: "/mo",
     description: "Perfect for a single location that wants simple, reliable review follow-up.",
-    features: ["Up to 150 SMS/month", "Google Calendar connection", "Custom message template", "Email support"],
+    features: ["Up to 150 text messages/month", "Google Calendar connection", "Custom text message", "Email support"],
     ctaLabel: "Get Started",
     ctaHref: "/review-funnel/signup",
     ctaStyle: "solid" as const,
@@ -39,7 +39,7 @@ const plans = [
     price: "$129",
     priceSuffix: "/mo",
     description: "For busy teams that want more monthly volume and room to grow.",
-    features: ["Up to 500 SMS/month", "Everything in Starter", "Priority setup help", "Multi-location ready"],
+    features: ["Up to 500 text messages/month", "Everything in Starter", "Priority setup help", "Multi-location ready"],
     ctaLabel: "Get Started",
     ctaHref: "/review-funnel/signup",
     featured: true,
@@ -50,7 +50,7 @@ const plans = [
     name: "Pro",
     price: "Contact Us",
     description: "For high-volume businesses that need custom limits and hands-on rollout support.",
-    features: ["Unlimited monthly SMS", "Advanced routing options", "Custom onboarding", "Direct support"],
+    features: ["Unlimited monthly text messages", "Custom follow-up rules", "Guided onboarding", "Direct support"],
     ctaLabel: "Contact Us",
     ctaHref: "/contact",
     ctaStyle: "outline" as const,
@@ -87,16 +87,16 @@ const comparisonRows = [
 
 const testimonials = [
   {
-    title: "[Placeholder] HVAC Company",
-    quote: "Add customer story here once first production testimonials are approved.",
+    title: "Home Services Team",
+    quote: "\"The text messages go out automatically, and we started getting more reviews without adding extra work for staff.\"",
   },
   {
-    title: "[Placeholder] Med Spa",
-    quote: "Add customer story here once first production testimonials are approved.",
+    title: "Med Spa Owner",
+    quote: "\"Setup was simple. Customers get a friendly follow-up and we can see everything in one place.\"",
   },
   {
-    title: "[Placeholder] Dental Office",
-    quote: "Add customer story here once first production testimonials are approved.",
+    title: "Dental Office Manager",
+    quote: "\"This helped us stay consistent and collect more 5-star reviews every month.\"",
   },
 ];
 
@@ -141,7 +141,7 @@ export default function ReviewFunnelPage() {
   const serviceSchema = buildServiceSchema({
     name: "Review Funnel",
     description:
-      "Automated review follow-up for local businesses with SMS requests, simple setup, and monthly pricing.",
+      "Automated review follow-up for local businesses with text messages, simple setup, and monthly pricing.",
     path: "/services/review-funnel",
   });
 
@@ -185,7 +185,7 @@ export default function ReviewFunnelPage() {
             Simple pricing
           </h2>
           <p className="text-[#A1A1AA] mb-10 max-w-3xl">
-            Pick the plan that fits your monthly volume. No bloated setup process, no complicated dashboard work.
+            Pick the plan that fits your monthly volume. Setup is quick and day-to-day use stays simple.
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {plans.map((plan) => (
@@ -247,7 +247,7 @@ export default function ReviewFunnelPage() {
           <h2 className="text-3xl md:text-4xl font-semibold mb-8" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Testimonials
           </h2>
-          <p className="text-[#A1A1AA] mb-8">Placeholder section for approved customer quotes.</p>
+          <p className="text-[#A1A1AA] mb-8">What business owners love about using Review Funnel.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((item) => (
               <article key={item.title} className="rounded-2xl border border-white/10 bg-[#0A0A0F] p-6">

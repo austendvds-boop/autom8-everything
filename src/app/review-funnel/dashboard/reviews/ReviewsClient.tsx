@@ -199,7 +199,7 @@ export default function ReviewsClient() {
         <h2 className="text-2xl font-semibold text-white" style={{ fontFamily: "var(--font-playfair), serif" }}>
           Reviews
         </h2>
-        <p className="mt-1 text-sm text-[#A1A1AA]">Filter and inspect every request that moved through the funnel.</p>
+        <p className="mt-1 text-sm text-[#A1A1AA]">Filter and review every customer request sent from your review flow.</p>
       </section>
 
       <form onSubmit={handleApplyFilters} className="rounded-2xl border border-white/10 bg-[#12121A] p-4 sm:p-5">
@@ -241,7 +241,7 @@ export default function ReviewsClient() {
           </label>
 
           <label className="block">
-            <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">SMS status</span>
+            <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Text message status</span>
             <select
               value={draftFilters.smsStatus}
               onChange={(event) => setDraftFilters((prev) => ({ ...prev, smsStatus: event.target.value }))}
@@ -314,7 +314,7 @@ export default function ReviewsClient() {
                 {selectedReview.rating ? `${selectedReview.rating}★` : "—"}
               </p>
               <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
-                <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">SMS status</span>
+                <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Text message status</span>
                 {toLabel(selectedReview.smsStatus)}
               </p>
               <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
@@ -322,7 +322,7 @@ export default function ReviewsClient() {
                 {selectedReview.pageOpenedAt ? formatDate(selectedReview.pageOpenedAt) : "No"}
               </p>
               <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
-                <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">SMS sent</span>
+                <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Text message sent</span>
                 {formatDate(selectedReview.smsSentAt)}
               </p>
               <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">

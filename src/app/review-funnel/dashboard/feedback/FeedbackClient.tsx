@@ -51,7 +51,7 @@ export default function FeedbackClient() {
           Feedback
         </h2>
         <p className="mt-1 text-sm text-[#A1A1AA]">
-          See private 1–4★ feedback so your team can follow up quickly and improve experiences.
+          See private lower-star feedback so your team can follow up quickly and make things right.
         </p>
       </section>
 

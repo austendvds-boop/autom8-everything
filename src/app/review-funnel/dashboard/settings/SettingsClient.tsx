@@ -59,8 +59,8 @@ interface SmsFormState {
 }
 
 const TAB_ORDER: Array<{ key: SettingsTab; label: string }> = [
-  { key: "profile", label: "Profile" },
-  { key: "sms", label: "SMS" },
+  { key: "profile", label: "Your Business" },
+  { key: "sms", label: "Text Messages" },
   { key: "calendar", label: "Calendar" },
   { key: "billing", label: "Billing" },
 ]
@@ -128,11 +128,11 @@ export default function SettingsClient() {
       const billingPayload = (await billingResponse.json().catch(() => null)) as BillingResponse | { error?: string } | null
 
       if (!profileResponse.ok || !profilePayload || !("profile" in profilePayload)) {
-        throw new Error((profilePayload as { error?: string } | null)?.error || "Failed to load profile settings")
+        throw new Error((profilePayload as { error?: string } | null)?.error || "Failed to load business settings")
       }
 
       if (!smsResponse.ok || !smsPayload || !("smsTemplate" in smsPayload)) {
-        throw new Error((smsPayload as { error?: string } | null)?.error || "Failed to load SMS settings")
+        throw new Error((smsPayload as { error?: string } | null)?.error || "Failed to load text message settings")
       }
 
       if (!billingResponse.ok || !billingPayload || !("plan" in billingPayload)) {
@@ -158,7 +158,7 @@ export default function SettingsClient() {
 
       setBilling(billingPayload)
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to load settings")
+      setErrorMessage(error instanceof Error ? error.message : "Failed to load your settings")
     } finally {
       setIsLoading(false)
     }
@@ -195,7 +195,7 @@ export default function SettingsClient() {
 
   async function saveProfileSettings() {
     if (!isValidHexColor(profile.primaryColor) || !isValidHexColor(profile.accentColor)) {
-      setErrorMessage("Primary and accent colors must be valid hex values (e.g. #8B5CF6)")
+      setErrorMessage("Please use a full color code like #8B5CF6 for both color fields.")
       return
     }
 
@@ -224,7 +224,7 @@ export default function SettingsClient() {
         | null
 
       if (!response.ok) {
-        throw new Error((payload as { error?: string } | null)?.error || "Failed to save profile settings")
+        throw new Error((payload as { error?: string } | null)?.error || "Failed to save your business settings")
       }
 
       if (payload && "profile" in payload && payload.profile) {
@@ -240,9 +240,9 @@ export default function SettingsClient() {
         }))
       }
 
-      setStatusMessage("Profile settings saved")
+      setStatusMessage("Your business settings were saved.")
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to save profile settings")
+      setErrorMessage(error instanceof Error ? error.message : "Failed to save your business settings")
     } finally {
       setIsSavingProfile(false)
     }
@@ -250,7 +250,7 @@ export default function SettingsClient() {
 
   async function saveSmsSettings() {
     if (smsConfig.smsDelayMinutes < 0 || smsConfig.smsDelayMinutes > 1440) {
-      setErrorMessage("SMS delay must be between 0 and 1440 minutes")
+      setErrorMessage("Send delay must be between 0 and 1,440 minutes.")
       return
     }
 
@@ -273,16 +273,16 @@ export default function SettingsClient() {
       const payload = (await response.json().catch(() => null)) as SmsResponse | { error?: string } | null
 
       if (!response.ok || !payload || !("smsTemplate" in payload)) {
-        throw new Error((payload as { error?: string } | null)?.error || "Failed to save SMS settings")
+        throw new Error((payload as { error?: string } | null)?.error || "Failed to save text message settings")
       }
 
       setSmsConfig({
         smsTemplate: payload.smsTemplate,
         smsDelayMinutes: payload.smsDelayMinutes,
       })
-      setStatusMessage("SMS settings saved")
+      setStatusMessage("Your text message settings were saved.")
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to save SMS settings")
+      setErrorMessage(error instanceof Error ? error.message : "Failed to save your text message settings")
     } finally {
       setIsSavingSms(false)
     }
@@ -347,12 +347,12 @@ export default function SettingsClient() {
       const payload = (await response.json().catch(() => null)) as { url?: string; error?: string } | null
 
       if (!response.ok || !payload?.url) {
-        throw new Error(payload?.error || "Unable to open Stripe billing portal")
+        throw new Error(payload?.error || "Unable to open your billing page")
       }
 
       window.location.assign(payload.url)
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Unable to open billing portal")
+      setErrorMessage(error instanceof Error ? error.message : "Unable to open your billing page")
       setIsBillingBusy(false)
     }
   }
@@ -363,10 +363,10 @@ export default function SettingsClient() {
     }
 
     if (billing.smsLimitUnlimited) {
-      return `${billing.smsUsedThisMonth.toLocaleString()} used (unlimited plan)`
+      return `${billing.smsUsedThisMonth.toLocaleString()} text messages sent (unlimited plan)`
     }
 
-    return `${billing.smsUsedThisMonth.toLocaleString()} / ${(billing.smsLimitMonthly ?? 0).toLocaleString()} used`
+    return `${billing.smsUsedThisMonth.toLocaleString()} / ${(billing.smsLimitMonthly ?? 0).toLocaleString()} text messages sent`
   }, [billing])
 
   return (
@@ -375,7 +375,7 @@ export default function SettingsClient() {
         <h2 className="text-2xl font-semibold text-white" style={{ fontFamily: "var(--font-playfair), serif" }}>
           Settings
         </h2>
-        <p className="mt-1 text-sm text-[#A1A1AA]">Manage branding, SMS behavior, calendar sync, and billing.</p>
+        <p className="mt-1 text-sm text-[#A1A1AA]">Update your business info, text messages, calendar, and billing.</p>
       </section>
 
       {statusMessage ? (
@@ -405,13 +405,13 @@ export default function SettingsClient() {
         </div>
       </section>
 
-      {isLoading ? <p className="text-sm text-[#A1A1AA]">Loading settings...</p> : null}
+      {isLoading ? <p className="text-sm text-[#A1A1AA]">Loading your settings...</p> : null}
 
       {!isLoading && activeTab === "profile" ? (
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-[1.2fr_1fr]">
           <article className="rounded-2xl border border-white/10 bg-[#12121A] p-5">
-            <h3 className="text-lg font-semibold text-white">Business profile</h3>
-            <p className="mt-1 text-sm text-[#A1A1AA]">Update your public-facing brand and promo details.</p>
+            <h3 className="text-lg font-semibold text-white">Your business details</h3>
+            <p className="mt-1 text-sm text-[#A1A1AA]">Update what customers see on your review page.</p>
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="block sm:col-span-2">
@@ -425,7 +425,8 @@ export default function SettingsClient() {
               </label>
 
               <label className="block sm:col-span-2">
-                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Promo offer</span>
+                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Special offer for feedback</span>
+                <p className="mb-2 text-xs text-[#A1A1AA]">Shown to unhappy customers to help win them back.</p>
                 <textarea
                   value={profile.promoOffer}
                   onChange={(event) => setProfile((prev) => ({ ...prev, promoOffer: event.target.value }))}
@@ -435,7 +436,7 @@ export default function SettingsClient() {
               </label>
 
               <label className="block">
-                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Promo code</span>
+                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Offer code (optional)</span>
                 <input
                   type="text"
                   value={profile.promoCode}
@@ -446,7 +447,8 @@ export default function SettingsClient() {
               </label>
 
               <label className="block">
-                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Primary color</span>
+                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Your brand color</span>
+                <p className="mb-2 text-xs text-[#A1A1AA]">This is the main color customers will see on your review page.</p>
                 <input
                   type="text"
                   value={profile.primaryColor}
@@ -457,7 +459,8 @@ export default function SettingsClient() {
               </label>
 
               <label className="block">
-                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Accent color</span>
+                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Second brand color</span>
+                <p className="mb-2 text-xs text-[#A1A1AA]">Used on buttons and highlights.</p>
                 <input
                   type="text"
                   value={profile.accentColor}
@@ -470,7 +473,7 @@ export default function SettingsClient() {
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 text-sm text-[#D4D4D8]">
               <p className="rounded-lg border border-white/10 bg-white/5 p-3">
-                <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Owner</span>
+                <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Account owner</span>
                 {ownerName || "—"}
               </p>
               <p className="rounded-lg border border-white/10 bg-white/5 p-3">
@@ -490,7 +493,7 @@ export default function SettingsClient() {
                 disabled={isSavingProfile}
                 className="rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isSavingProfile ? "Saving..." : "Save profile"}
+                {isSavingProfile ? "Saving..." : "Save business details"}
               </button>
             </div>
           </article>
@@ -507,8 +510,8 @@ export default function SettingsClient() {
 
       {!isLoading && activeTab === "sms" ? (
         <section className="rounded-2xl border border-white/10 bg-[#12121A] p-5">
-          <h3 className="text-lg font-semibold text-white">SMS settings</h3>
-          <p className="mt-1 text-sm text-[#A1A1AA]">Adjust timing and messaging for review requests.</p>
+          <h3 className="text-lg font-semibold text-white">Text message settings</h3>
+          <p className="mt-1 text-sm text-[#A1A1AA]">Choose what your text says and when it gets sent.</p>
 
           <div className="mt-4">
             <SmsTemplateEditor
@@ -520,7 +523,7 @@ export default function SettingsClient() {
           </div>
 
           <label className="mt-4 block max-w-xs">
-            <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Delay after appointment (minutes)</span>
+            <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">How long to wait after the appointment (minutes)</span>
             <input
               type="number"
               min={0}
@@ -544,7 +547,7 @@ export default function SettingsClient() {
               disabled={isSavingSms}
               className="rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isSavingSms ? "Saving..." : "Save SMS settings"}
+              {isSavingSms ? "Saving..." : "Save text message settings"}
             </button>
           </div>
         </section>
@@ -564,7 +567,7 @@ export default function SettingsClient() {
       {!isLoading && activeTab === "billing" ? (
         <section className="rounded-2xl border border-white/10 bg-[#12121A] p-5">
           <h3 className="text-lg font-semibold text-white">Billing</h3>
-          <p className="mt-1 text-sm text-[#A1A1AA]">Review plan details and open the Stripe customer portal.</p>
+          <p className="mt-1 text-sm text-[#A1A1AA]">Review your plan details and open your secure billing page.</p>
 
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 text-sm">
             <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
@@ -576,7 +579,7 @@ export default function SettingsClient() {
               {billing?.planAmountMonthlyUsd ? `$${billing.planAmountMonthlyUsd}/mo` : "Custom"}
             </p>
             <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
-              <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">SMS usage</span>
+              <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Text message usage</span>
               {billingUsageText}
             </p>
           </div>
@@ -590,7 +593,7 @@ export default function SettingsClient() {
               disabled={isBillingBusy}
               className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/15 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isBillingBusy ? "Opening portal..." : "Manage Billing"}
+              {isBillingBusy ? "Opening billing page..." : "Manage Billing"}
             </button>
           </div>
         </section>

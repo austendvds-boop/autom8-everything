@@ -1,6 +1,10 @@
 "use client"
 
-const VARIABLE_KEYS = ["{customer_name}", "{business_name}", "{funnel_url}"] as const
+const VARIABLE_OPTIONS = [
+  { key: "{customer_name}", label: "Customer name" },
+  { key: "{business_name}", label: "Business name" },
+  { key: "{funnel_url}", label: "Review link" },
+] as const
 
 interface SmsTemplateEditorProps {
   value: string
@@ -44,24 +48,25 @@ export default function SmsTemplateEditor({
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-sm font-medium text-[#D4D4D8]">Template variables</p>
+        <p className="text-sm font-medium text-[#D4D4D8]">Quick insert</p>
+        <p className="mt-1 text-xs text-[#A1A1AA]">Tap to drop in a customer name, your business name, or the review link.</p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {VARIABLE_KEYS.map((key) => (
+          {VARIABLE_OPTIONS.map((variable) => (
             <button
-              key={key}
+              key={variable.key}
               type="button"
               disabled={disabled}
-              onClick={() => insertVariable(key)}
+              onClick={() => insertVariable(variable.key)}
               className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-semibold text-[#C4B5FD] transition hover:border-[#8B5CF6]/50 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {key}
+              {variable.label}
             </button>
           ))}
         </div>
       </div>
 
       <label className="block">
-        <span className="mb-2 block text-sm font-medium text-[#D4D4D8]">SMS template</span>
+        <span className="mb-2 block text-sm font-medium text-[#D4D4D8]">Text message</span>
         <textarea
           value={value}
           onChange={(event) => onChange(event.target.value)}
@@ -73,7 +78,7 @@ export default function SmsTemplateEditor({
       </label>
 
       <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-        <p className="text-xs uppercase tracking-wide text-[#8B5CF6]">Preview</p>
+        <p className="text-xs uppercase tracking-wide text-[#8B5CF6]">Preview example</p>
         <p className="mt-2 whitespace-pre-wrap text-sm text-[#E4E4E7]">{previewText}</p>
       </div>
     </div>

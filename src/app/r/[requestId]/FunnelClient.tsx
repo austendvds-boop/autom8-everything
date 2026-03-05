@@ -272,7 +272,7 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
             </div>
           ) : null}
 
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-[#A1A1AA]">Customer feedback</p>
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-[#A1A1AA]">We&apos;d love your feedback</p>
           <h1
             className="mt-3 text-center text-2xl font-semibold leading-tight text-white sm:text-3xl"
             style={{ fontFamily: "var(--font-playfair), serif" }}
@@ -282,7 +282,7 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
 
           {isLoading ? (
             <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-8 text-center text-[#A1A1AA]">
-              Loading your review link...
+              Loading your feedback page...
             </div>
           ) : null}
 
@@ -315,8 +315,8 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
               {step === "five-star" ? (
                 <div className="space-y-5">
                   <div className="rounded-2xl border border-emerald-300/25 bg-emerald-500/10 p-4 text-center text-emerald-50">
-                    <p className="text-lg font-semibold">Glad you had a great experience!</p>
-                    <p className="mt-1 text-sm text-emerald-100/90">Would you share it on Google?</p>
+                    <p className="text-lg font-semibold">We&apos;re so glad you had a great experience!</p>
+                    <p className="mt-1 text-sm text-emerald-100/90">Would you mind sharing that on Google?</p>
                   </div>
 
                   <button
@@ -337,14 +337,14 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
                     <p className="text-sm font-semibold text-white">{funnelData.tenant.promoOffer}</p>
                     {funnelData.tenant.promoCode ? (
                       <p className="mt-1 text-xs text-[#E4E4E7]">
-                        Promo code: <span className="font-semibold tracking-wide">{funnelData.tenant.promoCode}</span>
+                        Offer code: <span className="font-semibold tracking-wide">{funnelData.tenant.promoCode}</span>
                       </p>
                     ) : null}
                   </div>
 
                   <div>
                     <label htmlFor="feedback" className="mb-2 block text-sm font-medium text-[#E4E4E7]">
-                      Tell us what could have been better
+                      Tell us what we could have done better
                     </label>
                     <textarea
                       id="feedback"
@@ -358,7 +358,7 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
                         boxShadow: `0 0 0 0 ${primaryColor}`,
                         caretColor: primaryColor,
                       }}
-                      placeholder="Share your feedback..."
+                      placeholder="Share your thoughts..."
                     />
                   </div>
 
@@ -368,7 +368,7 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
                     className="w-full rounded-2xl px-5 py-4 text-base font-semibold text-white transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
                     style={{ background: ctaGradient }}
                   >
-                    {isSubmitting ? "Submitting..." : "Submit feedback"}
+                    {isSubmitting ? "Sending..." : "Send feedback"}
                   </button>
                 </form>
               ) : null}
@@ -393,7 +393,7 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
                   </div>
 
                   <Link href={`/r/${requestId}/thanks`} className="inline-block text-sm font-medium text-[#C4B5FD] hover:text-[#DDD6FE]">
-                    Continue
+                    Done
                   </Link>
                 </div>
               ) : null}

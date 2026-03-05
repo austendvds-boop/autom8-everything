@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/seo"
 export const metadata: Metadata = {
   ...buildMetadata({
     title: "Review Funnel Login | Autom8 Everything",
-    description: "Sign in to your Review Funnel dashboard.",
+    description: "Enter your email and we'll send you a link to sign in.",
     path: "/review-funnel/login",
     keywords: ["review funnel login", "business review dashboard"],
   }),

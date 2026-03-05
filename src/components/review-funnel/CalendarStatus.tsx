@@ -22,11 +22,11 @@ export default function CalendarStatus({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.16em] text-[#8B5CF6]">Google Calendar</p>
-          <h3 className="mt-2 text-lg font-semibold text-white">Connection status</h3>
+          <h3 className="mt-2 text-lg font-semibold text-white">Calendar connection</h3>
           <p className="mt-1 text-sm text-[#A1A1AA]">
             {connected
-              ? "Calendar is connected and appointment sync is active."
-              : "Calendar is not connected yet. Connect it to start automated review requests."}
+              ? "Your calendar is connected, so review requests can go out automatically."
+              : "Connect your calendar to start sending review requests automatically."}
           </p>
         </div>
 
@@ -44,10 +44,10 @@ export default function CalendarStatus({
       {connected ? (
         <div className="mt-4 space-y-1 text-sm text-[#D4D4D8]">
           <p>
-            Account: <span className="font-medium text-white">{googleEmail?.trim() || "Unknown"}</span>
+            Connected account: <span className="font-medium text-white">{googleEmail?.trim() || "Unknown"}</span>
           </p>
           <p>
-            Active watches: <span className="font-medium text-white">{activeWatchCount}</span>
+            Active calendar syncs: <span className="font-medium text-white">{activeWatchCount}</span>
           </p>
         </div>
       ) : null}
@@ -64,7 +64,7 @@ export default function CalendarStatus({
             disabled={isBusy}
             className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-red-300/50 hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isBusy ? "Disconnecting..." : "Disconnect Google Calendar"}
+            {isBusy ? "Disconnecting..." : "Disconnect Calendar"}
           </button>
         ) : (
           <button
@@ -73,7 +73,7 @@ export default function CalendarStatus({
             disabled={isBusy}
             className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isBusy ? "Connecting..." : "Connect Google Calendar"}
+            {isBusy ? "Connecting..." : "Connect Calendar"}
           </button>
         )}
       </div>
