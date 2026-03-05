@@ -74,11 +74,17 @@ export default function PricingPage() {
 
           <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Review Funnel</p>
-            <h2 className="text-3xl font-semibold mb-2">Coming Soon</h2>
-            <p className="text-[#A1A1AA] mb-6">Automated review collection and response support.</p>
-            <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
-              Contact Us
-            </Link>
+            <h2 className="text-3xl font-semibold mb-2">Starter $79/mo</h2>
+            <p className="text-[#A1A1AA] mb-3">Growth $129/mo • Pro available with custom onboarding.</p>
+            <p className="text-[#A1A1AA] mb-6">Set-it-and-forget-it review follow-up for local businesses.</p>
+            <div className="mt-auto flex flex-col sm:flex-row gap-3">
+              <Link href="/review-funnel/signup" className="inline-flex w-fit px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+                Get Started
+              </Link>
+              <Link href="/services/review-funnel" className="inline-flex w-fit px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
+                Learn More
+              </Link>
+            </div>
           </article>
 
           <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 md:col-span-2 h-full flex flex-col">

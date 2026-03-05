@@ -2,10 +2,19 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import Navigation from "@/components/Navigation"
 import Footer from "@/components/Footer"
+import { buildMetadata } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Review Funnel Signup Success",
-  description: "Your Review Funnel signup is complete.",
+  ...buildMetadata({
+    title: "Review Funnel Signup Success | Autom8 Everything",
+    description: "Your Review Funnel signup is complete.",
+    path: "/review-funnel/signup/success",
+    keywords: ["review funnel signup success", "review funnel onboarding"],
+  }),
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function ReviewFunnelSignupSuccessPage() {

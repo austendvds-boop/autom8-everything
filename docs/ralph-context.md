@@ -2,47 +2,39 @@
 
 ## Batch Notes (keep last 3)
 
-### 2026-03-05 — Batch 5: Customer funnel page + public funnel APIs
+### 2026-03-05 — Batch 8: Review Funnel product page live + polish pass
 
-#### Files created
-- `src/app/api/review-funnel/funnel/[requestId]/route.ts`
-- `src/app/api/review-funnel/funnel/rate/route.ts`
-- `src/app/api/review-funnel/funnel/feedback/route.ts`
-- `src/app/r/[requestId]/page.tsx`
-- `src/app/r/[requestId]/FunnelClient.tsx`
-- `src/app/r/[requestId]/thanks/page.tsx`
-- `src/components/review-funnel/StarRating.tsx`
-- `src/app/review-funnel/signup/SignupClient.tsx`
+#### Scope completed
+- Replaced `/services/review-funnel` teaser/waitlist content with a full live product page.
+- Added/confirmed required sections on the product page:
+  - live pricing (Starter `$79/mo`, Growth `$129/mo`, Pro `Contact Us`)
+  - reusable `PlanCard` component
+  - feature comparison (`Review Funnel vs manual follow-up`)
+  - 3-step flow (`Connect Calendar` → `Automatic SMS` → `Reviews Roll In`)
+  - testimonials placeholder block
+  - FAQ block
+  - primary CTA to `/review-funnel/signup`
+- Kept copy plain-language and benefit-first (`set it and forget it`, `without the tech headache`) with no AI-agent jargon.
+- Polish pass updates for consistency:
+  - Review Funnel pricing/messaging on homepage service card and `/pricing` now matches live offer
+  - updated metadata/OG setup for Review Funnel signup/login/success pages via `buildMetadata`
+  - sitemap now includes `/review-funnel/signup`
+- Navigation/footer check:
+  - `Review Funnel` link already present in both `Navigation.tsx` and `Footer.tsx`; no additional code changes required there.
+
+#### Files added
+- `src/components/review-funnel/PlanCard.tsx`
 
 #### Files modified
+- `src/app/services/review-funnel/page.tsx`
+- `src/components/ServicesBento.tsx`
+- `src/app/pricing/page.tsx`
+- `src/app/sitemap.ts`
+- `src/app/review-funnel/signup/page.tsx`
 - `src/app/review-funnel/login/page.tsx`
-  - wrapped `LoginClient` in `<Suspense>` to satisfy `useSearchParams` CSR requirement during build
-- `package.json`
-  - added `nodemailer`
-  - added dev dependency `@types/nodemailer`
-- `package-lock.json`
-- `docs/ralph-context.md`
-- `docs/CODER-CONTEXT.md`
-
-#### Behavior implemented
-- Public funnel data route (`GET /api/review-funnel/funnel/[requestId]`):
-  - joins request + tenant branding (and location review URL when available)
-  - returns business name, logo, colors, promo offer/code, request state
-  - tracks `page_opened_at` on first page load
-- Rating route (`POST /api/review-funnel/funnel/rate`):
-  - validates `requestId`, `rating` (1–5), optional `googleReviewClicked`
-  - writes `rating`, `rated_at`, and `google_review_clicked`
-- Feedback route (`POST /api/review-funnel/funnel/feedback`):
-  - validates payload and enforces feedback for 1–4★ only
-  - writes `feedback_text` and `promo_shown`
-- Customer funnel page (`/r/[requestId]`):
-  - standalone branded experience (no site nav/footer)
-  - star selection UX with large mobile tap targets
-  - 5★ flow: Google review CTA -> thank-you
-  - 1–4★ flow: promo + feedback form -> thank-you with promo details
-  - tracks required funnel fields through API calls
-- Static fallback thanks page at `/r/[requestId]/thanks`.
-- Added reusable `StarRating` component with keyboard/ARIA support and animated interaction states.
+- `src/app/review-funnel/signup/success/page.tsx`
+- `src/app/review-funnel/signup/SignupClient.tsx`
+- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx` (type-safety fix discovered during build verification)
 
 #### Verification
 - `npm run build` ✅

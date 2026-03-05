@@ -1,5 +1,49 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 8: Product page live rewrite + polish + deploy prep
+
+### Scope completed
+- Rewrote `src/app/services/review-funnel/page.tsx` from teaser/waitlist into a live product page with:
+  - pricing tiers (Starter `$79/mo`, Growth `$129/mo`, Pro `Contact Us`)
+  - reusable plan cards (`src/components/review-funnel/PlanCard.tsx`)
+  - manual follow-up comparison section
+  - 3-step flow (`Connect Calendar` → `Automatic SMS` → `Reviews Roll In`)
+  - testimonials placeholder section
+  - FAQ section
+  - primary CTA to `/review-funnel/signup`
+- Polish pass for consistency across related surfaces:
+  - updated Review Funnel pricing card copy on homepage (`src/components/ServicesBento.tsx`)
+  - updated Review Funnel pricing block on `/pricing` (`src/app/pricing/page.tsx`)
+  - refreshed signup hero copy and kept existing 4-step checkout flow (`src/app/review-funnel/signup/SignupClient.tsx`)
+- SEO/meta updates for new Review Funnel pages:
+  - `src/app/review-funnel/signup/page.tsx` uses `buildMetadata`
+  - `src/app/review-funnel/login/page.tsx` uses `buildMetadata` + `robots: noindex`
+  - `src/app/review-funnel/signup/success/page.tsx` uses `buildMetadata` + `robots: noindex`
+- Sitemap update:
+  - added `/review-funnel/signup` to `src/app/sitemap.ts`
+- Navigation/footer verification:
+  - `Review Funnel` links were already present in `src/components/Navigation.tsx` and `src/components/Footer.tsx` (no additional edits required).
+- Build blocker fix discovered during verification:
+  - `src/app/review-funnel/dashboard/settings/SettingsClient.tsx` narrowed `payload.profile` before `setProfile` callback to satisfy TypeScript strictness.
+
+### Files changed in this batch
+- `src/app/services/review-funnel/page.tsx`
+- `src/components/review-funnel/PlanCard.tsx`
+- `src/components/ServicesBento.tsx`
+- `src/app/pricing/page.tsx`
+- `src/app/review-funnel/signup/SignupClient.tsx`
+- `src/app/review-funnel/signup/page.tsx`
+- `src/app/review-funnel/login/page.tsx`
+- `src/app/review-funnel/signup/success/page.tsx`
+- `src/app/sitemap.ts`
+- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+- Note: Neon warning persists during build (`fetchConnectionCache` deprecation; already always true).
+
 ## 2026-03-05 — Review Funnel Batch 6: magic link auth + signup flow
 
 ### Scope completed

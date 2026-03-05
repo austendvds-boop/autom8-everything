@@ -51,12 +51,12 @@ const products: Product[] = [
     productName: "Review Funnel",
     valueProp:
       "Ask for reviews automatically after each job and keep responses consistent so your reputation keeps growing.",
-    price: "Coming Soon",
-    priceContext: "Join the waitlist",
-    priceAriaLabel: "Review Funnel pricing is coming soon",
-    microProof: "Collect more 5-star reviews with less follow-up",
+    price: "$79/mo",
+    priceContext: "Starter plan • set it and forget it",
+    priceAriaLabel: "Review Funnel starts at 79 dollars per month",
+    microProof: "5-minute setup without the tech headache",
     icon: MessageSquareHeart,
-    cta: { href: "/services/review-funnel", label: "See Review Funnel" },
+    cta: { href: "/review-funnel/signup", label: "Get Started" },
   },
   {
     tier: "small",
