@@ -107,7 +107,7 @@ export default function ContactPageClient() {
                 <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
                   <h3 className="text-xl font-semibold mb-4">Prefer to try something first?</h3>
                   <p className="text-[#A1A1AA] mb-6">Start Cadence free and see live phone answering in minutes.</p>
-                  <Link href="/cadence/get-started" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Start Free Trial</Link>
+                  <Link href="/get-started" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Start Free Trial</Link>
                 </div>
 
                 <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">

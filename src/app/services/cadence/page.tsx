@@ -89,7 +89,7 @@ export default function CadencePage() {
                 Call (480) 631-3993
               </a>
               <Link
-                href="/onboarding"
+                href="/get-started"
                 className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 text-center"
               >
                 Prefer to type? Use the web form
@@ -156,7 +156,7 @@ export default function CadencePage() {
                 Call (480) 631-3993
               </a>
               <Link
-                href="/onboarding"
+                href="/get-started"
                 className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60"
               >
                 Prefer to type? Use the web form
@@ -196,7 +196,7 @@ export default function CadencePage() {
               Call (480) 631-3993
             </a>
             <Link
-              href="/onboarding"
+              href="/get-started"
               className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60"
             >
               Prefer to type? Use the web form
@@ -209,3 +209,4 @@ export default function CadencePage() {
     </main>
   );
 }
+

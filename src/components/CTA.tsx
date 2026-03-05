@@ -43,7 +43,7 @@ export default function CTA() {
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...(prefersReducedMotion ? revealReduced : reveal)}>
           <Link
-            href="/onboarding"
+            href="/get-started"
             className="inline-block px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow"
           >
             Start Free Trial

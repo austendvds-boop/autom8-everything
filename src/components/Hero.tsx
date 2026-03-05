@@ -51,7 +51,7 @@ export default function Hero() {
               Explore Our Tools
             </motion.button>
           </Link>
-          <Link href="/onboarding">
+          <Link href="/get-started">
             <motion.button
               className="px-8 py-4 rounded-full border border-white/25 text-white font-semibold text-lg hover:border-[#8B5CF6]/60 transition-colors"
               {...buttonHover}

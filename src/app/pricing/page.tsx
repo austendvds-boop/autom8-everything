@@ -67,7 +67,7 @@ export default function PricingPage() {
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Cadence</p>
             <h2 className="text-3xl font-semibold mb-2">$199/mo</h2>
             <p className="text-[#A1A1AA] mb-6">7-day free trial included.</p>
-            <Link href="/onboarding" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+            <Link href="/get-started" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
               Start Free Trial
             </Link>
           </article>

@@ -11,7 +11,7 @@ const productLinks = [
   { label: "Website Creation", href: "/services/websites" },
   { label: "SEO & Content", href: "/services/seo-content" },
   { label: "Custom Apps", href: "/services/custom-apps" },
-  { label: "Onboarding", href: "/onboarding" },
+  { label: "Get Started", href: "/get-started" },
   { label: "Pricing", href: "/pricing" },
 ];
 

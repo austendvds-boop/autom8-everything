@@ -84,7 +84,7 @@ export default function Navigation() {
             >
               Client Login
             </Link>
-            <Link href="/onboarding">
+            <Link href="/get-started">
               <motion.button
                 className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium text-sm"
                 {...buttonHover}
@@ -155,7 +155,7 @@ export default function Navigation() {
               </motion.div>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.78 }}>
                 <Link
-                  href="/onboarding"
+                  href="/get-started"
                   className="mt-8 px-8 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
