@@ -1,5 +1,23 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 3 retry: commit/push completion
+
+### Scope completed
+- Finalized and verified Batch 3 pricing + calendar-limit changes for commit/push on `master`.
+- Confirmed pricing and CTA updates across:
+  - `src/app/services/review-funnel/page.tsx`
+  - `src/app/review-funnel/signup/SignupClient.tsx`
+- Confirmed calendar limit enforcement + plain-language error handling across:
+  - `src/lib/review-funnel/services/calendar.ts`
+  - `src/app/api/review-funnel/google/auth-url/route.ts`
+  - `src/app/api/review-funnel/google/callback/route.ts`
+  - `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
+- Updated docs:
+  - `docs/ralph-context.md` (appended latest batch summary and kept only last 3 notes)
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-05 — Review Funnel Batch 3: pricing UI + calendar limit enforcement
 
 ### Scope completed
