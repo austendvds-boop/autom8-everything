@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Navigation from "@/components/Navigation"
 import Footer from "@/components/Footer"
 
@@ -56,9 +56,13 @@ export default function SignupClient() {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState<SignupFormState>(initialFormState)
   const [isSearchingPlaces, setIsSearchingPlaces] = useState(false)
+  const [hasSearchedPlaces, setHasSearchedPlaces] = useState(false)
+  const [isPlacesOpen, setIsPlacesOpen] = useState(false)
   const [places, setPlaces] = useState<PlaceSearchResult[]>([])
+  const [placesError, setPlacesError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const autocompleteRef = useRef<HTMLDivElement | null>(null)
 
   const canContinue = useMemo(() => {
     if (step === 1) {
@@ -81,50 +85,87 @@ export default function SignupClient() {
     return true
   }, [form, step])
 
+  const shouldRenderPlacesDropdown =
+    form.googleSearch.trim().length >= 3 && (isPlacesOpen || isSearchingPlaces || hasSearchedPlaces || !!placesError || places.length > 0)
+
   function updateField<K extends keyof SignupFormState>(key: K, value: SignupFormState[K]) {
     setForm((previous) => ({ ...previous, [key]: value }))
   }
 
-  async function searchPlaces(event?: FormEvent<HTMLFormElement>) {
-    event?.preventDefault()
+  useEffect(() => {
+    function handleOutsideClick(event: MouseEvent | TouchEvent) {
+      if (!autocompleteRef.current) return
 
+      if (!autocompleteRef.current.contains(event.target as Node)) {
+        setIsPlacesOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleOutsideClick)
+    document.addEventListener("touchstart", handleOutsideClick)
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick)
+      document.removeEventListener("touchstart", handleOutsideClick)
+    }
+  }, [])
+
+  useEffect(() => {
     const query = form.googleSearch.trim()
 
-    if (query.length < 2) {
-      setError("Please type at least 2 letters to search")
+    if (query.length < 3) {
+      setPlaces([])
+      setPlacesError(null)
+      setHasSearchedPlaces(false)
+      setIsSearchingPlaces(false)
       return
     }
 
-    setError(null)
-    setIsSearchingPlaces(true)
+    const abortController = new AbortController()
+    const timeoutId = window.setTimeout(async () => {
+      setIsSearchingPlaces(true)
+      setHasSearchedPlaces(false)
+      setPlacesError(null)
 
-    try {
-      const response = await fetch(`/api/review-funnel/google/places-search?q=${encodeURIComponent(query)}`)
-      const payload = (await response.json().catch(() => null)) as
-        | { results?: PlaceSearchResult[]; error?: string }
-        | null
+      try {
+        const response = await fetch(`/api/review-funnel/google/places-search?q=${encodeURIComponent(query)}`, {
+          signal: abortController.signal,
+        })
 
-      if (!response.ok) {
-        throw new Error(payload?.error || "We could not search Google right now")
+        const payload = (await response.json().catch(() => null)) as
+          | { results?: PlaceSearchResult[]; error?: string }
+          | null
+
+        if (!response.ok) {
+          throw new Error(payload?.error || "We could not search Google right now")
+        }
+
+        setPlaces(payload?.results ?? [])
+      } catch (searchError) {
+        if (abortController.signal.aborted) return
+
+        setPlaces([])
+        setPlacesError(searchError instanceof Error ? searchError.message : "Could not search for your business")
+      } finally {
+        if (!abortController.signal.aborted) {
+          setIsSearchingPlaces(false)
+          setHasSearchedPlaces(true)
+        }
       }
+    }, 300)
 
-      const nextResults = payload?.results ?? []
-      setPlaces(nextResults)
-
-      if (nextResults.length === 0) {
-        setError("No matches found. Try a different name or paste your Google Place ID below.")
-      }
-    } catch (searchError) {
-      setError(searchError instanceof Error ? searchError.message : "Could not search for your business")
-    } finally {
-      setIsSearchingPlaces(false)
+    return () => {
+      window.clearTimeout(timeoutId)
+      abortController.abort()
     }
-  }
+  }, [form.googleSearch])
 
   function selectPlace(place: PlaceSearchResult) {
     updateField("googlePlaceId", place.placeId)
     updateField("selectedPlaceLabel", `${place.name}${place.address ? ` — ${place.address}` : ""}`)
+    setPlacesError(null)
     setError(null)
+    setIsPlacesOpen(false)
   }
 
   function goNextStep() {
@@ -245,55 +286,114 @@ export default function SignupClient() {
 
             {step === 2 && (
               <div className="space-y-4">
-                <form onSubmit={searchPlaces} className="space-y-3">
+                <div className="space-y-3" ref={autocompleteRef}>
                   <label className="mb-2 block text-sm text-[#D4D4D8]">Search your business on Google</label>
-                  <div className="flex flex-col gap-3 sm:flex-row">
+
+                  <div className="relative">
                     <input
                       className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-4 py-3"
                       value={form.googleSearch}
-                      onChange={(event) => updateField("googleSearch", event.target.value)}
+                      onChange={(event) => {
+                        const nextValue = event.target.value
+
+                        setForm((previous) => ({
+                          ...previous,
+                          googleSearch: nextValue,
+                          googlePlaceId: "",
+                          selectedPlaceLabel: "",
+                        }))
+
+                        setError(null)
+                        setPlacesError(null)
+                        setHasSearchedPlaces(false)
+                        setIsPlacesOpen(nextValue.trim().length >= 3)
+                      }}
+                      onFocus={() => {
+                        if (
+                          form.googleSearch.trim().length >= 3 ||
+                          isSearchingPlaces ||
+                          hasSearchedPlaces ||
+                          !!placesError ||
+                          places.length > 0
+                        ) {
+                          setIsPlacesOpen(true)
+                        }
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape") {
+                          setIsPlacesOpen(false)
+                        }
+                      }}
                       placeholder="Business name and city"
                     />
-                    <button
-                      type="submit"
-                      disabled={isSearchingPlaces}
-                      className="rounded-lg border border-white/20 px-5 py-3 font-semibold disabled:opacity-60"
-                    >
-                      {isSearchingPlaces ? "Searching..." : "Search"}
-                    </button>
-                  </div>
-                </form>
 
-                {places.length > 0 && (
-                  <div className="space-y-2">
-                    {places.map((place) => {
-                      const selected = form.googlePlaceId === place.placeId
+                    {shouldRenderPlacesDropdown && (
+                      <div
+                        className={`absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-white/10 bg-[#12121A] shadow-[0_20px_50px_rgba(0,0,0,0.45)] transition-all duration-150 ${
+                          isPlacesOpen ? "translate-y-0 opacity-100" : "-translate-y-1 pointer-events-none opacity-0"
+                        }`}
+                      >
+                        <div className="max-h-72 overflow-y-auto py-1">
+                          {isSearchingPlaces && (
+                            <div className="flex items-center gap-3 px-4 py-3 text-sm text-[#A1A1AA]">
+                              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
+                              Searching...
+                            </div>
+                          )}
 
-                      return (
-                        <button
-                          key={place.placeId}
-                          type="button"
-                          onClick={() => selectPlace(place)}
-                          className="w-full rounded-lg border px-4 py-3 text-left"
-                          style={{
-                            borderColor: selected ? "#8B5CF6" : "rgba(255,255,255,0.1)",
-                            background: selected ? "rgba(139,92,246,0.12)" : "rgba(10,10,15,0.7)",
-                          }}
-                        >
-                          <p className="font-medium text-white">{place.name}</p>
-                          {place.address && <p className="text-sm text-[#A1A1AA]">{place.address}</p>}
-                        </button>
-                      )
-                    })}
+                          {!isSearchingPlaces && placesError && (
+                            <p className="px-4 py-3 text-sm text-red-300">{placesError}</p>
+                          )}
+
+                          {!isSearchingPlaces && !placesError && hasSearchedPlaces && places.length === 0 && (
+                            <p className="px-4 py-3 text-sm text-[#A1A1AA]">No businesses found</p>
+                          )}
+
+                          {!isSearchingPlaces && !placesError && places.length > 0 && (
+                            <div className="divide-y divide-white/5">
+                              {places.map((place) => {
+                                const selected = form.googlePlaceId === place.placeId
+
+                                return (
+                                  <button
+                                    key={place.placeId}
+                                    type="button"
+                                    onClick={() => selectPlace(place)}
+                                    className={`w-full px-4 py-3.5 text-left transition-colors duration-150 ${
+                                      selected ? "bg-[#2A1E45]" : "hover:bg-white/5"
+                                    }`}
+                                  >
+                                    <p className="font-medium text-white">{place.name}</p>
+                                    {place.address && <p className="mt-1 text-sm text-[#A1A1AA]">{place.address}</p>}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  {form.googleSearch.trim().length > 0 && form.googleSearch.trim().length < 3 && (
+                    <p className="text-xs text-[#71717A]">Type at least 3 characters to search</p>
+                  )}
+                </div>
 
                 <div>
                   <label className="mb-2 block text-sm text-[#D4D4D8]">Google Place ID</label>
                   <input
                     className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-4 py-3"
                     value={form.googlePlaceId}
-                    onChange={(event) => updateField("googlePlaceId", event.target.value)}
+                    onChange={(event) => {
+                      const nextValue = event.target.value
+
+                      setForm((previous) => ({
+                        ...previous,
+                        googlePlaceId: nextValue,
+                        selectedPlaceLabel: "",
+                      }))
+                    }}
                     placeholder="Paste Place ID if needed"
                   />
                   {form.selectedPlaceLabel && <p className="mt-2 text-sm text-[#A1A1AA]">Selected: {form.selectedPlaceLabel}</p>}
