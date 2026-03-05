@@ -9,6 +9,12 @@ const checkoutRequestSchema = z.object({
   ownerPhone: z.string().trim().min(1).max(32),
   plan: z.enum(["starter", "growth", "pro"]),
   googlePlaceId: z.string().trim().min(1).max(255),
+  primaryColor: z
+    .string()
+    .trim()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .optional(),
+  promoOffer: z.string().trim().min(1).max(500).optional(),
 })
 
 export const runtime = "nodejs"
@@ -22,6 +28,8 @@ function toCheckoutParams(parsed: z.infer<typeof checkoutRequestSchema>): Create
     ownerPhone: parsed.ownerPhone,
     plan: parsed.plan,
     googlePlaceId: parsed.googlePlaceId,
+    primaryColor: parsed.primaryColor,
+    promoOffer: parsed.promoOffer,
   }
 }
 

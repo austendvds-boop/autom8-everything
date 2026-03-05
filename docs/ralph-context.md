@@ -2,6 +2,51 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-05 — Batch 5: Customer funnel page + public funnel APIs
+
+#### Files created
+- `src/app/api/review-funnel/funnel/[requestId]/route.ts`
+- `src/app/api/review-funnel/funnel/rate/route.ts`
+- `src/app/api/review-funnel/funnel/feedback/route.ts`
+- `src/app/r/[requestId]/page.tsx`
+- `src/app/r/[requestId]/FunnelClient.tsx`
+- `src/app/r/[requestId]/thanks/page.tsx`
+- `src/components/review-funnel/StarRating.tsx`
+- `src/app/review-funnel/signup/SignupClient.tsx`
+
+#### Files modified
+- `src/app/review-funnel/login/page.tsx`
+  - wrapped `LoginClient` in `<Suspense>` to satisfy `useSearchParams` CSR requirement during build
+- `package.json`
+  - added `nodemailer`
+  - added dev dependency `@types/nodemailer`
+- `package-lock.json`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+#### Behavior implemented
+- Public funnel data route (`GET /api/review-funnel/funnel/[requestId]`):
+  - joins request + tenant branding (and location review URL when available)
+  - returns business name, logo, colors, promo offer/code, request state
+  - tracks `page_opened_at` on first page load
+- Rating route (`POST /api/review-funnel/funnel/rate`):
+  - validates `requestId`, `rating` (1–5), optional `googleReviewClicked`
+  - writes `rating`, `rated_at`, and `google_review_clicked`
+- Feedback route (`POST /api/review-funnel/funnel/feedback`):
+  - validates payload and enforces feedback for 1–4★ only
+  - writes `feedback_text` and `promo_shown`
+- Customer funnel page (`/r/[requestId]`):
+  - standalone branded experience (no site nav/footer)
+  - star selection UX with large mobile tap targets
+  - 5★ flow: Google review CTA -> thank-you
+  - 1–4★ flow: promo + feedback form -> thank-you with promo details
+  - tracks required funnel fields through API calls
+- Static fallback thanks page at `/r/[requestId]/thanks`.
+- Added reusable `StarRating` component with keyboard/ARIA support and animated interaction states.
+
+#### Verification
+- `npm run build` ✅
+
 ### 2026-03-04 — Batch 4: Stripe integration + checkout + billing routes
 
 #### Files created
@@ -85,43 +130,6 @@
   - terminal handling for opted-out / no-phone / limit-reached
 - Twilio status webhook maps delivery states to `rf_review_requests.sms_status`
 - Twilio inbound webhook handles STOP/UNSUBSCRIBE keywords and writes to `rf_sms_opt_outs`
-
-#### Verification
-- `npm run build` ✅
-
-### 2026-03-04 — Batch 2: Google Calendar OAuth + webhook/watch renewal
-
-#### Files created
-- `src/lib/review-funnel/services/calendar.ts`
-- `src/app/api/review-funnel/google/auth-url/route.ts`
-- `src/app/api/review-funnel/google/callback/route.ts`
-- `src/app/api/review-funnel/google/disconnect/route.ts`
-- `src/app/api/review-funnel/webhooks/google-calendar/route.ts`
-- `src/app/api/review-funnel/cron/renew-watches/route.ts`
-
-#### Files modified
-- `docs/ralph-context.md`
-- `docs/CODER-CONTEXT.md`
-
-#### Calendar service exports
-- `generateAuthUrl(tenantId)`
-- `parseGoogleOAuthState(state)`
-- `handleCallback(code, tenantId)`
-- `createWatch(tenantId, calendarId)`
-- `renewWatch(watchId)`
-- `disconnectCalendar(tenantId)`
-- `processWebhookNotification(channelId, resourceId)`
-
-#### Behavior implemented
-- Google OAuth URL generation with `calendar.readonly` scope and signed state payload.
-- OAuth callback token exchange with encrypted token persistence in `rf_google_oauth_tokens`.
-- Google Calendar watch registration to `/api/review-funnel/webhooks/google-calendar`.
-- Watch renewal flow for expiring channels (new watch + best-effort stop/deactivate old watch).
-- Calendar disconnect flow (best-effort Google stop, DB watch deactivation, token deletion).
-- Webhook incremental sync handling with sync-token fallback/reset on 410.
-- Completed appointment extraction window (past 24h), phone extraction from description/attendees/extended properties, and queued inserts into:
-  - `rf_review_requests`
-  - `rf_pending_sms`
 
 #### Verification
 - `npm run build` ✅

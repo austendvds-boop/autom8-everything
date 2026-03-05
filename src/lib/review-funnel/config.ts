@@ -35,8 +35,10 @@ export const reviewFunnelEnvSchema = z.object({
     .string()
     .regex(/^[0-9a-fA-F]{64}$/, "RF_ENCRYPTION_KEY must be 64 hex characters (32 bytes)"),
   RF_JWT_SECRET: z.string().min(32, "RF_JWT_SECRET must be at least 32 characters"),
-  RF_MAGIC_LINK_TTL_MINUTES: z.coerce.number().int().positive().default(30),
+  RF_MAGIC_LINK_TTL_MINUTES: z.coerce.number().int().positive().default(15),
   RF_SESSION_TTL_HOURS: z.coerce.number().int().positive().default(24),
+
+  RF_GMAIL_CREDENTIALS_PATH: optionalEnvString,
 
   TWILIO_ACCOUNT_SID: optionalEnvString,
   TWILIO_AUTH_TOKEN: optionalEnvString,

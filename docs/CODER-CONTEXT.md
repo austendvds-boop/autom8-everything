@@ -1,5 +1,139 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 6: magic link auth + signup flow
+
+### Scope completed
+- Added magic-link auth API routes:
+  - `POST /api/review-funnel/auth/login` (`src/app/api/review-funnel/auth/login/route.ts`)
+    - accepts `{ email }`
+    - generates one-time magic link token
+    - stores hashed token in `rf_magic_links`
+    - sends login email via Gmail SMTP
+    - returns `{ success: true, message: "Check your email" }`
+  - `GET /api/review-funnel/auth/verify` (`src/app/api/review-funnel/auth/verify/route.ts`)
+    - validates token and marks it as used
+    - creates JWT cookie session (`rf_session`)
+    - redirects to `/review-funnel/dashboard`
+  - `POST /api/review-funnel/auth/logout` (`src/app/api/review-funnel/auth/logout/route.ts`)
+    - clears session cookie
+- Added magic-link mail delivery service:
+  - `src/lib/review-funnel/services/magic-link-email.ts`
+  - Uses Nodemailer + Gmail SMTP.
+  - Reads credentials from env vars with fallback to `C:\Users\austen\.openclaw\credentials\gmail-autom8.txt`.
+  - From: `aust@autom8everything.com`
+  - Subject: `Your Review Funnel login link`
+  - Link URL: `https://autom8everything.com/api/review-funnel/auth/verify?token=...`
+- Updated auth/config behavior:
+  - `src/lib/review-funnel/config.ts`
+    - default `RF_MAGIC_LINK_TTL_MINUTES` now `15`
+    - added optional `RF_GMAIL_CREDENTIALS_PATH`
+- Added Review Funnel login UI:
+  - `src/app/review-funnel/login/page.tsx`
+  - `src/app/review-funnel/login/LoginClient.tsx`
+  - Simple email form + `Send Login Link` CTA + success state message.
+- Added Review Funnel signup wizard:
+  - `src/app/review-funnel/signup/page.tsx`
+  - `src/app/review-funnel/signup/SignupClient.tsx`
+  - 4 steps:
+    1) business info
+    2) Google business lookup (Place ID)
+    3) branding (primary color + promo offer)
+    4) plan selection (Starter, Growth, Pro contact path)
+  - Starter/Growth submit to Stripe Checkout redirect.
+  - Pro path routes to contact CTA.
+- Added signup success page:
+  - `src/app/review-funnel/signup/success/page.tsx`
+  - Includes `Connect Google Calendar` CTA.
+- Added Google Places lookup API route for signup step 2:
+  - `GET /api/review-funnel/google/places-search` (`src/app/api/review-funnel/google/places-search/route.ts`)
+  - Uses Google Places API (Text Search) and returns place candidates.
+- Extended Stripe checkout intake to preserve signup branding fields:
+  - `src/app/api/review-funnel/checkout/route.ts` now accepts optional `primaryColor` and `promoOffer`.
+  - `src/lib/review-funnel/services/stripe.ts` now stores those values via checkout metadata and persists into `rf_tenants` on webhook completion.
+
+### Files changed
+- `src/app/api/review-funnel/auth/login/route.ts` (new)
+- `src/app/api/review-funnel/auth/verify/route.ts` (new)
+- `src/app/api/review-funnel/auth/logout/route.ts` (new)
+- `src/lib/review-funnel/services/magic-link-email.ts` (new)
+- `src/lib/review-funnel/config.ts`
+- `src/app/review-funnel/login/page.tsx` (new)
+- `src/app/review-funnel/login/LoginClient.tsx` (new)
+- `src/app/review-funnel/signup/page.tsx`
+- `src/app/review-funnel/signup/SignupClient.tsx`
+- `src/app/review-funnel/signup/success/page.tsx` (new)
+- `src/app/api/review-funnel/google/places-search/route.ts` (new)
+- `src/app/api/review-funnel/checkout/route.ts`
+- `src/lib/review-funnel/services/stripe.ts`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm install` ✅
+- `npm run build` ✅
+- Build warning observed (pre-existing): Neon `fetchConnectionCache` deprecation notice.
+
+## 2026-03-05 — Review Funnel Batch 5: customer funnel page + public funnel APIs
+
+### Scope completed
+- Implemented public funnel API routes:
+  - `GET /api/review-funnel/funnel/[requestId]` (`src/app/api/review-funnel/funnel/[requestId]/route.ts`)
+    - Returns tenant branding and review request payload for the customer-facing page.
+    - Tracks first page open by setting `rf_review_requests.page_opened_at` when null.
+    - Includes color sanitization fallback and location review URL override (`rf_locations.gmb_review_url` when present).
+  - `POST /api/review-funnel/funnel/rate` (`src/app/api/review-funnel/funnel/rate/route.ts`)
+    - Validates `requestId`, `rating` (1–5), optional `googleReviewClicked`.
+    - Persists `rating`, `rated_at` (first-set), ensures `page_opened_at`, and tracks `google_review_clicked`.
+  - `POST /api/review-funnel/funnel/feedback` (`src/app/api/review-funnel/funnel/feedback/route.ts`)
+    - Validates `requestId` + feedback text.
+    - Enforces 1–4★ flow only (`rating` required and must not be 5).
+    - Persists `feedback_text` + `promo_shown` and returns promo details.
+- Added customer-facing funnel pages:
+  - `src/app/r/[requestId]/page.tsx`
+    - Dynamic server shell + metadata/OG tags including business name when available.
+    - Marked dynamic and noindex for the public request-specific page.
+  - `src/app/r/[requestId]/FunnelClient.tsx`
+    - Client-side fetch of funnel payload on mount.
+    - Mobile-first standalone branded UI (no site nav/footer).
+    - Implements full flow:
+      - star selection (1–5)
+      - 5★ prompt -> Google review CTA -> thank-you
+      - 1–4★ promo + feedback form -> submit -> thank-you with promo details
+    - Tracks required events via API calls: `page_opened_at`, `rating`, `rated_at`, `google_review_clicked`, `feedback_text`.
+  - `src/app/r/[requestId]/thanks/page.tsx` static fallback thank-you page.
+- Added reusable star selector:
+  - `src/components/review-funnel/StarRating.tsx`
+  - 5 interactive stars with large tap targets, hover/selection animation, keyboard support, and ARIA radio semantics.
+
+### Build unblockers completed during this batch
+- `npm run build` initially failed on pre-existing Review Funnel auth/signup files present in workspace but not fully wired.
+- Added missing/supporting pieces required for successful build:
+  - `src/app/review-funnel/signup/SignupClient.tsx` (placeholder client component for existing signup page import)
+  - Updated `src/app/review-funnel/login/page.tsx` to wrap client usage in `Suspense` (required for `useSearchParams` CSR bailout)
+  - Installed email dependency/types required by existing magic-link mailer files:
+    - `nodemailer` (dependency)
+    - `@types/nodemailer` (dev dependency)
+  - Updated lockfile accordingly (`package-lock.json`).
+
+### Files changed
+- `src/app/api/review-funnel/funnel/[requestId]/route.ts` (new)
+- `src/app/api/review-funnel/funnel/rate/route.ts` (new)
+- `src/app/api/review-funnel/funnel/feedback/route.ts` (new)
+- `src/app/r/[requestId]/page.tsx` (new)
+- `src/app/r/[requestId]/FunnelClient.tsx` (new)
+- `src/app/r/[requestId]/thanks/page.tsx` (new)
+- `src/components/review-funnel/StarRating.tsx` (new)
+- `src/app/review-funnel/login/page.tsx`
+- `src/app/review-funnel/signup/SignupClient.tsx` (new)
+- `package.json`
+- `package-lock.json`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+- Build warning observed (pre-existing): Neon `fetchConnectionCache` deprecation notice.
+
 ## 2026-03-04 — Review Funnel Batch 4: Stripe integration + checkout + billing routes
 
 ### Scope completed

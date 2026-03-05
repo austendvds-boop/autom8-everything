@@ -31,6 +31,8 @@ export interface CreateCheckoutSessionParams {
   ownerPhone: string
   plan: ReviewFunnelPlan
   googlePlaceId: string
+  primaryColor?: string
+  promoOffer?: string
 }
 
 export interface CreateCheckoutSessionResult {
@@ -243,6 +245,8 @@ async function getOrCreateStripeCustomer(params: {
   businessName: string
   plan: ReviewFunnelPlan
   googlePlaceId: string
+  primaryColor?: string | null
+  promoOffer?: string | null
 }): Promise<string> {
   const existingCustomer = await findCustomerByEmail(params.email)
 
@@ -258,6 +262,8 @@ async function getOrCreateStripeCustomer(params: {
         ownerEmail: params.email,
         ownerPhone: params.ownerPhone,
         googlePlaceId: params.googlePlaceId,
+        ...(params.primaryColor ? { primaryColor: params.primaryColor } : {}),
+        ...(params.promoOffer ? { promoOffer: params.promoOffer } : {}),
       },
     })
 
@@ -275,6 +281,8 @@ async function getOrCreateStripeCustomer(params: {
       ownerEmail: params.email,
       ownerPhone: params.ownerPhone,
       googlePlaceId: params.googlePlaceId,
+      ...(params.primaryColor ? { primaryColor: params.primaryColor } : {}),
+      ...(params.promoOffer ? { promoOffer: params.promoOffer } : {}),
     },
   })
 
@@ -353,6 +361,10 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session):
   const googlePlaceId = toBoundedString(extractCheckoutMetadataValue(session.metadata, "googlePlaceId", 255), 255)
   const gmbReviewUrl = googlePlaceId ? buildReviewUrl(googlePlaceId) : "https://search.google.com/local/writereview"
 
+  const rawPrimaryColor = toBoundedString(extractCheckoutMetadataValue(session.metadata, "primaryColor", 7), 7)
+  const primaryColor = rawPrimaryColor && /^#[0-9a-fA-F]{6}$/.test(rawPrimaryColor) ? rawPrimaryColor : null
+  const promoOffer = toBoundedString(extractCheckoutMetadataValue(session.metadata, "promoOffer", 500), 500)
+
   const metadataPlan = parsePlan(extractCheckoutMetadataValue(session.metadata, "plan", 20))
   const plan = metadataPlan || (await inferPlanFromSubscription(subscriptionId))
 
@@ -380,6 +392,8 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session):
         ownerPhone,
         googlePlaceId,
         gmbReviewUrl,
+        ...(primaryColor ? { primaryColor } : {}),
+        ...(promoOffer ? { promoOffer } : {}),
         stripeCustomerId: customerId,
         stripeSubscriptionId: subscriptionId,
         plan,
@@ -402,6 +416,8 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session):
     ownerPhone,
     googlePlaceId,
     gmbReviewUrl,
+    ...(primaryColor ? { primaryColor } : {}),
+    ...(promoOffer ? { promoOffer } : {}),
     stripeCustomerId: customerId,
     stripeSubscriptionId: subscriptionId,
     plan,
@@ -482,6 +498,9 @@ export async function createCheckoutSession(params: CreateCheckoutSessionParams)
   const ownerName = toBoundedString(params.ownerName, 255)
   const ownerPhone = toBoundedString(params.ownerPhone, 20)
   const googlePlaceId = toBoundedString(params.googlePlaceId, 255)
+  const rawPrimaryColor = toBoundedString(params.primaryColor ?? null, 7)
+  const primaryColor = rawPrimaryColor && /^#[0-9a-fA-F]{6}$/.test(rawPrimaryColor) ? rawPrimaryColor : null
+  const promoOffer = toBoundedString(params.promoOffer ?? null, 500)
 
   if (!email || !businessName || !ownerName || !ownerPhone || !googlePlaceId) {
     throw new Error("Missing required checkout fields")
@@ -494,6 +513,8 @@ export async function createCheckoutSession(params: CreateCheckoutSessionParams)
     ownerPhone,
     plan: params.plan,
     googlePlaceId,
+    primaryColor,
+    promoOffer,
   })
 
   const session = await getStripeClient().checkout.sessions.create({
@@ -510,6 +531,8 @@ export async function createCheckoutSession(params: CreateCheckoutSessionParams)
       ownerEmail: email,
       ownerPhone,
       googlePlaceId,
+      ...(primaryColor ? { primaryColor } : {}),
+      ...(promoOffer ? { promoOffer } : {}),
       planAmountMonthlyUsd: String(PLAN_CONFIG[params.plan].amountMonthlyUsd),
       planSmsLimitMonthly:
         PLAN_CONFIG[params.plan].smsLimitMonthly >= PRO_SMS_LIMIT_SENTINEL
