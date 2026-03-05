@@ -1,5 +1,17 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Batch 2 deploy-gate retry: force fresh production deploy for latest master commit
+
+### Scope completed
+- Verified local and remote `master` were both at `a1a8fa8e221020a8b4edc7ac9a52ed9c37e977af`.
+- Re-ran `npm run build` and confirmed pass before deploy trigger.
+- Triggered a fresh auto-deploy by pushing a minimal no-op commit to `origin/master` (no Batch 2 backend logic changed).
+- Confirmed Vercel production deployment for `prj_VDUyHtQs8yg3QUy1BEvVyEyY96aj` reached `READY` for the latest commit from this retry.
+
+### Verification
+- `npm run build` ✅
+- Vercel production deploy (latest commit) ✅ READY
+
 ## 2026-03-05 — Review Funnel Batch 3: Admin panel for Austen
 
 ### Scope completed

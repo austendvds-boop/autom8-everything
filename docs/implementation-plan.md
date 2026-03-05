@@ -1,5 +1,11 @@
 # implementation-plan.md — Review Funnel Batches 1-2
 
+## Batch 2 retry — Deploy gate recovery
+
+- [x] Confirm latest `master` SHA and rerun `npm run build`
+- [x] Trigger fresh production deployment for latest commit (minimal no-op push)
+- [x] Verify Vercel latest production deployment is `READY`
+
 ## Batch 1 — Routing Bug Fix + DB Migration + Docs
 
 - [x] Audit routing behavior for:
