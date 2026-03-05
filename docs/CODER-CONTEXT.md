@@ -1,5 +1,45 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-04 — Review Funnel Batch 3: SMS service + Twilio webhooks + cron processing
+
+### Scope completed
+- Added `src/lib/review-funnel/services/sms.ts` with required SMS primitives:
+  - `sendReviewRequest(reviewRequestId)` sends Twilio SMS with funnel URL interpolation.
+  - `interpolateTemplate(template, vars)` supports `{customer_name}`, `{business_name}`, `{funnel_url}`.
+  - `checkOptOut(phone)` checks `rf_sms_opt_outs`.
+  - `checkMonthlyLimit(tenantId)` compares current usage in `rf_sms_usage` against tenant limits.
+  - `incrementUsage(tenantId)` upserts monthly usage counters.
+  - `handleOptOut(phone)` inserts/ignores in `rf_sms_opt_outs`.
+  - Quiet-hours helper (`RF_QUIET_HOURS_START` / `RF_QUIET_HOURS_END`) returns next allowed send time.
+- Added cron route `GET /api/review-funnel/cron/process-sms`:
+  - Atomically claims up to 10 due queued rows from `rf_pending_sms` and sets them to `processing`.
+  - Sends through `sendReviewRequest`, handles terminal states, quiet-hours deferral, and retries.
+  - Retry policy implemented with up to 3 attempts and 3-minute backoff multiplier.
+- Added Twilio webhook routes:
+  - `POST /api/review-funnel/webhooks/twilio/status` maps Twilio delivery states to `rf_review_requests.sms_status`.
+  - `POST /api/review-funnel/webhooks/twilio/inbound` handles STOP/UNSUBSCRIBE opt-outs and responds with TwiML.
+- Added `vercel.json` cron schedule entries for:
+  - `/api/review-funnel/cron/process-sms` every minute.
+  - `/api/review-funnel/cron/renew-watches` every 4 hours.
+- Build unblock/fixes while integrating Review Funnel server routes:
+  - `src/lib/review-funnel/config.ts` now injects safe placeholder values only during Next production build phase when required RF env vars are absent.
+  - `src/lib/review-funnel/services/calendar.ts` type fixes (`OAuth2` instance typing + nullable token row return).
+
+### Files changed
+- `src/lib/review-funnel/services/sms.ts` (new)
+- `src/app/api/review-funnel/cron/process-sms/route.ts` (new)
+- `src/app/api/review-funnel/webhooks/twilio/status/route.ts` (new)
+- `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts` (new)
+- `src/lib/review-funnel/config.ts`
+- `src/lib/review-funnel/services/calendar.ts`
+- `vercel.json` (new)
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+- Build warning seen from Neon driver: `fetchConnectionCache` deprecation (already true by default).
+
 ## 2026-03-03 — Full content overhaul (homepage, product pages, pricing, website tiers)
 
 ### Scope completed

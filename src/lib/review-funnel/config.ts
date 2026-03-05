@@ -9,6 +9,24 @@ const optionalEnvString = z.preprocess(
   z.string().optional(),
 )
 
+const BUILD_PLACEHOLDER_DATABASE_URL = "postgres://build:build@localhost:5432/review-funnel"
+const BUILD_PLACEHOLDER_ENCRYPTION_KEY = "0000000000000000000000000000000000000000000000000000000000000000"
+const BUILD_PLACEHOLDER_JWT_SECRET = "review-funnel-build-placeholder-secret"
+
+function getReviewFunnelEnvSource() {
+  const envSource: Record<string, string | undefined> = {
+    ...process.env,
+  }
+
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    envSource.DATABASE_URL ??= BUILD_PLACEHOLDER_DATABASE_URL
+    envSource.RF_ENCRYPTION_KEY ??= BUILD_PLACEHOLDER_ENCRYPTION_KEY
+    envSource.RF_JWT_SECRET ??= BUILD_PLACEHOLDER_JWT_SECRET
+  }
+
+  return envSource
+}
+
 export const reviewFunnelEnvSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
@@ -20,6 +38,8 @@ export const reviewFunnelEnvSchema = z.object({
   RF_MAGIC_LINK_TTL_MINUTES: z.coerce.number().int().positive().default(30),
   RF_SESSION_TTL_HOURS: z.coerce.number().int().positive().default(24),
 
+  TWILIO_ACCOUNT_SID: optionalEnvString,
+  TWILIO_AUTH_TOKEN: optionalEnvString,
   RF_TWILIO_PHONE_NUMBER: optionalEnvString,
   RF_TWILIO_MESSAGING_SERVICE_SID: optionalEnvString,
 
@@ -34,4 +54,4 @@ export const reviewFunnelEnvSchema = z.object({
 
 export type ReviewFunnelConfig = z.infer<typeof reviewFunnelEnvSchema>
 
-export const reviewFunnelConfig: ReviewFunnelConfig = reviewFunnelEnvSchema.parse(process.env)
+export const reviewFunnelConfig: ReviewFunnelConfig = reviewFunnelEnvSchema.parse(getReviewFunnelEnvSource())
