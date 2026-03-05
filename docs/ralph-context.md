@@ -2,7 +2,7 @@
 
 ## Batch Notes (keep last 3)
 
-### 2026-03-05 — Batch 3: Pricing UI + calendar limit enforcement
+### 2026-03-05 — Batch 3 retry: Pricing UI + calendar limit enforcement
 
 #### Files modified
 - `src/app/services/review-funnel/page.tsx`
@@ -11,25 +11,24 @@
 - `src/app/api/review-funnel/google/auth-url/route.ts`
 - `src/app/api/review-funnel/google/callback/route.ts`
 - `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
-- `docs/UI-VERIFICATION.md`
 - `docs/ralph-context.md`
-- `docs/CODER-CONTEXT.md`
 
-#### Scope completed
-- Updated `/services/review-funnel` pricing cards to match required tiers:
-  - Starter: `$79/month`, `1 connected calendar`, `150 text messages per month`
-  - Growth: `$149/month`, `Up to 5 connected calendars`, `600 text messages per month`, `Most Popular`
-  - Pro: `Let's talk`, `Unlimited calendars`, `Custom message volume`, `Priority support`
-  - CTA updates: Starter/Growth `Get Started` to `/review-funnel/signup`; Pro `Contact Us` to `mailto:aust@autom8everything.com`
-- Updated `/review-funnel/signup` Step 4 plan cards to match the same pricing/limits and CTA behavior.
-  - Starter/Growth keep Stripe checkout path.
-  - Pro opens contact email only (no checkout).
-- Enforced calendar limit with user-friendly handling:
-  - Enforcement logic in `src/lib/review-funnel/services/calendar.ts` before watch creation (`createWatch`) using active watch count vs `rf_tenants.calendar_limit`.
-  - Added shared limit message: `You've reached your calendar limit for your current plan. Upgrade to connect more calendars.`
-  - Added pre-check in `GET /api/review-funnel/google/auth-url` so limit errors are returned before calendar connect redirect.
-  - Added inline calendar error display in `SettingsClient` -> `CalendarStatus` card so the message appears where users click Connect Calendar.
-- Sanitized calendar-connect failure messaging to plain-language output in callback/settings flow.
+#### UI changes summary
+- `/services/review-funnel` pricing now shows:
+  - Starter `$79/month` with `1 connected calendar`, `150 text messages per month`, and `Get Started` to `/review-funnel/signup`
+  - Growth `$149/month` with `Up to 5 connected calendars`, `600 text messages per month`, `Most Popular`, and `Get Started` to `/review-funnel/signup`
+  - Pro `Let's talk` with `Unlimited calendars`, `Custom message volume`, `Priority support`, and `Contact Us` to `mailto:aust@autom8everything.com`
+- `/review-funnel/signup` Step 4 plan cards match the same three tiers.
+  - Starter and Growth continue to Stripe checkout.
+  - Pro is contact-only and does not open checkout.
+
+#### Calendar limit enforcement location
+- Main enforcement in `src/lib/review-funnel/services/calendar.ts`:
+  - `ensureCalendarConnectionAllowed(tenantId)` checks active calendar watch count against `rf_tenants.calendar_limit`.
+  - `createWatch()` also enforces the same limit before creating a new watch.
+  - Friendly message used: `You've reached your calendar limit for your current plan. Upgrade to connect more calendars.`
+- Enforced before connect flow starts in `src/app/api/review-funnel/google/auth-url/route.ts`.
+- Inline user-facing message shown in `src/app/review-funnel/dashboard/settings/SettingsClient.tsx` via `CalendarStatus` error block on the calendar card.
 
 #### Verification
 - `npm run build` ✅
