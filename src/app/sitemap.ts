@@ -21,8 +21,6 @@ const staticRoutes = [
   "/privacy",
   "/terms",
   "/security",
-  "/get-started",
-  "/get-started/success",
   "/cadence/get-started",
   "/cadence/welcome",
   "/onboarding",
