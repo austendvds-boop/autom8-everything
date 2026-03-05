@@ -1,5 +1,48 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-04 — Review Funnel Batch 4: Stripe integration + checkout + billing routes
+
+### Scope completed
+- Added Stripe service at `src/lib/review-funnel/services/stripe.ts` with the core primitives:
+  - `createCheckoutSession(params)` for Stripe subscription checkout
+  - `constructStripeWebhookEvent(payload, signature)` for signature verification
+  - `handleWebhookEvent(event)` for Review Funnel Stripe lifecycle events
+  - `createBillingPortalSession(tenantId)` for Stripe Billing Portal redirect URLs
+- Implemented Review Funnel plan mapping and limits in Stripe service:
+  - Starter: $79/mo, 150 SMS
+  - Growth: $129/mo, 500 SMS
+  - Pro: $199/mo, unlimited SMS (stored as sentinel `999999`)
+- Added checkout endpoint `POST /api/review-funnel/checkout`:
+  - Validates payload fields: `email`, `businessName`, `ownerName`, `ownerPhone`, `plan`, `googlePlaceId`
+  - Creates/reuses Stripe customer
+  - Creates Stripe Checkout Session in subscription mode
+  - Uses success URL `/review-funnel/signup/success?session_id={CHECKOUT_SESSION_ID}`
+  - Uses cancel URL `/review-funnel/signup`
+- Added Stripe webhook endpoint `POST /api/review-funnel/webhooks/stripe`:
+  - Verifies signature with `stripe.webhooks.constructEvent()`
+  - Handles `checkout.session.completed` by creating/updating `rf_tenants` with Stripe IDs, plan, and SMS limits
+  - Handles `customer.subscription.updated` by syncing plan + SMS limit
+  - Handles `customer.subscription.deleted` by deactivating tenant (`is_active = false`)
+  - Handles `invoice.payment_failed` by flagging tenant via deactivation (`is_active = false`) because schema currently has no dedicated billing-flag field
+- Added billing settings routes:
+  - `GET /api/review-funnel/settings/billing` (authenticated) returns current plan/subscription ids/usage snapshot
+  - `POST /api/review-funnel/settings/billing/portal` (authenticated) returns billing portal URL
+- Extended Review Funnel config parsing in `src/lib/review-funnel/config.ts` to include `STRIPE_SECRET_KEY`.
+
+### Files changed
+- `src/lib/review-funnel/services/stripe.ts` (new)
+- `src/app/api/review-funnel/checkout/route.ts` (new)
+- `src/app/api/review-funnel/webhooks/stripe/route.ts` (new)
+- `src/app/api/review-funnel/settings/billing/route.ts` (new)
+- `src/app/api/review-funnel/settings/billing/portal/route.ts` (new)
+- `src/lib/review-funnel/config.ts`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+- Build warning seen from Neon driver: `fetchConnectionCache` deprecation (already true by default).
+
 ## 2026-03-04 — Review Funnel Batch 3: SMS service + Twilio webhooks + cron processing
 
 ### Scope completed

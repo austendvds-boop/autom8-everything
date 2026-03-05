@@ -43,6 +43,7 @@ export const reviewFunnelEnvSchema = z.object({
   RF_TWILIO_PHONE_NUMBER: optionalEnvString,
   RF_TWILIO_MESSAGING_SERVICE_SID: optionalEnvString,
 
+  STRIPE_SECRET_KEY: optionalEnvString,
   RF_STRIPE_WEBHOOK_SECRET: optionalEnvString,
   RF_STRIPE_PRICE_STARTER: optionalEnvString,
   RF_STRIPE_PRICE_GROWTH: optionalEnvString,
