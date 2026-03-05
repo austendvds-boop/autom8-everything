@@ -1,5 +1,12 @@
 # implementation-plan.md — Review Funnel batches
 
+## Batch 4 retry 2 — Deploy gate recovery
+
+- [x] Confirm latest `master` SHA and verify production deploy was still on older commit
+- [x] Re-run `npm run build`
+- [x] Push a minimal safe non-feature commit to trigger fresh production deploy
+- [x] Verify latest production deployment is `READY` for newest `master` commit
+
 ## Batch 4 — Review Funnel admin panel (tenant review + stats)
 
 - [x] Generate a new `RF_ADMIN_SECRET` and save it to `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt`

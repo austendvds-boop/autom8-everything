@@ -2,6 +2,16 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-05 — Batch 4 retry 2: deploy gate recovery
+
+#### Scope completed
+- Verified latest production deployment for Vercel project `prj_VDUyHtQs8yg3QUy1BEvVyEyY96aj` was still on older commit `f1b8e324...`.
+- Re-ran `npm run build` (pass) before triggering retry deploy.
+- Pushed a minimal docs-only commit to `master` to trigger a fresh production deployment.
+- Verified newest production deployment reached `READY` and now points at the latest retry commit.
+
+---
+
 ### 2026-03-05 — Batch 4 retry: commit/push gate recovery
 
 #### Scope completed
@@ -67,18 +77,3 @@
   - `preview`
   - `development`
 
----
-
-### 2026-03-05 — Batch 3 retry: Pricing UI + calendar limit enforcement
-
-#### Files modified
-- `src/app/services/review-funnel/page.tsx`
-- `src/app/review-funnel/signup/SignupClient.tsx`
-- `src/lib/review-funnel/services/calendar.ts`
-- `src/app/api/review-funnel/google/auth-url/route.ts`
-- `src/app/api/review-funnel/google/callback/route.ts`
-- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
-- `docs/ralph-context.md`
-
-#### Verification
-- `npm run build` ✅

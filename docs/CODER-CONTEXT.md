@@ -1,5 +1,17 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Batch 4 retry 2: deploy gate recovery
+
+### Scope completed
+- Verified `master` and `origin/master` are aligned and prepared for deploy-gate retry.
+- Confirmed Vercel production for project `prj_VDUyHtQs8yg3QUy1BEvVyEyY96aj` was still serving older commit `f1b8e324...`.
+- Re-ran `npm run build` to confirm a passing local build before deploy trigger.
+- Created a minimal docs-only retry commit to force a fresh production auto-deploy from latest `master`.
+- Verified latest production deployment reached `READY` and points to the newest retry commit.
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-05 — Batch 4 retry: commit/push gate recovery
 
 ### Scope completed
