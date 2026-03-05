@@ -1,5 +1,31 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 - Review Funnel Batch 2 rerun: schema + Stripe backend refresh (no UI changes)
+
+### Scope completed
+- Executed the Batch 2 backend task block again on `master`.
+- Confirmed `rf_tenants.calendar_limit` already exists in schema definition (`src/lib/review-funnel/db/schema.ts`) with default `1`.
+- Pulled `DATABASE_URL` from Vercel and ran `npx drizzle-kit push` using temporary `.env.local`.
+  - Drizzle presented legacy sequence drop statements for unrelated tables; run was intentionally aborted at confirmation prompt to avoid destructive changes.
+  - Verified directly in DB that `public.rf_tenants.calendar_limit` exists (`integer`, default `1`, not null).
+- Created fresh Stripe products/prices for this rerun:
+  - Starter product `prod_U5tRNpAHSzUdKZ` / price `price_1T7hegBxWKNs26XEZGeX5otQ`
+  - Growth product `prod_U5tReGySXLI0wU` / price `price_1T7hehBxWKNs26XEeKM2MwGm`
+- Updated Vercel env values:
+  - `RF_STRIPE_PRICE_STARTER` -> `price_1T7hegBxWKNs26XEZGeX5otQ`
+  - `RF_STRIPE_PRICE_GROWTH` -> `price_1T7hehBxWKNs26XEeKM2MwGm`
+  - `RF_STRIPE_PRICE_PRO` confirmed absent
+- No backend code logic changes were required; plan config already matched required values (Starter 79/1/150, Growth 149/5/600, Pro contact with no Stripe price env).
+
+### Files changed in this rerun
+- `docs/ENV-VARS.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- DB schema check for `calendar_limit` in `rf_tenants` passed.
+- `npm run build` passed.
+
 ## 2026-03-05 — Batch 2 deploy-gate retry: force fresh production deploy for latest master commit
 
 ### Scope completed
@@ -770,3 +796,4 @@
 ### Verification
 - `npm run build` ✅
 - Note: pre-existing Next.js warning remains about inferred workspace root due to multiple lockfiles.
+

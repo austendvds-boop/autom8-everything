@@ -21,8 +21,8 @@
 ## Stripe
 - STRIPE_SECRET_KEY — Autom8 Stripe (set ✅)
 - RF_STRIPE_WEBHOOK_SECRET — set ✅
-- RF_STRIPE_PRICE_STARTER — set ✅ (updated in Batch 2: `price_1T7hMIBxWKNs26XE5RMWhTmX`)
-- RF_STRIPE_PRICE_GROWTH — set ✅ (updated in Batch 2: `price_1T7hMIBxWKNs26XEx6KV6naT`)
+- RF_STRIPE_PRICE_STARTER — set ✅ (updated in Batch 2 rerun: `price_1T7hegBxWKNs26XEZGeX5otQ`)
+- RF_STRIPE_PRICE_GROWTH — set ✅ (updated in Batch 2 rerun: `price_1T7hehBxWKNs26XEeKM2MwGm`)
 
 ## Google
 - GOOGLE_PLACES_API_KEY — set ✅

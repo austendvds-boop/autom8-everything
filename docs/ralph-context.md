@@ -2,6 +2,30 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-05 — Batch 2 (rerun): Schema + Stripe backend refresh
+
+#### Scope completed
+- Re-ran Batch 2 backend flow from `ralph-queue.md` in `master` without UI edits.
+- Confirmed schema definition already includes `rf_tenants.calendar_limit` in `src/lib/review-funnel/db/schema.ts` (`integer NOT NULL DEFAULT 1`).
+- Ran Vercel env fetch + temporary `.env.local` + `npx drizzle-kit push` flow, then removed `.env.local`.
+  - Drizzle surfaced legacy `DROP SEQUENCE` statements for unrelated tables and was aborted at confirmation prompt (no destructive changes applied).
+  - Independently verified DB column exists: `calendar_limit` (`integer`, default `1`, not null) in `public.rf_tenants`.
+- Created new Stripe products/prices:
+  - Starter product `prod_U5tRNpAHSzUdKZ` / price `price_1T7hegBxWKNs26XEZGeX5otQ`
+  - Growth product `prod_U5tReGySXLI0wU` / price `price_1T7hehBxWKNs26XEeKM2MwGm`
+- Updated Vercel env vars:
+  - `RF_STRIPE_PRICE_STARTER` -> `price_1T7hegBxWKNs26XEZGeX5otQ`
+  - `RF_STRIPE_PRICE_GROWTH` -> `price_1T7hehBxWKNs26XEeKM2MwGm`
+  - `RF_STRIPE_PRICE_PRO` confirmed absent
+- Updated docs:
+  - `docs/ENV-VARS.md` with the new Starter/Growth price IDs.
+
+#### Verification
+- `npx drizzle-kit push` executed (aborted before destructive legacy sequence drops)
+- DB check for `rf_tenants.calendar_limit` passed
+
+---
+
 ### 2026-03-05 — Batch 3: RF admin panel for Austen
 
 #### Scope completed
@@ -54,14 +78,3 @@
 #### Verification
 - `npm run build` ✅
 
----
-
-### 2026-03-05 — Batch 9: Signup Step 3 copy + checkout 405 fix + Stripe prices
-
-#### Scope completed
-- Updated `/review-funnel/signup` Step 3 copy to be clearer and non-technical.
-- Hardened `POST /api/review-funnel/checkout` with lazy Stripe import so invalid payloads return `400` and env failures return JSON `500` (not HTML 405).
-- Created Stripe monthly prices used before Batch 2 replacement.
-
-#### Verification
-- `npm run build` ✅
