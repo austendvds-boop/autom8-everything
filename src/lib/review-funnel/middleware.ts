@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { verifySession } from "./services/auth"
 import type { RfTenant } from "./db/schema"
-
-export const RF_SESSION_COOKIE_NAME = "rf_session"
+import { RF_SESSION_COOKIE_NAME } from "./constants"
 
 export interface ReviewFunnelAuthSuccess {
   ok: true

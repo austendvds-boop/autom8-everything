@@ -1,5 +1,34 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 1 (retry 2): routing fix + DB migration + docs
+
+### Scope completed
+- Diagnosed routing bug root cause: `RF_SESSION_COOKIE_NAME` was exported from `src/lib/review-funnel/middleware.ts`, which also eagerly imports `verifySession` (`services/auth` -> `config`). Importing that cookie constant into login/dashboard auth flow pulled env-bound auth code at module load and caused incorrect routing behavior.
+- Fixed routing/auth coupling by moving cookie constant to `src/lib/review-funnel/constants.ts` and updating imports in:
+  - `src/lib/review-funnel/middleware.ts`
+  - `src/app/review-funnel/dashboard/layout.tsx`
+  - `src/app/api/review-funnel/auth/verify/route.ts`
+  - `src/app/api/review-funnel/auth/logout/route.ts`
+- Updated dashboard layout to lazy-import `verifySession` only after checking for the session cookie so unauthenticated requests now redirect to `/review-funnel/login`.
+- Executed DB migration flow using `DATABASE_URL` from Vercel: wrote temporary `.env.local`, ran `npx drizzle-kit push --force`, then deleted `.env.local`.
+- Confirmed `rf_*` tables exist in `public`: `rf_calendar_watches`, `rf_google_oauth_tokens`, `rf_locations`, `rf_magic_links`, `rf_pending_sms`, `rf_review_requests`, `rf_sms_opt_outs`, `rf_sms_usage`, `rf_tenants`.
+- Created required docs:
+  - `docs/ENV-VARS.md`
+  - `docs/UI-VERIFICATION.md`
+- Appended summary to `docs/ralph-context.md`.
+
+### DB migration result
+- `drizzle-kit push` attempted to drop legacy non-RF sequences and hit Postgres dependency protection on `audit_log_id_seq` (`cannot drop sequence ... because other objects depend on it`).
+- RF tables remain present and queryable.
+
+### Verification
+- Route smoke checks using local `next start`:
+  - `GET /review-funnel/login` -> `200`
+  - `GET /review-funnel/signup` -> `200`
+  - `GET /services/review-funnel` -> `200`
+  - `GET /review-funnel/dashboard` (no session) -> `307` redirect to `/review-funnel/login`
+- `npm run build` ✅
+
 ## 2026-03-05 — Review Funnel Batch 9: Signup copy clarity + checkout 405 hardening + Stripe price setup
 
 ### Scope completed

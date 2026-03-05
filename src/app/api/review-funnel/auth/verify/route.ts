@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { RF_SESSION_COOKIE_NAME } from "@/lib/review-funnel/middleware"
+import { RF_SESSION_COOKIE_NAME } from "@/lib/review-funnel/constants"
 import { reviewFunnelConfig } from "@/lib/review-funnel/config"
 import { verifyMagicLink } from "@/lib/review-funnel/services/auth"
 

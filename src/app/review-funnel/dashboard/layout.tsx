@@ -2,8 +2,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import type { ReactNode } from "react"
 import DashboardLayout from "@/components/review-funnel/DashboardLayout"
-import { RF_SESSION_COOKIE_NAME } from "@/lib/review-funnel/middleware"
-import { verifySession } from "@/lib/review-funnel/services/auth"
+import { RF_SESSION_COOKIE_NAME } from "@/lib/review-funnel/constants"
 
 interface ReviewFunnelDashboardLayoutProps {
   children: ReactNode
@@ -19,6 +18,7 @@ export default async function ReviewFunnelDashboardRootLayout({ children }: Revi
     redirect("/review-funnel/login")
   }
 
+  const { verifySession } = await import("@/lib/review-funnel/services/auth")
   const tenant = await verifySession(sessionToken)
 
   if (!tenant) {

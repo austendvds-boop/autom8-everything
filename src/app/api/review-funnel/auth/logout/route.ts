@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { RF_SESSION_COOKIE_NAME } from "@/lib/review-funnel/middleware"
+import { RF_SESSION_COOKIE_NAME } from "@/lib/review-funnel/constants"
 
 export const runtime = "nodejs"
 

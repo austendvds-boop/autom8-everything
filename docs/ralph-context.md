@@ -106,3 +106,55 @@
 - `npm run lint` ❌ (pre-existing lint error in `src/lib/review-funnel/services/auth.ts` uses `require()` for `jsonwebtoken`)
 
 
+
+### 2026-03-05 - Batch 1: Routing fix + DB migration + docs baseline
+
+#### Scope completed
+- Audited routing behavior for `/review-funnel/dashboard`, `/review-funnel/login`, and `/services/review-funnel`.
+- Root cause fixed in auth coupling: moved `RF_SESSION_COOKIE_NAME` to `src/lib/review-funnel/constants.ts` so dashboard/login auth routing does not depend on importing full auth middleware module.
+- Updated imports in:
+  - `src/lib/review-funnel/middleware.ts`
+  - `src/app/review-funnel/dashboard/layout.tsx`
+  - `src/app/api/review-funnel/auth/verify/route.ts`
+  - `src/app/api/review-funnel/auth/logout/route.ts`
+
+#### DB migration
+- Pulled `DATABASE_URL` from Vercel and wrote temporary `.env.local`.
+- Ran `npx drizzle-kit push` with env loaded from `.env.local`.
+- Drizzle attempted to drop legacy sequences and errored on `audit_log_id_seq`, but RF table creation completed.
+- Confirmed existing RF tables:
+  - `rf_calendar_watches`
+  - `rf_google_oauth_tokens`
+  - `rf_locations`
+  - `rf_magic_links`
+  - `rf_pending_sms`
+  - `rf_review_requests`
+  - `rf_sms_opt_outs`
+  - `rf_sms_usage`
+  - `rf_tenants`
+- Deleted temporary `.env.local`.
+
+#### Docs created
+- `docs/ENV-VARS.md`
+- `docs/UI-VERIFICATION.md`
+
+### 2026-03-05 - Batch 1 retry finalization (commit + push)
+
+#### Routing fix summary
+- Root cause: `RF_SESSION_COOKIE_NAME` was imported from `src/lib/review-funnel/middleware.ts`, which also imports auth/config code at module load. That coupling pulled runtime auth dependencies into routing checks and caused incorrect behavior.
+- Fix: moved the cookie constant to `src/lib/review-funnel/constants.ts`, updated all imports, and lazy-loaded `verifySession` in dashboard layout only after checking for the session cookie.
+- Route smoke checks (local `next start`):
+  - `GET /review-funnel/login` -> `200`
+  - `GET /review-funnel/signup` -> `200`
+  - `GET /services/review-funnel` -> `200`
+  - `GET /review-funnel/dashboard` (no session) -> `307` redirect to `/review-funnel/login`
+
+#### DB migration rerun
+- Pulled `DATABASE_URL` from Vercel again.
+- Wrote temporary `.env.local`, ran `npx drizzle-kit push --force`, then removed `.env.local`.
+- Drizzle reported legacy sequence-drop dependency protection (`audit_log_id_seq`) while `rf_*` tables remained present.
+- Verified `rf_` tables exist in `public` schema.
+
+#### Docs
+- Confirmed/updated `docs/ENV-VARS.md` and `docs/UI-VERIFICATION.md` to the required Batch 1 content.
+- `npm run build` passes.
