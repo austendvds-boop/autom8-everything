@@ -178,9 +178,9 @@ export default function SignupClient() {
     setStep((current) => Math.min(4, current + 1))
   }
 
-  async function submitSignup() {
-    if (form.plan === "pro") {
-      window.location.href = "/contact?topic=review-funnel-pro"
+  async function submitSignup(selectedPlan: Plan = form.plan) {
+    if (selectedPlan === "pro") {
+      window.location.href = "mailto:hello@autom8everything.com?subject=Review%20Funnel%20Pro"
       return
     }
 
@@ -198,7 +198,7 @@ export default function SignupClient() {
           businessName: form.businessName.trim(),
           ownerName: form.ownerName.trim(),
           ownerPhone: form.phone.trim(),
-          plan: form.plan,
+          plan: selectedPlan,
           googlePlaceId: form.googlePlaceId.trim(),
           primaryColor: form.primaryColor.trim(),
           promoOffer: form.promoOffer.trim(),
@@ -437,44 +437,78 @@ export default function SignupClient() {
 
             {step === 4 && (
               <div className="space-y-4">
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4 md:grid-cols-3">
                   {[
                     {
                       key: "starter" as const,
                       title: "Starter",
                       price: "$79/mo",
-                      detail: "Great for one location getting started",
+                      features: ["1 Google Calendar", "150 review requests/mo", "Magic link login", "Full dashboard"],
+                      ctaLabel: "Start with Starter",
                     },
                     {
                       key: "growth" as const,
                       title: "Growth",
-                      price: "$129/mo",
-                      detail: "More messages and room to grow",
+                      price: "$149/mo",
+                      badge: "Most Popular",
+                      features: ["Up to 5 Google Calendars", "600 review requests/mo", "All Starter features"],
+                      ctaLabel: "Start with Growth",
                     },
                     {
                       key: "pro" as const,
                       title: "Pro",
-                      price: "Contact us",
-                      detail: "For advanced teams with custom needs",
+                      price: "Let's talk",
+                      features: ["Unlimited calendars", "Unlimited review requests", "All Growth features", "Priority support"],
+                      ctaLabel: "Contact Us",
                     },
                   ].map((planOption) => {
                     const selected = form.plan === planOption.key
+                    const isPro = planOption.key === "pro"
 
                     return (
-                      <button
-                        type="button"
+                      <article
                         key={planOption.key}
-                        onClick={() => updateField("plan", planOption.key)}
-                        className="rounded-2xl border p-4 text-left transition"
+                        className="rounded-2xl border p-5"
                         style={{
                           borderColor: selected ? "#8B5CF6" : "rgba(255,255,255,0.12)",
                           background: selected ? "rgba(139,92,246,0.12)" : "rgba(10,10,15,0.75)",
                         }}
                       >
-                        <p className="text-sm uppercase tracking-wide text-[#A1A1AA]">{planOption.title}</p>
-                        <p className="mt-1 text-2xl font-semibold text-white">{planOption.price}</p>
-                        <p className="mt-2 text-sm text-[#A1A1AA]">{planOption.detail}</p>
-                      </button>
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-sm uppercase tracking-wide text-[#A1A1AA]">{planOption.title}</p>
+                          {planOption.badge ? (
+                            <span className="rounded-full border border-[#C4B5FD]/50 bg-[#8B5CF6]/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#DDD6FE]">
+                              {planOption.badge}
+                            </span>
+                          ) : null}
+                        </div>
+
+                        <p className="mt-2 text-2xl font-semibold text-white">{planOption.price}</p>
+
+                        <ul className="mt-4 space-y-2 text-sm text-[#D4D4D8]">
+                          {planOption.features.map((feature) => (
+                            <li key={feature}>• {feature}</li>
+                          ))}
+                        </ul>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateField("plan", planOption.key)
+                            void submitSignup(planOption.key)
+                          }}
+                          disabled={isSubmitting && !isPro}
+                          className={`mt-5 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
+                            isPro
+                              ? "border border-white/20 text-white hover:border-[#8B5CF6]/60"
+                              : "bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white disabled:opacity-50"
+                          }`}
+                        >
+                          {isSubmitting && !isPro && form.plan === planOption.key
+                            ? "Opening secure checkout..."
+                            : planOption.ctaLabel}
+                        </button>
+                      </article>
                     )
                   })}
                 </div>
@@ -514,20 +548,6 @@ export default function SignupClient() {
                 </button>
               )}
 
-              {step === 4 && (
-                <button
-                  type="button"
-                  onClick={submitSignup}
-                  disabled={isSubmitting}
-                  className="rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-3 font-semibold text-white disabled:opacity-50"
-                >
-                  {isSubmitting
-                    ? "Opening secure checkout..."
-                    : form.plan === "pro"
-                      ? "Talk to Us About Pro"
-                      : "Go to Secure Checkout"}
-                </button>
-              )}
             </div>
           </div>
         </div>

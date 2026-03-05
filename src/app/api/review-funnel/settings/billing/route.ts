@@ -34,10 +34,8 @@ export async function GET(request: NextRequest) {
       authResult.tenant.plan === "starter"
         ? 79
         : authResult.tenant.plan === "growth"
-          ? 129
-          : authResult.tenant.plan === "pro"
-            ? 199
-            : null,
+          ? 149
+          : null,
     isActive: authResult.tenant.isActive,
     stripeCustomerId: authResult.tenant.stripeCustomerId,
     stripeSubscriptionId: authResult.tenant.stripeSubscriptionId,

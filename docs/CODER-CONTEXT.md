@@ -1,5 +1,72 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 3: Admin panel for Austen
+
+### Scope completed
+- Added Review Funnel admin auth primitives:
+  - `src/lib/review-funnel/admin.ts` (admin session constants + plan config)
+  - `src/lib/review-funnel/admin-middleware.ts` (ADMIN_SECRET header check + JWT cookie verification)
+- Added admin auth API:
+  - `POST /api/review-funnel/admin/auth` to validate `{ secret }` and set `rf_admin_session` cookie (8-hour expiry)
+  - `DELETE /api/review-funnel/admin/auth` for logout
+- Added protected admin APIs (all gated by `requireReviewFunnelAdminAuth`):
+  - `GET /api/review-funnel/admin/tenants`
+  - `GET/PATCH /api/review-funnel/admin/tenants/[id]`
+  - `GET /api/review-funnel/admin/stats`
+- Added admin UI routes:
+  - `/review-funnel/admin/login` (single password input)
+  - `/review-funnel/admin` (tenant list with search + sortable columns)
+  - `/review-funnel/admin/tenants/[id]` (tenant detail, calendar connections, 3-month SMS history, recent requests, status/plan actions)
+  - `/review-funnel/admin/stats` (plan counts, monthly SMS total, MRR, monthly signups)
+- Added internal admin shell component with required sidebar nav: Tenants | Stats | Logout.
+- Updated docs for Batch 3:
+  - `docs/ENV-VARS.md`
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+- Generated and set `RF_ADMIN_SECRET` in Vercel project `prj_VDUyHtQs8yg3QUy1BEvVyEyY96aj`; saved local copy to `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt`.
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-05 — Review Funnel Batch 2: calendar-based pricing tiers + Stripe products + schema update
+
+### Scope completed
+- Added `calendarLimit` to the Review Funnel tenant schema in `src/lib/review-funnel/db/schema.ts` (maps to DB column `calendar_limit`, default `1`).
+- Ran the queue-required DB flow without `psql`:
+  - pulled `DATABASE_URL` from Vercel (`prj_VDUyHtQs8yg3QUy1BEvVyEyY96aj`), wrote temporary `.env.local`
+  - ran `npx drizzle-kit push`
+  - drizzle attempted legacy sequence drops and reported dependency error on `audit_log_id_seq`
+  - independently verified `rf_tenants.calendar_limit` exists via Neon SQL query through `@neondatabase/serverless`
+  - deleted `.env.local`
+- Created new Stripe products + monthly prices:
+  - Starter product `prod_U5t8pSDs2wkHG4` / price `price_1T7hMIBxWKNs26XE5RMWhTmX`
+  - Growth product `prod_U5t8V16exFKWPK` / price `price_1T7hMIBxWKNs26XEx6KV6naT`
+- Updated Vercel env vars:
+  - `RF_STRIPE_PRICE_STARTER` -> `price_1T7hMIBxWKNs26XE5RMWhTmX`
+  - `RF_STRIPE_PRICE_GROWTH` -> `price_1T7hMIBxWKNs26XEx6KV6naT`
+  - deleted `RF_STRIPE_PRICE_PRO`
+- Updated plan logic and pricing:
+  - `src/lib/review-funnel/services/stripe.ts`: Growth now `$149` + `600` monthly request limit; Pro remains unlimited limits and no checkout plan
+  - `src/lib/review-funnel/config.ts`: removed `RF_STRIPE_PRICE_PRO` env parse
+  - `src/app/api/review-funnel/checkout/route.ts`: checkout payload now only allows `starter|growth`
+  - `src/app/api/review-funnel/settings/billing/route.ts`: Growth monthly amount now `149`, Pro amount `null`
+- Updated UI pricing copy:
+  - `src/app/review-funnel/signup/SignupClient.tsx` Step 4 cards and CTA flow now match Starter/Growth/Pro spec (including `Most Popular` Growth badge and Pro `mailto:` contact CTA)
+  - `src/app/services/review-funnel/page.tsx` pricing cards updated to new plan values and plain-language capacity copy (`1 location or staff calendar`)
+  - `src/app/pricing/page.tsx` summary line updated to `Growth $149/mo • Pro is a contact-us plan`
+- Enforced calendar limit in watch creation:
+  - `src/lib/review-funnel/services/calendar.ts` now counts active watches and throws `Upgrade your plan to connect more calendars` when at limit before creating a new watch.
+
+### Docs updated
+- `docs/ENV-VARS.md` (Starter/Growth price IDs updated; Pro env removed)
+- `docs/UI-VERIFICATION.md` (Batch 2 UI checks added)
+- `docs/implementation-plan.md` (Batch 2 checklist added)
+- `docs/ralph-context.md` (Batch 2 summary appended)
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-05 — Review Funnel Batch 1 (retry 2): routing fix + DB migration + docs
 
 ### Scope completed

@@ -49,7 +49,6 @@ export const reviewFunnelEnvSchema = z.object({
   RF_STRIPE_WEBHOOK_SECRET: optionalEnvString,
   RF_STRIPE_PRICE_STARTER: optionalEnvString,
   RF_STRIPE_PRICE_GROWTH: optionalEnvString,
-  RF_STRIPE_PRICE_PRO: optionalEnvString,
 
   RF_QUIET_HOURS_START: z.coerce.number().int().min(0).max(23).default(21),
   RF_QUIET_HOURS_END: z.coerce.number().int().min(0).max(23).default(9),

@@ -37,6 +37,7 @@ export const rfTenants = pgTable(
     stripeSubscriptionId: varchar("stripe_subscription_id", { length: 255 }),
     plan: varchar("plan", { length: 20 }).notNull().default("starter"),
     smsLimitMonthly: integer("sms_limit_monthly").notNull().default(150),
+    calendarLimit: integer("calendar_limit").notNull().default(1),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },

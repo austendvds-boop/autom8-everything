@@ -11,25 +11,29 @@ const PLAN_CONFIG = {
   starter: {
     amountMonthlyUsd: 79,
     smsLimitMonthly: 150,
+    calendarLimit: 1,
   },
   growth: {
-    amountMonthlyUsd: 129,
-    smsLimitMonthly: 500,
+    amountMonthlyUsd: 149,
+    smsLimitMonthly: 600,
+    calendarLimit: 5,
   },
   pro: {
-    amountMonthlyUsd: 199,
+    amountMonthlyUsd: null,
     smsLimitMonthly: PRO_SMS_LIMIT_SENTINEL,
+    calendarLimit: PRO_SMS_LIMIT_SENTINEL,
   },
 } as const
 
 export type ReviewFunnelPlan = keyof typeof PLAN_CONFIG
+export type ReviewFunnelCheckoutPlan = Exclude<ReviewFunnelPlan, "pro">
 
 export interface CreateCheckoutSessionParams {
   email: string
   businessName: string
   ownerName: string
   ownerPhone: string
-  plan: ReviewFunnelPlan
+  plan: ReviewFunnelCheckoutPlan
   googlePlaceId: string
   primaryColor?: string
   promoOffer?: string
@@ -77,13 +81,8 @@ function parsePlan(rawPlan: string | null | undefined): ReviewFunnelPlan | null 
   return null
 }
 
-function getPlanPriceId(plan: ReviewFunnelPlan): string {
-  const rawPriceId =
-    plan === "starter"
-      ? reviewFunnelConfig.RF_STRIPE_PRICE_STARTER
-      : plan === "growth"
-        ? reviewFunnelConfig.RF_STRIPE_PRICE_GROWTH
-        : reviewFunnelConfig.RF_STRIPE_PRICE_PRO
+function getPlanPriceId(plan: ReviewFunnelCheckoutPlan): string {
+  const rawPriceId = plan === "starter" ? reviewFunnelConfig.RF_STRIPE_PRICE_STARTER : reviewFunnelConfig.RF_STRIPE_PRICE_GROWTH
 
   const priceId = rawPriceId?.trim()
 
@@ -108,7 +107,26 @@ function getPlanForPriceId(priceId: string | null | undefined): ReviewFunnelPlan
     return "growth"
   }
 
-  if (reviewFunnelConfig.RF_STRIPE_PRICE_PRO?.trim() === normalizedPriceId) {
+  return null
+}
+
+function getPlanForPrice(price: Stripe.Price | null | undefined): ReviewFunnelPlan | null {
+  const mappedByPriceId = getPlanForPriceId(price?.id)
+  if (mappedByPriceId) {
+    return mappedByPriceId
+  }
+
+  const amount = typeof price?.unit_amount === "number" ? price.unit_amount : null
+
+  if (amount === 7900) {
+    return "starter"
+  }
+
+  if (amount === 14900 || amount === 12900) {
+    return "growth"
+  }
+
+  if (amount === 19900) {
     return "pro"
   }
 
@@ -117,6 +135,10 @@ function getPlanForPriceId(priceId: string | null | undefined): ReviewFunnelPlan
 
 function getPlanSmsLimit(plan: ReviewFunnelPlan): number {
   return PLAN_CONFIG[plan].smsLimitMonthly
+}
+
+function getPlanCalendarLimit(plan: ReviewFunnelPlan): number {
+  return PLAN_CONFIG[plan].calendarLimit
 }
 
 function normalizeEmail(value: string | null | undefined): string | null {
@@ -243,7 +265,7 @@ async function getOrCreateStripeCustomer(params: {
   ownerName: string
   ownerPhone: string
   businessName: string
-  plan: ReviewFunnelPlan
+  plan: ReviewFunnelCheckoutPlan
   googlePlaceId: string
   primaryColor?: string | null
   promoOffer?: string | null
@@ -326,8 +348,8 @@ async function inferPlanFromSubscription(subscriptionId: string): Promise<Review
     return metadataPlan
   }
 
-  const firstPriceId = subscription.items.data[0]?.price?.id ?? null
-  return getPlanForPriceId(firstPriceId)
+  const firstPrice = subscription.items.data[0]?.price
+  return getPlanForPrice(firstPrice)
 }
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session): Promise<void> {
@@ -398,6 +420,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session):
         stripeSubscriptionId: subscriptionId,
         plan,
         smsLimitMonthly: getPlanSmsLimit(plan),
+        calendarLimit: getPlanCalendarLimit(plan),
         isActive: true,
         updatedAt: new Date(),
       })
@@ -422,12 +445,13 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session):
     stripeSubscriptionId: subscriptionId,
     plan,
     smsLimitMonthly: getPlanSmsLimit(plan),
+    calendarLimit: getPlanCalendarLimit(plan),
     isActive: true,
   })
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription): Promise<void> {
-  const plan = parsePlan(subscription.metadata?.plan) || getPlanForPriceId(subscription.items.data[0]?.price?.id)
+  const plan = parsePlan(subscription.metadata?.plan) || getPlanForPrice(subscription.items.data[0]?.price)
 
   if (!plan) {
     throw new Error(`Unable to map subscription ${subscription.id} to a Review Funnel plan`)
@@ -447,6 +471,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription): Pro
       stripeSubscriptionId: subscription.id,
       plan,
       smsLimitMonthly: getPlanSmsLimit(plan),
+      calendarLimit: getPlanCalendarLimit(plan),
       isActive: subscription.status !== "canceled" && subscription.status !== "unpaid",
       updatedAt: new Date(),
     })

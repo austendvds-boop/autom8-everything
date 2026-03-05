@@ -1,5 +1,5 @@
 import crypto from "node:crypto"
-import { and, eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 import { google, type calendar_v3 } from "googleapis"
 import { rfDb } from "../db/client"
 import {
@@ -161,6 +161,30 @@ async function ensureActiveTenant(tenantId: string): Promise<RfTenant> {
   }
 
   return tenant
+}
+
+function toCount(value: number | string | null | undefined): number {
+  if (typeof value === "number") {
+    return value
+  }
+
+  if (typeof value === "string") {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : 0
+  }
+
+  return 0
+}
+
+async function countActiveWatches(tenantId: string): Promise<number> {
+  const [watchCount] = await rfDb
+    .select({
+      count: sql<number>`count(*)`,
+    })
+    .from(rfCalendarWatches)
+    .where(and(eq(rfCalendarWatches.tenantId, tenantId), eq(rfCalendarWatches.isActive, true)))
+
+  return toCount(watchCount?.count)
 }
 
 async function getGoogleTokenRow(tenantId: string): Promise<RfGoogleOauthToken | null> {
@@ -497,19 +521,49 @@ export async function handleCallback(code: string, tenantId: string): Promise<Rf
       },
     })
 
-  await deactivateActiveWatchesForTenant(tenant.id)
-
   return createWatch(tenant.id, "primary")
 }
 
-export async function createWatch(tenantId: string, calendarId = "primary"): Promise<RfCalendarWatch> {
-  await ensureActiveTenant(tenantId)
+interface CreateWatchOptions {
+  skipLimitCheck?: boolean
+  ignoreExistingCalendarWatch?: boolean
+}
 
-  const context = await createTenantCalendarContext(tenantId)
+export async function createWatch(
+  tenantId: string,
+  calendarId = "primary",
+  options: CreateWatchOptions = {},
+): Promise<RfCalendarWatch> {
+  const tenant = await ensureActiveTenant(tenantId)
+  const normalizedCalendarId = calendarId.trim() || "primary"
+
+  if (!options.ignoreExistingCalendarWatch) {
+    const existingWatch = await rfDb.query.rfCalendarWatches.findFirst({
+      where: and(
+        eq(rfCalendarWatches.tenantId, tenant.id),
+        eq(rfCalendarWatches.calendarId, normalizedCalendarId),
+        eq(rfCalendarWatches.isActive, true),
+      ),
+    })
+
+    if (existingWatch) {
+      return existingWatch
+    }
+  }
+
+  if (!options.skipLimitCheck) {
+    const activeWatchCount = await countActiveWatches(tenant.id)
+
+    if (activeWatchCount >= tenant.calendarLimit) {
+      throw new Error("Upgrade your plan to connect more calendars")
+    }
+  }
+
+  const context = await createTenantCalendarContext(tenant.id)
 
   const requestedChannelId = crypto.randomUUID()
   const watchResponse = await context.calendarClient.events.watch({
-    calendarId,
+    calendarId: normalizedCalendarId,
     requestBody: {
       id: requestedChannelId,
       type: "web_hook",
@@ -531,8 +585,8 @@ export async function createWatch(tenantId: string, calendarId = "primary"): Pro
   const [createdWatch] = await rfDb
     .insert(rfCalendarWatches)
     .values({
-      tenantId,
-      calendarId,
+      tenantId: tenant.id,
+      calendarId: normalizedCalendarId,
       channelId: responseChannelId,
       resourceId: watchResponse.data.resourceId ?? null,
       expiration,
@@ -556,7 +610,10 @@ export async function renewWatch(watchId: string): Promise<RfCalendarWatch> {
     throw new Error("Calendar watch not found or already inactive")
   }
 
-  const renewedWatch = await createWatch(existingWatch.tenantId, existingWatch.calendarId)
+  const renewedWatch = await createWatch(existingWatch.tenantId, existingWatch.calendarId, {
+    skipLimitCheck: true,
+    ignoreExistingCalendarWatch: true,
+  })
 
   try {
     const context = await createTenantCalendarContext(existingWatch.tenantId)

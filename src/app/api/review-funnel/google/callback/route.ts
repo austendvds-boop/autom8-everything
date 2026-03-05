@@ -31,7 +31,8 @@ export async function GET(request: NextRequest) {
   try {
     await handleCallback(code, tenantId)
     return buildDashboardRedirect(request, "connected")
-  } catch {
-    return buildDashboardRedirect(request, "error", "callback_failed")
+  } catch (error) {
+    const reason = error instanceof Error && error.message.trim().length > 0 ? error.message : "callback_failed"
+    return buildDashboardRedirect(request, "error", reason)
   }
 }

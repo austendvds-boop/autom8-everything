@@ -6,7 +6,7 @@ const checkoutRequestSchema = z.object({
   businessName: z.string().trim().min(1).max(255),
   ownerName: z.string().trim().min(1).max(255),
   ownerPhone: z.string().trim().min(1).max(32),
-  plan: z.enum(["starter", "growth", "pro"]),
+  plan: z.enum(["starter", "growth"]),
   googlePlaceId: z.string().trim().min(1).max(255),
   primaryColor: z
     .string()
