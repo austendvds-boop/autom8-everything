@@ -1,5 +1,76 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-05 — Review Funnel Batch 7: Dashboard + settings implementation
+
+### Scope completed
+- Implemented the authenticated Review Funnel dashboard shell and all requested dashboard/settings pages:
+  - `src/app/review-funnel/dashboard/layout.tsx`
+  - `src/app/review-funnel/dashboard/page.tsx`
+  - `src/app/review-funnel/dashboard/DashboardOverview.tsx`
+  - `src/app/review-funnel/dashboard/reviews/page.tsx`
+  - `src/app/review-funnel/dashboard/reviews/ReviewsClient.tsx`
+  - `src/app/review-funnel/dashboard/feedback/page.tsx`
+  - `src/app/review-funnel/dashboard/feedback/FeedbackClient.tsx`
+  - `src/app/review-funnel/dashboard/settings/page.tsx`
+  - `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
+- Added dashboard layout UI component with responsive sidebar nav + header + logout:
+  - `src/components/review-funnel/DashboardLayout.tsx`
+- Added shared dashboard components:
+  - `src/components/review-funnel/StatsCard.tsx`
+  - `src/components/review-funnel/ReviewTable.tsx`
+  - `src/components/review-funnel/FeedbackList.tsx`
+  - `src/components/review-funnel/CalendarStatus.tsx`
+  - `src/components/review-funnel/SmsTemplateEditor.tsx`
+  - `src/components/review-funnel/BrandingPreview.tsx`
+- Added required dashboard/settings API routes:
+  - `src/app/api/review-funnel/dashboard/stats/route.ts`
+  - `src/app/api/review-funnel/dashboard/sms-usage/route.ts`
+  - `src/app/api/review-funnel/dashboard/reviews/route.ts`
+  - `src/app/api/review-funnel/dashboard/reviews/[id]/route.ts`
+  - `src/app/api/review-funnel/dashboard/feedback/route.ts`
+  - `src/app/api/review-funnel/settings/profile/route.ts`
+  - `src/app/api/review-funnel/settings/sms/route.ts`
+  - `src/app/api/review-funnel/settings/locations/route.ts`
+  - `src/app/api/review-funnel/settings/locations/[id]/route.ts`
+- Implemented dashboard auth redirect behavior in server layout using `rf_session` + `verifySession()`.
+- Added a build unblocker during verification:
+  - `src/app/review-funnel/login/LoginClient.tsx` and `src/app/review-funnel/login/page.tsx` now pass URL error keys from server `searchParams` prop instead of using `useSearchParams`, removing prerender suspense bailout.
+
+### Files changed in this batch
+- `src/app/review-funnel/dashboard/layout.tsx`
+- `src/app/review-funnel/dashboard/page.tsx`
+- `src/app/review-funnel/dashboard/DashboardOverview.tsx`
+- `src/app/review-funnel/dashboard/reviews/page.tsx`
+- `src/app/review-funnel/dashboard/reviews/ReviewsClient.tsx`
+- `src/app/review-funnel/dashboard/feedback/page.tsx`
+- `src/app/review-funnel/dashboard/feedback/FeedbackClient.tsx`
+- `src/app/review-funnel/dashboard/settings/page.tsx`
+- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
+- `src/components/review-funnel/DashboardLayout.tsx`
+- `src/components/review-funnel/StatsCard.tsx`
+- `src/components/review-funnel/ReviewTable.tsx`
+- `src/components/review-funnel/FeedbackList.tsx`
+- `src/components/review-funnel/CalendarStatus.tsx`
+- `src/components/review-funnel/SmsTemplateEditor.tsx`
+- `src/components/review-funnel/BrandingPreview.tsx`
+- `src/app/api/review-funnel/dashboard/stats/route.ts`
+- `src/app/api/review-funnel/dashboard/sms-usage/route.ts`
+- `src/app/api/review-funnel/dashboard/reviews/route.ts`
+- `src/app/api/review-funnel/dashboard/reviews/[id]/route.ts`
+- `src/app/api/review-funnel/dashboard/feedback/route.ts`
+- `src/app/api/review-funnel/settings/profile/route.ts`
+- `src/app/api/review-funnel/settings/sms/route.ts`
+- `src/app/api/review-funnel/settings/locations/route.ts`
+- `src/app/api/review-funnel/settings/locations/[id]/route.ts`
+- `src/app/review-funnel/login/LoginClient.tsx`
+- `src/app/review-funnel/login/page.tsx`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+- `npm run lint` ❌ (pre-existing lint error in `src/lib/review-funnel/services/auth.ts` uses `require()` import style)
+
 ## 2026-03-05 — Review Funnel Batch 8: Product page live rewrite + polish + deploy prep
 
 ### Scope completed

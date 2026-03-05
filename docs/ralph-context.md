@@ -6,21 +6,16 @@
 
 #### Scope completed
 - Replaced `/services/review-funnel` teaser/waitlist content with a full live product page.
-- Added/confirmed required sections on the product page:
+- Added/confirmed required sections:
   - live pricing (Starter `$79/mo`, Growth `$129/mo`, Pro `Contact Us`)
   - reusable `PlanCard` component
-  - feature comparison (`Review Funnel vs manual follow-up`)
+  - comparison section vs manual follow-up
   - 3-step flow (`Connect Calendar` → `Automatic SMS` → `Reviews Roll In`)
   - testimonials placeholder block
   - FAQ block
   - primary CTA to `/review-funnel/signup`
-- Kept copy plain-language and benefit-first (`set it and forget it`, `without the tech headache`) with no AI-agent jargon.
-- Polish pass updates for consistency:
-  - Review Funnel pricing/messaging on homepage service card and `/pricing` now matches live offer
-  - updated metadata/OG setup for Review Funnel signup/login/success pages via `buildMetadata`
-  - sitemap now includes `/review-funnel/signup`
-- Navigation/footer check:
-  - `Review Funnel` link already present in both `Navigation.tsx` and `Footer.tsx`; no additional code changes required there.
+- Aligned Review Funnel pricing/messaging across homepage + `/pricing`.
+- Updated signup/login/success metadata and sitemap inclusion for `/review-funnel/signup`.
 
 #### Files added
 - `src/components/review-funnel/PlanCard.tsx`
@@ -34,10 +29,59 @@
 - `src/app/review-funnel/login/page.tsx`
 - `src/app/review-funnel/signup/success/page.tsx`
 - `src/app/review-funnel/signup/SignupClient.tsx`
-- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx` (type-safety fix discovered during build verification)
+- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx` (type-safety fix)
 
 #### Verification
 - `npm run build` ✅
+
+### 2026-03-05 — Batch 7: Dashboard + settings shell, pages, and APIs
+
+#### Scope completed
+- Added authenticated dashboard app shell under `/review-funnel/dashboard`:
+  - `src/app/review-funnel/dashboard/layout.tsx` now verifies `rf_session` and redirects to `/review-funnel/login` if missing/invalid.
+  - `src/components/review-funnel/DashboardLayout.tsx` provides responsive sidebar nav (Overview, Reviews, Feedback, Settings), header with business name, mobile collapse, and logout.
+- Added overview page + client:
+  - `src/app/review-funnel/dashboard/page.tsx`
+  - `src/app/review-funnel/dashboard/DashboardOverview.tsx`
+  - Includes stats cards, SMS usage bar, calendar status widget, recent reviews list.
+- Added reviews page + client:
+  - `src/app/review-funnel/dashboard/reviews/page.tsx`
+  - `src/app/review-funnel/dashboard/reviews/ReviewsClient.tsx`
+  - Includes pagination, date/rating/status filters, and detail drawer panel.
+- Added feedback page + client:
+  - `src/app/review-funnel/dashboard/feedback/page.tsx`
+  - `src/app/review-funnel/dashboard/feedback/FeedbackClient.tsx`
+- Added settings page + client:
+  - `src/app/review-funnel/dashboard/settings/page.tsx`
+  - `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
+  - Tabs: Profile, SMS, Calendar, Billing.
+  - Profile: business/promo/colors + branding preview.
+  - SMS: template editor + variable preview + delay.
+  - Calendar: connect/disconnect actions.
+  - Billing: plan/usage summary + Stripe portal CTA.
+- Added shared dashboard components:
+  - `src/components/review-funnel/StatsCard.tsx`
+  - `src/components/review-funnel/ReviewTable.tsx`
+  - `src/components/review-funnel/FeedbackList.tsx`
+  - `src/components/review-funnel/CalendarStatus.tsx`
+  - `src/components/review-funnel/SmsTemplateEditor.tsx`
+  - `src/components/review-funnel/BrandingPreview.tsx`
+- Added dashboard/settings API routes:
+  - `GET /api/review-funnel/dashboard/stats`
+  - `GET /api/review-funnel/dashboard/sms-usage`
+  - `GET /api/review-funnel/dashboard/reviews`
+  - `GET /api/review-funnel/dashboard/reviews/[id]`
+  - `GET /api/review-funnel/dashboard/feedback`
+  - `GET/PATCH /api/review-funnel/settings/profile`
+  - `GET/PATCH /api/review-funnel/settings/sms`
+  - `GET/POST /api/review-funnel/settings/locations`
+  - `PATCH/DELETE /api/review-funnel/settings/locations/[id]`
+- Build reliability fix applied while verifying this batch:
+  - `src/app/review-funnel/login/LoginClient.tsx` + `src/app/review-funnel/login/page.tsx` now avoid `useSearchParams` prerender bailout by passing `searchParams` from server page to client props.
+
+#### Verification
+- `npm run build` ✅
+- `npm run lint` ❌ (pre-existing lint error in `src/lib/review-funnel/services/auth.ts` uses `require()` for `jsonwebtoken`)
 
 ### 2026-03-04 — Batch 4: Stripe integration + checkout + billing routes
 
@@ -65,63 +109,9 @@
   - Starter: `$79/mo`, `150 SMS`
   - Growth: `$129/mo`, `500 SMS`
   - Pro: `$199/mo`, `unlimited` (stored as sentinel `999999`)
-- Checkout flow (`POST /api/review-funnel/checkout`):
-  - validates payload (`email`, `businessName`, `ownerName`, `ownerPhone`, `plan`, `googlePlaceId`)
-  - creates/reuses Stripe customer
-  - creates Stripe Checkout session in `subscription` mode
-  - uses success URL `/review-funnel/signup/success?session_id={CHECKOUT_SESSION_ID}`
-  - uses cancel URL `/review-funnel/signup`
-- Stripe webhook flow (`POST /api/review-funnel/webhooks/stripe`):
-  - verifies signature via `stripe.webhooks.constructEvent(...)`
-  - `checkout.session.completed`: creates/updates `rf_tenants` with Stripe IDs, plan, and SMS limits
-  - `customer.subscription.updated`: updates plan + SMS limit + active state
-  - `customer.subscription.deleted`: deactivates tenant (`is_active = false`)
-  - `invoice.payment_failed`: flags tenant by deactivating account (`is_active = false`) due current schema lacking a dedicated billing-flag column
-- Billing settings routes:
-  - `GET /api/review-funnel/settings/billing` (authenticated): returns plan, Stripe IDs, active status, monthly SMS limit, and current month usage
-  - `POST /api/review-funnel/settings/billing/portal` (authenticated): returns Stripe Billing Portal URL
-
-#### Verification
-- `npm run build` ✅
-
-### 2026-03-04 — Batch 3: SMS service + Twilio webhooks + cron
-
-#### Files created
-- `src/lib/review-funnel/services/sms.ts`
-- `src/app/api/review-funnel/cron/process-sms/route.ts`
-- `src/app/api/review-funnel/webhooks/twilio/status/route.ts`
-- `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`
-- `vercel.json`
-
-#### Files modified
-- `src/lib/review-funnel/config.ts`
-  - added `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN` env parsing
-  - added build-phase placeholder fallbacks for `DATABASE_URL`, `RF_ENCRYPTION_KEY`, `RF_JWT_SECRET` so Next build can complete when Review Funnel env vars are not set locally
-- `src/lib/review-funnel/services/calendar.ts`
-  - fixed OAuth client typing (`InstanceType<typeof google.auth.OAuth2>`)
-  - fixed nullable return from token lookup helper
-
-#### SMS service exports
-- `sendReviewRequest(reviewRequestId)`
-- `interpolateTemplate(template, vars)`
-- `checkOptOut(phone)`
-- `checkMonthlyLimit(tenantId)`
-- `incrementUsage(tenantId)`
-- `handleOptOut(phone)`
-- `getNextAllowedSendTime(date)`
-
-#### Behavior implemented
-- Twilio send with funnel URL interpolation and status callback wiring
-- Quiet hours deferral using `RF_QUIET_HOURS_START`/`RF_QUIET_HOURS_END`
-- Opt-out and monthly SMS limit enforcement before send
-- Usage upsert/increment in `rf_sms_usage`
-- Cron queue processing (`rf_pending_sms`) with:
-  - atomic claim of up to 10 queued due rows
-  - `processing` lock transition
-  - retry up to 3 attempts with 3-minute backoff multiplier
-  - terminal handling for opted-out / no-phone / limit-reached
-- Twilio status webhook maps delivery states to `rf_review_requests.sms_status`
-- Twilio inbound webhook handles STOP/UNSUBSCRIBE keywords and writes to `rf_sms_opt_outs`
+- Checkout flow (`POST /api/review-funnel/checkout`) validates payload, creates/reuses customer, creates subscription checkout session.
+- Stripe webhook flow handles `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, and `invoice.payment_failed`.
+- Billing routes expose plan snapshot and Stripe portal URL for authenticated tenants.
 
 #### Verification
 - `npm run build` ✅
