@@ -7,7 +7,7 @@
 ## Auth
 - RF_JWT_SECRET — JWT signing secret (set ✅)
 - RF_ENCRYPTION_KEY — AES-256 for OAuth token encryption (set ✅)
-- RF_ADMIN_SECRET — admin panel password secret used to sign `rf_admin_session` (set in Vercel during Batch 3; generated and stored at `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt`)
+- RF_ADMIN_SECRET — admin panel password secret used to sign `rf_admin_session` (generated in Batch 4, set in Vercel for production/preview/development, and stored at `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt`)
 
 ## Gmail (magic links)
 - RF_GMAIL_USER — aust@autom8everything.com (set ✅)

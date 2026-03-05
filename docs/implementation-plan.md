@@ -1,4 +1,19 @@
-# implementation-plan.md — Review Funnel Batches 1-3
+# implementation-plan.md — Review Funnel batches
+
+## Batch 4 — Review Funnel admin panel (tenant review + stats)
+
+- [x] Generate a new `RF_ADMIN_SECRET` and save it to `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt`
+- [x] Set `RF_ADMIN_SECRET` in Vercel for production/preview/development
+- [x] Add `/review-funnel/admin/layout.tsx` auth guard for `rf_admin_session`
+- [x] Update `/review-funnel/admin/login` to use `Admin Password` + `Sign In` copy and inline `Incorrect password` handling
+- [x] Update `POST /api/review-funnel/admin/auth` to validate password against `process.env.RF_ADMIN_SECRET`
+- [x] Rebuild `/review-funnel/admin` as a server component with required columns + needs-attention badges
+- [x] Implement Stripe subscription status lookup with 5-minute cache for admin table status/badges
+- [x] Enforce table sort order: needs-attention severity first, then joined date descending
+- [x] Rebuild `/review-funnel/admin/stats` as a server component with Starter/Growth/Total MRR + monthly totals
+- [x] Update docs (`ENV-VARS.md`, `UI-VERIFICATION.md`, `ralph-context.md`, `CODER-CONTEXT.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/master`
 
 ## Batch 3 — Pricing UI + calendar limit enforcement
 

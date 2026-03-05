@@ -12,7 +12,7 @@ interface AdminShellProps {
 const NAV_ITEMS = [
   {
     href: "/review-funnel/admin",
-    label: "Tenants",
+    label: "Businesses",
     icon: Building2,
   },
   {

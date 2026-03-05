@@ -10,9 +10,13 @@ import { RF_ADMIN_SESSION_COOKIE_NAME } from "@/lib/review-funnel/admin"
 
 const authBodySchema = z
   .object({
-    secret: z.string().trim().min(1),
+    password: z.string().trim().min(1).optional(),
+    secret: z.string().trim().min(1).optional(),
   })
   .strict()
+  .refine((value) => Boolean(value.password ?? value.secret), {
+    message: "Password is required",
+  })
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -33,15 +37,16 @@ export async function POST(request: NextRequest) {
   const parsedBody = authBodySchema.safeParse(rawBody)
 
   if (!parsedBody.success) {
-    return NextResponse.json({ error: "Secret is required" }, { status: 400 })
+    return NextResponse.json({ error: "Password is required" }, { status: 400 })
   }
 
-  if (!isReviewFunnelAdminSecretValid(parsedBody.data.secret)) {
-    return NextResponse.json({ error: "Invalid admin secret" }, { status: 401 })
+  const passwordCandidate = parsedBody.data.password ?? parsedBody.data.secret
+
+  if (!isReviewFunnelAdminSecretValid(passwordCandidate)) {
+    return NextResponse.json({ error: "Incorrect password" }, { status: 401 })
   }
 
   const sessionToken = createReviewFunnelAdminSessionToken()
-
   const response = NextResponse.json({ success: true })
 
   response.cookies.set({

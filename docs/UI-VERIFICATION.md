@@ -40,26 +40,28 @@
   - Inline error is shown in the calendar card:
     - `You've reached your calendar limit for your current plan. Upgrade to connect more calendars.`
 
-## Batch 3 checks (admin panel for Austen)
-- `/review-funnel/admin/login`:
-  - password-only form renders (no username/email field)
-  - wrong password shows error
-  - successful login redirects to `/review-funnel/admin`
-- `/review-funnel/admin` tenant list:
-  - columns show business, owner, email, plan, calendars connected, SMS used/limit, status, created at
-  - search filters by business name or owner email
-  - sorting works for created date, plan, and status
-- `/review-funnel/admin/tenants/[id]` tenant detail:
-  - tenant profile block renders
-  - calendar connections table renders
-  - SMS usage table shows last 3 months
-  - recent review requests table shows up to 20 rows
-  - Deactivate/Reactivate and plan update actions persist
-- `/review-funnel/admin/stats`:
-  - plan counts render
-  - total SMS sent this month renders
-  - MRR renders
-  - new signups this month renders
+## Batch 4 checks (review funnel admin panel)
+- Breakpoints to verify for each route below: **375px** and **1280px**
+- `/review-funnel/admin/login`
+  - password form renders
+  - wrong password shows inline `Incorrect password`
+- `/review-funnel/admin`
+  - tenant table renders with all columns:
+    - Business name
+    - Plan
+    - Calendars connected
+    - Text messages used this month / monthly limit
+    - Status
+    - Joined date
+  - needs-attention badges render with colored dots when applicable
+- `/review-funnel/admin/stats`
+  - Starter MRR card renders
+  - Growth MRR card renders
+  - Total MRR card renders
+  - Total text messages sent this month renders
+  - New signups this month renders
+- `/review-funnel/admin/tenants/[id]`
+  - tenant detail page still loads and actions persist
 
 ## Known PENDING (not bugs)
 - Google Calendar connect → OAuth flow (GOOGLE_CLIENT_ID not set yet)
