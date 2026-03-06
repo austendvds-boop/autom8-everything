@@ -1,11 +1,13 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
 import BrandingPreview from "@/components/review-funnel/BrandingPreview"
 import CalendarStatus from "@/components/review-funnel/CalendarStatus"
 import SmsTemplateEditor from "@/components/review-funnel/SmsTemplateEditor"
 
 type SettingsTab = "profile" | "sms" | "calendar" | "billing"
+
+type ReviewPlatform = "google" | "yelp" | "both"
 
 interface ProfileResponse {
   profile: {
@@ -18,6 +20,8 @@ interface ProfileResponse {
     ownerName: string
     ownerEmail: string
     ownerPhone: string
+    reviewPlatform: ReviewPlatform
+    yelpReviewUrl: string | null
   }
   calendar: {
     connected: boolean
@@ -51,6 +55,8 @@ interface ProfileFormState {
   promoCode: string
   primaryColor: string
   accentColor: string
+  reviewPlatform: ReviewPlatform
+  yelpReviewUrl: string
 }
 
 interface SmsFormState {
@@ -71,6 +77,8 @@ const DEFAULT_PROFILE: ProfileFormState = {
   promoCode: "",
   primaryColor: "#8B5CF6",
   accentColor: "#06B6D4",
+  reviewPlatform: "google",
+  yelpReviewUrl: "",
 }
 
 const DEFAULT_SMS: SmsFormState = {
@@ -116,9 +124,13 @@ export default function SettingsClient() {
   const [ownerEmail, setOwnerEmail] = useState("")
   const [ownerName, setOwnerName] = useState("")
   const [ownerPhone, setOwnerPhone] = useState("")
+  const [logoUrl, setLogoUrl] = useState<string | null>(null)
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null)
+  const [selectedLogoFile, setSelectedLogoFile] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState(true)
   const [isSavingProfile, setIsSavingProfile] = useState(false)
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false)
   const [isSavingSms, setIsSavingSms] = useState(false)
   const [isCalendarBusy, setIsCalendarBusy] = useState(false)
   const [isBillingBusy, setIsBillingBusy] = useState(false)
@@ -160,7 +172,10 @@ export default function SettingsClient() {
         promoCode: profilePayload.profile.promoCode ?? "",
         primaryColor: profilePayload.profile.primaryColor,
         accentColor: profilePayload.profile.accentColor,
+        reviewPlatform: profilePayload.profile.reviewPlatform ?? "google",
+        yelpReviewUrl: profilePayload.profile.yelpReviewUrl ?? "",
       })
+      setLogoUrl(profilePayload.profile.logoUrl ?? null)
       setOwnerEmail(profilePayload.profile.ownerEmail)
       setOwnerName(profilePayload.profile.ownerName)
       setOwnerPhone(profilePayload.profile.ownerPhone)
@@ -182,6 +197,14 @@ export default function SettingsClient() {
   useEffect(() => {
     void loadSettings()
   }, [loadSettings])
+
+  useEffect(() => {
+    return () => {
+      if (logoPreviewUrl) {
+        URL.revokeObjectURL(logoPreviewUrl)
+      }
+    }
+  }, [logoPreviewUrl])
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -233,6 +256,8 @@ export default function SettingsClient() {
           promoCode: profile.promoCode,
           primaryColor: profile.primaryColor,
           accentColor: profile.accentColor,
+          reviewPlatform: profile.reviewPlatform,
+          yelpReviewUrl: profile.reviewPlatform === "google" ? null : profile.yelpReviewUrl,
         }),
       })
 
@@ -255,7 +280,10 @@ export default function SettingsClient() {
           promoCode: nextProfile.promoCode ?? "",
           primaryColor: nextProfile.primaryColor,
           accentColor: nextProfile.accentColor,
+          reviewPlatform: nextProfile.reviewPlatform ?? current.reviewPlatform,
+          yelpReviewUrl: nextProfile.yelpReviewUrl ?? "",
         }))
+        setLogoUrl(nextProfile.logoUrl ?? null)
       }
 
       setStatusMessage("Your business settings were saved.")
@@ -263,6 +291,60 @@ export default function SettingsClient() {
       setErrorMessage(error instanceof Error ? error.message : "Failed to save your business settings")
     } finally {
       setIsSavingProfile(false)
+    }
+  }
+
+  function handleLogoFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+
+    if (!file) {
+      return
+    }
+
+    if (logoPreviewUrl) {
+      URL.revokeObjectURL(logoPreviewUrl)
+    }
+
+    setSelectedLogoFile(file)
+    setLogoPreviewUrl(URL.createObjectURL(file))
+    setErrorMessage(null)
+  }
+
+  async function uploadLogo() {
+    if (!selectedLogoFile) {
+      return
+    }
+
+    setIsUploadingLogo(true)
+    setErrorMessage(null)
+    setStatusMessage(null)
+
+    try {
+      const formData = new FormData()
+      formData.append("logo", selectedLogoFile)
+
+      const response = await fetch("/api/review-funnel/settings/logo", {
+        method: "POST",
+        body: formData,
+      })
+
+      const payload = (await response.json().catch(() => null)) as { logoUrl?: string; error?: string } | null
+
+      if (!response.ok || !payload?.logoUrl) {
+        throw new Error(payload?.error || "Failed to upload your logo")
+      }
+
+      setLogoUrl(payload.logoUrl)
+      setSelectedLogoFile(null)
+      if (logoPreviewUrl) {
+        URL.revokeObjectURL(logoPreviewUrl)
+      }
+      setLogoPreviewUrl(null)
+      setStatusMessage("Your logo was uploaded.")
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Failed to upload your logo")
+    } finally {
+      setIsUploadingLogo(false)
     }
   }
 
@@ -433,6 +515,35 @@ export default function SettingsClient() {
             <h3 className="text-lg font-semibold text-white">Your business details</h3>
             <p className="mt-1 text-sm text-[#A1A1AA]">Update what customers see on your review page.</p>
 
+            <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">Business logo</p>
+              <p className="mt-1 text-xs text-[#A1A1AA]">This logo appears at the top of your review page.</p>
+              <div className="mt-3 flex items-center gap-3">
+                {(logoPreviewUrl || logoUrl) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={logoPreviewUrl || logoUrl || ""}
+                    alt="Business logo preview"
+                    className="h-14 w-14 rounded-xl border border-white/10 bg-white object-contain p-1"
+                  />
+                ) : null}
+                <label className="inline-flex cursor-pointer rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white transition hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/15">
+                  {logoUrl || logoPreviewUrl ? "Change logo" : "Upload logo"}
+                  <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" className="hidden" onChange={handleLogoFileChange} />
+                </label>
+                {selectedLogoFile ? (
+                  <button
+                    type="button"
+                    onClick={() => void uploadLogo()}
+                    disabled={isUploadingLogo}
+                    className="rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-4 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isUploadingLogo ? "Uploading..." : "Save logo"}
+                  </button>
+                ) : null}
+              </div>
+            </div>
+
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="block sm:col-span-2">
                 <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Business name</span>
@@ -465,6 +576,34 @@ export default function SettingsClient() {
                   placeholder="WELCOME10"
                 />
               </label>
+
+              <label className="block">
+                <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Review platform</span>
+                <select
+                  value={profile.reviewPlatform}
+                  onChange={(event) =>
+                    setProfile((prev) => ({ ...prev, reviewPlatform: event.target.value as ReviewPlatform }))
+                  }
+                  className="w-full rounded-lg border border-white/15 bg-[#0D0D13] px-3 py-2 text-sm text-white focus:border-[#8B5CF6] focus:outline-none"
+                >
+                  <option value="google">Google</option>
+                  <option value="yelp">Yelp</option>
+                  <option value="both">Both</option>
+                </select>
+              </label>
+
+              {(profile.reviewPlatform === "yelp" || profile.reviewPlatform === "both") ? (
+                <label className="block sm:col-span-2">
+                  <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Yelp review URL</span>
+                  <input
+                    type="url"
+                    value={profile.yelpReviewUrl}
+                    onChange={(event) => setProfile((prev) => ({ ...prev, yelpReviewUrl: event.target.value }))}
+                    className="w-full rounded-lg border border-white/15 bg-[#0D0D13] px-3 py-2 text-sm text-white focus:border-[#8B5CF6] focus:outline-none"
+                    placeholder="https://www.yelp.com/writeareview/biz/your-business-id"
+                  />
+                </label>
+              ) : null}
 
               <label className="block">
                 <span className="mb-1 block text-xs uppercase tracking-wide text-[#A1A1AA]">Your brand color</span>

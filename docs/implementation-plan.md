@@ -1,5 +1,19 @@
 # implementation-plan.md — Review Funnel batches
 
+## Batch 7 — Logo upload + Yelp platform
+
+- [x] Add `POST /api/review-funnel/settings/logo` multipart upload endpoint with auth + validation + file save + tenant update
+- [x] Add `yelp_review_url` and `review_platform` to `rf_tenants` schema
+- [x] Update profile settings API GET/PATCH for Yelp fields and review platform validation
+- [x] Update dashboard settings profile UI with logo upload + review platform selector + conditional Yelp URL input
+- [x] Update public funnel API payload with Yelp fields
+- [x] Update funnel five-star CTA rendering logic for google/yelp/both
+- [x] Attempt DB migration via `npx drizzle-kit push`
+- [x] Add SQL fallback migration file for manual ALTERs
+- [x] Update docs (`UI-VERIFICATION.md`, `ralph-context.md`, `CODER-CONTEXT.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/master`
+
 ## Batch 6 — Process SMS cron finalization
 
 - [x] Verify `process-sms` cron route is fully implemented and auth-protected

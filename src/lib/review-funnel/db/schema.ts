@@ -24,6 +24,8 @@ export const rfTenants = pgTable(
     ownerPhone: varchar("owner_phone", { length: 20 }).notNull(),
     googlePlaceId: varchar("google_place_id", { length: 255 }),
     gmbReviewUrl: text("gmb_review_url").notNull(),
+    yelpReviewUrl: text("yelp_review_url"),
+    reviewPlatform: varchar("review_platform", { length: 20 }).notNull().default("google"),
     logoUrl: text("logo_url"),
     primaryColor: varchar("primary_color", { length: 7 }).notNull().default("#2563EB"),
     accentColor: varchar("accent_color", { length: 7 }).notNull().default("#1E40AF"),

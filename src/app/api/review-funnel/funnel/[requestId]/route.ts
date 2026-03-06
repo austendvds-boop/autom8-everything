@@ -41,6 +41,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ req
       promoOffer: rfTenants.promoOffer,
       promoCode: rfTenants.promoCode,
       tenantGmbReviewUrl: rfTenants.gmbReviewUrl,
+      yelpReviewUrl: rfTenants.yelpReviewUrl,
+      reviewPlatform: rfTenants.reviewPlatform,
       locationGmbReviewUrl: rfLocations.gmbReviewUrl,
     })
     .from(rfReviewRequests)
@@ -83,6 +85,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ req
       promoOffer: record.promoOffer,
       promoCode: record.promoCode,
       gmbReviewUrl: record.locationGmbReviewUrl ?? record.tenantGmbReviewUrl,
+      yelpReviewUrl: record.yelpReviewUrl,
+      reviewPlatform: record.reviewPlatform,
     },
   })
 }

@@ -1,5 +1,41 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 7: logo upload + Yelp review platform support
+
+### Scope completed
+- Added new authenticated logo upload API route:
+  - `POST /api/review-funnel/settings/logo` in `src/app/api/review-funnel/settings/logo/route.ts`
+  - accepts multipart `logo` file input
+  - validates MIME type (`image/png`, `image/jpeg`, `image/webp`, `image/svg+xml`) and max size (2MB)
+  - writes files to `public/uploads/review-funnel/logos/{tenantId}-{Date.now()}.{ext}` and persists `rf_tenants.logo_url`
+- Extended Review Funnel tenant schema in `src/lib/review-funnel/db/schema.ts`:
+  - `yelpReviewUrl: text('yelp_review_url')`
+  - `reviewPlatform: varchar('review_platform', { length: 20 }).notNull().default('google')`
+- Updated profile settings API `src/app/api/review-funnel/settings/profile/route.ts`:
+  - GET now returns `yelpReviewUrl` + `reviewPlatform`
+  - PATCH now accepts/saves `yelpReviewUrl` + `reviewPlatform`
+  - review platform validation constrained to `google | yelp | both`
+- Updated settings profile UI `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`:
+  - Added logo upload section with preview and save action
+  - Added review platform dropdown (Google, Yelp, Both)
+  - Added conditional Yelp review URL input when platform is `yelp`/`both`
+- Updated public funnel data API `src/app/api/review-funnel/funnel/[requestId]/route.ts`:
+  - tenant payload now includes `yelpReviewUrl` + `reviewPlatform`
+- Updated funnel client `src/app/r/[requestId]/FunnelClient.tsx`:
+  - updated `FunnelApiPayload` tenant type for Yelp fields
+  - five-star step now renders Google/Yelp CTA buttons based on `reviewPlatform`
+- Added SQL fallback migration file:
+  - `docs/migrations/2026-03-06-rf-yelp-platform.sql`
+
+### DB migration note
+- `npx drizzle-kit push` failed in this environment because `DATABASE_URL` is not set.
+- Error: `Please provide required params for Postgres driver: url: ''`
+- Use the SQL in `docs/migrations/2026-03-06-rf-yelp-platform.sql` (or rerun drizzle push with DB env loaded).
+
+### Verification
+- `npm run build` ✅
+
+
 ## 2026-03-06 — Batch 6: process-sms cron finalization
 
 ### Scope completed

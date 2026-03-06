@@ -18,6 +18,8 @@ interface FunnelApiPayload {
     promoOffer: string
     promoCode: string | null
     gmbReviewUrl: string | null
+    yelpReviewUrl: string | null
+    reviewPlatform: "google" | "yelp" | "both"
   }
   request: {
     id: string
@@ -242,6 +244,25 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
     void submitRating(5, { googleReviewClicked: true, silent: true })
   }
 
+  function handleYelpReviewClick() {
+    if (!funnelData) {
+      return
+    }
+
+    const url = funnelData.tenant.yelpReviewUrl?.trim()
+
+    if (!url) {
+      setErrorMessage("Yelp review link is unavailable. Thank you for your feedback!")
+      setStep("thanks")
+      return
+    }
+
+    window.open(url, "_blank", "noopener,noreferrer")
+    setStep("thanks")
+    void submitRating(5, { googleReviewClicked: true, silent: true })
+  }
+
+  const reviewPlatform = funnelData?.tenant.reviewPlatform ?? "google"
   const customerName = funnelData?.request.customerName?.trim() || "there"
   const businessName = funnelData?.tenant.businessName || "our team"
 
@@ -316,18 +337,34 @@ export default function FunnelClient({ requestId }: FunnelClientProps) {
                 <div className="space-y-5">
                   <div className="rounded-2xl border border-emerald-300/25 bg-emerald-500/10 p-4 text-center text-emerald-50">
                     <p className="text-lg font-semibold">We&apos;re so glad you had a great experience!</p>
-                    <p className="mt-1 text-sm text-emerald-100/90">Would you mind sharing that on Google?</p>
+                    <p className="mt-1 text-sm text-emerald-100/90">Would you mind sharing that with a quick public review?</p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={handleGoogleReviewClick}
-                    disabled={isSubmitting}
-                    className="w-full rounded-2xl px-5 py-4 text-base font-semibold text-white transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-                    style={{ background: ctaGradient }}
-                  >
-                    Leave a Google review
-                  </button>
+                  <div className={reviewPlatform === "both" ? "grid grid-cols-1 gap-3 sm:grid-cols-2" : ""}>
+                    {(reviewPlatform === "google" || reviewPlatform === "both") ? (
+                      <button
+                        type="button"
+                        onClick={handleGoogleReviewClick}
+                        disabled={isSubmitting}
+                        className="w-full rounded-2xl px-5 py-4 text-base font-semibold text-white transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+                        style={{ background: ctaGradient }}
+                      >
+                        Leave a Google review
+                      </button>
+                    ) : null}
+
+                    {(reviewPlatform === "yelp" || reviewPlatform === "both") ? (
+                      <button
+                        type="button"
+                        onClick={handleYelpReviewClick}
+                        disabled={isSubmitting}
+                        className="w-full rounded-2xl px-5 py-4 text-base font-semibold text-white transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+                        style={{ background: ctaGradient }}
+                      >
+                        Leave a Yelp review
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
               ) : null}
 

@@ -21,6 +21,20 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch 7 checks (logo upload + Yelp review platform)
+- `/review-funnel/dashboard/settings` -> **Your Business** tab
+  - Logo section shows current logo thumbnail when present
+  - `Upload logo` / `Change logo` opens file picker for png/jpg/webp/svg
+  - Selecting a file shows preview
+  - Clicking `Save logo` uploads and shows success message
+  - Uploaded logo renders on funnel page `/r/[requestId]`
+  - `Review platform` dropdown options: Google, Yelp, Both
+  - `Yelp review URL` input only appears when platform is Yelp or Both
+- `/r/[requestId]` five-star step behavior
+  - Google platform: shows only `Leave a Google review`
+  - Yelp platform: shows only `Leave a Yelp review`
+  - Both platform: shows both buttons side-by-side
+
 ## Batch 3 checks (pricing + calendar limit)
 - `/services/review-funnel`
   - Pricing cards show Starter `$79/month`, Growth `$149/month`, Pro `Let's talk`

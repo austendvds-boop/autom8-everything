@@ -21,6 +21,8 @@ const nullableTrimmedString = z.preprocess(
   z.string().nullable().optional(),
 )
 
+const reviewPlatformSchema = z.enum(["google", "yelp", "both"])
+
 const profilePatchSchema = z
   .object({
     businessName: z.string().trim().min(1).max(255).optional(),
@@ -30,6 +32,8 @@ const profilePatchSchema = z
     promoCode: nullableTrimmedString,
     logoUrl: nullableTrimmedString,
     gmbReviewUrl: nullableTrimmedString,
+    yelpReviewUrl: nullableTrimmedString,
+    reviewPlatform: reviewPlatformSchema.optional(),
     primaryColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/).optional(),
     accentColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/).optional(),
   })
@@ -53,6 +57,10 @@ function toInt(value: number | string | null | undefined): number {
 
 function isValidUrlOrNull(value: string | null | undefined): boolean {
   if (!value) {
+    return true
+  }
+
+  if (value.startsWith("/")) {
     return true
   }
 
@@ -107,6 +115,8 @@ export async function GET(request: NextRequest) {
       promoCode: authResult.tenant.promoCode,
       googlePlaceId: authResult.tenant.googlePlaceId,
       gmbReviewUrl: authResult.tenant.gmbReviewUrl,
+      yelpReviewUrl: authResult.tenant.yelpReviewUrl,
+      reviewPlatform: authResult.tenant.reviewPlatform,
       plan: authResult.tenant.plan,
     },
     calendar,
@@ -144,8 +154,11 @@ export async function PATCH(request: NextRequest) {
 
   const payload = parsed.data
 
-  if (!isValidUrlOrNull(payload.logoUrl) || !isValidUrlOrNull(payload.gmbReviewUrl)) {
-    return NextResponse.json({ error: "logoUrl and gmbReviewUrl must be valid http(s) URLs" }, { status: 400 })
+  if (!isValidUrlOrNull(payload.logoUrl) || !isValidUrlOrNull(payload.gmbReviewUrl) || !isValidUrlOrNull(payload.yelpReviewUrl)) {
+    return NextResponse.json(
+      { error: "logoUrl, gmbReviewUrl, and yelpReviewUrl must be valid http(s) URLs" },
+      { status: 400 },
+    )
   }
 
   const hasOwn = (key: keyof typeof payload) => Object.prototype.hasOwnProperty.call(payload, key)
@@ -182,6 +195,14 @@ export async function PATCH(request: NextRequest) {
     updateData.gmbReviewUrl = payload.gmbReviewUrl ?? authResult.tenant.gmbReviewUrl
   }
 
+  if (hasOwn("yelpReviewUrl")) {
+    updateData.yelpReviewUrl = payload.yelpReviewUrl ?? null
+  }
+
+  if (hasOwn("reviewPlatform") && payload.reviewPlatform !== undefined) {
+    updateData.reviewPlatform = payload.reviewPlatform
+  }
+
   if (hasOwn("primaryColor") && payload.primaryColor !== undefined) {
     updateData.primaryColor = payload.primaryColor
   }
@@ -209,6 +230,8 @@ export async function PATCH(request: NextRequest) {
       promoOffer: rfTenants.promoOffer,
       promoCode: rfTenants.promoCode,
       gmbReviewUrl: rfTenants.gmbReviewUrl,
+      yelpReviewUrl: rfTenants.yelpReviewUrl,
+      reviewPlatform: rfTenants.reviewPlatform,
     })
 
   const calendar = await getCalendarSnapshot(authResult.tenant.id)
