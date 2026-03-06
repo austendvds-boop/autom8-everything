@@ -1,5 +1,13 @@
 # implementation-plan.md — Review Funnel batches
 
+## Batch 7 retry 2 — Verification + commit gate recovery
+
+- [x] Re-verify Batch 7 implementation files and behavior
+- [x] Re-run `npx drizzle-kit push` (confirm failure mode without `DATABASE_URL`)
+- [x] Re-run `npm run build`
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push retry pass to `origin/master`
+
 ## Batch 7 — Logo upload + Yelp platform
 
 - [x] Add `POST /api/review-funnel/settings/logo` multipart upload endpoint with auth + validation + file save + tenant update

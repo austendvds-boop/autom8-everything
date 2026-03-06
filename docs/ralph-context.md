@@ -2,7 +2,31 @@
 
 ## Batch Notes (keep last 3)
 
-### 2026-03-06 — Batch 7: logo upload + Yelp platform support
+### 2026-03-06 - Batch 7 retry 2: verification + commit gate recovery
+
+#### Files modified
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+#### Key exports / behavior
+- Verified Batch 7 implementation is present end-to-end:
+  - logo upload API route and dashboard profile upload flow
+  - `rf_tenants` Yelp fields (`yelp_review_url`, `review_platform`)
+  - settings profile GET/PATCH support for Yelp fields + platform validation
+  - funnel payload + five-star CTA behavior for Google/Yelp/Both
+- Re-ran DB migration attempt:
+  - `npx drizzle-kit push` failed in this environment because `DATABASE_URL` is empty.
+  - SQL fallback migration remains at `docs/migrations/2026-03-06-rf-yelp-platform.sql`.
+- Re-ran full build successfully.
+
+#### Gotchas for next batch
+- `npx drizzle-kit push` requires `DATABASE_URL`; set env before rerunning.
+- Yelp and Google CTA clicks still share existing `googleReviewClicked` boolean tracking in `rf_review_requests`.
+
+---
+
+### 2026-03-06 - Batch 7: logo upload + Yelp platform support
 
 #### Files modified
 - `src/app/api/review-funnel/settings/logo/route.ts` (new)
@@ -47,7 +71,7 @@
 
 ---
 
-### 2026-03-06 — Batch 6: finalize process-sms cron + Twilio HELP handling
+### 2026-03-06 - Batch 6: finalize process-sms cron + Twilio HELP handling
 
 #### Files modified
 - `src/app/api/review-funnel/cron/process-sms/route.ts`
@@ -69,22 +93,3 @@
 #### Gotchas for next batch
 - `limit_reached` rows are terminal in `rf_pending_sms` but not counted in the `skipped` metric; summary intentionally stays `{ processed, sent, skipped, failed, rescheduled }`.
 - Retry counter increments on thrown exceptions only; terminal service statuses do not increment attempts.
-
----
-
-### 2026-03-06 — Batch 5: process-sms cron + Twilio HELP keyword handling
-
-#### Files modified
-- `src/app/api/review-funnel/cron/process-sms/route.ts`
-- `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`
-- `docs/implementation-plan.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/ralph-context.md`
-
-#### Key exports / behavior
-- `GET /api/review-funnel/cron/process-sms` now fully processes queued rows in `rf_pending_sms`.
-- Twilio inbound webhook now handles HELP before STOP.
-
-#### Gotchas for next batch
-- `process-sms` updates pending rows only; `sendReviewRequest()` still owns `rf_review_requests` status updates (`sent`, `opted_out`, `limit_reached`, `no_phone`).
-- `failed` counter in cron response increments only when retries reach terminal failure (attempts >= 3), not on intermediate retryable errors.
