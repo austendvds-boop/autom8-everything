@@ -1,5 +1,51 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 11: platform portal auth + middleware foundation
+
+### Scope completed
+- Added platform portal auth service at `src/lib/platform/services/auth.ts` using the same magic-link/session patterns as Review Funnel auth.
+- Implemented SHA-256 token hashing and JWT session creation for portal clients:
+  - `hashToken(token)`
+  - `createPortalSession(clientId)` using `platformConfig.A8_JWT_SECRET` and `A8_SESSION_TTL_HOURS`
+- Implemented portal magic-link lifecycle:
+  - `generatePortalMagicLink(email)` looks up active `a8_clients` by normalized email, creates secure random token, stores hashed token in `a8_magic_links`, returns raw token
+  - `verifyPortalMagicLink(token)` validates unexpired/unused link in transaction, atomically marks link used, loads active client, returns `{ sessionToken, client }`
+  - `verifyPortalSession(token)` validates JWT claims and loads active `a8_clients` row
+- Used `require("jsonwebtoken")` style import in platform auth/middleware files to avoid ESM issues.
+- Added Cadence portal API client at `src/lib/platform/services/cadence-api.ts`:
+  - injects `X-Portal-Secret` on every request
+  - uses base URL from `platformConfig.CADENCE_API_URL`
+  - exports:
+    - `getCadenceTenantConfig(tenantId)`
+    - `updateCadenceTenantConfig(tenantId, updates)`
+    - `getCadenceRecentCalls(tenantId, limit?, offset?)`
+  - defines interfaces:
+    - `CadenceTenantConfig`
+    - `CadenceTenantUpdate`
+    - `CadenceCall`
+    - `CadenceCallsResponse`
+- Added admin auth middleware at `src/lib/platform/admin-middleware.ts`:
+  - `isAdminSecretValid(candidate)` with timing-safe compare against `A8_ADMIN_SECRET`
+  - `createAdminSessionToken()` with `{ role: "platform_admin" }` JWT, 8h expiry
+  - `requireAdminAuth(request)` with `x-admin-secret` OR `a8_admin_session` cookie
+  - exported `A8_ADMIN_SESSION_COOKIE_NAME = "a8_admin_session"`
+- Added portal auth middleware at `src/lib/platform/portal-middleware.ts`:
+  - supports Bearer token or `a8_portal_session` cookie
+  - validates via `verifyPortalSession()` and returns `{ ok: true, client, sessionToken }`
+  - exported `A8_PORTAL_SESSION_COOKIE_NAME = "a8_portal_session"`
+
+### Files changed
+- `src/lib/platform/services/auth.ts` (new)
+- `src/lib/platform/services/cadence-api.ts` (new)
+- `src/lib/platform/admin-middleware.ts` (new)
+- `src/lib/platform/portal-middleware.ts` (new)
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 10: platform DB spec alignment + finalize commit
 
 ### Scope completed

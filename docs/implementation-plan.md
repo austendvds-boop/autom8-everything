@@ -1,5 +1,19 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — Platform portal auth services + admin/portal middleware
+
+- [x] Create `src/lib/platform/services/auth.ts` with magic-link hashing/generation/verification and JWT portal sessions
+- [x] Use `require("jsonwebtoken")` pattern for JWT signing/verifying in platform auth
+- [x] Create `src/lib/platform/services/cadence-api.ts` with `X-Portal-Secret` authenticated requests and typed interfaces
+- [x] Add cadence API helpers: `getCadenceTenantConfig`, `updateCadenceTenantConfig`, `getCadenceRecentCalls`
+- [x] Create `src/lib/platform/admin-middleware.ts` with timing-safe admin-secret check, 8h admin session JWT, and auth gate
+- [x] Export `A8_ADMIN_SESSION_COOKIE_NAME = "a8_admin_session"`
+- [x] Create `src/lib/platform/portal-middleware.ts` with Bearer/cookie portal auth gate
+- [x] Export `A8_PORTAL_SESSION_COOKIE_NAME = "a8_portal_session"`
+- [x] Run `npm run build` and ensure pass
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push to `origin/master`
+
 ## 2026-03-06 — Platform DB spec alignment + finalize commit
 
 - [x] Validate existing platform DB foundation files against requested spec
