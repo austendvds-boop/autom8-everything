@@ -1,5 +1,78 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 10: platform DB spec alignment + finalize commit
+
+### Scope completed
+- Finalized unified platform DB foundation files and aligned details to task spec.
+- Updated platform schema unique email index from expression-based `lower(email)` to direct unique email index.
+- Kept required partial indexes and type exports for all `a8_*` tables.
+- Verified platform DB client merges `platformSchema` + `reviewFunnelSchema` and exports `platformDb`/`PlatformDb`.
+- Verified platform env config includes all required vars and build-phase placeholders.
+- Updated `.env.example` platform section to exactly requested keys:
+  - `A8_ADMIN_SECRET`
+  - `A8_JWT_SECRET`
+  - `CADENCE_API_URL`
+  - `PORTAL_API_SECRET`
+- Updated SQL migration index for `a8_clients.email` to match schema.
+
+### Files changed
+- `src/lib/platform/db/schema.ts`
+- `src/lib/platform/db/client.ts`
+- `src/lib/platform/config.ts`
+- `docs/migrations/2026-03-07-platform-tables.sql`
+- `drizzle.config.ts`
+- `.env.example`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-06 — Batch 9: platform DB foundation (a8 tables + config + client)
+
+### Scope completed
+- Added new unified platform Drizzle schema at `src/lib/platform/db/schema.ts`:
+  - `a8_clients`
+  - `a8_client_services`
+  - `a8_magic_links`
+- Added required indexes/constraints:
+  - case-insensitive unique email index via `lower(email)` on `a8_clients`
+  - partial index on `a8_clients.stripe_customer_id` where not null
+  - unique `(client_id, service_type)` on `a8_client_services`
+  - partial indexes on `a8_client_services.cadence_tenant_id` and `a8_client_services.rf_tenant_id`
+  - unique `token_hash` and `(email, created_at)` index on `a8_magic_links`
+  - check constraints for `a8_client_services.service_type` and `a8_client_services.status`
+- Exported `platformSchema` and inferred types:
+  - `A8Client`, `NewA8Client`
+  - `A8ClientService`, `NewA8ClientService`
+  - `A8MagicLink`, `NewA8MagicLink`
+- Added platform DB client at `src/lib/platform/db/client.ts`:
+  - follows Neon + Drizzle singleton pattern used by Review Funnel
+  - merges `platformSchema` + `reviewFunnelSchema` so platform code can query `rf_*` tables
+  - exports `platformDb` and `PlatformDb`
+- Added platform env config at `src/lib/platform/config.ts`:
+  - zod validation for `DATABASE_URL`, site URL, platform secrets, TTLs, Cadence URL
+  - build-phase placeholder injection pattern mirrors Review Funnel config (`NEXT_PHASE === "phase-production-build"`)
+- Updated migration/filtering and env docs:
+  - `drizzle.config.ts` table filter now includes `a8_*`
+  - appended Platform section to `.env.example`
+  - added SQL fallback migration `docs/migrations/2026-03-07-platform-tables.sql`
+
+### Files changed
+- `src/lib/platform/db/schema.ts` (new)
+- `src/lib/platform/db/client.ts` (new)
+- `src/lib/platform/config.ts` (new)
+- `docs/migrations/2026-03-07-platform-tables.sql` (new)
+- `drizzle.config.ts`
+- `.env.example`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 8: consent logging + health endpoint + env docs
 
 ### Scope completed

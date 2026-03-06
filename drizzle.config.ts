@@ -9,5 +9,5 @@ export default defineConfig({
   },
   strict: true,
   verbose: true,
-  tablesFilter: ["rf_*"],
+  tablesFilter: ["rf_*", "a8_*"],
 })

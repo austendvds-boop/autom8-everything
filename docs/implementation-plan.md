@@ -1,5 +1,33 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — Platform DB spec alignment + finalize commit
+
+- [x] Validate existing platform DB foundation files against requested spec
+- [x] Align `a8_clients` unique index to direct `email` uniqueness
+- [x] Keep required partial indexes and inferred `A8*` types
+- [x] Keep platform DB client merged with `reviewFunnelSchema`
+- [x] Keep platform env zod config + build placeholders
+- [x] Align `.env.example` platform section with requested keys
+- [x] Align SQL migration with schema index updates
+- [x] Run `npm run build` and ensure pass
+- [x] Append docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push to `origin/master`
+
+## 2026-03-06 — Platform DB foundation (a8_ tables + config + client)
+
+- [x] Create `src/lib/platform/db/schema.ts` with `a8_clients`, `a8_client_services`, and `a8_magic_links`
+- [x] Add required indexes (including partial indexes + lower(email) uniqueness)
+- [x] Export `platformSchema` and inferred `A8*` select/insert types
+- [x] Create `src/lib/platform/db/client.ts` with Neon + Drizzle singleton
+- [x] Merge `platformSchema` + `reviewFunnelSchema` in platform DB client
+- [x] Create `src/lib/platform/config.ts` with zod env parsing + build placeholders
+- [x] Update `drizzle.config.ts` tables filter to include `a8_*`
+- [x] Append Platform env section to `.env.example`
+- [x] Add fallback SQL migration `docs/migrations/2026-03-07-platform-tables.sql`
+- [x] Run `npm run build` and ensure pass
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push to `origin/master`
+
 ## Batch 8 — Consent logging + health endpoint + env docs
 
 - [x] Add `rf_consent_log` table to `src/lib/review-funnel/db/schema.ts`

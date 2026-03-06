@@ -2,6 +2,60 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 - Batch 10: platform DB spec alignment + finalize commit
+
+#### Files modified
+- `src/lib/platform/db/schema.ts`
+- `src/lib/platform/db/client.ts`
+- `src/lib/platform/config.ts`
+- `docs/migrations/2026-03-07-platform-tables.sql`
+- `drizzle.config.ts`
+- `.env.example`
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- Confirmed the unified platform DB foundation is in place with `a8_clients`, `a8_client_services`, and `a8_magic_links`.
+- Kept required type exports and platform DB client schema merge with Review Funnel tables.
+- Aligned `a8_clients` unique index to direct `email` uniqueness (instead of expression-based uniqueness).
+- Kept required partial indexes (`stripe_customer_id` and `cadence_tenant_id`) and magic-link indexes.
+- Confirmed platform config env parsing + build placeholders match requested behavior.
+- Updated SQL migration and `.env.example` platform block to match task spec.
+
+#### Gotchas for next batch
+- `drizzle.config.ts` table filter now includes `a8_*`, but `schema` still points to review-funnel schema path. Use the SQL migration file for DB creation unless schema config is expanded in a follow-up.
+
+---
+
+### 2026-03-06 - Batch 9: platform DB foundation (a8 tables + config + client)
+
+#### Files modified
+- `src/lib/platform/db/schema.ts` (new)
+- `src/lib/platform/db/client.ts` (new)
+- `src/lib/platform/config.ts` (new)
+- `docs/migrations/2026-03-07-platform-tables.sql` (new)
+- `drizzle.config.ts`
+- `.env.example`
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- Added `a8_clients`, `a8_client_services`, and `a8_magic_links` in `platformSchema`.
+- Added inferred types: `A8Client`, `NewA8Client`, `A8ClientService`, `NewA8ClientService`, `A8MagicLink`, `NewA8MagicLink`.
+- Added platform DB singleton client `platformDb` and exported `PlatformDb` type.
+- Platform DB client merges `platformSchema` + `reviewFunnelSchema` so shared queries can include `rf_*` tables.
+- Added `platformEnvSchema` + `platformConfig` with build placeholders for required platform secrets/URLs during Next production build phase.
+- Added fallback SQL migration for all `a8_*` tables and indexes.
+- Updated Drizzle table filter to include both `rf_*` and `a8_*`.
+
+#### Gotchas for next batch
+- `drizzle.config.ts` still points `schema` to `./src/lib/review-funnel/db/schema.ts`; only `tablesFilter` was updated per task. If Drizzle push for `a8_*` is needed, use the SQL fallback file or expand schema input in a follow-up.
+- `a8_client_services.rf_tenant_id` is intentionally stored as UUID without FK constraint to keep migration simple and avoid cross-module coupling in schema declarations.
+
+---
+
 ### 2026-03-06 - Batch 8: consent logging + health endpoint + env docs
 
 #### Files modified
@@ -22,63 +76,7 @@
   - `source`: `calendar_event | manual | twilio_inbound | cron_process`
 - `sendReviewRequest()` now writes a consent log after a successful SMS send and usage increment.
 - Twilio inbound opt-out flow now writes a consent log entry after `handleOptOut(from)`.
-- Added `GET /api/review-funnel/health` that reports:
-  - DB connectivity (`SELECT 1`)
-  - required env presence checks
-  - status `200` when all healthy, else `503`
-- Expanded `.env.example` with comprehensive Review Funnel env vars and comments.
-- Migration attempt result:
-  - `npx drizzle-kit push` failed due missing `DATABASE_URL` (`url: ''`).
-  - Added manual SQL fallback migration at `docs/migrations/2026-03-06-rf-consent-log.sql`.
+- Added `GET /api/review-funnel/health` that reports DB connectivity and required env presence.
 
 #### Gotchas for next batch
 - Run `npx drizzle-kit push` (or apply SQL fallback) once `DATABASE_URL` is available to create `rf_consent_log` in DB.
-- No DB-level check constraints were added for `consent_type`/`source`; allowed values are currently enforced in app typing/conventions.
-
----
-
-### 2026-03-06 - Batch 7 retry 3: PowerShell build gate recovery
-
-#### Files modified
-- `docs/ralph-context.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/implementation-plan.md`
-
-#### Key exports / behavior
-- Re-verified Batch 7 feature set remains implemented end-to-end:
-  - logo upload API route and dashboard profile upload flow
-  - `rf_tenants` Yelp fields (`yelp_review_url`, `review_platform`)
-  - settings profile GET/PATCH support for Yelp fields + platform validation
-  - funnel payload and five-star CTA behavior for Google/Yelp/Both
-- Re-ran DB migration command with PowerShell-safe syntax:
-  - `npx drizzle-kit push` still fails in this environment because `DATABASE_URL` is empty (`url: ''`).
-  - SQL fallback migration remains available at `docs/migrations/2026-03-06-rf-yelp-platform.sql`.
-- Re-ran full build with PowerShell-safe command chaining (`Set-Location ...; npm run build`) and build passes.
-
-#### Gotchas for next batch
-- On Windows PowerShell, use `;` (or separate statements) instead of `&&` when chaining commands.
-- DB migration remains blocked until `DATABASE_URL` is available in the local environment.
-
----
-
-### 2026-03-06 - Batch 7 retry 2: verification + commit gate recovery
-
-#### Files modified
-- `docs/ralph-context.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/implementation-plan.md`
-
-#### Key exports / behavior
-- Verified Batch 7 implementation is present end-to-end:
-  - logo upload API route and dashboard profile upload flow
-  - `rf_tenants` Yelp fields (`yelp_review_url`, `review_platform`)
-  - settings profile GET/PATCH support for Yelp fields + platform validation
-  - funnel payload + five-star CTA behavior for Google/Yelp/Both
-- Re-ran DB migration attempt:
-  - `npx drizzle-kit push` failed in this environment because `DATABASE_URL` is empty.
-  - SQL fallback migration remains at `docs/migrations/2026-03-06-rf-yelp-platform.sql`.
-- Re-ran full build successfully.
-
-#### Gotchas for next batch
-- `npx drizzle-kit push` requires `DATABASE_URL`; set env before rerunning.
-- Yelp and Google CTA clicks still share existing `googleReviewClicked` boolean tracking in `rf_review_requests`.
