@@ -1,5 +1,18 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — Platform operator admin API routes + provisioning/email services
+
+- [x] Create `src/lib/platform/services/email.ts` with Gmail SMTP resolution parity and portal/welcome email senders
+- [x] Create `src/lib/platform/services/provisioning.ts` with provision/pause/cancel/resume service lifecycle helpers
+- [x] Create `POST /api/admin/auth` route for shared-secret login and `a8_admin_session` cookie issuance
+- [x] Create `GET/POST /api/admin/clients` routes for admin-authenticated list/create operations
+- [x] Create `GET/PATCH /api/admin/clients/[id]` routes for admin-authenticated detail/update operations including Cadence/RF usage hydration
+- [x] Create `POST/DELETE/PATCH /api/admin/clients/[id]/services` routes for service provisioning state changes + welcome email send
+- [x] Ensure every admin route checks `requireAdminAuth` before route logic (except admin login route)
+- [x] Run `npm run build` and ensure pass
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push to `origin/master`
+
 ## 2026-03-06 — Platform portal auth services + admin/portal middleware
 
 - [x] Create `src/lib/platform/services/auth.ts` with magic-link hashing/generation/verification and JWT portal sessions

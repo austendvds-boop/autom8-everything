@@ -1,5 +1,53 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 12: platform operator admin API routes + provisioning/email services
+
+### Scope completed
+- Added new platform email service at `src/lib/platform/services/email.ts`:
+  - Reuses the same Gmail SMTP credential resolution pattern (env-first with credentials-file fallback).
+  - Exports `sendPortalMagicLinkEmail({ toEmail, token })` with portal verify URL:
+    - `https://autom8everything.com/api/portal/auth/verify?token=...`
+  - Exports `sendWelcomeEmail({ toEmail, clientName, serviceName, magicLinkToken })`.
+  - Uses the same dark-theme email shell style as Review Funnel (`#0A0A0F` background, `#12121A` card, purple gradient CTA button).
+- Added service provisioning helper at `src/lib/platform/services/provisioning.ts`:
+  - `provisionService(clientId, serviceType, metadata?)`
+  - `pauseService(clientId, serviceType)`
+  - `cancelService(clientId, serviceType)`
+  - `resumeService(clientId, serviceType)`
+  - Cadence provisioning requires and stores `cadenceTenantId` from metadata.
+  - Review Funnel provisioning resolves/stores `rfTenantId` either from metadata or by matching `a8_clients.email` to `rf_tenants.owner_email`.
+- Added platform admin auth route `POST /api/admin/auth` at `src/app/api/admin/auth/route.ts`:
+  - Validates `{ secret }` via `isAdminSecretValid`
+  - Creates admin session JWT via `createAdminSessionToken`
+  - Sets `a8_admin_session` HTTP-only cookie
+  - Returns `{ ok: true }` on success, `401` on invalid secret
+- Added platform admin clients collection route `src/app/api/admin/clients/route.ts`:
+  - `GET` (admin-auth required): returns all clients plus mapped services summary (`serviceType`, `status`, `provisionedAt`).
+  - `POST` (admin-auth required): creates a new `a8_clients` record and returns `{ client }`.
+- Added platform admin client detail route `src/app/api/admin/clients/[id]/route.ts`:
+  - `GET` (admin-auth required): returns client, full services, and usage hydration:
+    - Cadence services: calls `getCadenceTenantConfig()` + `getCadenceRecentCalls()` and derives call count.
+    - Review Funnel services: queries current-month count from `rf_sms_usage`.
+  - `PATCH` (admin-auth required): updates partial client fields (`businessName`, `contactName`, `email`, `phone`, `notes`, `isActive`).
+- Added platform admin client-service management route `src/app/api/admin/clients/[id]/services/route.ts`:
+  - `POST` (admin-auth required): provisions service, generates portal magic link, sends welcome email, returns `{ ok: true, service }`.
+  - `DELETE` (admin-auth required): cancels service, returns `{ ok: true }`.
+  - `PATCH` (admin-auth required): pause/resume actions, returns `{ ok: true }`.
+
+### Files changed
+- `src/lib/platform/services/email.ts` (new)
+- `src/lib/platform/services/provisioning.ts` (new)
+- `src/app/api/admin/auth/route.ts` (new)
+- `src/app/api/admin/clients/route.ts` (new)
+- `src/app/api/admin/clients/[id]/route.ts` (new)
+- `src/app/api/admin/clients/[id]/services/route.ts` (new)
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 11: platform portal auth + middleware foundation
 
 ### Scope completed

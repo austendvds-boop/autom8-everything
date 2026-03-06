@@ -2,6 +2,53 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 - Batch 12: platform operator admin API routes + provisioning/email services
+
+#### Files modified
+- `src/lib/platform/services/email.ts` (new)
+- `src/lib/platform/services/provisioning.ts` (new)
+- `src/app/api/admin/auth/route.ts` (new)
+- `src/app/api/admin/clients/route.ts` (new)
+- `src/app/api/admin/clients/[id]/route.ts` (new)
+- `src/app/api/admin/clients/[id]/services/route.ts` (new)
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- Added platform portal email service:
+  - `sendPortalMagicLinkEmail({ toEmail, token })`
+  - `sendWelcomeEmail({ toEmail, clientName, serviceName, magicLinkToken })`
+  - Uses the dark email shell style parity with Review Funnel and links to `/api/portal/auth/verify?token=...`.
+- Added platform provisioning service:
+  - `provisionService(clientId, serviceType, metadata?)`
+  - `pauseService(clientId, serviceType)`
+  - `cancelService(clientId, serviceType)`
+  - `resumeService(clientId, serviceType)`
+- Provisioning specifics:
+  - Cadence requires `metadata.cadenceTenantId` and stores it in `a8_client_services.cadence_tenant_id`.
+  - Review Funnel resolves `rf_tenant_id` from `metadata.rfTenantId` or by matching `a8_clients.email` to `rf_tenants.owner_email`.
+- Added admin auth route:
+  - `POST /api/admin/auth` validates `{ secret }`, sets `a8_admin_session`, returns `{ ok: true }`.
+- Added admin clients routes:
+  - `GET /api/admin/clients` returns clients with summarized services array.
+  - `POST /api/admin/clients` creates client.
+  - `GET /api/admin/clients/[id]` returns client + full services + usage data.
+  - `PATCH /api/admin/clients/[id]` updates partial client fields.
+  - `POST /api/admin/clients/[id]/services` provisions service, generates portal magic link, sends welcome email.
+  - `DELETE /api/admin/clients/[id]/services` cancels service.
+  - `PATCH /api/admin/clients/[id]/services` pauses/resumes service.
+- Usage hydration in client detail:
+  - Cadence services call `getCadenceTenantConfig()` + `getCadenceRecentCalls()`.
+  - Review Funnel services query current month usage from `rf_sms_usage` via SQL.
+
+#### Gotchas for next batch
+- `GET /api/admin/clients/[id]` derives Cadence `callCount` from common keys in the calls payload (`callCount`, `total`, etc.) and falls back to `calls.length`. If cadence-v2 standardizes a definitive count field, tighten this mapping.
+- Provisioning currently returns `500` for provisioning/email failures in `/api/admin/clients/[id]/services`; if UI needs finer-grained validation errors (e.g., missing Cadence ID, no matching RF tenant), split into explicit `4xx` responses.
+- `sendPortalMagicLinkEmail` is implemented but not yet wired to an API route in this batch.
+
+---
+
 ### 2026-03-06 - Batch 11: platform portal auth + middleware foundation
 
 #### Files modified
@@ -27,11 +74,6 @@
     - `getCadenceTenantConfig(tenantId)`
     - `updateCadenceTenantConfig(tenantId, updates)`
     - `getCadenceRecentCalls(tenantId, limit?, offset?)`
-  - Added interfaces:
-    - `CadenceTenantConfig`
-    - `CadenceTenantUpdate`
-    - `CadenceCall`
-    - `CadenceCallsResponse`
 - Added admin middleware:
   - `isAdminSecretValid(candidate)` with timing-safe compare to `A8_ADMIN_SECRET`
   - `createAdminSessionToken()` JWT with `{ role: "platform_admin" }`, 8h expiry
@@ -70,31 +112,3 @@
 
 #### Gotchas for next batch
 - `drizzle.config.ts` table filter now includes `a8_*`, but `schema` still points to review-funnel schema path. Use the SQL migration file for DB creation unless schema config is expanded in a follow-up.
-
----
-
-### 2026-03-06 - Batch 9: platform DB foundation (a8 tables + config + client)
-
-#### Files modified
-- `src/lib/platform/db/schema.ts` (new)
-- `src/lib/platform/db/client.ts` (new)
-- `src/lib/platform/config.ts` (new)
-- `docs/migrations/2026-03-07-platform-tables.sql` (new)
-- `drizzle.config.ts`
-- `.env.example`
-- `docs/implementation-plan.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/ralph-context.md`
-
-#### Key exports / behavior
-- Added `a8_clients`, `a8_client_services`, and `a8_magic_links` in `platformSchema`.
-- Added inferred types: `A8Client`, `NewA8Client`, `A8ClientService`, `NewA8ClientService`, `A8MagicLink`, `NewA8MagicLink`.
-- Added platform DB singleton client `platformDb` and exported `PlatformDb` type.
-- Platform DB client merges `platformSchema` + `reviewFunnelSchema` so shared queries can include `rf_*` tables.
-- Added `platformEnvSchema` + `platformConfig` with build placeholders for required platform secrets/URLs during Next production build phase.
-- Added fallback SQL migration for all `a8_*` tables and indexes.
-- Updated Drizzle table filter to include both `rf_*` and `a8_*`.
-
-#### Gotchas for next batch
-- `drizzle.config.ts` still points `schema` to `./src/lib/review-funnel/db/schema.ts`; only `tablesFilter` was updated per task. If Drizzle push for `a8_*` is needed, use the SQL fallback file or expand schema input in a follow-up.
-- `a8_client_services.rf_tenant_id` is intentionally stored as UUID without FK constraint to keep migration simple and avoid cross-module coupling in schema declarations.
