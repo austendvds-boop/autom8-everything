@@ -2,6 +2,65 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 - Batch 8: consent logging + health endpoint + env docs
+
+#### Files modified
+- `src/lib/review-funnel/db/schema.ts`
+- `src/lib/review-funnel/services/sms.ts`
+- `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`
+- `src/app/api/review-funnel/health/route.ts` (new)
+- `.env.example`
+- `docs/migrations/2026-03-06-rf-consent-log.sql` (new)
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- Added new `rf_consent_log` table + indexes and exported it in `reviewFunnelSchema`.
+- Added consent type/source aliases for expected values:
+  - `consentType`: `sms_sent | opt_out | opt_in`
+  - `source`: `calendar_event | manual | twilio_inbound | cron_process`
+- `sendReviewRequest()` now writes a consent log after a successful SMS send and usage increment.
+- Twilio inbound opt-out flow now writes a consent log entry after `handleOptOut(from)`.
+- Added `GET /api/review-funnel/health` that reports:
+  - DB connectivity (`SELECT 1`)
+  - required env presence checks
+  - status `200` when all healthy, else `503`
+- Expanded `.env.example` with comprehensive Review Funnel env vars and comments.
+- Migration attempt result:
+  - `npx drizzle-kit push` failed due missing `DATABASE_URL` (`url: ''`).
+  - Added manual SQL fallback migration at `docs/migrations/2026-03-06-rf-consent-log.sql`.
+
+#### Gotchas for next batch
+- Run `npx drizzle-kit push` (or apply SQL fallback) once `DATABASE_URL` is available to create `rf_consent_log` in DB.
+- No DB-level check constraints were added for `consent_type`/`source`; allowed values are currently enforced in app typing/conventions.
+
+---
+
+### 2026-03-06 - Batch 7 retry 3: PowerShell build gate recovery
+
+#### Files modified
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+#### Key exports / behavior
+- Re-verified Batch 7 feature set remains implemented end-to-end:
+  - logo upload API route and dashboard profile upload flow
+  - `rf_tenants` Yelp fields (`yelp_review_url`, `review_platform`)
+  - settings profile GET/PATCH support for Yelp fields + platform validation
+  - funnel payload and five-star CTA behavior for Google/Yelp/Both
+- Re-ran DB migration command with PowerShell-safe syntax:
+  - `npx drizzle-kit push` still fails in this environment because `DATABASE_URL` is empty (`url: ''`).
+  - SQL fallback migration remains available at `docs/migrations/2026-03-06-rf-yelp-platform.sql`.
+- Re-ran full build with PowerShell-safe command chaining (`Set-Location ...; npm run build`) and build passes.
+
+#### Gotchas for next batch
+- On Windows PowerShell, use `;` (or separate statements) instead of `&&` when chaining commands.
+- DB migration remains blocked until `DATABASE_URL` is available in the local environment.
+
+---
+
 ### 2026-03-06 - Batch 7 retry 2: verification + commit gate recovery
 
 #### Files modified
@@ -23,73 +82,3 @@
 #### Gotchas for next batch
 - `npx drizzle-kit push` requires `DATABASE_URL`; set env before rerunning.
 - Yelp and Google CTA clicks still share existing `googleReviewClicked` boolean tracking in `rf_review_requests`.
-
----
-
-### 2026-03-06 - Batch 7: logo upload + Yelp platform support
-
-#### Files modified
-- `src/app/api/review-funnel/settings/logo/route.ts` (new)
-- `src/lib/review-funnel/db/schema.ts`
-- `src/app/api/review-funnel/settings/profile/route.ts`
-- `src/app/review-funnel/dashboard/settings/SettingsClient.tsx`
-- `src/app/api/review-funnel/funnel/[requestId]/route.ts`
-- `src/app/r/[requestId]/FunnelClient.tsx`
-- `docs/migrations/2026-03-06-rf-yelp-platform.sql` (new)
-- `docs/UI-VERIFICATION.md`
-- `docs/implementation-plan.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/ralph-context.md`
-
-#### Key exports / behavior
-- New authenticated logo upload endpoint:
-  - `POST /api/review-funnel/settings/logo`
-  - accepts `multipart/form-data` field `logo`
-  - validates file type (`png/jpg/webp/svg`) and max size `2MB`
-  - writes file to `public/uploads/review-funnel/logos/{tenantId}-{Date.now()}.{ext}`
-  - updates `rf_tenants.logo_url`
-  - returns `{ logoUrl }`
-- `rf_tenants` schema now includes:
-  - `yelp_review_url` (`text`, nullable)
-  - `review_platform` (`varchar(20)`, not null, default `google`)
-- Profile settings API now supports Yelp fields:
-  - `GET /api/review-funnel/settings/profile` returns `reviewPlatform` + `yelpReviewUrl`
-  - `PATCH` accepts/saves `reviewPlatform` (`google|yelp|both`) + `yelpReviewUrl`
-- Settings UI profile tab now includes:
-  - logo upload/preview flow with explicit save step
-  - review platform selector (Google, Yelp, Both)
-  - conditional Yelp review URL input
-- Public funnel payload now returns tenant `reviewPlatform` + `yelpReviewUrl`.
-- 5-star step CTA behavior:
-  - `google` -> Google button only
-  - `yelp` -> Yelp button only
-  - `both` -> both buttons side by side
-
-#### Gotchas for next batch
-- `npx drizzle-kit push` failed in this environment due missing `DATABASE_URL`; use `docs/migrations/2026-03-06-rf-yelp-platform.sql` (or run push with DB env loaded) before expecting DB columns in runtime.
-- Yelp/Google button click currently both mark `googleReviewClicked` internally (existing boolean field reused).
-
----
-
-### 2026-03-06 - Batch 6: finalize process-sms cron + Twilio HELP handling
-
-#### Files modified
-- `src/app/api/review-funnel/cron/process-sms/route.ts`
-- `docs/CODER-CONTEXT.md`
-- `docs/ralph-context.md`
-
-#### Key exports / behavior
-- `GET /api/review-funnel/cron/process-sms` remains fully implemented and auth-protected by `CRON_SECRET` (`Authorization: Bearer` or `x-cron-secret`).
-- Queue processing continues to:
-  - select due `rf_pending_sms` rows where `status='queued'`, `send_after <= now`, `attempts < 3`, ordered by `send_after ASC`, limit 50
-  - call `sendReviewRequest(reviewRequestId)` per row
-  - persist outcomes (`sent`, `skipped`, `limit_reached`, `quiet_hours` reschedule, retry/fail-on-3)
-  - return summary `{ processed, sent, skipped, failed, rescheduled }`
-- Quiet-hours branch now explicitly sets `status: 'queued'` when rescheduling to keep state deterministic.
-- Twilio inbound HELP handling (added in prior batch) is active before STOP/opt-out checks:
-  - keywords: `help`, `info`
-  - response: `For help with review requests, contact the business that texted you. To stop messages, reply STOP.`
-
-#### Gotchas for next batch
-- `limit_reached` rows are terminal in `rf_pending_sms` but not counted in the `skipped` metric; summary intentionally stays `{ processed, sent, skipped, failed, rescheduled }`.
-- Retry counter increments on thrown exceptions only; terminal service statuses do not increment attempts.

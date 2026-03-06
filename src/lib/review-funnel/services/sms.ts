@@ -2,7 +2,7 @@ import twilio, { type Twilio } from "twilio"
 import { and, eq, sql } from "drizzle-orm"
 import { reviewFunnelConfig } from "../config"
 import { rfDb } from "../db/client"
-import { rfLocations, rfReviewRequests, rfSmsOptOuts, rfSmsUsage, rfTenants } from "../db/schema"
+import { rfConsentLog, rfLocations, rfReviewRequests, rfSmsOptOuts, rfSmsUsage, rfTenants } from "../db/schema"
 import { normalizePhone } from "../utils/phone"
 
 const DEFAULT_REVIEW_SMS_TEMPLATE =
@@ -325,6 +325,14 @@ export async function sendReviewRequest(reviewRequestId: string): Promise<SmsSen
     .where(eq(rfReviewRequests.id, reviewRequest.id))
 
   await incrementUsage(tenant.id)
+
+  await rfDb.insert(rfConsentLog).values({
+    phone: toPhone,
+    tenantId: tenant.id,
+    consentType: "sms_sent",
+    source: "cron_process",
+    metadata: JSON.stringify({ reviewRequestId: reviewRequest.id, smsSid: message.sid }),
+  })
 
   return {
     status: "sent",

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { eq } from "drizzle-orm"
 import { rfDb } from "@/lib/review-funnel/db/client"
-import { rfReviewRequests } from "@/lib/review-funnel/db/schema"
+import { rfConsentLog, rfReviewRequests } from "@/lib/review-funnel/db/schema"
 import { handleOptOut } from "@/lib/review-funnel/services/sms"
 import { normalizePhone } from "@/lib/review-funnel/utils/phone"
 
@@ -79,6 +79,13 @@ export async function POST(request: Request) {
   await handleOptOut(from)
 
   const normalizedPhone = normalizePhone(from)
+
+  await rfDb.insert(rfConsentLog).values({
+    phone: normalizedPhone || from,
+    tenantId: null,
+    consentType: "opt_out",
+    source: "twilio_inbound",
+  })
   if (normalizedPhone) {
     await rfDb
       .update(rfReviewRequests)

@@ -1,5 +1,64 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 8: consent logging + health endpoint + env docs
+
+### Scope completed
+- Added Review Funnel consent log table in `src/lib/review-funnel/db/schema.ts`:
+  - `rf_consent_log` with columns `id`, `phone`, `tenant_id`, `consent_type`, `source`, `metadata`, `created_at`
+  - indexes on `phone` and `tenant_id`
+  - exported via `reviewFunnelSchema`
+  - added types: `RfConsentType`, `RfConsentSource`, `RfConsentLog`, `NewRfConsentLog`
+- Added consent logging on successful SMS sends in `src/lib/review-funnel/services/sms.ts`:
+  - after `incrementUsage()` inserts `sms_sent` from `cron_process`
+  - metadata includes `{ reviewRequestId, smsSid }`
+- Added consent logging on Twilio STOP/opt-out in `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`:
+  - after `handleOptOut(from)` inserts `opt_out` from `twilio_inbound`
+  - stores normalized phone fallback (`normalizedPhone || from`)
+- Added health check endpoint `GET /api/review-funnel/health` at:
+  - `src/app/api/review-funnel/health/route.ts`
+  - performs DB `SELECT 1` check and required env presence checks
+  - returns `200` when all checks pass, `503` otherwise
+- Expanded `.env.example` with comprehensive Review Funnel env documentation/comments including:
+  - DB/auth, Google calendar + places, Twilio, Stripe, cron/admin, SMTP options
+- Ran DB migration command:
+  - `npx drizzle-kit push` fails in this environment because `DATABASE_URL` is not set (`url: ''`)
+  - added SQL fallback migration at `docs/migrations/2026-03-06-rf-consent-log.sql`
+
+### Files changed
+- `src/lib/review-funnel/db/schema.ts`
+- `src/lib/review-funnel/services/sms.ts`
+- `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`
+- `src/app/api/review-funnel/health/route.ts` (new)
+- `.env.example`
+- `docs/migrations/2026-03-06-rf-consent-log.sql` (new)
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-06 — Batch 7 retry 3: PowerShell build gate recovery
+
+### Scope completed
+- Re-verified the Batch 7 implementation remains complete in code for:
+  - logo upload API + dashboard upload flow
+  - Yelp schema/profile API support
+  - funnel payload updates and Google/Yelp/Both five-star CTA logic
+- Re-ran `npx drizzle-kit push` using PowerShell-safe command chaining.
+  - Result: still fails in this environment because `DATABASE_URL` is not set.
+  - Confirmed SQL fallback migration remains at `docs/migrations/2026-03-06-rf-yelp-platform.sql`.
+- Re-ran `npm run build` using `Set-Location ...; npm run build` and confirmed pass.
+- Updated handoff docs for retry tracking.
+
+### Files changed
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 7 retry 2: verification + commit gate recovery
 
 ### Scope completed

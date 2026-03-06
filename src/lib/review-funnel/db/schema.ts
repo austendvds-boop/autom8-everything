@@ -221,6 +221,23 @@ export const rfMagicLinks = pgTable(
   }),
 )
 
+export const rfConsentLog = pgTable(
+  "rf_consent_log",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    phone: varchar("phone", { length: 20 }).notNull(),
+    tenantId: uuid("tenant_id").references(() => rfTenants.id, { onDelete: "set null" }),
+    consentType: varchar("consent_type", { length: 20 }).notNull(),
+    source: varchar("source", { length: 30 }).notNull(),
+    metadata: text("metadata"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    phoneIndex: index("rf_consent_log_phone_idx").on(table.phone),
+    tenantIndex: index("rf_consent_log_tenant_idx").on(table.tenantId),
+  }),
+)
+
 export const reviewFunnelSchema = {
   rfTenants,
   rfLocations,
@@ -231,6 +248,7 @@ export const reviewFunnelSchema = {
   rfSmsOptOuts,
   rfSmsUsage,
   rfMagicLinks,
+  rfConsentLog,
 }
 
 export type RfTenant = typeof rfTenants.$inferSelect
@@ -251,3 +269,10 @@ export type RfSmsUsage = typeof rfSmsUsage.$inferSelect
 export type NewRfSmsUsage = typeof rfSmsUsage.$inferInsert
 export type RfMagicLink = typeof rfMagicLinks.$inferSelect
 export type NewRfMagicLink = typeof rfMagicLinks.$inferInsert
+export type RfConsentType = "sms_sent" | "opt_out" | "opt_in"
+export type RfConsentSource = "calendar_event" | "manual" | "twilio_inbound" | "cron_process"
+export type RfConsentLog = typeof rfConsentLog.$inferSelect
+export type NewRfConsentLog = Omit<typeof rfConsentLog.$inferInsert, "consentType" | "source"> & {
+  consentType: RfConsentType
+  source: RfConsentSource
+}

@@ -1,5 +1,28 @@
 # implementation-plan.md — Review Funnel batches
 
+## Batch 8 — Consent logging + health endpoint + env docs
+
+- [x] Add `rf_consent_log` table to `src/lib/review-funnel/db/schema.ts`
+- [x] Export consent log table in `reviewFunnelSchema` and add consent types
+- [x] Log `sms_sent` consent in `sendReviewRequest()` after successful Twilio send + usage increment
+- [x] Log `opt_out` consent in Twilio inbound webhook after `handleOptOut(from)`
+- [x] Add `GET /api/review-funnel/health` endpoint with DB ping + env checks
+- [x] Expand `.env.example` with comprehensive Review Funnel env var docs/comments
+- [x] Attempt `npx drizzle-kit push` (documented failure due missing `DATABASE_URL`)
+- [x] Add SQL fallback migration for `rf_consent_log`
+- [x] Run `npm run build` and ensure pass
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push to `origin/master`
+
+## Batch 7 retry 3 — PowerShell build gate recovery
+
+- [x] Re-verify Batch 7 implementation files and behavior
+- [x] Re-run `npx drizzle-kit push` using PowerShell-safe command chaining
+- [x] Confirm migration failure mode remains `DATABASE_URL` missing (`url: ''`)
+- [x] Re-run `npm run build` using `Set-Location ...; npm run build`
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push retry pass to `origin/master`
+
 ## Batch 7 retry 2 — Verification + commit gate recovery
 
 - [x] Re-verify Batch 7 implementation files and behavior
