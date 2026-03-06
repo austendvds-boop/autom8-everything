@@ -1,5 +1,14 @@
 # implementation-plan.md — Review Funnel batches
 
+## Batch 6 — Process SMS cron finalization
+
+- [x] Verify `process-sms` cron route is fully implemented and auth-protected
+- [x] Ensure quiet-hours reschedule explicitly preserves `status: queued`
+- [x] Verify HELP keyword handling remains before STOP/opt-out in Twilio inbound webhook
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/master`
+
 ## Batch 5 — Process SMS cron + Twilio HELP handling
 
 - [x] Replace `GET /api/review-funnel/cron/process-sms` stub with queue processor logic

@@ -71,6 +71,7 @@ export async function GET(request: NextRequest) {
           await rfDb
             .update(rfPendingSms)
             .set({
+              status: "queued",
               sendAfter: result.sendAfter,
               lastError: null,
             })

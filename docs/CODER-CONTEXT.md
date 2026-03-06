@@ -1,5 +1,21 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 6: process-sms cron finalization
+
+### Scope completed
+- Verified the Review Funnel critical-path cron route and Twilio inbound keyword handling are wired and active.
+- Updated `src/app/api/review-funnel/cron/process-sms/route.ts` quiet-hours reschedule branch to explicitly persist `status: "queued"` alongside updated `send_after`.
+- Confirmed Twilio inbound HELP flow remains in place before STOP opt-out handling.
+- Updated handoff docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`) with this batch summary and next-batch gotchas.
+
+### Files changed
+- `src/app/api/review-funnel/cron/process-sms/route.ts`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 5: process-sms cron implementation + Twilio HELP handling
 
 ### Scope completed

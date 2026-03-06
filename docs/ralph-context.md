@@ -2,6 +2,31 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 — Batch 6: finalize process-sms cron + Twilio HELP handling
+
+#### Files modified
+- `src/app/api/review-funnel/cron/process-sms/route.ts`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- `GET /api/review-funnel/cron/process-sms` remains fully implemented and auth-protected by `CRON_SECRET` (`Authorization: Bearer` or `x-cron-secret`).
+- Queue processing continues to:
+  - select due `rf_pending_sms` rows where `status='queued'`, `send_after <= now`, `attempts < 3`, ordered by `send_after ASC`, limit 50
+  - call `sendReviewRequest(reviewRequestId)` per row
+  - persist outcomes (`sent`, `skipped`, `limit_reached`, `quiet_hours` reschedule, retry/fail-on-3)
+  - return summary `{ processed, sent, skipped, failed, rescheduled }`
+- Quiet-hours branch now explicitly sets `status: 'queued'` when rescheduling to keep state deterministic.
+- Twilio inbound HELP handling (added in prior batch) is active before STOP/opt-out checks:
+  - keywords: `help`, `info`
+  - response: `For help with review requests, contact the business that texted you. To stop messages, reply STOP.`
+
+#### Gotchas for next batch
+- `limit_reached` rows are terminal in `rf_pending_sms` but not counted in the `skipped` metric; summary intentionally stays `{ processed, sent, skipped, failed, rescheduled }`.
+- Retry counter increments on thrown exceptions only; terminal service statuses do not increment attempts.
+
+---
+
 ### 2026-03-06 — Batch 5: process-sms cron + Twilio HELP keyword handling
 
 #### Files modified
@@ -42,14 +67,3 @@
 - Re-ran `npm run build` (pass) before triggering retry deploy.
 - Pushed a minimal docs-only commit to `master` to trigger a fresh production deployment.
 - Verified newest production deployment reached `READY` and now points at the latest retry commit.
-
----
-
-### 2026-03-05 — Batch 4 retry: commit/push gate recovery
-
-#### Scope completed
-- Retry run focused on clearing the commit gate failure (`no new commit detected on origin/master`).
-- Re-ran `npm run build` and confirmed it passes.
-- Confirmed `RF_ADMIN_SECRET` exists in Vercel for `production`, `preview`, and `development`.
-- Confirmed local admin secret file exists at `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt` (32-character value).
-- Created and pushed a fresh commit to `origin/master`.
