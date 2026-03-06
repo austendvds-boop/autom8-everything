@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Onboarding Complete | Autom8 Everything",
-  description: "Your Cadence onboarding is complete.",
+  ...buildMetadata({
+    title: "Onboarding Complete | Autom8 Everything",
+    description: "Your Cadence onboarding is complete.",
+    path: "/onboarding/success",
+  }),
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function OnboardingSuccessPage() {

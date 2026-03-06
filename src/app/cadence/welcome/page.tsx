@@ -4,7 +4,11 @@ import CadenceWelcomeClient from "./CadenceWelcomeClient";
 
 export const metadata: Metadata = {
   title: "Cadence Welcome",
-  description: "Your Cadence provisioning status"
+  description: "Your Cadence provisioning status",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function CadenceWelcomePage() {

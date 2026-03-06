@@ -1,5 +1,43 @@
 # implementation-plan.md — Review Funnel batches
 
+## Batch 5 — Process SMS cron + Twilio HELP handling
+
+- [x] Replace `GET /api/review-funnel/cron/process-sms` stub with queue processor logic
+- [x] Add cron auth guard using `CRON_SECRET` (`Authorization: Bearer` and `x-cron-secret`)
+- [x] Query due queued `rf_pending_sms` rows (`status=queued`, `send_after <= now`, `attempts < 3`, ASC, limit 50)
+- [x] Call `sendReviewRequest(reviewRequestId)` for each queued row and persist outcomes
+- [x] Handle send outcomes: sent, quiet hours reschedule, skipped (opted out/no phone), limit reached
+- [x] Handle errors by incrementing attempts, storing `last_error`, and failing at 3 attempts
+- [x] Return summary JSON `{ processed, sent, skipped, failed, rescheduled }`
+- [x] Add HELP keyword handling (`help`, `info`) to Twilio inbound webhook before STOP handling
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/master`
+
+## Batch 1 — Production hardening pass
+
+- [x] Route canonical strategy updates:
+  - keep `/services/websites` as canonical website service page
+  - make `/services/website-creation` a permanent redirect to `/services/websites`
+- [x] Indexing guardrails:
+  - mark `/get-started/success` and `/onboarding/success` as `noindex, nofollow`
+  - mark internal Cadence onboarding/status routes as `noindex, nofollow`
+- [x] Sitemap hygiene:
+  - remove non-SEO/internal funnel routes from `src/app/sitemap.ts`
+  - sync fallback `public/sitemap.xml` to valid, indexable routes only
+- [x] Robots cleanup:
+  - use clean `Host` directive format (`autom8everything.com`)
+  - keep sitemap reference on both dynamic and static robots outputs
+- [x] Legal/compliance hardening:
+  - expand `/privacy`, `/terms`, `/security` with plain-English production copy
+  - include text message consent + STOP/HELP + frequency/rates language where applicable
+- [x] Analytics sanity:
+  - add shared browser analytics helper
+  - add hooks for contact form submit, call-click tracking, and get-started completion
+- [x] Validation:
+  - run `npm run build`
+  - smoke-check impacted routes locally (`200/308`, canonical, robots, sitemap, noindex)
+
 ## Batch 4 retry 2 — Deploy gate recovery
 
 - [x] Confirm latest `master` SHA and verify production deploy was still on older commit

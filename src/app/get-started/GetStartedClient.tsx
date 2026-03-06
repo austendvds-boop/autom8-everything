@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { trackGetStartedCompletion } from "@/lib/analytics";
 
 const ONBOARD_ENDPOINT = "https://cadence-v2-production.up.railway.app/api/onboard";
 
@@ -598,6 +599,11 @@ export default function GetStartedClient() {
         const message = await extractErrorMessage(response);
         throw new Error(message);
       }
+
+      trackGetStartedCompletion({
+        page_type: "get_started",
+        lead_type: "cadence_onboarding",
+      });
 
       router.push("/get-started/success");
     } catch (error) {

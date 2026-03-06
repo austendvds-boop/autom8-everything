@@ -5,6 +5,7 @@ import { rfReviewRequests } from "@/lib/review-funnel/db/schema"
 import { handleOptOut } from "@/lib/review-funnel/services/sms"
 import { normalizePhone } from "@/lib/review-funnel/utils/phone"
 
+const HELP_KEYWORDS = new Set(["help", "info"])
 const OPT_OUT_KEYWORDS = new Set(["stop", "stopall", "unsubscribe", "cancel", "end", "quit"])
 
 export const dynamic = "force-dynamic"
@@ -35,6 +36,17 @@ function twiml(message?: string): NextResponse {
   })
 }
 
+function isHelpMessage(messageBody: string): boolean {
+  const normalized = messageBody.trim().toLowerCase()
+
+  if (!normalized) {
+    return false
+  }
+
+  const firstWord = normalized.split(/\s+/)[0] ?? ""
+  return HELP_KEYWORDS.has(firstWord)
+}
+
 function isOptOutMessage(messageBody: string): boolean {
   const normalized = messageBody.trim().toLowerCase()
 
@@ -52,7 +64,15 @@ export async function POST(request: Request) {
   const from = asTrimmedString(formData.get("From"))
   const body = asTrimmedString(formData.get("Body"))
 
-  if (!from || !isOptOutMessage(body)) {
+  if (!from) {
+    return twiml()
+  }
+
+  if (isHelpMessage(body)) {
+    return twiml("For help with review requests, contact the business that texted you. To stop messages, reply STOP.")
+  }
+
+  if (!isOptOutMessage(body)) {
     return twiml()
   }
 

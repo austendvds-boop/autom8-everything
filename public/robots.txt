@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Host: autom8everything.com
 Sitemap: https://autom8everything.com/sitemap.xml

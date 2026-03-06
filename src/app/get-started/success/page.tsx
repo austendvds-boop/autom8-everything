@@ -3,16 +3,24 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { buildMetadata } from "@/lib/seo";
+import GetStartedSuccessTracker from "./GetStartedSuccessTracker";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Onboarding Complete | Cadence",
-  description: "Your onboarding form has been submitted successfully.",
-  path: "/get-started/success",
-});
+export const metadata: Metadata = {
+  ...buildMetadata({
+    title: "Onboarding Complete | Cadence",
+    description: "Your onboarding form has been submitted successfully.",
+    path: "/get-started/success",
+  }),
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function GetStartedSuccessPage() {
   return (
     <main className="min-h-screen bg-[#0A0A0F]">
+      <GetStartedSuccessTracker />
       <Navigation />
 
       <section className="mesh-bg pb-20 pt-32">

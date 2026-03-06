@@ -2,6 +2,39 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 — Batch 5: process-sms cron + Twilio HELP keyword handling
+
+#### Files modified
+- `src/app/api/review-funnel/cron/process-sms/route.ts`
+- `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- `GET /api/review-funnel/cron/process-sms` now fully processes queued rows in `rf_pending_sms`:
+  - auth checks `CRON_SECRET` from either `Authorization: Bearer <secret>` or `x-cron-secret`
+  - selects due queued rows (`status=queued`, `send_after <= now`, `attempts < 3`) ordered by `send_after ASC`, limit 50
+  - calls `sendReviewRequest(reviewRequestId)` for each row
+  - updates pending row status/fields based on result:
+    - `sent` -> `status: sent`
+    - `quiet_hours` -> update `send_after`, keep queued
+    - `opted_out`/`no_phone` -> `status: skipped`
+    - `limit_reached` -> `status: limit_reached`
+  - on exception: increments `attempts`, stores `last_error`, and marks `status: failed` when attempts reaches 3
+  - returns summary JSON `{ processed, sent, skipped, failed, rescheduled }`
+- Twilio inbound webhook now handles HELP before STOP:
+  - `HELP_KEYWORDS = new Set(['help', 'info'])`
+  - `isHelpMessage()` helper mirrors opt-out parsing pattern (first word, case-insensitive)
+  - HELP response TwiML:
+    - `For help with review requests, contact the business that texted you. To stop messages, reply STOP.`
+
+#### Gotchas for next batch
+- `process-sms` updates pending rows only; `sendReviewRequest()` still owns `rf_review_requests` status updates (`sent`, `opted_out`, `limit_reached`, `no_phone`).
+- `failed` counter in cron response increments only when retries reach terminal failure (attempts >= 3), not on intermediate retryable errors.
+
+---
+
 ### 2026-03-05 — Batch 4 retry 2: deploy gate recovery
 
 #### Scope completed
@@ -20,60 +53,3 @@
 - Confirmed `RF_ADMIN_SECRET` exists in Vercel for `production`, `preview`, and `development`.
 - Confirmed local admin secret file exists at `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt` (32-character value).
 - Created and pushed a fresh commit to `origin/master`.
-
----
-
-### 2026-03-05 — Batch 4: Review Funnel admin panel refresh (server-rendered list + stats)
-
-#### Files created
-- `src/app/review-funnel/admin/layout.tsx`
-- `src/lib/review-funnel/admin-dashboard.ts`
-
-#### Files modified
-- `src/app/review-funnel/(admin-public)/admin/login/page.tsx`
-- `src/app/review-funnel/(admin-public)/admin/login/AdminLoginClient.tsx`
-- `src/app/api/review-funnel/admin/auth/route.ts`
-- `src/app/review-funnel/admin/page.tsx`
-- `src/app/review-funnel/admin/stats/page.tsx`
-- `src/app/review-funnel/admin/tenants/[id]/page.tsx`
-- `docs/ENV-VARS.md`
-- `docs/UI-VERIFICATION.md`
-- `docs/implementation-plan.md`
-- `docs/ralph-context.md`
-- `docs/CODER-CONTEXT.md`
-
-#### Admin auth approach
-- Login page (`/review-funnel/admin/login`) now posts a password to `POST /api/review-funnel/admin/auth`.
-- API compares the submitted password against `process.env.RF_ADMIN_SECRET`.
-- On match: sets `rf_admin_session` httpOnly JWT cookie with 8-hour expiry.
-- On mismatch: returns `401` with `Incorrect password` for inline UI feedback.
-- `src/app/review-funnel/admin/layout.tsx` now validates `rf_admin_session` on every protected admin render and redirects missing/invalid sessions to `/review-funnel/admin/login`.
-- `/review-funnel/admin/login` is served from `src/app/review-funnel/(admin-public)/admin/login/*`, so the login page stays reachable without a session.
-- This admin auth remains separate from Review Funnel magic-link auth.
-
-#### Data + UI changes
-- `/review-funnel/admin` is now a server component table with required columns:
-  - Business name
-  - Plan
-  - Calendars connected (active calendar connection count)
-  - Text messages used this month / monthly limit
-  - Status (`active` / `past_due` / `cancelled`) from Stripe subscription status
-  - Joined date
-- Added row-level needs-attention badges:
-  - 🔴 No calendar
-  - 🔴 No messages sent
-  - 🟡 Calendar offline
-  - 🔴 Payment issue
-  - 🟢 Upgrade ready
-- Sorting now prioritizes needs-attention severity (`payment > no calendar > calendar offline > no messages > upgrade`), then joined date descending.
-- Stripe subscription status checks use `GET https://api.stripe.com/v1/subscriptions/<id>` with a 5-minute cache.
-- `/review-funnel/admin/stats` is now a server component with cards for Starter MRR, Growth MRR, Total MRR, total monthly text messages, and new signups this month.
-
-#### Secrets
-- Generated a new `RF_ADMIN_SECRET` and saved it to:
-  - `C:\Users\austen\.openclaw\credentials\rf-admin-secret.txt`
-- Updated Vercel env var `RF_ADMIN_SECRET` for:
-  - `production`
-  - `preview`
-  - `development`
-

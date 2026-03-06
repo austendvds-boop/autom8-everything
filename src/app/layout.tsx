@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { businessProfile, businessSameAs } from "@/lib/business";
 import { defaultDescription, defaultOgImage, defaultTitle, siteName, siteUrl } from "@/lib/seo";
+import AnalyticsClickTracker from "@/components/AnalyticsClickTracker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -132,6 +133,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
+        <AnalyticsClickTracker />
         {children}
       </body>
     </html>

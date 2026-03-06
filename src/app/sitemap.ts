@@ -8,7 +8,6 @@ const staticRoutes = [
   "/pricing",
   "/services/cadence",
   "/services/websites",
-  "/services/website-creation",
   "/services/review-funnel",
   "/services/seo-content",
   "/services/custom-apps",
@@ -17,15 +16,9 @@ const staticRoutes = [
   "/locations",
   "/contact",
   "/get-started",
-  "/get-started/success",
   "/privacy",
   "/terms",
   "/security",
-  "/cadence/get-started",
-  "/cadence/welcome",
-  "/onboarding",
-  "/onboarding/success",
-  "/review-funnel/signup",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

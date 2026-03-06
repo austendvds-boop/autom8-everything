@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Clock, Send, Check, Phone } from "lucide-react";
 import { businessProfile } from "@/lib/business";
+import { trackContactFormSubmit } from "@/lib/analytics";
 
 const helpOptions = ["Phone Answering", "Website", "Reviews", "SEO", "Not Sure Yet"];
 
@@ -36,6 +37,11 @@ export default function ContactPageClient() {
     await new Promise((resolve) => setTimeout(resolve, 1200));
     setIsSubmitting(false);
     setIsSubmitted(true);
+
+    trackContactFormSubmit({
+      page_type: "contact",
+      lead_type: "contact_form",
+    });
   };
 
   return (

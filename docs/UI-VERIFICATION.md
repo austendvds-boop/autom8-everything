@@ -63,6 +63,27 @@
 - `/review-funnel/admin/tenants/[id]`
   - tenant detail page still loads and actions persist
 
+## Batch 1 checks (production hardening)
+- `/services/websites`
+  - canonical tag points to `https://autom8everything.com/services/websites`
+- `/services/website-creation`
+  - returns permanent redirect (`308`) to `/services/websites`
+- `/get-started/success`
+  - page loads
+  - includes `noindex, nofollow`
+- `/onboarding/success`
+  - page loads
+  - includes `noindex, nofollow`
+- `/privacy`, `/terms`, `/security`
+  - render expanded plain-English legal text
+  - include text message consent/opt-out language where applicable
+- `/robots.txt`
+  - contains `Host: autom8everything.com`
+  - contains `Sitemap: https://autom8everything.com/sitemap.xml`
+- `/sitemap.xml`
+  - does **not** include internal funnel/success routes
+  - includes `/services/websites`
+
 ## Known PENDING (not bugs)
 - Google Calendar connect → OAuth flow (GOOGLE_CLIENT_ID not set yet)
 - SMS sending → RF_TWILIO_PHONE_NUMBER not set yet

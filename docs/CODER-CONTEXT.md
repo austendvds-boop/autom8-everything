@@ -1,5 +1,44 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 5: process-sms cron implementation + Twilio HELP handling
+
+### Scope completed
+- Replaced `src/app/api/review-funnel/cron/process-sms/route.ts` stub with full cron processor implementation.
+- Added `export const dynamic = "force-dynamic"` to the process-sms cron route.
+- Added CRON auth guard parity with renew-watches route:
+  - accepts `Authorization: Bearer <CRON_SECRET>`
+  - accepts `x-cron-secret: <CRON_SECRET>`
+- Implemented pending queue query against `rf_pending_sms` with required filters:
+  - `status = "queued"`
+  - `send_after <= now()`
+  - `attempts < 3`
+  - order `send_after ASC`
+  - limit `50`
+- For each queued row, route now calls `sendReviewRequest(reviewRequestId)` and persists outcomes:
+  - `sent` -> marks pending row `status: "sent"`
+  - `quiet_hours` -> updates `send_after` and leaves queued
+  - `opted_out` / `no_phone` -> marks pending row `status: "skipped"`
+  - `limit_reached` -> marks pending row `status: "limit_reached"`
+  - thrown errors -> increments `attempts`, writes `last_error`, and marks `status: "failed"` when attempts hit 3
+- Added summary response payload from cron route:
+  - `{ processed, sent, skipped, failed, rescheduled }`
+- Updated Twilio inbound webhook `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`:
+  - added `HELP_KEYWORDS = new Set(["help", "info"])`
+  - added `isHelpMessage()` helper matching existing keyword parsing pattern
+  - inserted HELP handling before opt-out handling
+  - HELP now returns TwiML message:
+    - `For help with review requests, contact the business that texted you. To stop messages, reply STOP.`
+
+### Files changed
+- `src/app/api/review-funnel/cron/process-sms/route.ts`
+- `src/app/api/review-funnel/webhooks/twilio/inbound/route.ts`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-05 — Batch 4 retry 2: deploy gate recovery
 
 ### Scope completed
