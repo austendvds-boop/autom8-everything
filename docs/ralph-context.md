@@ -1,5 +1,25 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B6 retry 5 (2026-03-07): final verification + handoff refresh
+- Re-verified the full B6 Review Funnel overhaul is present in `src/app/services/review-funnel/page.tsx` and matches requested content/order.
+- Confirmed section order is still exactly:
+  1. Hero (updated compounding headline/subhead)
+  2. Why Reviews Compound (3 stats + compounding visual)
+  3. Pricing
+  4. Comparison table
+  5. How it works visual flow (Calendar/MessageSquare/Star + desktop connectors)
+  6. Testimonials (with TODO attribution comment)
+  7. Common Concerns
+  8. Cadence + Review Funnel bundle CTA ($278/mo)
+  9. FAQ
+  10. Final CTA
+- Confirmed required imports are present: `React`, `PhoneCall`, `MessageSquareHeart` and flow icons.
+- Build: `npm run build` ✅
+- Files modified this retry: `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`.
+- Gotchas for next batch:
+  - Use PowerShell-safe separators (`;`) in chained commands.
+  - Branch push target remains `origin/ui/cro-passover`.
+
 ## B6 retry 4 (2026-03-07): final gate closure — verified + committed
 - All B6 Review Funnel overhaul changes confirmed implemented and committed in:
   - `src/app/services/review-funnel/page.tsx` (commit `45d25d8`)
@@ -41,11 +61,3 @@
 - Build: `npm run build` ✅
 - Commit: `b2baa03` on `ui/cro-passover`
 - Gotchas: `ComparisonTable` is a pure client component; `CadenceDemoPlaceholder` requires framer-motion.
-
-## B6 (2026-03-06): Review Funnel page overhaul (original implementation)
-- Implemented full B6 spec in `src/app/services/review-funnel/page.tsx` (commit `45d25d8`)
-- Hero rewrite, reputation compounding stats section, visual how-it-works (icons + arrows),
-  testimonials TODO note, Common Concerns objections, Cadence+RF bundle CTA ($278/mo)
-- All 10 sections implemented and in correct order
-- Imports: `Calendar`, `MessageSquare`, `MessageSquareHeart`, `PhoneCall`, `Star` from lucide-react; `React` for Fragment
-- Build: `npm run build` ✅
