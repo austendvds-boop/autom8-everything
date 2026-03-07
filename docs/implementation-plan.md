@@ -29,7 +29,7 @@
 - [x] Write platform setup runbook at `docs/platform-setup.md`
 - [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
 - [x] Run `npm run build` and ensure pass
-- [ ] Commit and push to `origin/feature/customer-portal`
+- [x] Commit and push to `origin/feature/customer-portal`
 
 ## 2026-03-07 — B6-0: product page CTAs + Cadence CRM v2 callout
 
