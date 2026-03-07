@@ -11,7 +11,7 @@
 - [x] Ensure all portal routes except login/verify require `requirePortalAuth`
 - [x] Run `npm run build` and ensure pass
 - [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
-- [ ] Commit and push to `origin/master`
+- [x] Commit and push to `origin/master`
 
 ## 2026-03-06 — Platform operator admin API routes + provisioning/email services
 
