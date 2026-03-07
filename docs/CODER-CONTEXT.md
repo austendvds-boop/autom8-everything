@@ -1,5 +1,75 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B7-0: portal polish (SEO + errors + consistency)
+
+### Scope completed
+- SEO hardening verified/updated:
+  - verified noindex metadata is present on:
+    - `src/app/portal/checkout/page.tsx`
+    - `src/app/portal/checkout/success/page.tsx`
+    - `src/app/portal/review-funnel/page.tsx`
+  - updated `public/robots.txt` with portal disallow rules including:
+    - `Disallow: /portal/`
+    - `Disallow: /portal/login/`
+    - `Disallow: /portal/checkout/`
+    - `Disallow: /portal/cadence/`
+    - `Disallow: /portal/review-funnel/`
+    - `Disallow: /portal/billing/`
+  - verified `src/app/sitemap.ts` contains no `/portal/*` entries
+- Added shared portal fetch/session utility at `src/lib/platform/portal-fetch.ts`:
+  - `PortalSessionExpiredError`
+  - `portalFetch(url, init)` with `cache: "no-store"` and 401 -> thrown session-expired error
+- Added shared loading skeletons at `src/components/portal/LoadingSkeleton.tsx`:
+  - `PortalCardSkeleton`
+  - `PortalPageSkeleton`
+- Updated portal authenticated clients to use `portalFetch` session handling:
+  - `src/app/portal/PortalDashboardClient.tsx`
+  - `src/app/portal/cadence/PortalCadenceClient.tsx`
+  - `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - `src/app/portal/billing/PortalBillingClient.tsx`
+- Checkout UX polish in `src/app/portal/checkout/CheckoutClient.tsx`:
+  - added top `← Back to portal` link
+  - added status-mapped submit errors:
+    - 400 -> `Please fill in all required fields.`
+    - 500+ -> `Something went wrong on our end. Please try again in a moment.`
+    - network -> `Could not connect. Please check your internet and try again.`
+  - error card action label updated to `Try Again`
+  - aligned top-level checkout cards/form to portal card treatment (`bg-[#12121A]/90`, `border-white/8`)
+- Loading polish:
+  - replaced plain loading card with `PortalPageSkeleton` in:
+    - `PortalDashboardClient`
+    - `PortalCadenceClient`
+- Consistency/back links:
+  - verified `← Back to portal` links on:
+    - `/portal/cadence`
+    - `/portal/review-funnel`
+    - `/portal/billing`
+    - `/portal/checkout`
+- Updated docs:
+  - `docs/platform-setup.md` (rewritten to canonical Stripe + env + migration setup steps)
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/lib/platform/portal-fetch.ts` (new)
+- `src/components/portal/LoadingSkeleton.tsx` (new)
+- `src/app/portal/PortalDashboardClient.tsx`
+- `src/app/portal/cadence/PortalCadenceClient.tsx`
+- `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+- `src/app/portal/billing/PortalBillingClient.tsx`
+- `src/app/portal/checkout/CheckoutClient.tsx`
+- `public/robots.txt`
+- `docs/platform-setup.md`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` (pending)
+
 ## 2026-03-07 — B6-0: product page CTAs + Cadence CRM v2 callout
 
 ### Scope completed

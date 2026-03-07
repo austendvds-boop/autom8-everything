@@ -1,5 +1,36 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B7-0: SEO hardening + error states + portal polish
+
+- [x] Verify noindex metadata on portal routes:
+  - [x] `src/app/portal/checkout/page.tsx`
+  - [x] `src/app/portal/checkout/success/page.tsx`
+  - [x] `src/app/portal/review-funnel/page.tsx`
+- [x] Update `public/robots.txt` with portal disallow rules including `Disallow: /portal/checkout/`
+- [x] Verify `src/app/sitemap.ts` excludes `/portal/*` routes
+- [x] Add shared portal fetch helper with 401 session-expiry error:
+  - [x] `src/lib/platform/portal-fetch.ts`
+- [x] Add portal skeleton components:
+  - [x] `src/components/portal/LoadingSkeleton.tsx`
+- [x] Update portal client components to use shared session-expiry handling:
+  - [x] `src/app/portal/PortalDashboardClient.tsx`
+  - [x] `src/app/portal/cadence/PortalCadenceClient.tsx`
+  - [x] `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - [x] `src/app/portal/billing/PortalBillingClient.tsx`
+- [x] Update `src/app/portal/checkout/CheckoutClient.tsx` error copy + `Try Again` behavior
+- [x] Replace plain loading states with skeletons in:
+  - [x] `PortalDashboardClient`
+  - [x] `PortalCadenceClient`
+- [x] Ensure `← Back to portal` links on sub-pages:
+  - [x] `/portal/cadence`
+  - [x] `/portal/review-funnel`
+  - [x] `/portal/billing`
+  - [x] `/portal/checkout`
+- [x] Write platform setup runbook at `docs/platform-setup.md`
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/feature/customer-portal`
+
 ## 2026-03-07 — B6-0: product page CTAs + Cadence CRM v2 callout
 
 - [x] Add CRM v2 marketing section to `src/app/services/cadence/page.tsx` between features and downstream pricing/CTA areas

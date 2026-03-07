@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /portal/
+Disallow: /portal/login/
+Disallow: /portal/checkout/
+Disallow: /portal/cadence/
+Disallow: /portal/review-funnel/
+Disallow: /portal/billing/
 
 Host: autom8everything.com
 Sitemap: https://autom8everything.com/sitemap.xml

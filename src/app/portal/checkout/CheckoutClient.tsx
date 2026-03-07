@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { FormEvent, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 
@@ -80,13 +81,28 @@ export default function CheckoutClient() {
 
       const payload = (await response.json().catch(() => null)) as { error?: string; url?: string } | null
 
+      if (response.status === 400) {
+        throw new Error("Please fill in all required fields.")
+      }
+
+      if (response.status >= 500) {
+        throw new Error("Something went wrong on our end. Please try again in a moment.")
+      }
+
       if (!response.ok || !payload?.url) {
-        throw new Error(payload?.error || "We could not start checkout. Please try again.")
+        throw new Error(payload?.error || "Something went wrong on our end. Please try again in a moment.")
       }
 
       window.location.assign(payload.url)
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "We could not start checkout. Please try again.")
+      const fallbackMessage = "Could not connect. Please check your internet and try again."
+      if (error instanceof TypeError) {
+        setErrorMessage(fallbackMessage)
+      } else if (error instanceof Error && error.message) {
+        setErrorMessage(error.message)
+      } else {
+        setErrorMessage(fallbackMessage)
+      }
       setIsSubmitting(false)
     }
   }
@@ -95,6 +111,9 @@ export default function CheckoutClient() {
     <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl space-y-6">
         <header className="space-y-2">
+          <Link href="/portal" className="inline-flex text-sm text-[#C4B5FD] transition hover:text-[#DDD6FE]">
+            ← Back to portal
+          </Link>
           <p className="text-xs uppercase tracking-[0.18em] text-[#8B5CF6]">Autom8 Client Portal</p>
           <h1 className="text-3xl font-semibold text-white sm:text-4xl">Start your account</h1>
           <p className="text-sm text-[#A1A1AA]">
@@ -108,8 +127,8 @@ export default function CheckoutClient() {
             onClick={() => setProduct("cadence")}
             className={`rounded-2xl border p-5 text-left transition ${
               product === "cadence"
-                ? "border-[#8B5CF6] bg-[#12121A]"
-                : "border-white/10 bg-[#12121A]/70 hover:border-white/25"
+                ? "border-[#8B5CF6] bg-[#12121A]/90"
+                : "border-white/8 bg-[#12121A]/90 hover:border-white/25"
             }`}
           >
             <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">Cadence</p>
@@ -123,8 +142,8 @@ export default function CheckoutClient() {
             onClick={() => setProduct("review_funnel")}
             className={`rounded-2xl border p-5 text-left transition ${
               product === "review_funnel"
-                ? "border-[#8B5CF6] bg-[#12121A]"
-                : "border-white/10 bg-[#12121A]/70 hover:border-white/25"
+                ? "border-[#8B5CF6] bg-[#12121A]/90"
+                : "border-white/8 bg-[#12121A]/90 hover:border-white/25"
             }`}
           >
             <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">Review Funnel</p>
@@ -134,7 +153,7 @@ export default function CheckoutClient() {
           </button>
         </section>
 
-        <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-white/10 bg-[#12121A] p-6 sm:p-7">
+        <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 sm:p-7">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="sm:col-span-2">
               <span className="mb-2 block text-sm text-[#D4D4D8]">Business name</span>
@@ -228,7 +247,7 @@ export default function CheckoutClient() {
                 onClick={() => setErrorMessage(null)}
                 className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-red-100 underline"
               >
-                Try again
+                Try Again
               </button>
             </div>
           ) : null}

@@ -3,6 +3,8 @@
 import Link from "next/link"
 import { Fragment, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { PortalPageSkeleton } from "@/components/portal/LoadingSkeleton"
+import { PortalSessionExpiredError, portalFetch } from "@/lib/platform/portal-fetch"
 
 interface PortalMeService {
   serviceType: string
@@ -476,15 +478,11 @@ export default function PortalCadenceClient() {
       setUsageUnavailable(false)
 
       try {
-        const authResponse = await fetch("/api/portal/me", {
+        const authResponse = await portalFetch("/api/portal/me", {
           method: "GET",
           cache: "no-store",
         })
 
-        if (authResponse.status === 401) {
-          router.replace("/portal/login")
-          return
-        }
 
         const authPayload = (await authResponse.json().catch(() => null)) as (PortalMeResponse & { error?: string }) | null
 
@@ -561,6 +559,11 @@ export default function PortalCadenceClient() {
           setUsageUnavailable(true)
         }
       } catch (loadError) {
+        if (loadError instanceof PortalSessionExpiredError) {
+          router.replace("/portal/login")
+          return
+        }
+
         if (isActive) {
           setSettingsError(
             loadError instanceof Error ? loadError.message : "Could not load your Cadence settings.",
@@ -670,7 +673,7 @@ export default function PortalCadenceClient() {
         return
       }
 
-      const response = await fetch("/api/portal/cadence/settings", {
+      const response = await portalFetch("/api/portal/cadence/settings", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -689,6 +692,11 @@ export default function PortalCadenceClient() {
       setInitialSettings(normalized)
       setToastMessage("Settings saved")
     } catch (error) {
+      if (error instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
+
       setSaveError(error instanceof Error ? error.message : "Could not save your settings.")
     } finally {
       setIsSaving(false)
@@ -700,7 +708,7 @@ export default function PortalCadenceClient() {
     setCallsError(null)
 
     try {
-      const response = await fetch(`/api/portal/cadence/calls?limit=${CALL_PAGE_SIZE}&offset=${callsOffset}`, {
+      const response = await portalFetch(`/api/portal/cadence/calls?limit=${CALL_PAGE_SIZE}&offset=${callsOffset}`, {
         method: "GET",
         cache: "no-store",
       })
@@ -716,6 +724,11 @@ export default function PortalCadenceClient() {
       setCallsOffset((previous) => previous + nextCalls.length)
       setHasMoreCalls(nextCalls.length === CALL_PAGE_SIZE)
     } catch (error) {
+      if (error instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
+
       setCallsError(error instanceof Error ? error.message : "Could not load more calls.")
     } finally {
       setIsLoadingCalls(false)
@@ -745,7 +758,7 @@ export default function PortalCadenceClient() {
     setTestCallError(null)
 
     try {
-      const response = await fetch("/api/portal/cadence/test-call", {
+      const response = await portalFetch("/api/portal/cadence/test-call", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -770,6 +783,11 @@ export default function PortalCadenceClient() {
         setTestCallStatus("idle")
       }, 30000)
     } catch (error) {
+      if (error instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
+
       setTestCallStatus("idle")
       setTestCallError(error instanceof Error ? error.message : "Could not start your test call.")
     }
@@ -786,13 +804,7 @@ export default function PortalCadenceClient() {
   }
 
   if (isLoading) {
-    return (
-      <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 text-[#A1A1AA]">
-          Loading Cadence settings...
-        </div>
-      </main>
-    )
+    return <PortalPageSkeleton cards={3} />
   }
 
   if (settingsError) {

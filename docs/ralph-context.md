@@ -1,5 +1,62 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B7-0 (2026-03-07): portal polish (SEO + errors + consistency)
+- SEO hardening completed/verified:
+  - confirmed noindex metadata on:
+    - `src/app/portal/checkout/page.tsx`
+    - `src/app/portal/checkout/success/page.tsx`
+    - `src/app/portal/review-funnel/page.tsx`
+  - updated `public/robots.txt` with portal disallow rules:
+    - `/portal/`
+    - `/portal/login/`
+    - `/portal/checkout/`
+    - `/portal/cadence/`
+    - `/portal/review-funnel/`
+    - `/portal/billing/`
+  - verified `src/app/sitemap.ts` excludes portal routes (`/portal/*` not present in `staticRoutes`)
+- Added shared portal session/fetch utility:
+  - new `src/lib/platform/portal-fetch.ts`
+  - exports:
+    - `PortalSessionExpiredError`
+    - `portalFetch(url, init)` (`cache: "no-store"`, throws on 401)
+- Added shared portal loading skeletons:
+  - new `src/components/portal/LoadingSkeleton.tsx`
+  - exports:
+    - `PortalCardSkeleton`
+    - `PortalPageSkeleton`
+- Updated portal clients to use shared session handling (`portalFetch`):
+  - `src/app/portal/PortalDashboardClient.tsx`
+  - `src/app/portal/cadence/PortalCadenceClient.tsx`
+  - `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - `src/app/portal/billing/PortalBillingClient.tsx`
+- Loading polish:
+  - replaced plain loading text/cards with `PortalPageSkeleton` in:
+    - `PortalDashboardClient`
+    - `PortalCadenceClient`
+- Checkout polish (`src/app/portal/checkout/CheckoutClient.tsx`):
+  - added `← Back to portal` link
+  - added explicit submit error mapping:
+    - 400: `Please fill in all required fields.`
+    - 500+: `Something went wrong on our end. Please try again in a moment.`
+    - network: `Could not connect. Please check your internet and try again.`
+  - kept dismiss action and updated label to `Try Again`
+  - aligned top-level card/form styling to portal surface token usage (`bg-[#12121A]/90`, `border-white/8`)
+- Back-link consistency:
+  - verified top `← Back to portal` links on:
+    - `/portal/cadence`
+    - `/portal/review-funnel`
+    - `/portal/billing`
+    - `/portal/checkout`
+- Docs updated:
+  - `docs/platform-setup.md`
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+- Build: pending
+- Gotchas for next batch:
+  - `portalFetch` intentionally throws on any 401, so future portal-client API calls should either use this utility or handle session expiry with equivalent behavior.
+  - `public/robots.txt` now disallows all known portal paths; if new portal routes are added, include them in robots disallow review.
+
 ## B6-0 (2026-03-07): product page CTAs + Cadence CRM v2 callout
 - Updated `src/app/services/cadence/page.tsx`:
   - Added new **CRM Integration Coming Soon** section between Features and the later pricing/CTA flow.
@@ -39,7 +96,7 @@
     - `GET /api/portal/cadence/calls?limit=1&offset=0` for monthly call count preview
     - `GET /api/portal/cadence/settings` for Cadence phone number preview
   - Cadence card now shows:
-    - `X calls this month` when count is available
+    - `X calls this month` when available
     - `Your Cadence number: ...` when settings include a number
     - CTA `Manage Settings` -> `/portal/cadence`
   - Active Review Funnel card now:
@@ -70,28 +127,3 @@
 - Gotchas for next batch:
   - Review Funnel plan label on `/portal` depends on `a8_client_services.metadata.plan` (or `planName`); older rows may not show plan.
   - RF status usage uses `rf_sms_usage.month` (`YYYY-MM`) and `count` columns from current schema.
-
-## B4-0 (2026-03-07): portal cadence page enhancements (usage, checklist, prompt editor, test mode)
-- Added new route `src/app/api/portal/cadence/usage/route.ts`.
-  - `GET` requires portal auth, resolves active Cadence service for current client, returns `getCadenceUsage(cadenceTenantId)` payload.
-- Added new route `src/app/api/portal/cadence/test-call/route.ts`.
-  - `POST` requires portal auth, validates non-empty `{ toPhone }`, resolves active Cadence service, and returns `triggerCadenceTestCall()` result.
-- Updated `src/app/api/portal/cadence/settings/route.ts` PATCH schema to accept `systemPrompt` updates.
-- Updated `src/lib/platform/services/cadence-api.ts`:
-  - `CadenceTenantUpdate` now includes optional `systemPrompt`.
-- Updated `src/app/portal/cadence/PortalCadenceClient.tsx`:
-  - added top `Plan Usage` section with call/minute progress bars and usage threshold color bands (<60 green, 60-80 amber, >80 red)
-  - added over-80% warning banners with `/portal/billing` links
-  - added graceful usage-fetch fallback (`Usage data unavailable`) without blocking settings page
-  - added local-storage-backed onboarding checklist between usage and settings (`cadence_onboarding_dismissed_*`, `cadence_test_completed_*`)
-  - added `AI Personality & Instructions` field wired to existing Save flow (`systemPrompt`)
-  - added `Test Your AI Receptionist` section with phone prefill, POST test-call action, loading/success/error states, and 30s success reset
-  - upgraded Recent Calls table rows to expand/collapse with chevron and full bullet summary list
-- Updated docs:
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
-  - `docs/CODER-CONTEXT.md`
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Checklist visibility is controlled only by local storage dismiss key and tenant id availability.
-  - Greeting checklist completion uses non-empty + not-in-default-greetings heuristic; adjust default list if Cadence default copy changes.

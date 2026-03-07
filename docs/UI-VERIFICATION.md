@@ -25,6 +25,28 @@
 22. /portal/checkout/success — post-checkout setup confirmation page
 23. site footer — subtle `Client Portal` link to `/portal/login`
 
+## Batch B7-0 checks (portal polish: SEO + errors + consistency)
+- SEO
+  - `/portal/checkout`, `/portal/checkout/success`, and `/portal/review-funnel` all export robots noindex metadata (`index: false`, `follow: false`)
+  - `public/robots.txt` includes portal disallow lines, including `Disallow: /portal/checkout/`
+  - `src/app/sitemap.ts` has no `/portal/*` routes in `staticRoutes`
+- Session expiry handling
+  - authenticated portal clients route to login or show clear session-expired feedback when API returns 401:
+    - `/portal`
+    - `/portal/cadence`
+    - `/portal/review-funnel`
+    - `/portal/billing`
+- Checkout error handling (`/portal/checkout`)
+  - 400 response shows: `Please fill in all required fields.`
+  - 500 response shows: `Something went wrong on our end. Please try again in a moment.`
+  - network failure shows: `Could not connect. Please check your internet and try again.`
+  - error card includes `Try Again` button
+- Loading states
+  - `/portal` and `/portal/cadence` use card skeleton loading UI (no plain `Loading...` card)
+- Consistency
+  - `/portal/checkout`, `/portal/cadence`, `/portal/review-funnel`, `/portal/billing` each show `← Back to portal` link to `/portal`
+  - secondary action buttons on portal cards use `rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white`
+
 ## Smoke tests (no auth required)
 - GET /review-funnel/login → must render login form, NOT redirect
 - GET /review-funnel/signup → must render Step 1 of 4 wizard

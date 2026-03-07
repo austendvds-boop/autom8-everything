@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { PortalSessionExpiredError, portalFetch } from "@/lib/platform/portal-fetch"
 
 interface PortalMeResponse {
   client?: {
@@ -81,15 +82,11 @@ export default function PortalReviewFunnelClient() {
       setErrorMessage(null)
 
       try {
-        const meResponse = await fetch("/api/portal/me", {
+        const meResponse = await portalFetch("/api/portal/me", {
           method: "GET",
           cache: "no-store",
         })
 
-        if (meResponse.status === 401) {
-          router.replace("/portal/login")
-          return
-        }
 
         const mePayload = (await meResponse.json().catch(() => null)) as PortalMeResponse | null
 
@@ -97,7 +94,7 @@ export default function PortalReviewFunnelClient() {
           throw new Error(mePayload?.error || "We could not verify your account.")
         }
 
-        const statusResponse = await fetch("/api/portal/review-funnel/status", {
+        const statusResponse = await portalFetch("/api/portal/review-funnel/status", {
           method: "GET",
           cache: "no-store",
         })
@@ -114,6 +111,11 @@ export default function PortalReviewFunnelClient() {
 
         setStatus(statusPayload)
       } catch (error) {
+        if (error instanceof PortalSessionExpiredError) {
+          router.replace("/portal/login")
+          return
+        }
+
         if (isActive) {
           setErrorMessage(
             error instanceof Error ? error.message : "We could not load your Review Funnel status.",

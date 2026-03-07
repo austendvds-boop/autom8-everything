@@ -4,6 +4,8 @@ import Link from "next/link"
 import { Phone, Star } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { PortalPageSkeleton } from "@/components/portal/LoadingSkeleton"
+import { PortalSessionExpiredError, portalFetch } from "@/lib/platform/portal-fetch"
 
 type ServiceType = "cadence" | "review_funnel" | string
 
@@ -157,15 +159,9 @@ export default function PortalDashboardClient() {
       setErrorMessage(null)
 
       try {
-        const response = await fetch("/api/portal/me", {
+        const response = await portalFetch("/api/portal/me", {
           method: "GET",
-          cache: "no-store",
         })
-
-        if (response.status === 401) {
-          router.replace("/portal/login")
-          return
-        }
 
         const payload = (await response.json().catch(() => null)) as (PortalMeResponse & { error?: string }) | null
 
@@ -180,6 +176,11 @@ export default function PortalDashboardClient() {
         setClient(payload.client)
         setServices(payload.services ?? [])
       } catch (loadError) {
+        if (loadError instanceof PortalSessionExpiredError) {
+          router.replace("/portal/login")
+          return
+        }
+
         if (isActive) {
           setErrorMessage(loadError instanceof Error ? loadError.message : "We could not load your portal right now.")
         }
@@ -226,17 +227,25 @@ export default function PortalDashboardClient() {
       setIsLoadingCadenceStats(true)
 
       const [callsResult, settingsResult] = await Promise.allSettled([
-        fetch("/api/portal/cadence/calls?limit=1&offset=0", {
+        portalFetch("/api/portal/cadence/calls?limit=1&offset=0", {
           method: "GET",
-          cache: "no-store",
         }),
-        fetch("/api/portal/cadence/settings", {
+        portalFetch("/api/portal/cadence/settings", {
           method: "GET",
-          cache: "no-store",
         }),
       ])
 
       if (!isActive) {
+        return
+      }
+
+      if (callsResult.status === "rejected" && callsResult.reason instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
+
+      if (settingsResult.status === "rejected" && settingsResult.reason instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
         return
       }
 
@@ -283,7 +292,7 @@ export default function PortalDashboardClient() {
     setBillingError(null)
 
     try {
-      const response = await fetch("/api/portal/billing/portal", {
+      const response = await portalFetch("/api/portal/billing/portal", {
         method: "POST",
       })
 
@@ -295,6 +304,11 @@ export default function PortalDashboardClient() {
 
       window.location.href = payload.url
     } catch (billingOpenError) {
+      if (billingOpenError instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
+
       setBillingError(
         billingOpenError instanceof Error ? billingOpenError.message : "Could not open billing right now.",
       )
@@ -303,13 +317,7 @@ export default function PortalDashboardClient() {
   }
 
   if (isLoading) {
-    return (
-      <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl space-y-4">
-          <div className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 text-[#A1A1AA]">Loading your portal...</div>
-        </div>
-      </main>
-    )
+    return <PortalPageSkeleton cards={2} />
   }
 
   if (errorMessage) {
@@ -419,7 +427,7 @@ export default function PortalDashboardClient() {
                   <p className="mt-3 text-sm font-medium text-[#D4D4D8]">$199/mo · 7-day free trial</p>
                   <Link
                     href="/portal/checkout?product=cadence"
-                    className="mt-4 inline-flex rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35"
+                    className="mt-4 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
                   >
                     Get Started
                   </Link>
@@ -436,7 +444,7 @@ export default function PortalDashboardClient() {
                   <p className="mt-3 text-sm font-medium text-[#D4D4D8]">From $79/mo</p>
                   <Link
                     href="/portal/checkout?product=review_funnel"
-                    className="mt-4 inline-flex rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35"
+                    className="mt-4 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
                   >
                     Get Started
                   </Link>
