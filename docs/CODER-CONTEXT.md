@@ -1,5 +1,46 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 14: platform operator dashboard UI (/admin/clients)
+
+### Scope completed
+- Added new operator dashboard list route at `src/app/admin/clients/page.tsx` + `src/app/admin/clients/AdminClientsClient.tsx`:
+  - on mount, calls `GET /api/admin/clients` for auth gate + data load
+  - shows admin sign-in form on `401` and posts `POST /api/admin/auth` with `{ secret }`
+  - renders searchable client list with business/contact/email/service badges/created date
+  - row click navigation to `/admin/clients/[id]`
+  - includes `New Client` modal posting `POST /api/admin/clients`
+- Added client detail route at `src/app/admin/clients/[id]/page.tsx` + `src/app/admin/clients/[id]/AdminClientDetailClient.tsx`:
+  - back link, client header, inline edit mode for core fields
+  - service cards with status badges + this-month call/text message counts
+  - pause/resume/cancel controls wired to `PATCH/DELETE /api/admin/clients/[id]/services`
+  - add-service form wired to `POST /api/admin/clients/[id]/services` with:
+    - Cadence account ID input when adding Cadence
+    - Review Funnel auto-match note by client email
+  - success confirmation message after service add (`Service added. Welcome email sent to [email].`)
+  - usage panel for Cadence recent calls and Review Funnel text-message totals
+- Extended API hydration in `src/app/api/admin/clients/[id]/route.ts`:
+  - added `extractCadenceRecentCalls()` helper
+  - includes `usage.recentCalls` in Cadence service payload for detail-page usage table rendering
+- Updated docs:
+  - `docs/UI-VERIFICATION.md` with `/admin/clients` + `/admin/clients/[id]` verification checks
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/app/admin/clients/page.tsx` (new)
+- `src/app/admin/clients/AdminClientsClient.tsx` (new)
+- `src/app/admin/clients/[id]/page.tsx` (new)
+- `src/app/admin/clients/[id]/AdminClientDetailClient.tsx` (new)
+- `src/app/api/admin/clients/[id]/route.ts`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 13: platform client portal API routes
 
 ### Scope completed

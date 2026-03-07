@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { requireAdminAuth } from "@/lib/platform/admin-middleware"
@@ -51,6 +51,20 @@ function extractCadenceCallCount(payload: unknown): number {
   return 0
 }
 
+function extractCadenceRecentCalls(payload: unknown): unknown[] {
+  if (!payload || typeof payload !== "object") {
+    return []
+  }
+
+  const candidate = payload as Record<string, unknown>
+
+  if (!Array.isArray(candidate.calls)) {
+    return []
+  }
+
+  return candidate.calls.slice(0, 20)
+}
+
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
@@ -96,6 +110,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             usage: {
               type: "cadence",
               callCount: extractCadenceCallCount(callsResponse),
+              recentCalls: extractCadenceRecentCalls(callsResponse),
               tenantConfig,
             },
           }

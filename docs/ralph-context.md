@@ -2,6 +2,42 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 - Batch 14: platform operator dashboard UI (`/admin/clients`)
+
+#### Files modified
+- `src/app/admin/clients/page.tsx` (new)
+- `src/app/admin/clients/AdminClientsClient.tsx` (new)
+- `src/app/admin/clients/[id]/page.tsx` (new)
+- `src/app/admin/clients/[id]/AdminClientDetailClient.tsx` (new)
+- `src/app/api/admin/clients/[id]/route.ts`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- Added platform admin list route UI at `/admin/clients`:
+  - Login gate checks `GET /api/admin/clients` on mount.
+  - If unauthorized, shows password form and signs in via `POST /api/admin/auth` with `{ secret }`.
+  - On success, refetches and renders searchable client list.
+  - List rows show business/contact/email/service badges + created date and navigate to `/admin/clients/[id]`.
+  - Includes `New Client` modal form for creating records via `POST /api/admin/clients`.
+- Added platform admin client detail UI at `/admin/clients/[id]`:
+  - Includes back link, client header details, inline edit mode (`PATCH /api/admin/clients/[id]`).
+  - Service cards include status badges, this-month usage counters, and pause/resume/cancel actions.
+  - Add-service form supports Cadence account ID input and Review Funnel email-match onboarding.
+  - Successful add shows confirmation: `Service added. Welcome email sent to [email].`
+  - Usage section renders Cadence recent-call table + Review Funnel text-message usage when active.
+- Updated admin client detail API hydration:
+  - `GET /api/admin/clients/[id]` now includes `usage.recentCalls` extracted from Cadence calls response for UI table rendering.
+
+#### Gotchas for next batch
+- Cadence recent-call rows are passed through from upstream payload shape. If cadence-v2 field names change, update the detail UI call-row normalization helpers.
+- Detail page currently includes its own login gate (same pattern as list page) instead of shared admin layout middleware.
+- Review Funnel add-service flow still depends on email-based account lookup when explicit ID is not provided.
+
+---
+
 ### 2026-03-06 - Batch 13: platform client portal API routes
 
 #### Files modified
@@ -97,43 +133,3 @@
 - `GET /api/admin/clients/[id]` derives Cadence `callCount` from common keys in the calls payload (`callCount`, `total`, etc.) and falls back to `calls.length`. If cadence-v2 standardizes a definitive count field, tighten this mapping.
 - Provisioning currently returns `500` for provisioning/email failures in `/api/admin/clients/[id]/services`; if UI needs finer-grained validation errors (e.g., missing Cadence ID, no matching RF tenant), split into explicit `4xx` responses.
 - `sendPortalMagicLinkEmail` is implemented but not yet wired to an API route in this batch.
-
----
-
-### 2026-03-06 - Batch 11: platform portal auth + middleware foundation
-
-#### Files modified
-- `src/lib/platform/services/auth.ts` (new)
-- `src/lib/platform/services/cadence-api.ts` (new)
-- `src/lib/platform/admin-middleware.ts` (new)
-- `src/lib/platform/portal-middleware.ts` (new)
-- `docs/implementation-plan.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/ralph-context.md`
-
-#### Key exports / behavior
-- Added portal auth service with Review Funnel auth parity patterns:
-  - `hashToken(token)` uses SHA-256 hex digest.
-  - `createPortalSession(clientId)` creates JWT with role `portal_client` and TTL from `A8_SESSION_TTL_HOURS`.
-  - `generatePortalMagicLink(email)` normalizes email, verifies active `a8_clients` row, stores hashed token in `a8_magic_links`, and returns raw token.
-  - `verifyPortalMagicLink(token)` validates/consumes active link transactionally and returns `{ sessionToken, client }`.
-  - `verifyPortalSession(token)` validates JWT and active client status.
-- Added Cadence portal API client:
-  - Base URL from `CADENCE_API_URL`
-  - Adds `X-Portal-Secret` header on all requests
-  - Exports:
-    - `getCadenceTenantConfig(tenantId)`
-    - `updateCadenceTenantConfig(tenantId, updates)`
-    - `getCadenceRecentCalls(tenantId, limit?, offset?)`
-- Added admin middleware:
-  - `isAdminSecretValid(candidate)` with timing-safe compare to `A8_ADMIN_SECRET`
-  - `createAdminSessionToken()` JWT with `{ role: "platform_admin" }`, 8h expiry
-  - `requireAdminAuth(request)` accepts `x-admin-secret` OR `a8_admin_session` cookie
-  - Exported `A8_ADMIN_SESSION_COOKIE_NAME = "a8_admin_session"`
-- Added portal middleware:
-  - `requirePortalAuth(request)` accepts Bearer token or `a8_portal_session` cookie
-  - Returns `{ ok: true, client, sessionToken }` on success
-  - Exported `A8_PORTAL_SESSION_COOKIE_NAME = "a8_portal_session"`
-
-#### Gotchas for next batch
-- Cadence API helper currently targets `/dashboard/api/settings` and `/dashboard/api/calls` with `clientId` query semantics. If cadence-v2 portal route naming differs, update these path builders in one place.

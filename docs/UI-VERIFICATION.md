@@ -14,12 +14,32 @@
 11. /review-funnel/admin — tenant table (search + sort + status chips)
 12. /review-funnel/admin/tenants/[id] — tenant detail with actions
 13. /review-funnel/admin/stats — admin KPI overview
+14. /admin/clients — platform client management list, auth gate, add-client modal
+15. /admin/clients/[id] — platform client detail, edit mode, service controls, usage cards
 
 ## Smoke tests (no auth required)
 - GET /review-funnel/login → must render login form, NOT redirect
 - GET /review-funnel/signup → must render Step 1 of 4 wizard
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
+
+## Batch 14 checks (platform operator dashboard)
+- `/admin/clients`
+  - unauthenticated users see password sign-in card
+  - valid password opens `Client Management` list
+  - search input filters by business/contact/email
+  - each row shows business/contact/email/service badges/created date
+  - clicking a row opens `/admin/clients/[id]`
+  - `New Client` opens modal and successful submit refreshes list
+- `/admin/clients/[id]`
+  - back link returns to `/admin/clients`
+  - header shows business/contact/email/phone details
+  - `Edit Client` opens inline form and save persists updates
+  - service cards show status plus call/text message month counters
+  - pause/resume/cancel actions refresh service state
+  - `Add Service` supports Cadence account ID input and Review Funnel email-match note
+  - successful add shows confirmation: `Service added. Welcome email sent to [email].`
+  - usage section shows Cadence call table when data exists and Review Funnel text-message count when active
 
 ## Batch 7 checks (logo upload + Yelp review platform)
 - `/review-funnel/dashboard/settings` -> **Your Business** tab

@@ -1,5 +1,17 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — Platform operator dashboard UI (/admin/clients)
+
+- [x] Create `src/app/admin/clients/page.tsx` server route shell for the operator list UI
+- [x] Build `src/app/admin/clients/AdminClientsClient.tsx` with admin login gate, searchable client list, and create-client modal
+- [x] Create `src/app/admin/clients/[id]/page.tsx` server route shell for client detail
+- [x] Build `src/app/admin/clients/[id]/AdminClientDetailClient.tsx` with back nav, inline client edits, service controls, add-service form, and usage panels
+- [x] Extend `GET /api/admin/clients/[id]` response to include `usage.recentCalls` passthrough for Cadence usage table rendering
+- [x] Update UI verification docs for new operator routes
+- [x] Run `npm run build` and ensure pass
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push to `origin/master`
+
 ## 2026-03-06 — Platform client portal API routes
 
 - [x] Create `POST /api/portal/auth/login` for magic-link requests with email-enumeration-safe success response
