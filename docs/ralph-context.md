@@ -1,74 +1,44 @@
 # Ralph Context — Autom8 CRO Passover
 
-## B8 (2026-03-07): Custom Apps + Footer + Sticky Mobile CTA + polish
-- Created `src/components/StickyMobileCTA.tsx`:
-  - mobile-only fixed bottom CTA bar (`md:hidden`)
-  - appears after scroll past ~80vh
-  - actions: `Call Now` (`tel:+14806313993`) and `Book Demo` (`/contact`)
-- Updated `src/app/HomePageClient.tsx`:
-  - imported/rendered `StickyMobileCTA` after `<Footer />`
-  - main container now includes `pb-20 md:pb-0`
-- Updated all CRO service pages to render sticky CTA and reserve mobile bottom space:
-  - `src/app/services/cadence/page.tsx`
-  - `src/app/services/review-funnel/page.tsx`
-  - `src/app/services/websites/page.tsx`
-  - `src/app/services/seo-content/page.tsx`
-  - `src/app/services/custom-apps/page.tsx`
-- Reworked `src/app/services/custom-apps/page.tsx`:
-  - Hero headline now: `When Off-the-Shelf Tools Don't Fit, We Build What Does.`
-  - Hero subhead replaced with workflow-first copy + selectivity note
-  - Added new ROI section after How It Works with 3 cards (`Clock`, `ShieldCheck`, `Zap`)
-  - Upgraded examples to concrete outcomes with TODO case-study comments
-  - Pricing updated with `$2,000 to $15,000` range and 4 pricing-factor bullets
-  - Preserved required section order and structured data scripts
-  - Standardized classes: `btn-primary`/`btn-secondary`, `card-base`, `section-heading`
-- Updated `src/components/Footer.tsx`:
-  - Added prominent phone link below logo: `(480) 631-3993` -> `tel:+14806313993`
-  - Grid updated to `md:grid-cols-5` with brand block `md:col-span-2`
-  - Added new `Start Here` column with quick links
-  - Kept Products + Company columns and existing social icon aria labels
-- Docs updated:
-  - `docs/UI-VERIFICATION.md`
+## B2 (2026-03-07): Cadence portal API endpoint fix + provisioning hook
+- Updated `src/lib/platform/services/cadence-api.ts` to use Cadence portal endpoints authenticated by `X-Portal-Secret` instead of dashboard cookie endpoints:
+  - `getCadenceTenantConfig(tenantId)` now calls `GET /api/portal/tenant/:tenantId` and returns `payload.tenant`
+  - `updateCadenceTenantConfig(tenantId, updates)` now calls `PATCH /api/portal/tenant/:tenantId` and returns `payload.tenant`
+  - `getCadenceRecentCalls(tenantId, limit, offset)` now calls `GET /api/portal/tenant/:tenantId/calls?limit=&offset=`
+- Extended `CadenceTenantConfig` with `systemPrompt: string | null`.
+- Added new Cadence API exports:
+  - `getCadenceUsage(tenantId)`
+  - `triggerCadenceTestCall(tenantId, toPhone)`
+  - interfaces `CadenceUsageResponse` and `TestCallResponse`
+- Added `provisionCadenceTenant()` to `src/lib/platform/services/provisioning.ts`:
+  - Calls `POST ${CADENCE_API_URL}/api/onboard`
+  - Sends `X-Portal-Secret` and onboarding payload
+  - Returns `{ clientId, phoneNumber }` from `result`
+- Files modified in this batch:
+  - `src/lib/platform/services/cadence-api.ts`
+  - `src/lib/platform/services/provisioning.ts`
+  - `docs/ralph-context.md`
   - `docs/CODER-CONTEXT.md`
-  - `docs/implementation-plan.md`
 - Build: `npm run build` ✅
 - Gotchas for next batch:
-  - Keep sticky CTA rendered after `Footer` inside `<main>` on any newly-added top-level marketing pages.
-  - Preserve `pb-20 md:pb-0` on pages that include `StickyMobileCTA` to avoid content being covered on mobile.
+  - Portal endpoint response wrappers differ (`{ tenant }`, `{ ok, tenant }`) — do not assume legacy `{ settings }` shape.
+  - `provisionCadenceTenant()` includes `areaCode` in the function signature for caller parity, but `/api/onboard` payload in this scope does not consume it.
 
-## B7 (2026-03-07): Website Creation + SEO page overhauls
-- Updated `src/app/services/websites/page.tsx`:
-  - Hero rewritten to `A Website That Gets Picked, Trusted, and Contacted.`
-  - Added `Why Your Website Matters More Than You Think` stats section after hero.
-  - Kept existing `How It Works`, then inserted mid-page CTA (`Ready to upgrade? Let's pick your tier.`).
-  - Reworked pricing tier data with `bestFor` text and `recommended` badge on Scale tier.
-  - Added `Built for Real Businesses` screenshot placeholder section after pricing.
-  - Final CTA rewritten to `Your Website Should Work as Hard as You Do.` with dual actions (phone + form).
-  - Section order now matches requested 8-part sequence.
-- Updated `src/app/services/seo-content/page.tsx`:
-  - Hero rewritten to `Get Found on Google. Get Called. Get Booked.`
-  - Added timeline section `What to Expect and When` after How It Works.
-  - Replaced monthly 2x2 grid with structured 5-item deliverables list (icons).
-  - Imported and rendered `ComparisonTable` (`@/components/ComparisonTable`) for one-off vs monthly framing.
-  - Added `SEO Works Best as Part of Your Growth Stack` pairing section (Website/Reviews/Cadence).
-  - Added pricing context list under `Contact Us` card.
-  - Section order now matches requested 9-part sequence.
-- Docs updated:
-  - `docs/UI-VERIFICATION.md` (added B7 checks for `/services/websites` and `/services/seo-content`)
-  - `docs/implementation-plan.md`
-- Key exports/components used:
-  - Reused existing `ComparisonTable` default export from `src/components/ComparisonTable.tsx`.
+## B1 (2026-03-07): Production hardening — meta noindex + robots + sitemap cleanup
+- Added page-level `metadata` exports with `robots: { index: false, follow: false }` to all portal entry routes.
+- Added noindex metadata to Review Funnel dashboard pages.
+- Replaced `public/robots.txt` with hardened private-route disallow list.
+- Deleted stale static `public/sitemap.xml` so dynamic sitemap route is used.
+- Build: `npm run build` ✅
 - Gotchas for next batch:
-  - Keep `buildServiceSchema` + `buildFaqSchema` scripts intact on service pages.
-  - `ComparisonTable` is client-side; safe to import into server page components.
+  - Keep noindex metadata on private dashboard/portal pages by default.
+  - Do not re-add `public/sitemap.xml`; it shadows dynamic `src/app/sitemap.ts`.
 
-## B6 retry 6 (2026-03-07): commit gate closure — fresh push after stale HEAD
-- Confirmed the full B6 Review Funnel overhaul is present and correct in `src/app/services/review-funnel/page.tsx` at HEAD.
-- Working tree was clean; all changes already committed. Re-verified build passes.
-- Added this retry docs pass to produce a fresh commit and satisfy the commit-gate check.
-- Section order confirmed intact (10 sections, hero through final CTA).
-- `npm run build` ✅
-- Files modified: `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`
+## B8 (2026-03-07): Custom Apps + Footer + Sticky Mobile CTA + polish
+- Added `src/components/StickyMobileCTA.tsx` and wired it into homepage + service pages.
+- Reworked `src/app/services/custom-apps/page.tsx` with ROI/pricing structure updates.
+- Updated `src/components/Footer.tsx` with prominent phone and a `Start Here` column.
+- Build: `npm run build` ✅
 - Gotchas for next batch:
-  - Use `;` not `&&` in PowerShell exec chains.
-  - Push explicitly: `git push origin ui/cro-passover`.
+  - Keep sticky CTA rendered after `Footer` inside `<main>` on new marketing pages.
+  - Keep `pb-20 md:pb-0` on pages that include `StickyMobileCTA`.

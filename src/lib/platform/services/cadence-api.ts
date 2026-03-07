@@ -13,6 +13,7 @@ export interface CadenceTenantConfig {
   fallbackMode: string | null
   intakeMode: string | null
   smsNumber: string | null
+  systemPrompt: string | null
   [key: string]: unknown
 }
 
@@ -51,6 +52,26 @@ export interface CadenceCallsResponse {
   [key: string]: unknown
 }
 
+export interface CadenceUsageResponse {
+  usage: {
+    totalCalls: number
+    totalDurationSeconds: number
+    totalTranscriptTurns: number
+    monthStart: string
+  }
+  plan: {
+    name: string
+    callLimit: number
+    minuteLimit: number
+  }
+}
+
+export interface TestCallResponse {
+  ok: boolean
+  callSid?: string
+  error?: string
+}
+
 function getCadenceBaseUrl(): string {
   return platformConfig.CADENCE_API_URL.replace(/\/+$/, "")
 }
@@ -78,22 +99,22 @@ async function cadenceRequest<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export async function getCadenceTenantConfig(tenantId: string): Promise<CadenceTenantConfig> {
-  const payload = await cadenceRequest<{ settings?: CadenceTenantConfig } | CadenceTenantConfig>(
-    `/dashboard/api/settings?clientId=${encodeURIComponent(tenantId)}`,
+  const payload = await cadenceRequest<{ tenant: CadenceTenantConfig }>(
+    `/api/portal/tenant/${encodeURIComponent(tenantId)}`,
     { method: "GET" },
   )
 
-  return ("settings" in payload && payload.settings ? payload.settings : payload) as CadenceTenantConfig
+  return payload.tenant
 }
 
 export async function updateCadenceTenantConfig(
   tenantId: string,
   updates: Partial<CadenceTenantUpdate>,
 ): Promise<CadenceTenantConfig> {
-  const payload = await cadenceRequest<{ settings?: CadenceTenantConfig } | CadenceTenantConfig>(
-    `/dashboard/api/settings?clientId=${encodeURIComponent(tenantId)}`,
+  const payload = await cadenceRequest<{ ok: true; tenant: CadenceTenantConfig }>(
+    `/api/portal/tenant/${encodeURIComponent(tenantId)}`,
     {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -101,7 +122,7 @@ export async function updateCadenceTenantConfig(
     },
   )
 
-  return ("settings" in payload && payload.settings ? payload.settings : payload) as CadenceTenantConfig
+  return payload.tenant
 }
 
 export async function getCadenceRecentCalls(
@@ -109,9 +130,7 @@ export async function getCadenceRecentCalls(
   limit?: number,
   offset?: number,
 ): Promise<CadenceCallsResponse> {
-  const params = new URLSearchParams({
-    clientId: tenantId,
-  })
+  const params = new URLSearchParams()
 
   if (typeof limit === "number" && Number.isFinite(limit)) {
     params.set("limit", String(Math.max(1, Math.floor(limit))))
@@ -121,8 +140,28 @@ export async function getCadenceRecentCalls(
     params.set("offset", String(Math.max(0, Math.floor(offset))))
   }
 
+  const query = params.toString()
+
   return cadenceRequest<CadenceCallsResponse>(
-    `/dashboard/api/calls?${params.toString()}`,
+    `/api/portal/tenant/${encodeURIComponent(tenantId)}/calls${query ? `?${query}` : ""}`,
     { method: "GET" },
+  )
+}
+
+export async function getCadenceUsage(tenantId: string): Promise<CadenceUsageResponse> {
+  return cadenceRequest<CadenceUsageResponse>(
+    `/api/portal/tenant/${encodeURIComponent(tenantId)}/usage`,
+    { method: "GET" },
+  )
+}
+
+export async function triggerCadenceTestCall(tenantId: string, toPhone: string): Promise<TestCallResponse> {
+  return cadenceRequest<TestCallResponse>(
+    `/api/portal/tenant/${encodeURIComponent(tenantId)}/test-call`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ toPhone }),
+    },
   )
 }

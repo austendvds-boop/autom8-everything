@@ -1,5 +1,32 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B2: Cadence portal API fix + new usage/test/provisioning methods
+
+### Scope completed
+- Updated `src/lib/platform/services/cadence-api.ts` to stop calling dashboard session endpoints and use portal-secret endpoints instead:
+  - `getCadenceTenantConfig(tenantId)` now calls `GET /api/portal/tenant/:tenantId` and returns `payload.tenant`.
+  - `updateCadenceTenantConfig(tenantId, updates)` now calls `PATCH /api/portal/tenant/:tenantId` and returns `payload.tenant`.
+  - `getCadenceRecentCalls(tenantId, limit, offset)` now calls `GET /api/portal/tenant/:tenantId/calls` with query params.
+- Added `systemPrompt: string | null` to `CadenceTenantConfig`.
+- Added new Cadence service exports:
+  - `CadenceUsageResponse`
+  - `getCadenceUsage(tenantId)`
+  - `TestCallResponse`
+  - `triggerCadenceTestCall(tenantId, toPhone)`
+- Updated `src/lib/platform/services/provisioning.ts`:
+  - added `provisionCadenceTenant({ businessName, email, phone?, areaCode? })`
+  - sends `POST ${CADENCE_API_URL}/api/onboard` with `X-Portal-Secret`
+  - maps response `{ result: { clientId, phoneNumber } }` to return payload.
+
+### Files changed
+- `src/lib/platform/services/cadence-api.ts`
+- `src/lib/platform/services/provisioning.ts`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B8: Custom Apps + Footer + Sticky Mobile CTA + sitewide polish
 
 ### Scope completed
