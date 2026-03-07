@@ -1,5 +1,34 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — B2: homepage hero + CTA overhaul
+
+### Scope completed
+- Updated `src/components/Hero.tsx` copy and CTA structure for CRO passover hero requirements.
+- Replaced hero eyebrow text with `Growth infrastructure for local businesses`.
+- Replaced H1 with `Stop Losing Calls. Start Winning Customers.`
+- Replaced subhead with the new lead-machine positioning copy.
+- Swapped CTA stack to:
+  - primary `Call Cadence Live` tel link (`tel:+14806313993`) with `PhoneCall` icon.
+  - secondary `Book a 15-Minute Demo` link to `/contact`.
+- Added trust micro-strip under CTAs: `7-day free trial • No contracts • Setup in 5 minutes`.
+- Replaced old Cadence call paragraph with note: `Try Cadence right now — it will answer like your receptionist.`
+- Preserved existing motion behavior (`reveal`, `revealReduced`, `buttonHover`) and `BrandLogo` usage.
+- Updated handoff docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+
+### Files changed
+- `src/components/Hero.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+
 ## 2026-03-06 — B1: CRO passover branch + sitewide design tokens
 
 ### Scope completed

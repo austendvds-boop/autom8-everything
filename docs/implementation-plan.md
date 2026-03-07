@@ -1,5 +1,17 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — B2: Homepage hero + CTA overhaul
+
+- [x] Rewrite `src/components/Hero.tsx` eyebrow, headline, and subhead copy
+- [x] Replace primary CTA with `Call Cadence Live` tel link (`tel:+14806313993`) and phone icon
+- [x] Replace secondary CTA with `Book a 15-Minute Demo` linking to `/contact`
+- [x] Add trust micro-strip under hero CTAs (`7-day free trial • No contracts • Setup in 5 minutes`)
+- [x] Remove old Cadence prompt paragraph and replace with supporting note under trust strip
+- [x] Keep existing `buttonHover`, Framer reveal motion, `BrandLogo`, and reduced-motion handling unchanged
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-06 — B1: CRO passover branch + design tokens
 
 - [x] Checkout `master` and ensure branch base is current

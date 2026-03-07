@@ -29,6 +29,17 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B2 checks (homepage hero + CTA overhaul)
+- `/` homepage hero
+  - eyebrow reads: `Growth infrastructure for local businesses`
+  - headline reads: `Stop Losing Calls. Start Winning Customers.`
+  - subhead reads: `Autom8 helps local businesses answer every call, collect 5-star reviews, and turn their website into a lead machine — without becoming tech experts.`
+  - primary CTA is a phone link: `Call Cadence Live` with phone icon and target `tel:+14806313993`
+  - secondary CTA reads `Book a 15-Minute Demo` and links to `/contact`
+  - trust strip appears under CTAs: `7-day free trial • No contracts • Setup in 5 minutes`
+  - supporting note appears below trust strip: `Try Cadence right now — it will answer like your receptionist.`
+  - mobile (`375px`): CTA buttons stack vertically
+
 ## Batch B1 checks (CRO passover design tokens)
 - Confirm shared utility classes apply consistently where used:
   - buttons: `.btn-primary`, `.btn-secondary`, `.btn-ghost`

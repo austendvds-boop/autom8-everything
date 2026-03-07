@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { PhoneCall } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { buttonHover, reveal, revealReduced } from "@/lib/motion";
 
@@ -27,7 +28,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.p className="text-sm uppercase tracking-widest text-[#8B5CF6] mb-4" {...revealPreset}>
-          Simple tools for local businesses
+          Growth infrastructure for local businesses
         </motion.p>
 
         <motion.h1
@@ -35,37 +36,40 @@ export default function Hero() {
           style={{ fontFamily: "var(--font-playfair), serif" }}
           {...revealPreset}
         >
-          Get more calls and booked jobs without the tech headache.
+          Stop Losing Calls. Start Winning Customers.
         </motion.h1>
 
         <motion.p className="text-xl md:text-2xl text-[#A1A1AA] max-w-4xl mx-auto mb-10" {...revealPreset}>
-          Autom8 sets up your phone answering, reviews, website, and SEO so your business can grow while you stay focused on the work.
+          Autom8 helps local businesses answer every call, collect 5-star reviews, and turn their website into a lead machine — without becoming tech experts.
         </motion.p>
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...revealPreset}>
-          <Link href="#services">
-            <motion.button
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] via-[#A78BFA] to-[#06B6D4] text-white font-semibold text-lg shadow-lg"
-              {...buttonHover}
-            >
-              Explore Our Tools
-            </motion.button>
-          </Link>
-          <Link href="/get-started">
-            <motion.button
-              className="px-8 py-4 rounded-full border border-white/25 text-white font-semibold text-lg hover:border-[#8B5CF6]/60 transition-colors"
-              {...buttonHover}
-            >
-              Get Started
-            </motion.button>
-          </Link>
+          <motion.a
+            href="tel:+14806313993"
+            className="btn-primary text-lg gap-2 px-10 py-4 shadow-[0_0_30px_rgba(139,92,246,0.4)]"
+            {...buttonHover}
+          >
+            <PhoneCall className="w-5 h-5" />
+            Call Cadence Live
+          </motion.a>
+
+          <motion.div {...buttonHover}>
+            <Link href="/contact" className="btn-secondary text-lg px-8 py-4">
+              Book a 15-Minute Demo
+            </Link>
+          </motion.div>
         </motion.div>
 
-        <motion.p className="mt-6 text-base md:text-lg text-[#C4B5FD]" {...revealPreset}>
-          Want to see how Cadence handles your calls?{" "}
-          <a href="tel:+14806313993" className="font-semibold text-white hover:text-[#DDD6FE] transition-colors">
-            Call (480) 631-3993
-          </a>
+        <motion.p className="mt-6 text-sm text-[#A1A1AA] flex items-center justify-center gap-3 flex-wrap" {...revealPreset}>
+          <span>7-day free trial</span>
+          <span className="text-white/20">•</span>
+          <span>No contracts</span>
+          <span className="text-white/20">•</span>
+          <span>Setup in 5 minutes</span>
+        </motion.p>
+
+        <motion.p className="mt-3 text-sm text-[#C4B5FD]" {...revealPreset}>
+          Try Cadence right now — it will answer like your receptionist.
         </motion.p>
       </div>
     </section>
