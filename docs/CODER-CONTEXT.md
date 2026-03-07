@@ -44,7 +44,7 @@
 - `docs/CODER-CONTEXT.md`
 
 ### Verification
-- `npm run build` ⏳ pending
+- `npm run build` ✅
 
 ## 2026-03-06 — B3 retry: commit-gate recovery + verification
 
