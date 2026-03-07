@@ -29,6 +29,42 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B6 checks (Review Funnel page overhaul)
+- `/services/review-funnel` section order is:
+  1) Hero
+  2) Why Reviews Compound
+  3) Pricing
+  4) Comparison table
+  5) How it works
+  6) Testimonials
+  7) Common Concerns
+  8) Even Better Together bundle
+  9) FAQ
+  10) Final CTA
+- Hero copy
+  - headline: `Your Reputation Compounds. Every Review Brings the Next Customer.`
+  - subhead: `Every 5-star review makes the next customer more likely to call...`
+  - CTAs remain `Get Started` and `See Pricing`
+- `Why Reviews Compound` section
+  - renders 3 stat cards (93%, 266%, 5-9%) with source lines
+  - renders compounding chip flow: More reviews → Higher ranking → More clicks → More customers → More reviews
+- `How it works` section
+  - each step card has icon in tinted square:
+    - Step 1 `Connect Calendar` uses calendar icon
+    - Step 2 `Automatic Text` uses message icon
+    - Step 3 `Reviews Roll In` uses star icon
+  - desktop shows connector arrows between cards
+- `Testimonials`
+  - array has TODO note for replacing with real client names/businesses
+  - current title attributions remain descriptor-based (`Home Services Team`, `Med Spa Owner`, `Dental Office Manager`)
+- `Common Concerns` section
+  - renders exactly 3 concern cards with concern heading + answer text
+- `Even Better Together: Cadence + Review Funnel` section
+  - two side-by-side cards with icons (phone + review follow-up)
+  - combined pricing line reads `$278/mo combined`
+  - supporting line reads `Cadence $199/mo + Review Funnel Starter $79/mo`
+  - CTA button `Start with Both` links to `/contact`
+
 ## Batch B4 checks (homepage product stack + verticals + FAQ + final CTA)
 - `/` Services section (`ServicesBento`)
   - Cadence hero value prop reads: `Every missed call is a customer your competitor answers instead...` and includes `24/7`

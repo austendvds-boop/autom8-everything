@@ -1,5 +1,36 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B6: Review Funnel page overhaul
+
+### Scope completed
+- Updated `src/app/services/review-funnel/page.tsx` for the full B6 CRO pass:
+  - Hero headline changed to `Your Reputation Compounds. Every Review Brings the Next Customer.`
+  - Hero subhead updated to reputation compounding framing.
+  - Added new `Why Reviews Compound` section (3 stat cards + compounding loop visual).
+  - Kept pricing section in place and preserved existing plan card behavior/links.
+  - Kept comparison table section in place and preserved existing content.
+  - Replaced text-only `How it works` with connected visual step cards using `Calendar`, `MessageSquare`, `Star` icons and desktop connector arrows.
+  - Added testimonial TODO comment for future real-name attribution while keeping current descriptor titles.
+  - Added new `Common Concerns` objection-handling section.
+  - Added new `Even Better Together: Cadence + Review Funnel` bundle CTA section with side-by-side cards, `$278/mo combined` pricing, and `/contact` CTA.
+  - Preserved final FAQ and final CTA sections with updated page ordering.
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `src/app/services/review-funnel/page.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+### Verification
+- `npm run build` ✅
+
+
 ## 2026-03-07 — B4 retry 2: verification + commit-gate recovery
 
 ### Scope completed

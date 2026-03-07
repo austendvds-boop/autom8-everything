@@ -1,5 +1,50 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B6 (2026-03-07): Review Funnel page overhaul
+- Modified: `src/app/services/review-funnel/page.tsx`
+  - Hero headline replaced with: `Your Reputation Compounds. Every Review Brings the Next Customer.`
+  - Hero subhead replaced with compounding reputation framing.
+  - Added new `Why Reviews Compound` section after hero with 3 stat cards:
+    - `93%` (BrightLocal 2024)
+    - `266%` (Womply Research)
+    - `5-9%` (Harvard Business School)
+  - Added compounding visual chip flow:
+    - More reviews → Higher ranking → More clicks → More customers → More reviews
+  - Upgraded `How it works` into visual connected flow with icons and desktop connector arrows:
+    - Step 1 `Connect Calendar` (`Calendar`)
+    - Step 2 `Automatic Text` (`MessageSquare`)
+    - Step 3 `Reviews Roll In` (`Star`)
+  - Added TODO above testimonials array:
+    - `Replace with real client testimonials — use real first name and business name when available`
+  - Kept testimonial descriptors as requested:
+    - `Home Services Team`, `Med Spa Owner`, `Dental Office Manager`
+  - Added new `Common Concerns` section before FAQ (3 concern cards).
+  - Added new `Even Better Together: Cadence + Review Funnel` section before final CTA:
+    - side-by-side Cadence/Review Funnel cards
+    - combined pricing line `$278/mo combined`
+    - supporting line `Cadence $199/mo + Review Funnel Starter $79/mo`
+    - CTA `Start with Both` -> `/contact`
+- Section order now matches requested 10-block flow:
+  1) Hero
+  2) Reputation compounding stats
+  3) Pricing
+  4) Comparison table
+  5) How it works (visual)
+  6) Testimonials
+  7) Common Concerns
+  8) Bundle CTA
+  9) FAQ
+  10) Final CTA
+- Modified docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/ralph-context.md`
+- Key exports/components touched:
+  - `ReviewFunnelPage` (default export, unchanged route/export surface)
+- Gotchas for next batch:
+  - `How it works` now depends on `lucide-react` imports (`Calendar`, `MessageSquare`, `Star`, `PhoneCall`, `MessageSquareHeart`) in this page file.
+
 ## B4 retry 2 (2026-03-07): verification + commit-gate recovery
 - Verified B4 implementation is already present and aligned in:
   - `src/components/ServicesBento.tsx`
@@ -34,39 +79,3 @@
 - Gotchas for next batch:
   - Hard-hat icon now relies on `HardHat` export from current `lucide-react`; keep `Hammer` fallback only if icon package changes.
   - FAQ copy intentionally uses `setup and configuration` to match stakeholder-approved wording.
-
-## B4: Homepage Product Stack + Verticals + FAQ + Final CTA
-- Modified: `src/components/ServicesBento.tsx`
-  - Cadence hero copy updated with urgency positioning and new micro-proof:
-    - `Every missed call is a customer your competitor answers instead...`
-    - `Live in 5 minutes. Try it right now.`
-  - Added non-hero badges:
-    - Review Funnel: `Pairs with Cadence`
-    - Website Creation: `Foundation`
-    - SEO & Content: `Ongoing Growth`
-    - Custom Apps: `Advanced`
-  - Non-hero cards now render badge pill next to eyebrow when `product.badge` exists.
-- Modified: `src/components/WhoItsFor.tsx`
-  - Replaced audience-problem cards with industry verticals section.
-  - New heading/subtitle and 6-card vertical grid:
-    - HVAC & Plumbing, Roofing & Landscaping, Dental & Medical, Med Spa & Wellness, Legal & Professional, General Contractors.
-  - Added bottom section CTA: `See How It Works for Your Industry` -> `/contact`.
-- Modified: `src/components/FAQ.tsx`
-  - Replaced FAQ list with 7 buying-friction entries (pricing, website migration, service differences, tech comfort, one-product start, contracts, satisfaction/trial).
-  - Kept existing accordion behavior/animation/styling unchanged.
-- Modified: `src/components/CTA.tsx`
-  - New urgency headline/subhead.
-  - Primary CTA changed to tel `<a>`:
-    - `Call Cadence Live — (480) 631-3993` -> `tel:+14806313993`
-  - Secondary CTA updated to `Book a 15-Minute Demo` -> `/contact`.
-  - Trust line updated to `7-day free trial • No credit card for trial • Cancel anytime`.
-- Modified: `src/components/Testimonials.tsx`
-  - Removed duplicated testimonial array and marquee/infinite-scroll animation.
-  - Switched to static responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`).
-  - Trimmed to 3 testimonials and changed attribution style to role/company only with initials avatar labels.
-  - Added TODO note to replace with real client testimonials/headshots.
-- Docs updated:
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
-- Gotchas for next batch:
-  - Testimonials are intentionally anonymized placeholders until real client proof is available.

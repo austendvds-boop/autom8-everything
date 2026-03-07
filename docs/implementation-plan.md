@@ -1,5 +1,18 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B6: review funnel page overhaul
+
+- [x] Rewrite hero headline/subhead on `src/app/services/review-funnel/page.tsx`
+- [x] Insert reputation compounding section after hero and before pricing
+- [x] Upgrade How It Works to connected visual flow with icons (`Calendar`, `MessageSquare`, `Star`)
+- [x] Add testimonials TODO attribution note above testimonials array
+- [x] Add `Common Concerns` section before FAQ
+- [x] Add `Cadence + Review Funnel` bundle section before final CTA with `$278/mo combined`
+- [x] Preserve section order and existing pricing/comparison functionality
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-07 — B4 retry 2: verification + commit-gate recovery
 
 - [x] Re-verify requested B4 homepage changes are present in all 5 target components

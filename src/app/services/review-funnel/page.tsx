@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Calendar, MessageSquare, MessageSquareHeart, PhoneCall, Star } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PlanCard from "@/components/review-funnel/PlanCard";
@@ -10,16 +11,19 @@ const steps = [
     title: "Connect Calendar",
     description:
       "Connect your Google Calendar once, and Review Funnel knows when appointments are done.",
+    icon: Calendar,
   },
   {
-    title: "Automatic Text Message",
+    title: "Automatic Text",
     description:
       "A friendly text message goes out at the right time, so your team does not need to remember follow-up.",
+    icon: MessageSquare,
   },
   {
     title: "Reviews Roll In",
     description:
       "Happy customers are guided straight to your Google review page in just a few taps.",
+    icon: Star,
   },
 ];
 
@@ -85,18 +89,19 @@ const comparisonRows = [
   },
 ];
 
+// TODO: Replace with real client testimonials — use real first name and business name when available
 const testimonials = [
   {
     title: "Home Services Team",
-    quote: "\"The text messages go out automatically, and we started getting more reviews without adding extra work for staff.\"",
+    quote: '"The text messages go out automatically, and we started getting more reviews without adding extra work for staff."',
   },
   {
     title: "Med Spa Owner",
-    quote: "\"Setup was simple. Customers get a friendly follow-up and we can see everything in one place.\"",
+    quote: '"Setup was simple. Customers get a friendly follow-up and we can see everything in one place."',
   },
   {
     title: "Dental Office Manager",
-    quote: "\"This helped us stay consistent and collect more 5-star reviews every month.\"",
+    quote: '"This helped us stay consistent and collect more 5-star reviews every month."',
   },
 ];
 
@@ -115,7 +120,7 @@ const faqs = [
   },
   {
     question: "What if a customer replies STOP?",
-    answer: "They are automatically opted out, and no more review texts are sent to that number.",
+    answer: "They are automatically opted out, and no more review text messages are sent to that number.",
   },
   {
     question: "Can I cancel anytime?",
@@ -155,11 +160,10 @@ export default function ReviewFunnelPage() {
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-4">Review Funnel</p>
           <h1 className="text-5xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            More 5-star reviews, without the tech headache.
+            Your Reputation Compounds. Every Review Brings the Next Customer.
           </h1>
           <p className="text-xl text-[#A1A1AA] max-w-3xl">
-            Review Funnel sends review requests automatically after each appointment, so you can set it and forget it while your online reputation keeps
-            growing.
+            Every 5-star review makes the next customer more likely to call. Review Funnel automates the ask so your reputation grows on autopilot.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
@@ -176,6 +180,34 @@ export default function ReviewFunnelPage() {
             </Link>
           </div>
           <p className="mt-4 text-sm text-[#A1A1AA]">Dead simple setup. Most businesses are live in about 5 minutes.</p>
+        </div>
+      </section>
+
+      <section className="py-20 bg-[#12121A]">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="section-heading mb-10">Why Reviews Compound</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {[
+              { stat: "93%", text: "of consumers read reviews before choosing a local business", source: "BrightLocal 2024" },
+              { stat: "266%", text: "more revenue for businesses with 50+ reviews", source: "Womply Research" },
+              { stat: "5-9%", text: "revenue increase per one-star improvement on Google", source: "Harvard Business School" },
+            ].map((item) => (
+              <div key={item.stat} className="card-base p-8 text-center">
+                <p className="text-4xl font-bold gradient-text mb-3">{item.stat}</p>
+                <p className="text-[#A1A1AA] text-sm mb-2">{item.text}</p>
+                <p className="text-xs text-[#52525B]">Source: {item.source}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-[#A1A1AA]">
+            {["More reviews", "Higher ranking", "More clicks", "More customers", "More reviews"].map((step, i, arr) => (
+              <span key={`${step}-${i}`} className="contents">
+                <span className="px-4 py-2 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#C4B5FD] font-medium">{step}</span>
+                {i < arr.length - 1 && <span className="text-[#52525B]">→</span>}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -230,14 +262,25 @@ export default function ReviewFunnelPage() {
           <h2 className="text-3xl md:text-4xl font-semibold mb-10" style={{ fontFamily: "var(--font-playfair), serif" }}>
             How it works
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {steps.map((step, index) => (
-              <article key={step.title} className="rounded-2xl border border-white/10 bg-[#12121A] p-6">
-                <p className="text-sm font-semibold uppercase tracking-wide text-[#8B5CF6] mb-3">Step {index + 1}</p>
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                <p className="text-[#A1A1AA]">{step.description}</p>
-              </article>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+            {steps.map((step, index) => {
+              const StepIcon = step.icon;
+              return (
+                <div key={step.title} className="relative">
+                  {index < steps.length - 1 && (
+                    <div className="hidden md:block absolute top-12 -right-3 w-6 text-[#8B5CF6]/40">→</div>
+                  )}
+                  <article className="card-base p-6 text-center">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-[#8B5CF6]/10 flex items-center justify-center">
+                      <StepIcon className="w-7 h-7 text-[#8B5CF6]" />
+                    </div>
+                    <p className="text-sm font-semibold uppercase tracking-wide text-[#8B5CF6] mb-3">Step {index + 1}</p>
+                    <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                    <p className="text-[#A1A1AA]">{step.description}</p>
+                  </article>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -255,6 +298,71 @@ export default function ReviewFunnelPage() {
                 <p className="text-[#A1A1AA] leading-relaxed">{item.quote}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="section-heading mb-10">Common Concerns</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                concern: "What if customers find it annoying?",
+                answer:
+                  "The text is friendly, well-timed, and sent once. Customers can opt out instantly. Most people appreciate the reminder.",
+              },
+              {
+                concern: "Will this actually work for my business?",
+                answer:
+                  "If your customers have phones and use Google, yes. We have seen results across home services, dental, med spa, and professional services.",
+              },
+              {
+                concern: "I don't have time to manage another tool.",
+                answer:
+                  "That is the point. Set it once, and Review Funnel runs itself. Check your dashboard when you want — or don't.",
+              },
+            ].map((item) => (
+              <article key={item.concern} className="card-base p-6">
+                <h3 className="text-lg font-semibold mb-3 text-white">{item.concern}</h3>
+                <p className="text-[#A1A1AA] text-sm leading-relaxed">{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-[#12121A]">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="section-heading mb-4 text-center">Even Better Together: Cadence + Review Funnel</h2>
+          <p className="section-subheading mx-auto text-center mb-10">
+            Cadence answers your calls and captures customer info. Review Funnel follows up and collects reviews. Together, they keep your pipeline and
+            reputation growing automatically.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="card-base p-6 text-center">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[#8B5CF6]/10 flex items-center justify-center">
+                <PhoneCall className="w-6 h-6 text-[#8B5CF6]" />
+              </div>
+              <h3 className="font-semibold mb-2">Cadence</h3>
+              <p className="text-sm text-[#A1A1AA]">Answers every call → captures customer info → sends you summaries</p>
+            </div>
+            <div className="card-base p-6 text-center">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[#06B6D4]/10 flex items-center justify-center">
+                <MessageSquareHeart className="w-6 h-6 text-[#06B6D4]" />
+              </div>
+              <h3 className="font-semibold mb-2">Review Funnel</h3>
+              <p className="text-sm text-[#A1A1AA]">Follows up after service → asks for reviews → reputation compounds</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-2xl font-bold mb-2">$278/mo combined</p>
+            <p className="text-sm text-[#A1A1AA] mb-6">Cadence $199/mo + Review Funnel Starter $79/mo</p>
+            <Link href="/contact" className="btn-primary text-lg px-10 py-4">
+              Start with Both
+            </Link>
           </div>
         </div>
       </section>
