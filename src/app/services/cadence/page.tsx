@@ -3,6 +3,7 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CadenceDemoPlaceholder from "@/components/CadenceDemoPlaceholder";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import ComparisonTable from "@/components/ComparisonTable";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
 
@@ -118,7 +119,7 @@ export default function CadencePage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F]">
+    <main className="min-h-screen bg-[#0A0A0F] pb-20 md:pb-0">
       <Navigation />
       <script
         type="application/ld+json"
@@ -348,6 +349,7 @@ export default function CadencePage() {
       </section>
 
       <Footer />
+      <StickyMobileCTA />
     </main>
   );
 }

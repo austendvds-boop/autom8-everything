@@ -15,6 +15,13 @@ const productLinks = [
   { label: "Pricing", href: "/pricing" },
 ];
 
+const startHereLinks = [
+  { label: "Try Cadence Free", href: "tel:+14806313993" },
+  { label: "Get a Growth Audit", href: "/contact" },
+  { label: "See Pricing", href: "/pricing" },
+  { label: "Book a Demo", href: "/contact" },
+];
+
 const companyLinks = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -35,9 +42,12 @@ export default function Footer() {
   return (
     <footer className="py-16 bg-[#0A0A0F] border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
           <div className="md:col-span-2">
             <BrandLogo size="md" className="mb-4" />
+            <a href="tel:+14806313993" className="block text-xl font-semibold text-white hover:text-[#8B5CF6] transition-colors mb-3">
+              (480) 631-3993
+            </a>
             <p className="text-[#A1A1AA] mb-3 max-w-sm">
               Simple tools that help local businesses answer more calls, get more reviews, and stay visible online.
             </p>
@@ -72,6 +82,25 @@ export default function Footer() {
                   <Link href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
                     {link.label}
                   </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-white mb-4">Start Here</h4>
+            <ul className="space-y-3">
+              {startHereLinks.map((link) => (
+                <li key={link.label}>
+                  {link.href.startsWith("tel:") ? (
+                    <a href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="text-[#A1A1AA] hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

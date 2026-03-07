@@ -29,6 +29,43 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B8 checks (Custom Apps + Footer + Sticky Mobile CTA)
+- `/services/custom-apps` section order is:
+  1) Hero (new selectivity framing)
+  2) How It Works
+  3) The ROI of a Custom Tool
+  4) Examples We Can Build
+  5) Pricing
+  6) FAQ
+  7) Final CTA
+- `/services/custom-apps` hero copy
+  - headline: `When Off-the-Shelf Tools Don't Fit, We Build What Does.`
+  - subhead starts with: `Custom apps designed around your actual workflow...`
+  - italic selectivity note is visible under subhead
+- `/services/custom-apps` ROI section
+  - renders 3 icon cards: `Time Saved`, `Errors Eliminated`, `Competitive Edge`
+- `/services/custom-apps` examples section
+  - cards render concrete examples for Lead Scrapers, Internal Dashboards, Custom Booking Flows, Workflow Automations
+- `/services/custom-apps` pricing section
+  - includes range text: `Most custom builds range from $2,000 to $15,000 depending on scope.`
+  - includes `What affects pricing:` list with 4 bullets
+- Footer
+  - phone number `(480) 631-3993` is shown directly under logo and links to `tel:+14806313993`
+  - right side has 3 columns: `Products`, `Start Here`, `Company`
+  - `Start Here` includes: Try Cadence Free, Get a Growth Audit, See Pricing, Book a Demo
+- Sticky mobile CTA (`md` and below)
+  - appears only after scrolling past hero (~80vh)
+  - shows two actions: `Call Now` (`tel:+14806313993`) and `Book Demo` (`/contact`)
+- StickyMobileCTA appears on:
+  - `/` (homepage)
+  - `/services/cadence`
+  - `/services/review-funnel`
+  - `/services/websites`
+  - `/services/seo-content`
+  - `/services/custom-apps`
+- Main-content spacing check
+  - each route above includes bottom padding on mobile (`pb-20 md:pb-0`) so sticky CTA does not cover bottom content
+
 ## Batch B7 checks (Websites + SEO page overhauls)
 - `/services/websites` section order is:
   1) Hero

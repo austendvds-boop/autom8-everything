@@ -13,6 +13,7 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 export default function HomePageClient() {
   return (
@@ -23,7 +24,7 @@ export default function HomePageClient() {
       >
         Skip to main content
       </a>
-      <main id="main-content" className="min-h-screen bg-[#0A0A0F]">
+      <main id="main-content" className="min-h-screen bg-[#0A0A0F] pb-20 md:pb-0">
         <Navigation />
         <Hero />
         <SocialProofBar />
@@ -36,6 +37,7 @@ export default function HomePageClient() {
         <FAQ />
         <CTA />
         <Footer />
+        <StickyMobileCTA />
       </main>
     </ReactLenis>
   );

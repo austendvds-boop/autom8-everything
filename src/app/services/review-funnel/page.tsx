@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Calendar, MessageSquare, MessageSquareHeart, PhoneCall, Star } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import PlanCard from "@/components/review-funnel/PlanCard";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
 
@@ -152,7 +153,7 @@ export default function ReviewFunnelPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F]">
+    <main className="min-h-screen bg-[#0A0A0F] pb-20 md:pb-0">
       <Navigation />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(faqs)) }} />
@@ -400,6 +401,7 @@ export default function ReviewFunnelPage() {
       </section>
 
       <Footer />
+      <StickyMobileCTA />
     </main>
   );
 }

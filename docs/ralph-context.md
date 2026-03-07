@@ -1,5 +1,41 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B8 (2026-03-07): Custom Apps + Footer + Sticky Mobile CTA + polish
+- Created `src/components/StickyMobileCTA.tsx`:
+  - mobile-only fixed bottom CTA bar (`md:hidden`)
+  - appears after scroll past ~80vh
+  - actions: `Call Now` (`tel:+14806313993`) and `Book Demo` (`/contact`)
+- Updated `src/app/HomePageClient.tsx`:
+  - imported/rendered `StickyMobileCTA` after `<Footer />`
+  - main container now includes `pb-20 md:pb-0`
+- Updated all CRO service pages to render sticky CTA and reserve mobile bottom space:
+  - `src/app/services/cadence/page.tsx`
+  - `src/app/services/review-funnel/page.tsx`
+  - `src/app/services/websites/page.tsx`
+  - `src/app/services/seo-content/page.tsx`
+  - `src/app/services/custom-apps/page.tsx`
+- Reworked `src/app/services/custom-apps/page.tsx`:
+  - Hero headline now: `When Off-the-Shelf Tools Don't Fit, We Build What Does.`
+  - Hero subhead replaced with workflow-first copy + selectivity note
+  - Added new ROI section after How It Works with 3 cards (`Clock`, `ShieldCheck`, `Zap`)
+  - Upgraded examples to concrete outcomes with TODO case-study comments
+  - Pricing updated with `$2,000 to $15,000` range and 4 pricing-factor bullets
+  - Preserved required section order and structured data scripts
+  - Standardized classes: `btn-primary`/`btn-secondary`, `card-base`, `section-heading`
+- Updated `src/components/Footer.tsx`:
+  - Added prominent phone link below logo: `(480) 631-3993` -> `tel:+14806313993`
+  - Grid updated to `md:grid-cols-5` with brand block `md:col-span-2`
+  - Added new `Start Here` column with quick links
+  - Kept Products + Company columns and existing social icon aria labels
+- Docs updated:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/implementation-plan.md`
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - Keep sticky CTA rendered after `Footer` inside `<main>` on any newly-added top-level marketing pages.
+  - Preserve `pb-20 md:pb-0` on pages that include `StickyMobileCTA` to avoid content being covered on mobile.
+
 ## B7 (2026-03-07): Website Creation + SEO page overhauls
 - Updated `src/app/services/websites/page.tsx`:
   - Hero rewritten to `A Website That Gets Picked, Trusted, and Contacted.`
@@ -36,23 +72,3 @@
 - Gotchas for next batch:
   - Use `;` not `&&` in PowerShell exec chains.
   - Push explicitly: `git push origin ui/cro-passover`.
-
-## B6 retry 5 (2026-03-07): final verification + handoff refresh
-- Re-verified the full B6 Review Funnel overhaul is present in `src/app/services/review-funnel/page.tsx` and matches requested content/order.
-- Confirmed section order is still exactly:
-  1. Hero (updated compounding headline/subhead)
-  2. Why Reviews Compound (3 stats + compounding visual)
-  3. Pricing
-  4. Comparison table
-  5. How it works visual flow (Calendar/MessageSquare/Star + desktop connectors)
-  6. Testimonials (with TODO attribution comment)
-  7. Common Concerns
-  8. Cadence + Review Funnel bundle CTA ($278/mo)
-  9. FAQ
-  10. Final CTA
-- Confirmed required imports are present: `React`, `PhoneCall`, `MessageSquareHeart` and flow icons.
-- Build: `npm run build` ✅
-- Files modified this retry: `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`.
-- Gotchas for next batch:
-  - Use PowerShell-safe separators (`;`) in chained commands.
-  - Branch push target remains `origin/ui/cro-passover`.

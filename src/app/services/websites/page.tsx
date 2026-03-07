@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
 
 const steps = [
@@ -49,12 +50,12 @@ const tiers = [
   },
   {
     name: "Custom",
-    bestFor: "Multi-location or complex businesses with integrations",
+    bestFor: "Multi-location or complex businesses that need tools to work together",
     description: "A fully bespoke build with integrations, custom features, and ongoing support.",
     price: "Let's Talk",
     highlights: [
       "Fully bespoke design and architecture",
-      "Integrations with your existing tools",
+      "Connects with the tools you already use",
       "Custom features and functionality",
       "Ongoing support and updates",
       "Priority development queue",
@@ -101,7 +102,7 @@ export default function WebsitesPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F]">
+    <main className="min-h-screen bg-[#0A0A0F] pb-20 md:pb-0">
       <Navigation />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(faqs)) }} />
@@ -258,6 +259,7 @@ export default function WebsitesPage() {
       </section>
 
       <Footer />
+      <StickyMobileCTA />
     </main>
   );
 }

@@ -1,5 +1,23 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B8: custom apps + footer + sticky mobile CTA + polish
+
+- [x] Rewrite `src/app/services/custom-apps/page.tsx` hero copy and add selectivity note
+- [x] Add new ROI section after How It Works with `Clock`, `ShieldCheck`, `Zap` cards
+- [x] Update custom-apps examples with concrete descriptions + TODO case-study notes
+- [x] Update custom-apps pricing with `$2,000–$15,000` range and pricing-factor bullets
+- [x] Preserve section order: hero → how it works → ROI → examples → pricing → FAQ → final CTA
+- [x] Update `src/components/Footer.tsx` with prominent phone link and new `Start Here` column
+- [x] Keep footer right-side layout as Products + Start Here + Company with brand block spanning two columns
+- [x] Create `src/components/StickyMobileCTA.tsx` mobile-only fixed-bottom CTA bar
+- [x] Add `StickyMobileCTA` to homepage (`src/app/HomePageClient.tsx`) after `<Footer />`
+- [x] Add `StickyMobileCTA` to all service pages touched in CRO pass: cadence, review-funnel, websites, seo-content, custom-apps
+- [x] Add `pb-20 md:pb-0` to main containers on homepage + all 5 service pages for sticky CTA spacing
+- [x] Ensure touched UI uses shared design token classes (`btn-primary`, `btn-secondary`, `card-base`, `section-heading`)
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-07 — B7: websites + SEO services page overhauls
 
 - [x] Update `src/app/services/websites/page.tsx` hero copy

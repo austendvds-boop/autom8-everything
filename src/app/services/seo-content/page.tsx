@@ -4,6 +4,7 @@ import { BarChart3, FileText, Globe, MapPin, PhoneCall, Search, Star } from "luc
 import ComparisonTable from "@/components/ComparisonTable";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
 
 const steps = [
@@ -76,7 +77,7 @@ export default function SeoContentPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F]">
+    <main className="min-h-screen bg-[#0A0A0F] pb-20 md:pb-0">
       <Navigation />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(faqs)) }} />
@@ -279,6 +280,7 @@ export default function SeoContentPage() {
       </section>
 
       <Footer />
+      <StickyMobileCTA />
     </main>
   );
 }

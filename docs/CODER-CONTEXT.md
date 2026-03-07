@@ -1,5 +1,49 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B8: Custom Apps + Footer + Sticky Mobile CTA + sitewide polish
+
+### Scope completed
+- Created `src/components/StickyMobileCTA.tsx` (new mobile-only bottom action bar):
+  - visibility toggles after scrolling past ~80vh
+  - actions: `Call Now` -> `tel:+14806313993`, `Book Demo` -> `/contact`
+- Updated `src/app/HomePageClient.tsx`:
+  - added `StickyMobileCTA` import and render after `<Footer />`
+  - added `pb-20 md:pb-0` to `<main>`
+- Updated all required service pages to render sticky CTA and reserve mobile bottom space:
+  - `src/app/services/cadence/page.tsx`
+  - `src/app/services/review-funnel/page.tsx`
+  - `src/app/services/websites/page.tsx`
+  - `src/app/services/seo-content/page.tsx`
+  - `src/app/services/custom-apps/page.tsx`
+- Reworked `src/app/services/custom-apps/page.tsx` per requested CRO framing:
+  - hero headline/subhead rewrite + selectivity note
+  - inserted ROI section after How It Works (`Clock`, `ShieldCheck`, `Zap` cards)
+  - replaced examples with concrete-detail array + TODO case-study comments
+  - updated pricing section with `$2,000 to $15,000` context and pricing-factor bullets
+  - preserved required section order, metadata, service schema, FAQ schema, and FAQ/final CTA sections
+  - standardized touched UI classes to shared tokens (`btn-primary`, `btn-secondary`, `card-base`, `section-heading`)
+- Updated `src/components/Footer.tsx`:
+  - added prominent phone link under BrandLogo (`(480) 631-3993`)
+  - introduced `startHereLinks` column (`Try Cadence Free`, `Get a Growth Audit`, `See Pricing`, `Book a Demo`)
+  - upgraded layout to `md:grid-cols-5` with brand block `md:col-span-2` + Products/Start Here/Company columns
+
+### Files changed
+- `src/app/services/custom-apps/page.tsx`
+- `src/components/Footer.tsx`
+- `src/components/StickyMobileCTA.tsx` (new)
+- `src/app/HomePageClient.tsx`
+- `src/app/services/cadence/page.tsx`
+- `src/app/services/review-funnel/page.tsx`
+- `src/app/services/websites/page.tsx`
+- `src/app/services/seo-content/page.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B7: Website Creation + SEO page overhauls
 
 ### Scope completed
