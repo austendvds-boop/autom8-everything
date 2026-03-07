@@ -1,5 +1,13 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — B3 retry: commit-gate recovery + verification
+
+- [x] Verify B3 UI files are present and match requested structure/content
+- [x] Verify homepage section order includes `ProofBar` and `OfferLadder`
+- [x] Update handoff docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push retry pass to `origin/ui/cro-passover`
+
 ## 2026-03-06 — B3: Homepage trust/proof + offer ladder + how it works
 
 - [x] Rewrite `src/components/SocialProofBar.tsx` stats and keep 5-star card

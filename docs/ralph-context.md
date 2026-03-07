@@ -1,5 +1,25 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B3 retry: commit-gate recovery + verification
+- Verified B3 homepage implementation is present on `ui/cro-passover` and matches task spec:
+  - Trust bar stats/logo placeholders in `src/components/SocialProofBar.tsx`
+  - New `src/components/ProofBar.tsx`
+  - New `src/components/OfferLadder.tsx`
+  - Conversion rewrite in `src/components/HowItWorks.tsx`
+  - Updated section order/imports in `src/app/HomePageClient.tsx`
+- Build verification: `npm run build` ✅
+- Files modified this retry:
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/implementation-plan.md`
+- Key exports/components referenced:
+  - `SocialProofBar` (unchanged filename/export)
+  - `ProofBar` (default export)
+  - `OfferLadder` (default export)
+- Gotchas for next batch:
+  - `OfferLadder` anchors from `HowItWorks` CTA rely on `id="offer-ladder"`.
+  - Trust-logo row in `SocialProofBar` is placeholder text and intentionally kept with TODO for real logos.
+
 ## B3: Homepage trust/proof bar + offer ladder + how it works refresh
 - Modified: `src/components/SocialProofBar.tsx`
   - Stats now: `Local Businesses / Active Clients`, `24/7 / Call Coverage`, `5 min / Average Setup Time`
@@ -23,10 +43,6 @@
 - Modified: `src/app/HomePageClient.tsx`
   - Added imports for `ProofBar` and `OfferLadder`
   - Updated section order: Hero -> SocialProofBar -> ProofBar -> ServicesBento -> OfferLadder -> WhoItsFor -> HowItWorks -> Testimonials -> FAQ -> CTA -> Footer
-- Docs updated:
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
-  - `docs/CODER-CONTEXT.md`
 - Gotchas:
   - `SocialProofBar` filename and exported component name are intentionally unchanged to avoid import breakage.
   - `OfferLadder` CTAs intentionally mix tel and contact links.
@@ -46,9 +62,3 @@
 - Gotchas:
   - Kept Framer reveal animations, `buttonHover` preset, `BrandLogo`, and reduced-motion handling unchanged.
   - Secondary CTA still uses `buttonHover` via a motion wrapper around `Link`.
-
-## B1: Design Tokens
-- Created: `src/lib/design-tokens.ts` — exports SECTION_PY, CARD_BASE, CARD_ELEVATED, COLORS
-- Modified: `src/app/globals.css` — added .card-base, .card-elevated, .btn-primary, .btn-secondary, .btn-ghost, .section-heading, .section-subheading, CSS custom properties for section spacing
-- Branch: ui/cro-passover created from master
-- Gotchas: Tailwind v4 uses @theme inline block — new CSS classes are plain CSS, not @apply. Components can use these classes directly via className.

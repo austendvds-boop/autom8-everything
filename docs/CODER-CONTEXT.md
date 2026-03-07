@@ -1,5 +1,24 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — B3 retry: commit-gate recovery + verification
+
+### Scope completed
+- Verified the B3 homepage implementation is already present on `ui/cro-passover` and matches requested spec for:
+  - `src/components/SocialProofBar.tsx`
+  - `src/components/ProofBar.tsx`
+  - `src/components/OfferLadder.tsx`
+  - `src/components/HowItWorks.tsx`
+  - `src/app/HomePageClient.tsx`
+- Added retry handoff docs entry to preserve latest-batch context for next agent.
+
+### Files changed
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — B3: homepage trust/proof + offer ladder + how it works refresh
 
 ### Scope completed
