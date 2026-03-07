@@ -1,5 +1,18 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B4 retry 2: verified commit with component files
+- All 5 B4 component changes confirmed present and correct.
+- Fixed `<Link>` → `<a>` for Cadence hero tel: CTA in `ServicesBento.tsx` (tel: links should use native anchor, not Next.js Link).
+- This commit is the authoritative B4 code commit (previous B4 agent only committed docs; code was bundled in B3 commit by mistake).
+- Build verified: `npm run build` ✅
+- Files in this commit:
+  - `src/components/ServicesBento.tsx` (tel: CTA fix + all B4 urgency/badge changes)
+  - `src/components/WhoItsFor.tsx` (industry verticals section)
+  - `src/components/FAQ.tsx` (7 buying-friction questions)
+  - `src/components/CTA.tsx` (urgent headline, phone CTA, trust line)
+  - `src/components/Testimonials.tsx` (static 3-col grid, honest attribution)
+  - `docs/ralph-context.md`
+
 ## B4: Homepage Product Stack + Verticals + FAQ + Final CTA
 - Modified: `src/components/ServicesBento.tsx`
   - Cadence hero copy updated with urgency positioning and new micro-proof:
@@ -31,12 +44,10 @@
   - Switched to static responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`).
   - Trimmed to 3 testimonials and changed attribution style to role/company only with initials avatar labels.
   - Added TODO note to replace with real client testimonials/headshots.
-- Docs updated:
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
 - Gotchas for next batch:
   - `WhoItsFor` uses `Hammer` icon as fallback for the requested hard-hat visual.
   - Testimonials are intentionally anonymized placeholders until real client proof is available.
+  - ServicesBento hero CTA uses `<a>` (not `<Link>`) for the tel: call link.
 
 ## B3 retry: commit-gate recovery + verification
 - Verified B3 homepage implementation is present on `ui/cro-passover` and matches task spec:

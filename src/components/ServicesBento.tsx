@@ -177,12 +177,12 @@ export default function ServicesBento() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-                <Link
+                <a
                   href={hero.cta.href}
                   className="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white text-sm font-semibold"
                 >
                   {hero.cta.label}
-                </Link>
+                </a>
                 {hero.secondaryCta && (
                   <Link
                     href={hero.secondaryCta.href}
