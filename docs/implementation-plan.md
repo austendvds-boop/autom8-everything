@@ -14,7 +14,7 @@
   - [x] update `src/app/portal/review-funnel/page.tsx` to server shell with noindex metadata and client render
 - [x] Update `docs/UI-VERIFICATION.md` for new portal checks
 - [x] Run `npm run build` and ensure pass
-- [ ] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`), commit, and push to `origin/feature/customer-portal`
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`), commit, and push to `origin/feature/customer-portal`
 
 ## 2026-03-07 — B4-0: portal cadence enhancements (usage, checklist, prompt editor, test mode)
 
