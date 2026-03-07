@@ -1,5 +1,27 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B4 retry: finalize content parity + commit gate recovery
+
+### Scope completed
+- Updated `src/components/WhoItsFor.tsx` to use `HardHat` from `lucide-react` for the General Contractors vertical card (instead of fallback `Hammer`) now that icon availability is confirmed.
+- Updated `src/components/FAQ.tsx` to match the requested buying-friction answer text exactly for `Do I need to be tech-savvy?` (`setup and configuration` phrasing).
+- Updated docs and tracking artifacts for this retry pass:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/components/WhoItsFor.tsx`
+- `src/components/FAQ.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — B4: homepage product stack + verticals + FAQ + final CTA
 
 ### Scope completed

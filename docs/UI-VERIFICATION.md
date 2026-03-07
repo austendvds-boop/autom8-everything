@@ -48,6 +48,7 @@
     - Med Spa & Wellness
     - Legal & Professional
     - General Contractors
+  - General Contractors card icon uses a hard-hat glyph
   - each card has icon in rounded purple-tint square + title + gray description text
   - bottom CTA renders: `See How It Works for Your Industry` -> `/contact`
 - `/` FAQ section (`FAQ`)

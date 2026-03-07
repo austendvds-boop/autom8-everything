@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     question: "Do I need to be tech-savvy?",
-    answer: "No. We handle all setup for you. You get a phone number and a simple dashboard. Most businesses are live in under 5 minutes.",
+    answer: "No. We handle all setup and configuration. You get a phone number and a simple dashboard. Most businesses are live in under 5 minutes.",
   },
   {
     question: "Can I start with just one product?",

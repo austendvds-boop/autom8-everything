@@ -11,7 +11,7 @@
 - [x] Convert testimonials carousel to static 3-card grid and remove duplicated testimonial list
 - [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
 - [x] Run `npm run build` and ensure pass
-- [ ] Commit and push to `origin/ui/cro-passover`
+- [x] Commit and push to `origin/ui/cro-passover`
 
 ## 2026-03-06 — B3 retry: commit-gate recovery + verification
 

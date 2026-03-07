@@ -1,17 +1,22 @@
 # Ralph Context — Autom8 CRO Passover
 
-## B4 retry 2: verified commit with component files
-- All 5 B4 component changes confirmed present and correct.
-- Fixed `<Link>` → `<a>` for Cadence hero tel: CTA in `ServicesBento.tsx` (tel: links should use native anchor, not Next.js Link).
-- This commit is the authoritative B4 code commit (previous B4 agent only committed docs; code was bundled in B3 commit by mistake).
-- Build verified: `npm run build` ✅
-- Files in this commit:
-  - `src/components/ServicesBento.tsx` (tel: CTA fix + all B4 urgency/badge changes)
-  - `src/components/WhoItsFor.tsx` (industry verticals section)
-  - `src/components/FAQ.tsx` (7 buying-friction questions)
-  - `src/components/CTA.tsx` (urgent headline, phone CTA, trust line)
-  - `src/components/Testimonials.tsx` (static 3-col grid, honest attribution)
+## B4 retry (2026-03-07): content parity + commit-gate recovery
+- Modified: `src/components/WhoItsFor.tsx`
+  - Swapped fallback `Hammer` icon to `HardHat` for the `General Contractors` vertical now that `lucide-react` availability is confirmed.
+- Modified: `src/components/FAQ.tsx`
+  - Updated the `Do I need to be tech-savvy?` answer to exact requested phrasing:
+    - `No. We handle all setup and configuration...`
+- Modified docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
   - `docs/ralph-context.md`
+- Key exports/components touched:
+  - `WhoItsFor` (default export, unchanged API)
+  - `FAQ` (default export, unchanged API)
+- Gotchas for next batch:
+  - Hard-hat icon now relies on `HardHat` export from current `lucide-react`; keep `Hammer` fallback only if icon package changes.
+  - FAQ copy intentionally uses `setup and configuration` to match stakeholder-approved wording.
 
 ## B4: Homepage Product Stack + Verticals + FAQ + Final CTA
 - Modified: `src/components/ServicesBento.tsx`
@@ -28,7 +33,6 @@
   - Replaced audience-problem cards with industry verticals section.
   - New heading/subtitle and 6-card vertical grid:
     - HVAC & Plumbing, Roofing & Landscaping, Dental & Medical, Med Spa & Wellness, Legal & Professional, General Contractors.
-  - Uses lucide icons (`Flame`, `Home`, `Heart`, `Sparkles`, `Scale`, `Hammer` fallback for HardHat).
   - Added bottom section CTA: `See How It Works for Your Industry` -> `/contact`.
 - Modified: `src/components/FAQ.tsx`
   - Replaced FAQ list with 7 buying-friction entries (pricing, website migration, service differences, tech comfort, one-product start, contracts, satisfaction/trial).
@@ -44,10 +48,11 @@
   - Switched to static responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`).
   - Trimmed to 3 testimonials and changed attribution style to role/company only with initials avatar labels.
   - Added TODO note to replace with real client testimonials/headshots.
+- Docs updated:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
 - Gotchas for next batch:
-  - `WhoItsFor` uses `Hammer` icon as fallback for the requested hard-hat visual.
   - Testimonials are intentionally anonymized placeholders until real client proof is available.
-  - ServicesBento hero CTA uses `<a>` (not `<Link>`) for the tel: call link.
 
 ## B3 retry: commit-gate recovery + verification
 - Verified B3 homepage implementation is present on `ui/cro-passover` and matches task spec:
@@ -68,30 +73,3 @@
 - Gotchas for next batch:
   - `OfferLadder` anchors from `HowItWorks` CTA rely on `id="offer-ladder"`.
   - Trust-logo row in `SocialProofBar` is placeholder text and intentionally kept with TODO for real logos.
-
-## B3: Homepage trust/proof bar + offer ladder + how it works refresh
-- Modified: `src/components/SocialProofBar.tsx`
-  - Stats now: `Local Businesses / Active Clients`, `24/7 / Call Coverage`, `5 min / Average Setup Time`
-  - Existing five-star card retained with same motion/reduced-motion behavior
-  - Added trust-logo placeholder row: `Google Business`, `Stripe`, `Twilio`, `Google Calendar`
-  - Added TODO note to replace text with real integration logos later
-- Created: `src/components/ProofBar.tsx`
-  - New proof strip with three sourced stat callouts:
-    - `80%` callers won't leave voicemail (Ruby Receptionist)
-    - `$1,000+` missed call value (Industry average)
-    - `93%` review-reading behavior (BrightLocal 2024)
-- Created: `src/components/OfferLadder.tsx`
-  - New 4-tier pricing bundle section with heading/subheading
-  - Tiers: Start, Grow (featured), Expand, Custom
-  - Grow card is highlighted and includes `Most Popular` badge
-  - Includes icons, value props, checkmark feature lists, and CTA buttons
-  - Section id: `offer-ladder` for internal anchor linking
-- Modified: `src/components/HowItWorks.tsx`
-  - Rewrote 3 steps with conversion-focused copy
-  - Bottom CTA now `See Pricing` linking to `#offer-ladder` using `btn-secondary`
-- Modified: `src/app/HomePageClient.tsx`
-  - Added imports for `ProofBar` and `OfferLadder`
-  - Updated section order: Hero -> SocialProofBar -> ProofBar -> ServicesBento -> OfferLadder -> WhoItsFor -> HowItWorks -> Testimonials -> FAQ -> CTA -> Footer
-- Gotchas:
-  - `SocialProofBar` filename and exported component name are intentionally unchanged to avoid import breakage.
-  - `OfferLadder` CTAs intentionally mix tel and contact links.

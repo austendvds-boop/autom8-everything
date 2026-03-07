@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Flame, Hammer, Heart, Home, Scale, Sparkles } from "lucide-react";
+import { Flame, HardHat, Heart, Home, Scale, Sparkles } from "lucide-react";
 import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 const verticals = [
@@ -34,7 +34,7 @@ const verticals = [
   {
     title: "General Contractors",
     description: "One number, always answered. Summaries after every call.",
-    icon: Hammer,
+    icon: HardHat,
   },
 ];
 
