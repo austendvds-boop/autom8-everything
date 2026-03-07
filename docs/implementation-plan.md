@@ -1,5 +1,13 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B6 retry 3: commit-gate closure after PowerShell chaining failure
+
+- [x] Re-verify all B6 requested UI/content updates remain implemented in `src/app/services/review-funnel/page.tsx`
+- [x] Re-run `npm run build` and ensure pass
+- [x] Append retry handoff notes and keep `docs/ralph-context.md` trimmed to last 3 batches
+- [x] Update `docs/CODER-CONTEXT.md` + `docs/implementation-plan.md` for this retry
+- [x] Commit and push retry pass to `origin/ui/cro-passover`
+
 ## 2026-03-07 — B6 retry 2: final commit-gate closure
 
 - [x] Re-verify all B6 requested UI/content updates remain implemented in `src/app/services/review-funnel/page.tsx`
