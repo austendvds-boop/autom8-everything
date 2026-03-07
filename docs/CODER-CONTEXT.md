@@ -1,5 +1,29 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B4 retry 2: verification + commit-gate recovery
+
+### Scope completed
+- Confirmed the requested B4 homepage updates are already implemented and present in:
+  - `src/components/ServicesBento.tsx`
+  - `src/components/WhoItsFor.tsx`
+  - `src/components/FAQ.tsx`
+  - `src/components/CTA.tsx`
+  - `src/components/Testimonials.tsx`
+- Re-ran build verification for this retry pass.
+- Build initially failed due a stale Next lock file (`.next/lock`), then succeeded after clearing the stale lock.
+- Updated retry handoff docs:
+  - `docs/ralph-context.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `docs/ralph-context.md`
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B4 retry: finalize content parity + commit gate recovery
 
 ### Scope completed

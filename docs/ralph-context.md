@@ -1,5 +1,22 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B4 retry 2 (2026-03-07): verification + commit-gate recovery
+- Verified B4 implementation is already present and aligned in:
+  - `src/components/ServicesBento.tsx`
+  - `src/components/WhoItsFor.tsx`
+  - `src/components/FAQ.tsx`
+  - `src/components/CTA.tsx`
+  - `src/components/Testimonials.tsx`
+- Build verification: `npm run build` ✅
+- Modified docs:
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/implementation-plan.md`
+- Key exports/components touched:
+  - none (verification-only pass; existing default exports unchanged)
+- Gotchas for next batch:
+  - If `next build` fails with `.next/lock` acquisition error, remove stale `.next/lock` and rerun.
+
 ## B4 retry (2026-03-07): content parity + commit-gate recovery
 - Modified: `src/components/WhoItsFor.tsx`
   - Swapped fallback `Hammer` icon to `HardHat` for the `General Contractors` vertical now that `lucide-react` availability is confirmed.
@@ -53,23 +70,3 @@
   - `docs/implementation-plan.md`
 - Gotchas for next batch:
   - Testimonials are intentionally anonymized placeholders until real client proof is available.
-
-## B3 retry: commit-gate recovery + verification
-- Verified B3 homepage implementation is present on `ui/cro-passover` and matches task spec:
-  - Trust bar stats/logo placeholders in `src/components/SocialProofBar.tsx`
-  - New `src/components/ProofBar.tsx`
-  - New `src/components/OfferLadder.tsx`
-  - Conversion rewrite in `src/components/HowItWorks.tsx`
-  - Updated section order/imports in `src/app/HomePageClient.tsx`
-- Build verification: `npm run build` ✅
-- Files modified this retry:
-  - `docs/ralph-context.md`
-  - `docs/CODER-CONTEXT.md`
-  - `docs/implementation-plan.md`
-- Key exports/components referenced:
-  - `SocialProofBar` (unchanged filename/export)
-  - `ProofBar` (default export)
-  - `OfferLadder` (default export)
-- Gotchas for next batch:
-  - `OfferLadder` anchors from `HowItWorks` CTA rely on `id="offer-ladder"`.
-  - Trust-logo row in `SocialProofBar` is placeholder text and intentionally kept with TODO for real logos.

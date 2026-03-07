@@ -1,5 +1,12 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B4 retry 2: verification + commit-gate recovery
+
+- [x] Re-verify requested B4 homepage changes are present in all 5 target components
+- [x] Re-run `npm run build` and ensure pass
+- [x] Update retry handoff docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Commit and push retry pass to `origin/ui/cro-passover`
+
 ## 2026-03-06 — B4: homepage product stack + verticals + FAQ + final CTA
 
 - [x] Update `src/components/ServicesBento.tsx` Cadence urgency copy and micro-proof
