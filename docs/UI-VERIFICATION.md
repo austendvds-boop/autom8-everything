@@ -16,12 +16,44 @@
 13. /review-funnel/admin/stats — admin KPI overview
 14. /admin/clients — platform client management list, auth gate, add-client modal
 15. /admin/clients/[id] — platform client detail, edit mode, service controls, usage cards
+16. /portal/login — client portal email login page
+17. /portal — client portal dashboard with service cards + billing action
+18. /portal/cadence — client Cadence settings + recent calls
+19. /portal/billing — billing redirect/loading state
+20. /portal/review-funnel — review funnel dashboard handoff card
 
 ## Smoke tests (no auth required)
 - GET /review-funnel/login → must render login form, NOT redirect
 - GET /review-funnel/signup → must render Step 1 of 4 wizard
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
+
+## Batch 15 checks (platform client portal UI)
+- `/portal/login`
+  - centered sign-in card renders with email field + `Send login link`
+  - successful submit shows `Check your email for a login link.`
+  - failed submit shows inline error text
+- `/portal`
+  - unauthenticated access redirects to `/portal/login`
+  - authenticated view shows welcome header with contact + business name
+  - Cadence card shows status badge and `Manage` button to `/portal/cadence`
+  - Review Funnel card shows status badge and `Open Dashboard` button to `/review-funnel/dashboard` in a new tab
+  - `Manage Billing` button opens billing portal (or shows inline error)
+- `/portal/cadence`
+  - unauthenticated access redirects to `/portal/login`
+  - back link returns to `/portal`
+  - form fields render: greeting, transfer number, booking URL, timezone, business hours rows
+  - services list supports add/remove and editing name/description/price
+  - questions list supports add/remove and editing question/answer
+  - save action shows success toast (`Settings saved`) when update succeeds
+  - recent calls table masks caller phone as `(***) ***-1234`
+  - `Load more` appends more rows when available
+- `/portal/billing`
+  - shows loading state while billing portal request is in progress
+  - redirects automatically when billing URL is returned
+  - shows `No billing account linked. Contact support.` when no billing account exists
+- `/portal/review-funnel`
+  - route renders card with `Open Review Funnel Dashboard` link to `/review-funnel/dashboard`
 
 ## Batch 14 checks (platform operator dashboard)
 - `/admin/clients`

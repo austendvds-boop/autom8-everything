@@ -1,5 +1,20 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — Platform client portal UI (/portal)
+
+- [x] Create `src/app/portal/login/page.tsx` server shell for login route
+- [x] Build `src/app/portal/login/PortalLoginClient.tsx` with magic-link email form, success message, and error handling
+- [x] Create `src/app/portal/page.tsx` server shell for portal dashboard route
+- [x] Build `src/app/portal/PortalDashboardClient.tsx` with auth gate, service cards, and billing portal action
+- [x] Create `src/app/portal/cadence/page.tsx` server shell for Cadence settings route
+- [x] Build `src/app/portal/cadence/PortalCadenceClient.tsx` with settings editor, save flow, success toast, and recent call table with load-more
+- [x] Create `src/app/portal/review-funnel/page.tsx` handoff route with dashboard link card
+- [x] Create `src/app/portal/billing/page.tsx` server shell for billing redirect route
+- [x] Build `src/app/portal/billing/PortalBillingClient.tsx` with auto-redirect on mount and no-account message
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/master`
+
 ## 2026-03-06 — Platform operator dashboard UI (/admin/clients)
 
 - [x] Create `src/app/admin/clients/page.tsx` server route shell for the operator list UI

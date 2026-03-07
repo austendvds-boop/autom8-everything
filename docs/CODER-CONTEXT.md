@@ -1,5 +1,54 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 15: platform client portal UI (/portal)
+
+### Scope completed
+- Added portal login route at `src/app/portal/login/page.tsx` + `src/app/portal/login/PortalLoginClient.tsx`:
+  - centered branded dark card
+  - email input + `Send login link` action posting `POST /api/portal/auth/login`
+  - success and error inline messaging
+- Added portal dashboard route at `src/app/portal/page.tsx` + `src/app/portal/PortalDashboardClient.tsx`:
+  - auth gate via `GET /api/portal/me` with redirect to `/portal/login` on 401
+  - welcome header with contact and business name
+  - service cards for Cadence and Review Funnel with active/paused/inactive badges
+  - Cadence quick preview attempts call stats (`GET /api/portal/cadence/calls?limit=1`), with fallback copy when count is unavailable
+  - billing action button posts `POST /api/portal/billing/portal` and redirects to returned Stripe URL
+- Added Cadence settings route at `src/app/portal/cadence/page.tsx` + `src/app/portal/cadence/PortalCadenceClient.tsx`:
+  - auth gate via `GET /api/portal/me`
+  - editable settings fields: greeting, transfer number, booking URL, timezone, business hours, services list, FAQ list
+  - save flow via `PATCH /api/portal/cadence/settings` sending changed top-level fields only
+  - success toast on save and inline error states
+  - recent calls table from `GET /api/portal/cadence/calls` with masked phone numbers, formatted duration, summary first line, and load-more pagination
+- Added portal billing route at `src/app/portal/billing/page.tsx` + `src/app/portal/billing/PortalBillingClient.tsx`:
+  - auto request on mount to billing portal endpoint
+  - loading state while request is in progress
+  - user-facing fallback message when no billing account is linked
+- Added portal Review Funnel handoff route `src/app/portal/review-funnel/page.tsx`:
+  - simple card with direct link to `/review-funnel/dashboard`
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/app/portal/login/page.tsx` (new)
+- `src/app/portal/login/PortalLoginClient.tsx` (new)
+- `src/app/portal/page.tsx` (new)
+- `src/app/portal/PortalDashboardClient.tsx` (new)
+- `src/app/portal/cadence/page.tsx` (new)
+- `src/app/portal/cadence/PortalCadenceClient.tsx` (new)
+- `src/app/portal/review-funnel/page.tsx` (new)
+- `src/app/portal/billing/page.tsx` (new)
+- `src/app/portal/billing/PortalBillingClient.tsx` (new)
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 14: platform operator dashboard UI (/admin/clients)
 
 ### Scope completed

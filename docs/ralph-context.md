@@ -2,6 +2,64 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 - Batch 15: platform client portal UI (`/portal`)
+
+#### Files modified
+- `src/app/portal/login/page.tsx` (new)
+- `src/app/portal/login/PortalLoginClient.tsx` (new)
+- `src/app/portal/page.tsx` (new)
+- `src/app/portal/PortalDashboardClient.tsx` (new)
+- `src/app/portal/cadence/page.tsx` (new)
+- `src/app/portal/cadence/PortalCadenceClient.tsx` (new)
+- `src/app/portal/review-funnel/page.tsx` (new)
+- `src/app/portal/billing/page.tsx` (new)
+- `src/app/portal/billing/PortalBillingClient.tsx` (new)
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- Added `/portal/login` UI:
+  - server shell `src/app/portal/login/page.tsx`
+  - client form posts `POST /api/portal/auth/login` with `{ email }`
+  - success state: `Check your email for a login link.`
+  - inline error handling for failed requests
+- Added `/portal` dashboard UI:
+  - server shell `src/app/portal/page.tsx`
+  - client auth gate on mount with `GET /api/portal/me`; 401 redirects to `/portal/login`
+  - welcome header shows `contactName` and `businessName`
+  - service cards:
+    - Cadence card (`📞`) with active/paused/inactive badge, quick calls preview fallback, `Manage` -> `/portal/cadence`
+    - Review Funnel card (`⭐`) with status badge, `Open Dashboard` -> `/review-funnel/dashboard` in new tab
+  - billing section button posts `POST /api/portal/billing/portal` then redirects to returned URL
+- Added `/portal/cadence` settings UI:
+  - server shell `src/app/portal/cadence/page.tsx`
+  - client auth gate via `GET /api/portal/me`
+  - settings load via `GET /api/portal/cadence/settings`
+  - editable sections: greeting, transfer number, booking URL, timezone, business hours, services list, question list
+  - save via `PATCH /api/portal/cadence/settings` with changed top-level fields only
+  - success toast (`Settings saved`) and inline save error state
+  - recent calls table from `GET /api/portal/cadence/calls` with:
+    - local date/time formatting
+    - masked caller phone format `(***) ***-1234`
+    - duration formatted as `Xm Ys`
+    - summary first-line display
+    - load-more pagination
+- Added `/portal/review-funnel` route as a simple handoff card linking to `/review-funnel/dashboard`.
+- Added `/portal/billing` redirect route:
+  - server shell `src/app/portal/billing/page.tsx`
+  - client auto-posts `POST /api/portal/billing/portal` on mount
+  - loading state while fetching
+  - fallback message on error: `No billing account linked. Contact support.`
+
+#### Gotchas for next batch
+- Cadence settings shape from cadence-v2 is permissive; UI normalizes `hours/services/faqs` and writes back normalized arrays. If cadence-v2 requires a stricter schema, align normalization and payload shape.
+- Dashboard call-count preview attempts common count keys (`callCount`, `total`, `count`) and falls back to generic copy when unavailable.
+- `/portal/review-funnel` currently uses static handoff card (no server-side service entitlement check).
+
+---
+
 ### 2026-03-06 - Batch 14: platform operator dashboard UI (`/admin/clients`)
 
 #### Files modified
@@ -89,47 +147,3 @@
 - `GET /api/portal/auth/verify` currently returns JSON 401 for invalid links (as requested). If product wants friendly UI redirect parity with Review Funnel login, add a dedicated portal error page and redirect flow.
 - Cadence settings update schema allows unknown nested object shapes for `hours`, `services`, and `faqs` (`z.unknown()`), so deep validation is delegated to cadence-v2.
 - Billing portal route reads `stripeCustomerId` from DB at request time; if service provisioning delays Stripe sync, users may see the expected `No billing account linked` until sync completes.
-
----
-
-### 2026-03-06 - Batch 12: platform operator admin API routes + provisioning/email services
-
-#### Files modified
-- `src/lib/platform/services/email.ts` (new)
-- `src/lib/platform/services/provisioning.ts` (new)
-- `src/app/api/admin/auth/route.ts` (new)
-- `src/app/api/admin/clients/route.ts` (new)
-- `src/app/api/admin/clients/[id]/route.ts` (new)
-- `src/app/api/admin/clients/[id]/services/route.ts` (new)
-- `docs/implementation-plan.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/ralph-context.md`
-
-#### Key exports / behavior
-- Added platform portal email service:
-  - `sendPortalMagicLinkEmail({ toEmail, token })`
-  - `sendWelcomeEmail({ toEmail, clientName, serviceName, magicLinkToken })`
-  - Uses the dark email shell style parity with Review Funnel and links to `/api/portal/auth/verify?token=...`.
-- Added platform provisioning service:
-  - `provisionService(clientId, serviceType, metadata?)`
-  - `pauseService(clientId, serviceType)`
-  - `cancelService(clientId, serviceType)`
-  - `resumeService(clientId, serviceType)`
-- Provisioning specifics:
-  - Cadence requires `metadata.cadenceTenantId` and stores it in `a8_client_services.cadence_tenant_id`.
-  - Review Funnel resolves `rf_tenant_id` from `metadata.rfTenantId` or by matching `a8_clients.email` to `rf_tenants.owner_email`.
-- Added admin auth route:
-  - `POST /api/admin/auth` validates `{ secret }`, sets `a8_admin_session`, returns `{ ok: true }`.
-- Added admin clients routes:
-  - `GET /api/admin/clients` returns clients with summarized services array.
-  - `POST /api/admin/clients` creates client.
-  - `GET /api/admin/clients/[id]` returns client + full services + usage data.
-  - `PATCH /api/admin/clients/[id]` updates partial client fields.
-  - `POST /api/admin/clients/[id]/services` provisions service, generates portal magic link, sends welcome email.
-  - `DELETE /api/admin/clients/[id]/services` cancels service.
-  - `PATCH /api/admin/clients/[id]/services` pauses/resumes service.
-
-#### Gotchas for next batch
-- `GET /api/admin/clients/[id]` derives Cadence `callCount` from common keys in the calls payload (`callCount`, `total`, etc.) and falls back to `calls.length`. If cadence-v2 standardizes a definitive count field, tighten this mapping.
-- Provisioning currently returns `500` for provisioning/email failures in `/api/admin/clients/[id]/services`; if UI needs finer-grained validation errors (e.g., missing Cadence ID, no matching RF tenant), split into explicit `4xx` responses.
-- `sendPortalMagicLinkEmail` is implemented but not yet wired to an API route in this batch.
