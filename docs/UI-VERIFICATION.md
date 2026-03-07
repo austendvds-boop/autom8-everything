@@ -20,7 +20,7 @@
 17. /portal — client portal dashboard with service cards + billing action
 18. /portal/cadence — client Cadence settings + recent calls
 19. /portal/billing — billing redirect/loading state
-20. /portal/review-funnel — review funnel dashboard handoff card
+20. /portal/review-funnel — Review Funnel status page with usage, plan, and quick links
 21. /portal/checkout — self-serve signup page for Cadence/Review Funnel
 22. /portal/checkout/success — post-checkout setup confirmation page
 23. site footer — subtle `Client Portal` link to `/portal/login`
@@ -30,6 +30,53 @@
 - GET /review-funnel/signup → must render Step 1 of 4 wizard
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
+
+## Batch B5-0 checks (portal dashboard discovery + Review Funnel portal status)
+- `/portal`
+  - active Cadence card:
+    - shows `Manage Settings` button linking to `/portal/cadence`
+    - call line reads `X calls this month` when available
+    - shows `Your Cadence number: ...` when settings include a phone number
+  - active Review Funnel card:
+    - button reads `Open Dashboard` and links to `/portal/review-funnel`
+    - shows `Plan: ...` line when service metadata includes plan
+  - More Products section only appears when one or both products are missing
+    - card style uses muted treatment (`border-dashed border-white/15` + lower opacity)
+    - Cadence discovery card copy and CTA:
+      - title `Cadence — AI Receptionist`
+      - price `$199/mo · 7-day free trial`
+      - `Get Started` -> `/portal/checkout?product=cadence`
+    - Review Funnel discovery card copy and CTA:
+      - title `Review Funnel — Automated Reviews`
+      - price `From $79/mo`
+      - `Get Started` -> `/portal/checkout?product=review_funnel`
+  - Account section at bottom:
+    - shows customer name + email
+    - `Manage Billing` posts to `/api/portal/billing/portal` and redirects
+    - `Need help?` links to `/contact`
+- `/portal/review-funnel`
+  - page renders in portal dark theme with back link to `/portal`
+  - status card shows:
+    - plan line (`Plan: ...`)
+    - active/inactive badge
+    - usage summary line: `X / Y text messages sent this month`
+    - progress bar with same style as `/portal/cadence` usage bars
+    - connected calendar count
+  - quick links section includes:
+    - `Open Full Dashboard` -> `/review-funnel/dashboard` (prominent gradient button)
+    - `Settings` -> `/review-funnel/dashboard/settings`
+    - `View Reviews` -> `/review-funnel/dashboard/reviews`
+    - `View Feedback` -> `/review-funnel/dashboard/feedback`
+    - note text: `Your Review Funnel dashboard has detailed analytics, settings, and calendar management.`
+- `/api/portal/review-funnel/status`
+  - returns 401 without portal auth
+  - returns 404 when the logged-in client has no active Review Funnel service
+  - returns payload shape:
+    - `plan` (string)
+    - `smsUsed` (number)
+    - `smsLimit` (number)
+    - `calendarsConnected` (number)
+    - `isActive` (boolean)
 
 ## Batch B4-0 checks (portal cadence enhancements)
 - `/portal/cadence`

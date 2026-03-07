@@ -1,5 +1,43 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B5-0 (2026-03-07): portal dashboard discovery + Review Funnel portal status page
+- Updated `src/app/portal/PortalDashboardClient.tsx`:
+  - Active Cadence card now attempts both:
+    - `GET /api/portal/cadence/calls?limit=1&offset=0` for monthly call count preview
+    - `GET /api/portal/cadence/settings` for Cadence phone number preview
+  - Cadence card now shows:
+    - `X calls this month` when count is available
+    - `Your Cadence number: ...` when settings include a number
+    - CTA `Manage Settings` -> `/portal/cadence`
+  - Active Review Funnel card now:
+    - CTA `Open Dashboard` -> `/portal/review-funnel`
+    - Optional `Plan: ...` line sourced from service metadata when present
+  - Added `More Products` section when customer is missing one or both products:
+    - Cadence discovery card -> `/portal/checkout?product=cadence`
+    - Review Funnel discovery card -> `/portal/checkout?product=review_funnel`
+    - Muted visual treatment uses `border-dashed border-white/15` and reduced opacity
+  - Replaced billing-only block with account section showing name/email, billing action, and `Need help?` link to `/contact`
+- Updated `src/app/api/portal/me/route.ts` to include `metadata` in service rows so plan labels are available to dashboard UI.
+- Added `GET /api/portal/review-funnel/status` at `src/app/api/portal/review-funnel/status/route.ts`:
+  - requires portal auth
+  - resolves active Review Funnel service + `rfTenantId`
+  - reads status from merged `platformDb` RF tables and returns:
+    - `{ plan, smsUsed, smsLimit, calendarsConnected, isActive }`
+  - returns `404` when no active Review Funnel service is linked
+- Replaced portal Review Funnel handoff route with a real status page:
+  - new client component: `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - updated server page: `src/app/portal/review-funnel/page.tsx`
+    - now exports noindex metadata
+    - renders status client (no redirect/handoff-only card)
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - Review Funnel plan label on `/portal` depends on `a8_client_services.metadata.plan` (or `planName`); older rows may not show plan.
+  - RF status usage uses `rf_sms_usage.month` (`YYYY-MM`) and `count` columns from current schema.
+
 ## B4-0 (2026-03-07): portal cadence page enhancements (usage, checklist, prompt editor, test mode)
 - Added new route `src/app/api/portal/cadence/usage/route.ts`.
   - `GET` requires portal auth, resolves active Cadence service for current client, returns `getCadenceUsage(cadenceTenantId)` payload.
@@ -54,18 +92,3 @@
   - Portal webhook intentionally returns 200 even on handled failures; rely on logs for triage.
   - Review Funnel linking from portal checkout can be deferred if RF tenant is not yet created by RF webhook.
   - Stripe SDK in this repo expects API version `2025-02-24.acacia` (older literals fail TypeScript).
-
-## B2 retry (2026-03-07): commit-gate recovery + verification pass
-- Re-verified Cadence portal API wiring and onboarding provisioning changes for this batch:
-  - `getCadenceTenantConfig()` -> `GET /api/portal/tenant/:tenantId` and returns `tenant`
-  - `updateCadenceTenantConfig()` -> `PATCH /api/portal/tenant/:tenantId` and returns `tenant`
-  - `getCadenceRecentCalls()` -> `GET /api/portal/tenant/:tenantId/calls`
-  - Added/confirmed `getCadenceUsage()` and `triggerCadenceTestCall()` exports
-  - Added/confirmed `provisionCadenceTenant()` calling `POST /api/onboard` with `X-Portal-Secret`
-- Files modified in this retry batch:
-  - `docs/ralph-context.md`
-  - `docs/CODER-CONTEXT.md`
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Portal endpoint response wrappers differ (`{ tenant }`, `{ ok, tenant }`) — do not assume legacy shapes.
-  - `provisionCadenceTenant()` keeps `areaCode` in signature for caller parity; payload currently does not use it.

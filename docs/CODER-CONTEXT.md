@@ -1,5 +1,59 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B5-0: portal dashboard discovery + Review Funnel portal status
+
+### Scope completed
+- Updated portal dashboard UI in `src/app/portal/PortalDashboardClient.tsx`:
+  - active Cadence card now tries both calls preview and settings preview fetches
+    - shows `X calls this month` when available
+    - shows `Your Cadence number: ...` when available from settings
+    - action button now `Manage Settings` -> `/portal/cadence`
+  - active Review Funnel card now:
+    - links to `/portal/review-funnel` via `Open Dashboard`
+    - shows `Plan: ...` when service metadata includes plan
+  - added `More Products` section for missing products:
+    - Cadence discovery card (`/portal/checkout?product=cadence`)
+    - Review Funnel discovery card (`/portal/checkout?product=review_funnel`)
+    - both use muted visual style (`border-dashed border-white/15` + reduced opacity)
+  - replaced standalone billing block with `Account` section at bottom:
+    - customer name + email display
+    - existing billing portal POST flow retained
+    - added `Need help?` link to `/contact`
+- Extended `GET /api/portal/me` in `src/app/api/portal/me/route.ts` to include `metadata` per service row for dashboard plan labels.
+- Added new portal Review Funnel status API route at `src/app/api/portal/review-funnel/status/route.ts`:
+  - `GET` requires portal auth
+  - resolves active Review Funnel service by client + `rfTenantId`
+  - returns `{ plan, smsUsed, smsLimit, calendarsConnected, isActive }`
+  - returns `404` when no active Review Funnel service is linked
+- Replaced portal Review Funnel handoff page with dedicated status surface:
+  - new client: `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - page shell updated: `src/app/portal/review-funnel/page.tsx`
+    - now server component with noindex metadata
+    - renders status UI instead of direct dashboard handoff
+  - new status page includes:
+    - plan + active badge card
+    - text message usage summary with progress bar
+    - connected calendar count
+    - quick links to dashboard/settings/reviews/feedback
+    - note about full dashboard analytics/settings/calendar management
+- Updated docs/checklists:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `src/app/portal/PortalDashboardClient.tsx`
+- `src/app/api/portal/me/route.ts`
+- `src/app/api/portal/review-funnel/status/route.ts` (new)
+- `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx` (new)
+- `src/app/portal/review-funnel/page.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B4-0: portal cadence usage + checklist + prompt editor + test mode
 
 ### Scope completed

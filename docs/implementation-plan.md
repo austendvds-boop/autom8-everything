@@ -1,5 +1,21 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B5-0: portal dashboard discovery + Review Funnel portal status page
+
+- [x] Update `src/app/portal/PortalDashboardClient.tsx` to add:
+  - [x] active Cadence card improvements (`X calls this month`, phone number line, `Manage Settings` button)
+  - [x] active Review Funnel card improvements (`Open Dashboard` -> `/portal/review-funnel`, plan label when available)
+  - [x] `More Products` section with muted discovery cards for unpurchased Cadence/Review Funnel offers
+  - [x] Account section at bottom with customer name/email, billing action, and `/contact` help link
+- [x] Extend `GET /api/portal/me` to include service metadata for plan display
+- [x] Create `GET /api/portal/review-funnel/status` at `src/app/api/portal/review-funnel/status/route.ts`
+- [x] Replace `/portal/review-funnel` handoff page with a dedicated status page:
+  - [x] create `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - [x] update `src/app/portal/review-funnel/page.tsx` to server shell with noindex metadata and client render
+- [x] Update `docs/UI-VERIFICATION.md` for new portal checks
+- [x] Run `npm run build` and ensure pass
+- [ ] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`), commit, and push to `origin/feature/customer-portal`
+
 ## 2026-03-07 — B4-0: portal cadence enhancements (usage, checklist, prompt editor, test mode)
 
 - [x] Create `GET /api/portal/cadence/usage` route at `src/app/api/portal/cadence/usage/route.ts`

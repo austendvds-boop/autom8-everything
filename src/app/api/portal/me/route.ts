@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
       cadenceTenantId: true,
       rfTenantId: true,
       provisionedAt: true,
+      metadata: true,
     },
   })
 
