@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Calendar, MessageSquare, MessageSquareHeart, PhoneCall, Star } from "lucide-react";
@@ -202,10 +203,10 @@ export default function ReviewFunnelPage() {
 
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-[#A1A1AA]">
             {["More reviews", "Higher ranking", "More clicks", "More customers", "More reviews"].map((step, i, arr) => (
-              <span key={`${step}-${i}`} className="contents">
+              <React.Fragment key={step + i}>
                 <span className="px-4 py-2 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#C4B5FD] font-medium">{step}</span>
                 {i < arr.length - 1 && <span className="text-[#52525B]">→</span>}
-              </span>
+              </React.Fragment>
             ))}
           </div>
         </div>

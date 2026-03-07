@@ -29,6 +29,12 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B6 retry 4 checks (compounding-loop fragment alignment)
+- `/services/review-funnel`
+  - `Why Reviews Compound` chip loop still renders as: More reviews → Higher ranking → More clicks → More customers → More reviews
+  - chips and arrows remain centered and wrap cleanly on narrow screens
+  - no spacing/layout regression after keyed fragment rendering update
+
 ## Batch B6 checks (Review Funnel page overhaul)
 - `/services/review-funnel` section order is:
   1) Hero
