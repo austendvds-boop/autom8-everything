@@ -11,7 +11,7 @@
 - [x] Update `src/app/HomePageClient.tsx` imports and section order to include `ProofBar` + `OfferLadder`
 - [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
 - [x] Run `npm run build` and ensure pass
-- [ ] Commit and push to `origin/ui/cro-passover`
+- [x] Commit and push to `origin/ui/cro-passover`
 
 ## 2026-03-06 — B2: Homepage hero + CTA overhaul
 
