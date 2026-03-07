@@ -12,6 +12,7 @@ const updateCadenceSchema = z
     transferNumber: z.string().nullable().optional(),
     bookingUrl: z.string().nullable().optional(),
     timezone: z.string().optional(),
+    systemPrompt: z.string().nullable().optional(),
     hours: z.unknown().optional(),
     services: z.unknown().optional(),
     faqs: z.unknown().optional(),

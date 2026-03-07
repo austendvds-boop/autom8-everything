@@ -31,6 +31,52 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B4-0 checks (portal cadence enhancements)
+- `/portal/cadence`
+  - page starts with `Plan Usage` card above settings
+  - usage card shows both progress bars:
+    - `Calls: X / Y used this month`
+    - `Minutes: X / Y used this month`
+  - bar fill colors follow usage level:
+    - under 60% = green
+    - 60% to 80% = amber
+    - over 80% = red
+  - over-80% warning banner appears for calls and/or minutes with `Manage Billing` link to `/portal/billing`
+  - if usage fetch fails, page still loads and shows muted `Usage data unavailable`
+- Onboarding checklist (between usage and settings)
+  - hidden when local storage key `cadence_onboarding_dismissed_{tenantId}` is set to `1`
+  - when shown, displays `X of 6 complete`
+  - step completion behavior:
+    - `Account created` always complete
+    - `Set your greeting` completes only when greeting is non-empty and custom
+    - `Add your business hours` completes when at least one day is open
+    - `Set your services & FAQs` completes when at least one service or FAQ exists
+    - `Test your number` completes after successful test call (local storage key)
+    - `Go live! Share your Cadence number` shows the current number value
+  - incomplete linked steps scroll to their matching section on click
+  - `Dismiss checklist` hides checklist and persists local storage flag
+- Settings section
+  - new field appears between Greeting and Business Hours:
+    - label: `AI Personality & Instructions`
+    - helper text describing behavior
+    - textarea with at least 8 rows
+    - character count line (`X characters`)
+    - warning note: `Changes take effect on the next incoming call.`
+  - prompt edits save through the existing `Save changes` action (no separate save button)
+- Test mode section (after FAQs, before Recent Calls)
+  - heading: `Test Your AI Receptionist`
+  - phone field pre-fills from known account phone when available
+  - `Call Me` flow:
+    - click -> button shows `Calling...` and disables
+    - success -> button shows `Call initiated! Pick up your phone.`
+    - resets to idle state after ~30 seconds
+  - inline error appears when call request fails
+  - note appears: `You can test up to 3 times per hour.`
+- Recent Calls table
+  - clicking a row toggles expand/collapse
+  - each row shows a chevron icon (`▸` closed / `▾` open)
+  - expanded state shows all summary lines as bullet list below the row
+
 ## Batch B3-0 checks (portal checkout + post-purchase setup)
 - `/portal/checkout`
   - dark theme background `#0A0A0F` with card surface `#12121A`

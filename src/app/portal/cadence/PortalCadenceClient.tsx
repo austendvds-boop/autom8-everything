@@ -1,15 +1,21 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 
 interface PortalMeService {
   serviceType: string
   status: string
+  cadenceTenantId?: string | null
+}
+
+interface PortalMeClient {
+  phone?: string | null
 }
 
 interface PortalMeResponse {
+  client?: PortalMeClient
   services: PortalMeService[]
 }
 
@@ -33,10 +39,13 @@ interface FaqItem {
 }
 
 interface CadenceSettingsState {
+  tenantId: string
   greeting: string
   transferNumber: string
   bookingUrl: string
   timezone: string
+  systemPrompt: string
+  phoneNumber: string
   hours: BusinessHoursRow[]
   services: ServiceItem[]
   faqs: FaqItem[]
@@ -60,6 +69,25 @@ interface CadenceCallsResponse {
   error?: string
 }
 
+interface CadenceUsageResponse {
+  usage: {
+    totalCalls: number
+    totalDurationSeconds: number
+  }
+  plan: {
+    callLimit: number
+    minuteLimit: number
+  }
+}
+
+interface ChecklistStep {
+  key: string
+  title: string
+  complete: boolean
+  sectionId?: string
+  detail?: string
+}
+
 const DAYS = [
   { key: "sunday", label: "Sunday", defaultOpen: false },
   { key: "monday", label: "Monday", defaultOpen: true },
@@ -78,6 +106,11 @@ const TIMEZONE_OPTIONS = [
   "America/New_York",
   "America/Anchorage",
   "Pacific/Honolulu",
+]
+
+const DEFAULT_GREETING_OPTIONS = [
+  "Thanks for calling. How can I help you today?",
+  "Hello, thank you for calling. How can I help you today?",
 ]
 
 const CALL_PAGE_SIZE = 10
@@ -252,6 +285,12 @@ function normalizeSettings(raw: unknown): CadenceSettingsState {
   const payload = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {}
 
   return {
+    tenantId:
+      typeof payload.tenantId === "string"
+        ? payload.tenantId
+        : typeof payload.id === "string"
+          ? payload.id
+          : "",
     greeting: typeof payload.greeting === "string" ? payload.greeting : "",
     transferNumber: typeof payload.transferNumber === "string" ? payload.transferNumber : "",
     bookingUrl: typeof payload.bookingUrl === "string" ? payload.bookingUrl : "",
@@ -259,6 +298,13 @@ function normalizeSettings(raw: unknown): CadenceSettingsState {
       typeof payload.timezone === "string" && payload.timezone.trim()
         ? payload.timezone
         : "America/Phoenix",
+    systemPrompt: typeof payload.systemPrompt === "string" ? payload.systemPrompt : "",
+    phoneNumber:
+      typeof payload.phoneNumber === "string"
+        ? payload.phoneNumber
+        : typeof payload.smsNumber === "string"
+          ? payload.smsNumber
+          : "",
     hours: normalizeHours(payload.hours),
     services: normalizeServices(payload.services),
     faqs: normalizeFaqs(payload.faqs),
@@ -267,6 +313,52 @@ function normalizeSettings(raw: unknown): CadenceSettingsState {
 
 function serviceIsCadenceActive(services: PortalMeService[]): boolean {
   return services.some((service) => service.serviceType === "cadence" && service.status === "active")
+}
+
+function findCadenceTenantId(services: PortalMeService[]): string {
+  const service = services.find((item) => item.serviceType === "cadence" && item.status === "active")
+  return service?.cadenceTenantId?.trim() || ""
+}
+
+function toSafeRatio(used: number, limit: number): number {
+  if (!Number.isFinite(limit) || limit <= 0) {
+    return 0
+  }
+
+  return Math.max(0, Math.min(used / limit, 1))
+}
+
+function usageFillClass(usedRatio: number): string {
+  if (usedRatio > 0.8) {
+    return "bg-red-400"
+  }
+
+  if (usedRatio >= 0.6) {
+    return "bg-amber-400"
+  }
+
+  return "bg-emerald-400"
+}
+
+function formatWholeNumber(value: number): string {
+  return Number.isFinite(value) ? Math.max(0, Math.round(value)).toLocaleString() : "0"
+}
+
+function roundToMinutes(totalSeconds: number): number {
+  if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) {
+    return 0
+  }
+
+  return Math.round(totalSeconds / 60)
+}
+
+function scrollToSection(sectionId: string): void {
+  if (typeof window === "undefined") {
+    return
+  }
+
+  const element = document.getElementById(sectionId)
+  element?.scrollIntoView({ behavior: "smooth", block: "start" })
 }
 
 export default function PortalCadenceClient() {
@@ -286,6 +378,19 @@ export default function PortalCadenceClient() {
   const [callsError, setCallsError] = useState<string | null>(null)
   const [hasMoreCalls, setHasMoreCalls] = useState(false)
   const [callsOffset, setCallsOffset] = useState(0)
+  const [expandedCallIds, setExpandedCallIds] = useState<Set<string>>(new Set())
+
+  const [usage, setUsage] = useState<CadenceUsageResponse | null>(null)
+  const [usageUnavailable, setUsageUnavailable] = useState(false)
+
+  const [portalPhone, setPortalPhone] = useState("")
+  const [cadenceTenantId, setCadenceTenantId] = useState("")
+  const [isChecklistDismissed, setIsChecklistDismissed] = useState(true)
+  const [hasCompletedTestCall, setHasCompletedTestCall] = useState(false)
+
+  const [testCallPhone, setTestCallPhone] = useState("")
+  const [testCallStatus, setTestCallStatus] = useState<"idle" | "calling" | "success">("idle")
+  const [testCallError, setTestCallError] = useState<string | null>(null)
 
   const serializedInitial = useMemo(
     () => (initialSettings ? JSON.stringify(initialSettings) : null),
@@ -294,12 +399,81 @@ export default function PortalCadenceClient() {
   const serializedCurrent = useMemo(() => JSON.stringify(settings), [settings])
   const hasUnsavedChanges = Boolean(serializedInitial && serializedInitial !== serializedCurrent)
 
+  const onboardingKey = useMemo(() => {
+    const keySource = settings.tenantId || cadenceTenantId
+    return keySource ? `cadence_onboarding_dismissed_${keySource}` : ""
+  }, [cadenceTenantId, settings.tenantId])
+
+  const completedTestKey = useMemo(() => {
+    const keySource = settings.tenantId || cadenceTenantId
+    return keySource ? `cadence_test_completed_${keySource}` : ""
+  }, [cadenceTenantId, settings.tenantId])
+
+  const callsUsage = usage?.usage?.totalCalls ?? 0
+  const callsLimit = usage?.plan?.callLimit ?? 0
+  const minutesUsage = roundToMinutes(usage?.usage?.totalDurationSeconds ?? 0)
+  const minutesLimit = usage?.plan?.minuteLimit ?? 0
+
+  const callsRatio = toSafeRatio(callsUsage, callsLimit)
+  const minutesRatio = toSafeRatio(minutesUsage, minutesLimit)
+
+  const cadenceNumber = settings.phoneNumber.trim() || portalPhone.trim() || "Not available yet"
+  const greetingLooksCustom =
+    settings.greeting.trim().length > 0 &&
+    !DEFAULT_GREETING_OPTIONS.includes(settings.greeting.trim())
+
+  const checklistSteps = useMemo<ChecklistStep[]>(() => {
+    const openHoursCount = settings.hours.filter((hour) => hour.isOpen).length
+    const hasServicesOrFaqs = settings.services.length > 0 || settings.faqs.length > 0
+
+    return [
+      {
+        key: "account",
+        title: "Account created",
+        complete: true,
+      },
+      {
+        key: "greeting",
+        title: "Set your greeting",
+        complete: greetingLooksCustom,
+        sectionId: "cadence-greeting",
+      },
+      {
+        key: "hours",
+        title: "Add your business hours",
+        complete: openHoursCount > 0,
+        sectionId: "cadence-hours",
+      },
+      {
+        key: "services-faqs",
+        title: "Set your services & FAQs",
+        complete: hasServicesOrFaqs,
+        sectionId: "cadence-services",
+      },
+      {
+        key: "test",
+        title: "Test your number",
+        complete: hasCompletedTestCall,
+        sectionId: "cadence-test-mode",
+      },
+      {
+        key: "go-live",
+        title: "Go live! Share your Cadence number",
+        complete: cadenceNumber !== "Not available yet",
+        detail: cadenceNumber,
+      },
+    ]
+  }, [cadenceNumber, greetingLooksCustom, hasCompletedTestCall, settings.faqs.length, settings.hours, settings.services.length])
+
+  const completedChecklistCount = checklistSteps.filter((step) => step.complete).length
+
   useEffect(() => {
     let isActive = true
 
     async function loadInitialData() {
       setIsLoading(true)
       setSettingsError(null)
+      setUsageUnavailable(false)
 
       try {
         const authResponse = await fetch("/api/portal/me", {
@@ -322,12 +496,18 @@ export default function PortalCadenceClient() {
           throw new Error("Cadence is not active on this account.")
         }
 
-        const [settingsResponse, callsResponse] = await Promise.all([
+        const activeCadenceTenantId = findCadenceTenantId(authPayload.services ?? [])
+
+        const [settingsResponse, callsResponse, usageResponse] = await Promise.all([
           fetch("/api/portal/cadence/settings", {
             method: "GET",
             cache: "no-store",
           }),
           fetch(`/api/portal/cadence/calls?limit=${CALL_PAGE_SIZE}&offset=0`, {
+            method: "GET",
+            cache: "no-store",
+          }),
+          fetch("/api/portal/cadence/usage", {
             method: "GET",
             cache: "no-store",
           }),
@@ -347,9 +527,14 @@ export default function PortalCadenceClient() {
           throw new Error(callsPayload?.error || "Could not load recent calls.")
         }
 
+        const usagePayload = (await usageResponse.json().catch(() => null)) as (CadenceUsageResponse & { error?: string }) | null
+
         if (!isActive) {
           return
         }
+
+        setPortalPhone(authPayload.client?.phone?.trim() || "")
+        setCadenceTenantId(activeCadenceTenantId)
 
         setSettings(normalized)
         setInitialSettings(normalized)
@@ -358,6 +543,23 @@ export default function PortalCadenceClient() {
         setCalls(firstCalls)
         setCallsOffset(firstCalls.length)
         setHasMoreCalls(firstCalls.length === CALL_PAGE_SIZE)
+
+        if (usageResponse.ok && usagePayload && "usage" in usagePayload && "plan" in usagePayload) {
+          setUsage({
+            usage: {
+              totalCalls: Number(usagePayload.usage?.totalCalls ?? 0),
+              totalDurationSeconds: Number(usagePayload.usage?.totalDurationSeconds ?? 0),
+            },
+            plan: {
+              callLimit: Number(usagePayload.plan?.callLimit ?? 0),
+              minuteLimit: Number(usagePayload.plan?.minuteLimit ?? 0),
+            },
+          })
+          setUsageUnavailable(false)
+        } else {
+          setUsage(null)
+          setUsageUnavailable(true)
+        }
       } catch (loadError) {
         if (isActive) {
           setSettingsError(
@@ -392,6 +594,33 @@ export default function PortalCadenceClient() {
     }
   }, [toastMessage])
 
+  useEffect(() => {
+    if (!onboardingKey || typeof window === "undefined") {
+      return
+    }
+
+    const wasDismissed = window.localStorage.getItem(onboardingKey) === "1"
+    setIsChecklistDismissed(wasDismissed)
+  }, [onboardingKey])
+
+  useEffect(() => {
+    if (!completedTestKey || typeof window === "undefined") {
+      return
+    }
+
+    const completed = window.localStorage.getItem(completedTestKey) === "1"
+    setHasCompletedTestCall(completed)
+  }, [completedTestKey])
+
+  useEffect(() => {
+    if (!testCallPhone.trim()) {
+      const fallbackPhone = portalPhone.trim() || settings.transferNumber.trim()
+      if (fallbackPhone) {
+        setTestCallPhone(fallbackPhone)
+      }
+    }
+  }, [portalPhone, settings.transferNumber, testCallPhone])
+
   async function handleSave() {
     if (!initialSettings) {
       return
@@ -417,6 +646,10 @@ export default function PortalCadenceClient() {
 
       if (settings.timezone !== initialSettings.timezone) {
         updates.timezone = settings.timezone
+      }
+
+      if (settings.systemPrompt !== initialSettings.systemPrompt) {
+        updates.systemPrompt = settings.systemPrompt.trim() || null
       }
 
       if (JSON.stringify(settings.hours) !== JSON.stringify(initialSettings.hours)) {
@@ -489,6 +722,69 @@ export default function PortalCadenceClient() {
     }
   }
 
+  function toggleCallExpanded(callId: string) {
+    setExpandedCallIds((previous) => {
+      const next = new Set(previous)
+      if (next.has(callId)) {
+        next.delete(callId)
+      } else {
+        next.add(callId)
+      }
+      return next
+    })
+  }
+
+  async function handleTestCall() {
+    const toPhone = testCallPhone.trim()
+    if (!toPhone) {
+      setTestCallError("Please enter the phone number where we should call you.")
+      return
+    }
+
+    setTestCallStatus("calling")
+    setTestCallError(null)
+
+    try {
+      const response = await fetch("/api/portal/cadence/test-call", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ toPhone }),
+      })
+
+      const payload = (await response.json().catch(() => null)) as { error?: string; ok?: boolean } | null
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.error || "Could not start your test call.")
+      }
+
+      setTestCallStatus("success")
+
+      if (completedTestKey && typeof window !== "undefined") {
+        window.localStorage.setItem(completedTestKey, "1")
+        setHasCompletedTestCall(true)
+      }
+
+      window.setTimeout(() => {
+        setTestCallStatus("idle")
+      }, 30000)
+    } catch (error) {
+      setTestCallStatus("idle")
+      setTestCallError(error instanceof Error ? error.message : "Could not start your test call.")
+    }
+  }
+
+  function handleDismissChecklist() {
+    if (!onboardingKey || typeof window === "undefined") {
+      setIsChecklistDismissed(true)
+      return
+    }
+
+    window.localStorage.setItem(onboardingKey, "1")
+    setIsChecklistDismissed(true)
+  }
+
   if (isLoading) {
     return (
       <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
@@ -526,8 +822,112 @@ export default function PortalCadenceClient() {
           <p className="mt-2 text-sm text-[#A1A1AA]">Update how your receptionist answers calls for your business.</p>
         </div>
 
+        <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 space-y-4">
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="text-lg font-semibold text-white">Plan Usage</h2>
+            <Link href="/portal/billing" className="text-sm text-[#C4B5FD] transition hover:text-[#DDD6FE]">
+              Manage Billing
+            </Link>
+          </div>
+
+          {usageUnavailable || !usage ? (
+            <p className="text-sm text-[#A1A1AA]">Usage data unavailable</p>
+          ) : (
+            <div className="space-y-5">
+              <div>
+                <p className="mb-2 text-sm text-[#D4D4D8]">
+                  Calls: {formatWholeNumber(callsUsage)} / {formatWholeNumber(callsLimit)} used this month
+                </p>
+                <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className={`h-full rounded-full transition-all ${usageFillClass(callsRatio)}`}
+                    style={{ width: `${callsRatio * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-2 text-sm text-[#D4D4D8]">
+                  Minutes: {formatWholeNumber(minutesUsage)} / {formatWholeNumber(minutesLimit)} used this month
+                </p>
+                <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className={`h-full rounded-full transition-all ${usageFillClass(minutesRatio)}`}
+                    style={{ width: `${minutesRatio * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              {callsRatio > 0.8 ? (
+                <div className="rounded-xl border border-amber-300/30 bg-amber-500/10 p-3 text-sm text-amber-200">
+                  You&apos;ve used over 80% of your monthly calls. Upgrade your plan to avoid interruptions. {" "}
+                  <Link href="/portal/billing" className="underline decoration-amber-200/60 underline-offset-2">
+                    Manage Billing
+                  </Link>
+                </div>
+              ) : null}
+
+              {minutesRatio > 0.8 ? (
+                <div className="rounded-xl border border-amber-300/30 bg-amber-500/10 p-3 text-sm text-amber-200">
+                  You&apos;ve used over 80% of your monthly minutes. Upgrade your plan to avoid interruptions. {" "}
+                  <Link href="/portal/billing" className="underline decoration-amber-200/60 underline-offset-2">
+                    Manage Billing
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+          )}
+        </section>
+
+        {!isChecklistDismissed ? (
+          <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 space-y-4">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold text-white">Getting Started Checklist</h2>
+              <p className="text-sm text-[#A1A1AA]">
+                {completedChecklistCount} of {checklistSteps.length} complete
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              {checklistSteps.map((step) => (
+                <div key={step.key} className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/[0.01] px-3 py-2.5">
+                  <span className={`mt-0.5 text-sm ${step.complete ? "text-emerald-400" : "text-[#71717A]"}`}>
+                    {step.complete ? "✓" : "○"}
+                  </span>
+
+                  <div className="flex-1 text-sm">
+                    {step.complete ? (
+                      <p className="text-[#D4D4D8]">{step.title}</p>
+                    ) : step.sectionId ? (
+                      <button
+                        type="button"
+                        onClick={() => scrollToSection(step.sectionId as string)}
+                        className="text-left text-[#C4B5FD] transition hover:text-[#DDD6FE]"
+                      >
+                        {step.title}
+                      </button>
+                    ) : (
+                      <p className="text-[#D4D4D8]">{step.title}</p>
+                    )}
+
+                    {step.detail ? <p className="mt-1 text-xs text-[#A1A1AA]">{step.detail}</p> : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleDismissChecklist}
+              className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-[#D4D4D8] transition hover:border-white/30"
+            >
+              Dismiss checklist
+            </button>
+          </section>
+        ) : null}
+
         <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 space-y-6">
-          <div>
+          <div id="cadence-greeting">
             <label className="mb-2 block text-sm text-[#D4D4D8]">Greeting</label>
             <textarea
               rows={4}
@@ -536,6 +936,22 @@ export default function PortalCadenceClient() {
               className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white focus:border-[#8B5CF6] focus:outline-none"
               placeholder="How should Cadence greet callers?"
             />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-[#D4D4D8]">AI Personality & Instructions</label>
+            <p className="mb-3 text-sm text-[#A1A1AA]">
+              This is the script your AI receptionist follows. It determines how calls are handled, what information is collected, and how callers are helped.
+            </p>
+            <textarea
+              rows={8}
+              value={settings.systemPrompt}
+              onChange={(event) => setSettings((prev) => ({ ...prev, systemPrompt: event.target.value }))}
+              className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white focus:border-[#8B5CF6] focus:outline-none"
+              placeholder="Describe how your receptionist should handle calls."
+            />
+            <p className="mt-2 text-xs text-[#A1A1AA]">{settings.systemPrompt.length} characters</p>
+            <p className="mt-1 text-xs text-amber-200">Changes take effect on the next incoming call.</p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -577,7 +993,7 @@ export default function PortalCadenceClient() {
             </select>
           </div>
 
-          <div>
+          <div id="cadence-hours">
             <h2 className="text-lg font-semibold text-white">Business Hours</h2>
             <div className="mt-3 space-y-3">
               {settings.hours.map((hourRow, index) => (
@@ -634,7 +1050,7 @@ export default function PortalCadenceClient() {
             </div>
           </div>
 
-          <div>
+          <div id="cadence-services">
             <div className="mb-3 flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold text-white">Services</h2>
               <button
@@ -718,7 +1134,7 @@ export default function PortalCadenceClient() {
             </div>
           </div>
 
-          <div>
+          <div id="cadence-faqs">
             <div className="mb-3 flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold text-white">Frequently Asked Questions</h2>
               <button
@@ -787,6 +1203,40 @@ export default function PortalCadenceClient() {
             </div>
           </div>
 
+          <section id="cadence-test-mode" className="rounded-xl border border-white/8 bg-white/[0.01] p-4 space-y-3">
+            <h2 className="text-lg font-semibold text-white">Test Your AI Receptionist</h2>
+            <p className="text-sm text-[#A1A1AA]">
+              Hear exactly what your callers will hear. We&apos;ll call you and connect to your Cadence number.
+            </p>
+
+            <label className="block">
+              <span className="mb-2 block text-sm text-[#D4D4D8]">Your phone number</span>
+              <input
+                type="text"
+                value={testCallPhone}
+                onChange={(event) => setTestCallPhone(event.target.value)}
+                placeholder="Where we should call you"
+                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-2.5 text-white focus:border-[#8B5CF6] focus:outline-none"
+              />
+            </label>
+
+            <button
+              type="button"
+              onClick={() => void handleTestCall()}
+              disabled={testCallStatus === "calling"}
+              className="inline-flex rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {testCallStatus === "calling"
+                ? "Calling..."
+                : testCallStatus === "success"
+                  ? "Call initiated! Pick up your phone."
+                  : "Call Me"}
+            </button>
+
+            {testCallError ? <p className="text-sm text-red-300">{testCallError}</p> : null}
+            <p className="text-xs text-[#A1A1AA]">You can test up to 3 times per hour.</p>
+          </section>
+
           {saveError ? <p className="text-sm text-red-300">{saveError}</p> : null}
 
           <button
@@ -820,14 +1270,44 @@ export default function PortalCadenceClient() {
                     </td>
                   </tr>
                 ) : (
-                  calls.map((call) => (
-                    <tr key={call.id}>
-                      <td className="py-3 pr-4 whitespace-nowrap">{formatDateTime(call.startedAt)}</td>
-                      <td className="py-3 pr-4 whitespace-nowrap">{maskPhone(call.callerPhone)}</td>
-                      <td className="py-3 pr-4 whitespace-nowrap">{formatDuration(call.durationSeconds)}</td>
-                      <td className="py-3 max-w-xl truncate">{firstSummaryLine(call.summaryLines)}</td>
-                    </tr>
-                  ))
+                  calls.map((call) => {
+                    const isExpanded = expandedCallIds.has(call.id)
+                    const summaryLines = Array.isArray(call.summaryLines) ? call.summaryLines.filter(Boolean) : []
+
+                    return (
+                      <Fragment key={call.id}>
+                        <tr
+                          className="cursor-pointer transition hover:bg-white/[0.02]"
+                          onClick={() => toggleCallExpanded(call.id)}
+                        >
+                          <td className="py-3 pr-4 whitespace-nowrap">{formatDateTime(call.startedAt)}</td>
+                          <td className="py-3 pr-4 whitespace-nowrap">{maskPhone(call.callerPhone)}</td>
+                          <td className="py-3 pr-4 whitespace-nowrap">{formatDuration(call.durationSeconds)}</td>
+                          <td className="py-3 max-w-xl">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="truncate">{firstSummaryLine(call.summaryLines)}</span>
+                              <span className="text-xs text-[#A1A1AA]">{isExpanded ? "▾" : "▸"}</span>
+                            </div>
+                          </td>
+                        </tr>
+                        {isExpanded ? (
+                          <tr key={`${call.id}-expanded`}>
+                            <td colSpan={4} className="pb-4 pl-4 pr-4 text-[#CFCFE1]">
+                              {summaryLines.length > 0 ? (
+                                <ul className="list-disc space-y-1 pl-5 text-sm">
+                                  {summaryLines.map((line, lineIndex) => (
+                                    <li key={`${call.id}-summary-${lineIndex}`}>{line}</li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p className="text-sm text-[#A1A1AA]">No summary available</p>
+                              )}
+                            </td>
+                          </tr>
+                        ) : null}
+                      </Fragment>
+                    )
+                  })
                 )}
               </tbody>
             </table>

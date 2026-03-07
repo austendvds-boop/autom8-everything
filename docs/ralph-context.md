@@ -1,5 +1,30 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B4-0 (2026-03-07): portal cadence page enhancements (usage, checklist, prompt editor, test mode)
+- Added new route `src/app/api/portal/cadence/usage/route.ts`.
+  - `GET` requires portal auth, resolves active Cadence service for current client, returns `getCadenceUsage(cadenceTenantId)` payload.
+- Added new route `src/app/api/portal/cadence/test-call/route.ts`.
+  - `POST` requires portal auth, validates non-empty `{ toPhone }`, resolves active Cadence service, and returns `triggerCadenceTestCall()` result.
+- Updated `src/app/api/portal/cadence/settings/route.ts` PATCH schema to accept `systemPrompt` updates.
+- Updated `src/lib/platform/services/cadence-api.ts`:
+  - `CadenceTenantUpdate` now includes optional `systemPrompt`.
+- Updated `src/app/portal/cadence/PortalCadenceClient.tsx`:
+  - added top `Plan Usage` section with call/minute progress bars and usage threshold color bands (<60 green, 60-80 amber, >80 red)
+  - added over-80% warning banners with `/portal/billing` links
+  - added graceful usage-fetch fallback (`Usage data unavailable`) without blocking settings page
+  - added local-storage-backed onboarding checklist between usage and settings (`cadence_onboarding_dismissed_*`, `cadence_test_completed_*`)
+  - added `AI Personality & Instructions` field wired to existing Save flow (`systemPrompt`)
+  - added `Test Your AI Receptionist` section with phone prefill, POST test-call action, loading/success/error states, and 30s success reset
+  - upgraded Recent Calls table rows to expand/collapse with chevron and full bullet summary list
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - Checklist visibility is controlled only by local storage dismiss key and tenant id availability.
+  - Greeting checklist completion uses non-empty + not-in-default-greetings heuristic; adjust default list if Cadence default copy changes.
+
 ## B3-0 (2026-03-07): portal Stripe checkout + auto-provisioning webhook
 - Implemented new platform Stripe service at `src/lib/platform/services/stripe-portal.ts`.
   - Key exports:
@@ -44,27 +69,3 @@
 - Gotchas for next batch:
   - Portal endpoint response wrappers differ (`{ tenant }`, `{ ok, tenant }`) — do not assume legacy shapes.
   - `provisionCadenceTenant()` keeps `areaCode` in signature for caller parity; payload currently does not use it.
-
-## B2 (2026-03-07): Cadence portal API endpoint fix + provisioning hook
-- Updated `src/lib/platform/services/cadence-api.ts` to use Cadence portal endpoints authenticated by `X-Portal-Secret` instead of dashboard cookie endpoints:
-  - `getCadenceTenantConfig(tenantId)` now calls `GET /api/portal/tenant/:tenantId` and returns `payload.tenant`
-  - `updateCadenceTenantConfig(tenantId, updates)` now calls `PATCH /api/portal/tenant/:tenantId` and returns `payload.tenant`
-  - `getCadenceRecentCalls(tenantId, limit, offset)` now calls `GET /api/portal/tenant/:tenantId/calls?limit=&offset=`
-- Extended `CadenceTenantConfig` with `systemPrompt: string | null`.
-- Added new Cadence API exports:
-  - `getCadenceUsage(tenantId)`
-  - `triggerCadenceTestCall(tenantId, toPhone)`
-  - interfaces `CadenceUsageResponse` and `TestCallResponse`
-- Added `provisionCadenceTenant()` to `src/lib/platform/services/provisioning.ts`:
-  - Calls `POST ${CADENCE_API_URL}/api/onboard`
-  - Sends `X-Portal-Secret` and onboarding payload
-  - Returns `{ clientId, phoneNumber }` from `result`
-- Files modified in this batch:
-  - `src/lib/platform/services/cadence-api.ts`
-  - `src/lib/platform/services/provisioning.ts`
-  - `docs/ralph-context.md`
-  - `docs/CODER-CONTEXT.md`
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Portal endpoint response wrappers differ (`{ tenant }`, `{ ok, tenant }`) — do not assume legacy `{ settings }` shape.
-  - `provisionCadenceTenant()` includes `areaCode` in the function signature for caller parity, but `/api/onboard` payload in this scope does not consume it.

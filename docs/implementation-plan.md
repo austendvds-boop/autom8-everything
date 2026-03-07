@@ -1,5 +1,21 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B4-0: portal cadence enhancements (usage, checklist, prompt editor, test mode)
+
+- [x] Create `GET /api/portal/cadence/usage` route at `src/app/api/portal/cadence/usage/route.ts`
+- [x] Create `POST /api/portal/cadence/test-call` route at `src/app/api/portal/cadence/test-call/route.ts`
+- [x] Extend portal cadence settings PATCH validation to accept `systemPrompt`
+- [x] Extend Cadence tenant update typing to include `systemPrompt`
+- [x] Update `src/app/portal/cadence/PortalCadenceClient.tsx` with:
+  - [x] plan usage section with call/minute progress bars and over-80% warnings
+  - [x] onboarding checklist with local storage persistence and section scrolling links
+  - [x] AI prompt/persona editor field wired into existing save flow
+  - [x] test mode call section with status/error/success states and phone prefill
+  - [x] expandable recent-calls rows with chevron + bullet summary details
+- [x] Update UI verification checklist in `docs/UI-VERIFICATION.md`
+- [x] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/feature/customer-portal`
+
 ## 2026-03-07 — B3-0: Stripe portal checkout + auto-provisioning webhook
 
 - [x] Create `src/lib/platform/services/stripe-portal.ts` with checkout session creation and portal webhook handling

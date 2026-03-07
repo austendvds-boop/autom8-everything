@@ -28,6 +28,7 @@ export interface CadenceTenantUpdate {
   fallbackMode?: string | null
   intakeMode?: string | null
   smsNumber?: string | null
+  systemPrompt?: string | null
 }
 
 export interface CadenceCall {

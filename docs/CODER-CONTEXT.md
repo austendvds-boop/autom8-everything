@@ -1,5 +1,48 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B4-0: portal cadence usage + checklist + prompt editor + test mode
+
+### Scope completed
+- Added new portal Cadence usage API route at `src/app/api/portal/cadence/usage/route.ts`:
+  - `GET` requires portal auth
+  - resolves active Cadence service by client
+  - returns `getCadenceUsage(cadenceTenantId)` payload
+  - returns `404` when no active Cadence service exists
+- Added new portal Cadence test-call API route at `src/app/api/portal/cadence/test-call/route.ts`:
+  - `POST` requires portal auth
+  - validates `{ toPhone }` with non-empty phone
+  - resolves active Cadence service by client
+  - calls `triggerCadenceTestCall(cadenceTenantId, toPhone)`
+  - returns call result or normalized error payload
+- Updated Cadence settings API validation in `src/app/api/portal/cadence/settings/route.ts`:
+  - PATCH schema now accepts optional `systemPrompt` (`string | null`)
+- Updated Cadence API typing in `src/lib/platform/services/cadence-api.ts`:
+  - `CadenceTenantUpdate` now includes optional `systemPrompt`
+- Enhanced `src/app/portal/cadence/PortalCadenceClient.tsx`:
+  - usage card above settings with calls/minutes progress bars, usage color thresholds, and 80% warning banners
+  - graceful usage failure fallback (`Usage data unavailable`) without blocking page load
+  - onboarding checklist card (local-storage-backed dismiss + completion state + section scroll links)
+  - new `AI Personality & Instructions` textarea tied into existing save flow (`systemPrompt` patch field)
+  - new `Test Your AI Receptionist` section with phone prefill, call state transitions, success reset window, and inline errors
+  - recent calls table now supports row expand/collapse with chevron and full bullet summary lines
+- Updated verification/plan docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `src/app/api/portal/cadence/usage/route.ts` (new)
+- `src/app/api/portal/cadence/test-call/route.ts` (new)
+- `src/app/api/portal/cadence/settings/route.ts`
+- `src/lib/platform/services/cadence-api.ts`
+- `src/app/portal/cadence/PortalCadenceClient.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B3-0: portal Stripe checkout + auto-provisioning webhook
 
 ### Scope completed
