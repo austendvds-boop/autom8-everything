@@ -1,5 +1,39 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 16: platform final integration wiring + setup docs
+
+### Scope completed
+- Left `src/components/Navigation.tsx` unchanged for platform entry points:
+  - no `/admin/clients` link in public nav
+  - no `/portal/login` link in public nav
+- Updated `src/components/Footer.tsx` with a subtle bottom-of-links `Client Portal` link to `/portal/login` in the Company column.
+- Added setup runbook `docs/platform-setup.md` including:
+  - required platform env vars for autom8-everything
+  - matching `PORTAL_API_SECRET` requirement in cadence-v2
+  - DB migration instructions
+  - end-to-end operator/client workflow summary
+- Import/circular-check pass:
+  - reviewed cross references between `src/lib/platform` and `src/lib/review-funnel`
+  - no circular import dependency introduced by this batch
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/ENV-VARS.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/components/Footer.tsx`
+- `docs/platform-setup.md` (new)
+- `docs/UI-VERIFICATION.md`
+- `docs/ENV-VARS.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 15: platform client portal UI (/portal)
 
 ### Scope completed

@@ -2,6 +2,38 @@
 
 ## Batch Notes (keep last 3)
 
+### 2026-03-06 - Batch 16: final integration wiring + platform setup docs
+
+#### Files modified
+- `src/components/Footer.tsx`
+- `docs/platform-setup.md` (new)
+- `docs/UI-VERIFICATION.md`
+- `docs/ENV-VARS.md`
+- `docs/implementation-plan.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/ralph-context.md`
+
+#### Key exports / behavior
+- Left public navigation unchanged (`src/components/Navigation.tsx`):
+  - no `/admin/clients` public nav link
+  - no `/portal/login` public nav link
+- Added subtle footer entry point in Company links:
+  - `Client Portal` -> `/portal/login`
+  - small text style and placed at bottom of links section
+- Added `docs/platform-setup.md` runbook covering:
+  - platform env vars for autom8-everything
+  - required shared secret alignment with cadence-v2
+  - DB migration options (`docs/migrations/2026-03-07-platform-tables.sql` or drizzle push)
+  - end-to-end operator/client workflow
+- Import verification:
+  - Checked platform/review-funnel module boundaries for this batch; no circular dependency introduced.
+
+#### Gotchas for next batch
+- Public header still includes legacy Cadence `Client Login` external link; intentionally left unchanged because task only required portal entry in footer.
+- `docs/platform-setup.md` is now the canonical quick-start for platform rollout; keep it in sync with any auth/env changes.
+
+---
+
 ### 2026-03-06 - Batch 15: platform client portal UI (`/portal`)
 
 #### Files modified
@@ -93,57 +125,3 @@
 - Cadence recent-call rows are passed through from upstream payload shape. If cadence-v2 field names change, update the detail UI call-row normalization helpers.
 - Detail page currently includes its own login gate (same pattern as list page) instead of shared admin layout middleware.
 - Review Funnel add-service flow still depends on email-based account lookup when explicit ID is not provided.
-
----
-
-### 2026-03-06 - Batch 13: platform client portal API routes
-
-#### Files modified
-- `src/app/api/portal/auth/login/route.ts` (new)
-- `src/app/api/portal/auth/verify/route.ts` (new)
-- `src/app/api/portal/me/route.ts` (new)
-- `src/app/api/portal/cadence/settings/route.ts` (new)
-- `src/app/api/portal/cadence/calls/route.ts` (new)
-- `src/app/api/portal/billing/portal/route.ts` (new)
-- `docs/implementation-plan.md`
-- `docs/CODER-CONTEXT.md`
-- `docs/ralph-context.md`
-
-#### Key exports / behavior
-- Added `POST /api/portal/auth/login`:
-  - accepts `{ email }`
-  - normalizes to lowercase
-  - calls `generatePortalMagicLink(email)`
-  - sends `sendPortalMagicLinkEmail({ toEmail, token })` on known active client
-  - always returns `200 { ok: true }` for unknown client emails
-- Added `GET /api/portal/auth/verify`:
-  - validates `token` query param with `verifyPortalMagicLink(token)`
-  - sets `a8_portal_session` cookie using `A8_PORTAL_SESSION_COOKIE_NAME`
-  - cookie options: `httpOnly`, `sameSite: "lax"`, `secure` in production, `path: "/"`, `maxAge` from `platformConfig.A8_SESSION_TTL_HOURS * 60 * 60`
-  - redirects to `/portal`
-  - invalid/missing token returns `401 { error: "Invalid or expired link" }`
-- Added `GET /api/portal/me`:
-  - requires `requirePortalAuth`
-  - returns client identity fields plus mapped service list from `a8_client_services`
-- Added `GET/PATCH /api/portal/cadence/settings`:
-  - requires `requirePortalAuth`
-  - gates on active Cadence service (`service_type = cadence`, `status = active`, non-empty `cadenceTenantId`)
-  - `GET` returns `getCadenceTenantConfig(cadenceTenantId)`
-  - `PATCH` validates payload shape and passes updates to `updateCadenceTenantConfig(cadenceTenantId, body)`
-  - returns `404` if no active Cadence service
-- Added `GET /api/portal/cadence/calls`:
-  - requires `requirePortalAuth`
-  - gates on active Cadence service
-  - supports `limit` (default `50`) and `offset` (default `0`)
-  - returns `getCadenceRecentCalls(cadenceTenantId, limit, offset)`
-- Added `POST /api/portal/billing/portal`:
-  - requires `requirePortalAuth`
-  - loads `stripeCustomerId` from `a8_clients`
-  - returns `400 { error: "No billing account linked" }` when missing
-  - creates Stripe billing portal session via `new Stripe(process.env.STRIPE_SECRET_KEY)`
-  - fixed return URL: `https://autom8everything.com/portal`
-
-#### Gotchas for next batch
-- `GET /api/portal/auth/verify` currently returns JSON 401 for invalid links (as requested). If product wants friendly UI redirect parity with Review Funnel login, add a dedicated portal error page and redirect flow.
-- Cadence settings update schema allows unknown nested object shapes for `hours`, `services`, and `faqs` (`z.unknown()`), so deep validation is delegated to cadence-v2.
-- Billing portal route reads `stripeCustomerId` from DB at request time; if service provisioning delays Stripe sync, users may see the expected `No billing account linked` until sync completes.

@@ -21,12 +21,18 @@
 18. /portal/cadence — client Cadence settings + recent calls
 19. /portal/billing — billing redirect/loading state
 20. /portal/review-funnel — review funnel dashboard handoff card
+21. site footer — subtle `Client Portal` link to `/portal/login`
 
 ## Smoke tests (no auth required)
 - GET /review-funnel/login → must render login form, NOT redirect
 - GET /review-funnel/signup → must render Step 1 of 4 wizard
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
+
+## Batch 16 checks (final integration wiring)
+- Footer
+  - bottom of the `Company` links includes a small `Client Portal` link
+  - link goes to `/portal/login`
 
 ## Batch 15 checks (platform client portal UI)
 - `/portal/login`

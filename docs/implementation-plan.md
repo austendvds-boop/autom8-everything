@@ -1,5 +1,15 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — Platform final integration wiring + docs
+
+- [x] Keep public `Navigation` free of portal/admin entry links
+- [x] Add subtle `Client Portal` link in `Footer` to `/portal/login`
+- [x] Create `docs/platform-setup.md` with env, migration, and flow notes
+- [x] Verify platform/review-funnel imports (no circular cross-module dependency introduced)
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ENV-VARS.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/master`
+
 ## 2026-03-06 — Platform client portal UI (/portal)
 
 - [x] Create `src/app/portal/login/page.tsx` server shell for login route

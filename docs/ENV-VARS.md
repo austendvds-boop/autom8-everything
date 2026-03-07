@@ -29,3 +29,11 @@
 - GOOGLE_CLIENT_ID — PENDING: needs GCP OAuth setup for Calendar
 - GOOGLE_CLIENT_SECRET — PENDING
 - GOOGLE_REDIRECT_URI — PENDING: https://autom8everything.com/api/review-funnel/google/callback
+
+## Platform (Autom8 client portal)
+- A8_ADMIN_SECRET — required; password for `/admin/clients` operator login
+- A8_JWT_SECRET — required; 32+ char secret for portal sessions
+- A8_MAGIC_LINK_TTL_MINUTES — optional (default `15`)
+- A8_SESSION_TTL_HOURS — optional (default `24`)
+- CADENCE_API_URL — required; cadence-v2 base URL
+- PORTAL_API_SECRET — required; must match cadence-v2 value

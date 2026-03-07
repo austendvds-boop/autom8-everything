@@ -88,6 +88,11 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+            <div className="mt-6">
+              <Link href="/portal/login" className="text-xs text-[#71717A] hover:text-[#A1A1AA] transition-colors">
+                Client Portal
+              </Link>
+            </div>
           </div>
         </div>
 
