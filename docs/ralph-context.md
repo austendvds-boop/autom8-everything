@@ -1,5 +1,20 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B6 retry 2 (2026-03-07): final commit-gate closure
+- Re-validated the full B6 Review Funnel overhaul in:
+  - `src/app/services/review-funnel/page.tsx`
+- Confirmed required section order/content remain in place (hero rewrite, compounding stats/visual, pricing/comparison preservation, visual how-it-works, testimonials TODO, concerns, bundle CTA, FAQ, final CTA).
+- Build verification:
+  - `npm run build` ✅
+- Modified docs:
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/implementation-plan.md`
+- Key exports/components touched:
+  - none (verification + docs-only retry)
+- Gotchas for next batch:
+  - Use PowerShell-safe command chaining (`;`) instead of `&&` for OpenClaw exec commands.
+
 ## B6 retry (2026-03-07): commit/push gate recovery
 - Re-verified B6 implementation remains complete in:
   - `src/app/services/review-funnel/page.tsx`
@@ -57,21 +72,4 @@
 - Key exports/components touched:
   - `ReviewFunnelPage` (default export, unchanged route/export surface)
 - Gotchas for next batch:
-  - `How it works` now depends on `lucide-react` imports (`Calendar`, `MessageSquare`, `Star`, `PhoneCall`, `MessageSquareHeart`) in this page file.
-
-## B4 retry 2 (2026-03-07): verification + commit-gate recovery
-- Verified B4 implementation is already present and aligned in:
-  - `src/components/ServicesBento.tsx`
-  - `src/components/WhoItsFor.tsx`
-  - `src/components/FAQ.tsx`
-  - `src/components/CTA.tsx`
-  - `src/components/Testimonials.tsx`
-- Build verification: `npm run build` ✅
-- Modified docs:
-  - `docs/ralph-context.md`
-  - `docs/CODER-CONTEXT.md`
-  - `docs/implementation-plan.md`
-- Key exports/components touched:
-  - none (verification-only pass; existing default exports unchanged)
-- Gotchas for next batch:
-  - If `next build` fails with `.next/lock` acquisition error, remove stale `.next/lock` and rerun.
+  - `How it works` depends on `lucide-react` imports (`Calendar`, `MessageSquare`, `Star`, `PhoneCall`, `MessageSquareHeart`) in this page file.
