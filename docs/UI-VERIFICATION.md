@@ -20,8 +20,32 @@
 17. /portal — client portal dashboard with service cards + billing action
 18. /portal/cadence — client Cadence settings + recent calls
 19. /portal/billing — billing redirect/loading state
-20. /portal/review-funnel — review funnel dashboard handoff card
-21. site footer — subtle `Client Portal` link to `/portal/login`
+20. /portal/review-funnel — Review Funnel status page with usage, plan, and quick links
+21. /portal/checkout — self-serve signup page for Cadence/Review Funnel
+22. /portal/checkout/success — post-checkout setup confirmation page
+23. site footer — subtle `Client Portal` link to `/portal/login`
+
+## Batch B7-0 checks (portal polish: SEO + errors + consistency)
+- SEO
+  - `/portal/checkout`, `/portal/checkout/success`, and `/portal/review-funnel` all export robots noindex metadata (`index: false`, `follow: false`)
+  - `public/robots.txt` includes portal disallow lines, including `Disallow: /portal/checkout/`
+  - `src/app/sitemap.ts` has no `/portal/*` routes in `staticRoutes`
+- Session expiry handling
+  - authenticated portal clients route to login or show clear session-expired feedback when API returns 401:
+    - `/portal`
+    - `/portal/cadence`
+    - `/portal/review-funnel`
+    - `/portal/billing`
+- Checkout error handling (`/portal/checkout`)
+  - 400 response shows: `Please fill in all required fields.`
+  - 500 response shows: `Something went wrong on our end. Please try again in a moment.`
+  - network failure shows: `Could not connect. Please check your internet and try again.`
+  - error card includes `Try Again` button
+- Loading states
+  - `/portal` and `/portal/cadence` use card skeleton loading UI (no plain `Loading...` card)
+- Consistency
+  - `/portal/checkout`, `/portal/cadence`, `/portal/review-funnel`, `/portal/billing` each show `← Back to portal` link to `/portal`
+  - secondary action buttons on portal cards use `rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white`
 
 ## Smoke tests (no auth required)
 - GET /review-funnel/login → must render login form, NOT redirect
@@ -29,21 +53,146 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
-## Batch B1 checks (Production hardening: noindex + robots + sitemap)
-- Portal routes return metadata with noindex/nofollow robots:
-  - `/portal/login`
-  - `/portal`
-  - `/portal/billing`
-  - `/portal/cadence`
-  - `/portal/review-funnel`
-- Review Funnel dashboard routes return metadata with noindex/nofollow robots:
-  - `/review-funnel/dashboard`
-  - `/review-funnel/dashboard/feedback`
-  - `/review-funnel/dashboard/reviews`
-  - `/review-funnel/dashboard/settings`
-- `/robots.txt` includes disallow entries for private routes (`/portal/`, `/admin/`, `/review-funnel/dashboard/`, `/api/`, `/r/`, onboarding and success utility paths)
-- `public/sitemap.xml` no longer exists in the repo
-- `src/app/sitemap.ts` static route list does not include `/review-funnel/signup`
+## Batch B6-0 checks (product CTAs + Cadence CRM v2 callout)
+- `/services/cadence`
+  - New section appears between `Everything Cadence Does For You` and later pricing sections:
+    - badge: `Coming Soon` with emerald accent styling (`bg-emerald-400/10`, `text-emerald-300`, `border-emerald-400/30`)
+    - heading: `Automatic Lead Capture`
+    - 3 icon cards render in one column on mobile and 3 columns on `sm+`:
+      - `Incoming Call`
+      - `AI Summary`
+      - `CRM Sync`
+    - footer note: `CRM integration coming soon. Call logging and summaries available now in your dashboard.`
+  - Primary online CTA links now point to portal checkout:
+    - hero secondary CTA -> `/portal/checkout?product=cadence`
+    - pricing secondary CTA -> `/portal/checkout?product=cadence`
+    - final CTA secondary CTA -> `/portal/checkout?product=cadence`
+  - trust line appears under CTA groups: `7-day free trial · No credit card required to start`
+- `/services/review-funnel`
+  - All primary `Get Started` links now route to `/portal/checkout?product=review_funnel`:
+    - hero CTA
+    - Starter/Growth plan card CTAs
+    - final CTA
+  - pricing copy/tiers remain unchanged
+- `/pricing`
+  - Cadence card CTA points to `/portal/checkout?product=cadence`
+  - Review Funnel card CTA points to `/portal/checkout?product=review_funnel`
+  - custom/contact CTAs remain unchanged
+- Homepage/shared product CTA components
+  - `src/components/ServicesBento.tsx` Review Funnel CTA points to `/portal/checkout?product=review_funnel`
+  - `src/components/PricingOverview.tsx` Cadence CTA points to `/portal/checkout?product=cadence`
+
+## Batch B5-0 checks (portal dashboard discovery + Review Funnel portal status)
+- `/portal`
+  - active Cadence card:
+    - shows `Manage Settings` button linking to `/portal/cadence`
+    - call line reads `X calls this month` when available
+    - shows `Your Cadence number: ...` when settings include a phone number
+  - active Review Funnel card:
+    - button reads `Open Dashboard` and links to `/portal/review-funnel`
+    - shows `Plan: ...` line when service metadata includes plan
+  - More Products section only appears when one or both products are missing
+    - card style uses muted treatment (`border-dashed border-white/15` + lower opacity)
+    - Cadence discovery card copy and CTA:
+      - title `Cadence — AI Receptionist`
+      - price `$199/mo · 7-day free trial`
+      - `Get Started` -> `/portal/checkout?product=cadence`
+    - Review Funnel discovery card copy and CTA:
+      - title `Review Funnel — Automated Reviews`
+      - price `From $79/mo`
+      - `Get Started` -> `/portal/checkout?product=review_funnel`
+  - Account section at bottom:
+    - shows customer name + email
+    - `Manage Billing` posts to `/api/portal/billing/portal` and redirects
+    - `Need help?` links to `/contact`
+- `/portal/review-funnel`
+  - page renders in portal dark theme with back link to `/portal`
+  - status card shows:
+    - plan line (`Plan: ...`)
+    - active/inactive badge
+    - usage summary line: `X / Y text messages sent this month`
+    - progress bar with same style as `/portal/cadence` usage bars
+    - connected calendar count
+  - quick links section includes:
+    - `Open Full Dashboard` -> `/review-funnel/dashboard` (prominent gradient button)
+    - `Settings` -> `/review-funnel/dashboard/settings`
+    - `View Reviews` -> `/review-funnel/dashboard/reviews`
+    - `View Feedback` -> `/review-funnel/dashboard/feedback`
+    - note text: `Your Review Funnel dashboard has detailed analytics, settings, and calendar management.`
+- `/api/portal/review-funnel/status`
+  - returns 401 without portal auth
+  - returns 404 when the logged-in client has no active Review Funnel service
+  - returns payload shape:
+    - `plan` (string)
+    - `smsUsed` (number)
+    - `smsLimit` (number)
+    - `calendarsConnected` (number)
+    - `isActive` (boolean)
+
+## Batch B4-0 checks (portal cadence enhancements)
+- `/portal/cadence`
+  - page starts with `Plan Usage` card above settings
+  - usage card shows both progress bars:
+    - `Calls: X / Y used this month`
+    - `Minutes: X / Y used this month`
+  - bar fill colors follow usage level:
+    - under 60% = green
+    - 60% to 80% = amber
+    - over 80% = red
+  - over-80% warning banner appears for calls and/or minutes with `Manage Billing` link to `/portal/billing`
+  - if usage fetch fails, page still loads and shows muted `Usage data unavailable`
+- Onboarding checklist (between usage and settings)
+  - hidden when local storage key `cadence_onboarding_dismissed_{tenantId}` is set to `1`
+  - when shown, displays `X of 6 complete`
+  - step completion behavior:
+    - `Account created` always complete
+    - `Set your greeting` completes only when greeting is non-empty and custom
+    - `Add your business hours` completes when at least one day is open
+    - `Set your services & FAQs` completes when at least one service or FAQ exists
+    - `Test your number` completes after successful test call (local storage key)
+    - `Go live! Share your Cadence number` shows the current number value
+  - incomplete linked steps scroll to their matching section on click
+  - `Dismiss checklist` hides checklist and persists local storage flag
+- Settings section
+  - new field appears between Greeting and Business Hours:
+    - label: `AI Personality & Instructions`
+    - helper text describing behavior
+    - textarea with at least 8 rows
+    - character count line (`X characters`)
+    - warning note: `Changes take effect on the next incoming call.`
+  - prompt edits save through the existing `Save changes` action (no separate save button)
+- Test mode section (after FAQs, before Recent Calls)
+  - heading: `Test Your AI Receptionist`
+  - phone field pre-fills from known account phone when available
+  - `Call Me` flow:
+    - click -> button shows `Calling...` and disables
+    - success -> button shows `Call initiated! Pick up your phone.`
+    - resets to idle state after ~30 seconds
+  - inline error appears when call request fails
+  - note appears: `You can test up to 3 times per hour.`
+- Recent Calls table
+  - clicking a row toggles expand/collapse
+  - each row shows a chevron icon (`▸` closed / `▾` open)
+  - expanded state shows all summary lines as bullet list below the row
+
+## Batch B3-0 checks (portal checkout + post-purchase setup)
+- `/portal/checkout`
+  - dark theme background `#0A0A0F` with card surface `#12121A`
+  - shows two product cards:
+    - Cadence (`$199/month`, mentions `7-day free trial`)
+    - Review Funnel (`Starter $79/month • Growth $149/month`)
+  - supports query preselect: `/portal/checkout?product=review_funnel` selects Review Funnel card on first paint
+  - form fields render: Business name, Email, Phone (optional)
+  - Cadence selection shows area-code dropdown defaulted to `480`
+  - Review Funnel selection hides area code and shows Starter/Growth plan choices
+  - submit button shows loading copy `Redirecting to secure checkout...` during checkout request
+  - server-side validation errors render in the red inline error box and can be dismissed with `Try again`
+- `/portal/checkout/success`
+  - initially shows spinner + `Setting up your account...`
+  - after ~3 seconds, spinner fades and success state appears
+  - success message includes: `Your account is being set up. Check your email for a login link.`
+  - when `email` query param is present, it is displayed in the success card
+  - link `Already have a login link? Go to Portal →` points to `/portal/login`
 
 ## Batch B8 checks (Custom Apps + Footer + Sticky Mobile CTA)
 - `/services/custom-apps` section order is:

@@ -1,10 +1,21 @@
 import { z } from "zod"
 
+const optionalEnvString = z.preprocess(
+  (value) => {
+    if (typeof value !== "string") return value
+    const trimmed = value.trim()
+    return trimmed.length === 0 ? undefined : trimmed
+  },
+  z.string().optional(),
+)
+
 const BUILD_PLACEHOLDER_DATABASE_URL = "postgres://build:build@localhost:5432/platform"
 const BUILD_PLACEHOLDER_ADMIN_SECRET = "build-placeholder-admin-secret-0000"
 const BUILD_PLACEHOLDER_JWT_SECRET = "build-placeholder-jwt-secret-00000000000000"
 const BUILD_PLACEHOLDER_CADENCE_API_URL = "https://placeholder.example.com"
 const BUILD_PLACEHOLDER_PORTAL_API_SECRET = "build-placeholder-portal-secret"
+const BUILD_PLACEHOLDER_PORTAL_STRIPE_WEBHOOK_SECRET = "build-placeholder-portal-stripe-webhook-secret"
+const BUILD_PLACEHOLDER_PORTAL_STRIPE_PRICE_CADENCE_STARTER = "price_build_portal_cadence_starter"
 
 function getPlatformEnvSource() {
   const envSource: Record<string, string | undefined> = {
@@ -17,6 +28,8 @@ function getPlatformEnvSource() {
     envSource.A8_JWT_SECRET ??= BUILD_PLACEHOLDER_JWT_SECRET
     envSource.CADENCE_API_URL ??= BUILD_PLACEHOLDER_CADENCE_API_URL
     envSource.PORTAL_API_SECRET ??= BUILD_PLACEHOLDER_PORTAL_API_SECRET
+    envSource.PORTAL_STRIPE_WEBHOOK_SECRET ??= BUILD_PLACEHOLDER_PORTAL_STRIPE_WEBHOOK_SECRET
+    envSource.PORTAL_STRIPE_PRICE_CADENCE_STARTER ??= BUILD_PLACEHOLDER_PORTAL_STRIPE_PRICE_CADENCE_STARTER
   }
 
   return envSource
@@ -33,6 +46,9 @@ export const platformEnvSchema = z.object({
 
   CADENCE_API_URL: z.string().min(1, "CADENCE_API_URL is required"),
   PORTAL_API_SECRET: z.string().min(16, "PORTAL_API_SECRET must be at least 16 characters"),
+
+  PORTAL_STRIPE_WEBHOOK_SECRET: optionalEnvString,
+  PORTAL_STRIPE_PRICE_CADENCE_STARTER: optionalEnvString,
 })
 
 export type PlatformConfig = z.infer<typeof platformEnvSchema>

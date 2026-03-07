@@ -1,38 +1,320 @@
 # CODER-CONTEXT.md — autom8-everything
 
-## 2026-03-07 — B1: Production hardening (meta noindex + robots + sitemap cleanup)
+## 2026-03-07 — B7-0: portal polish (SEO + errors + consistency)
 
 ### Scope completed
-- Added page-level `metadata` exports with `robots: { index: false, follow: false }` for portal pages that were missing metadata:
-  - `src/app/portal/login/page.tsx` (`Client Portal Login`)
-  - `src/app/portal/page.tsx` (`Client Portal`)
-  - `src/app/portal/billing/page.tsx` (`Client Portal — Billing`)
-  - `src/app/portal/cadence/page.tsx` (`Client Portal — Cadence Settings`)
-  - `src/app/portal/review-funnel/page.tsx` (`Client Portal — Review Funnel`)
-- Updated existing Review Funnel dashboard metadata to include noindex/nofollow robots:
-  - `src/app/review-funnel/dashboard/page.tsx`
-  - `src/app/review-funnel/dashboard/feedback/page.tsx`
-  - `src/app/review-funnel/dashboard/reviews/page.tsx`
-  - `src/app/review-funnel/dashboard/settings/page.tsx`
-- Replaced `public/robots.txt` with tightened disallow rules for private routes (`/portal/`, `/admin/`, `/review-funnel/dashboard/`, `/api/`, `/r/`, onboarding/success utility paths, etc.).
-- Removed stale static sitemap file `public/sitemap.xml` so the dynamic `src/app/sitemap.ts` is used.
-- Verified `src/app/sitemap.ts` static routes do not include `/review-funnel/signup` and left `/services` index route unchanged per spec.
+- SEO hardening verified/updated:
+  - verified noindex metadata is present on:
+    - `src/app/portal/checkout/page.tsx`
+    - `src/app/portal/checkout/success/page.tsx`
+    - `src/app/portal/review-funnel/page.tsx`
+  - updated `public/robots.txt` with portal disallow rules including:
+    - `Disallow: /portal/`
+    - `Disallow: /portal/login/`
+    - `Disallow: /portal/checkout/`
+    - `Disallow: /portal/cadence/`
+    - `Disallow: /portal/review-funnel/`
+    - `Disallow: /portal/billing/`
+  - verified `src/app/sitemap.ts` contains no `/portal/*` entries
+- Added shared portal fetch/session utility at `src/lib/platform/portal-fetch.ts`:
+  - `PortalSessionExpiredError`
+  - `portalFetch(url, init)` with `cache: "no-store"` and 401 -> thrown session-expired error
+- Added shared loading skeletons at `src/components/portal/LoadingSkeleton.tsx`:
+  - `PortalCardSkeleton`
+  - `PortalPageSkeleton`
+- Updated portal authenticated clients to use `portalFetch` session handling:
+  - `src/app/portal/PortalDashboardClient.tsx`
+  - `src/app/portal/cadence/PortalCadenceClient.tsx`
+  - `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - `src/app/portal/billing/PortalBillingClient.tsx`
+- Checkout UX polish in `src/app/portal/checkout/CheckoutClient.tsx`:
+  - added top `← Back to portal` link
+  - added status-mapped submit errors:
+    - 400 -> `Please fill in all required fields.`
+    - 500+ -> `Something went wrong on our end. Please try again in a moment.`
+    - network -> `Could not connect. Please check your internet and try again.`
+  - error card action label updated to `Try Again`
+  - aligned top-level checkout cards/form to portal card treatment (`bg-[#12121A]/90`, `border-white/8`)
+- Loading polish:
+  - replaced plain loading card with `PortalPageSkeleton` in:
+    - `PortalDashboardClient`
+    - `PortalCadenceClient`
+- Consistency/back links:
+  - verified `← Back to portal` links on:
+    - `/portal/cadence`
+    - `/portal/review-funnel`
+    - `/portal/billing`
+    - `/portal/checkout`
+- Updated docs:
+  - `docs/platform-setup.md` (rewritten to canonical Stripe + env + migration setup steps)
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
 
 ### Files changed
-- `src/app/portal/login/page.tsx`
-- `src/app/portal/page.tsx`
-- `src/app/portal/billing/page.tsx`
-- `src/app/portal/cadence/page.tsx`
-- `src/app/portal/review-funnel/page.tsx`
-- `src/app/review-funnel/dashboard/page.tsx`
-- `src/app/review-funnel/dashboard/feedback/page.tsx`
-- `src/app/review-funnel/dashboard/reviews/page.tsx`
-- `src/app/review-funnel/dashboard/settings/page.tsx`
+- `src/lib/platform/portal-fetch.ts` (new)
+- `src/components/portal/LoadingSkeleton.tsx` (new)
+- `src/app/portal/PortalDashboardClient.tsx`
+- `src/app/portal/cadence/PortalCadenceClient.tsx`
+- `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+- `src/app/portal/billing/PortalBillingClient.tsx`
+- `src/app/portal/checkout/CheckoutClient.tsx`
 - `public/robots.txt`
-- `public/sitemap.xml` (deleted)
+- `docs/platform-setup.md`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
 - `docs/ralph-context.md`
 - `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` (pending)
+
+## 2026-03-07 — B6-0: product page CTAs + Cadence CRM v2 callout
+
+### Scope completed
+- Updated `src/app/services/cadence/page.tsx`:
+  - Added a new **CRM Integration Coming Soon** section between features and later CTA/pricing flow.
+  - Added `Coming Soon` emerald badge, `Automatic Lead Capture` heading, and three callout cards (`Incoming Call`, `AI Summary`, `CRM Sync`).
+  - Updated all online trial CTAs from `/get-started` to `/portal/checkout?product=cadence`.
+  - Added trust line under online CTA groups: `7-day free trial · No credit card required to start`.
+- Updated `src/app/services/review-funnel/page.tsx`:
+  - Updated primary `Get Started` CTAs to `/portal/checkout?product=review_funnel` (hero, Starter/Growth plan cards, final CTA).
+  - Kept pricing tiers/copy unchanged.
+- Updated `src/app/pricing/page.tsx`:
+  - Cadence pricing CTA -> `/portal/checkout?product=cadence`
+  - Review Funnel pricing CTA -> `/portal/checkout?product=review_funnel`
+  - Custom/contact CTAs unchanged.
+- Updated shared product CTA components:
+  - `src/components/ServicesBento.tsx` Review Funnel CTA -> `/portal/checkout?product=review_funnel`
+  - `src/components/PricingOverview.tsx` Cadence CTA -> `/portal/checkout?product=cadence`
+- Updated docs/checklists:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/app/services/cadence/page.tsx`
+- `src/app/services/review-funnel/page.tsx`
+- `src/app/pricing/page.tsx`
+- `src/components/ServicesBento.tsx`
+- `src/components/PricingOverview.tsx`
+- `docs/UI-VERIFICATION.md`
 - `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-07 — B5-0: portal dashboard discovery + Review Funnel portal status
+
+### Scope completed
+- Updated portal dashboard UI in `src/app/portal/PortalDashboardClient.tsx`:
+  - active Cadence card now tries both calls preview and settings preview fetches
+    - shows `X calls this month` when available
+    - shows `Your Cadence number: ...` when available from settings
+    - action button now `Manage Settings` -> `/portal/cadence`
+  - active Review Funnel card now:
+    - links to `/portal/review-funnel` via `Open Dashboard`
+    - shows `Plan: ...` when service metadata includes plan
+  - added `More Products` section for missing products:
+    - Cadence discovery card (`/portal/checkout?product=cadence`)
+    - Review Funnel discovery card (`/portal/checkout?product=review_funnel`)
+    - both use muted visual style (`border-dashed border-white/15` + reduced opacity)
+  - replaced standalone billing block with `Account` section at bottom:
+    - customer name + email display
+    - existing billing portal POST flow retained
+    - added `Need help?` link to `/contact`
+- Extended `GET /api/portal/me` in `src/app/api/portal/me/route.ts` to include `metadata` per service row for dashboard plan labels.
+- Added new portal Review Funnel status API route at `src/app/api/portal/review-funnel/status/route.ts`:
+  - `GET` requires portal auth
+  - resolves active Review Funnel service by client + `rfTenantId`
+  - returns `{ plan, smsUsed, smsLimit, calendarsConnected, isActive }`
+  - returns `404` when no active Review Funnel service is linked
+- Replaced portal Review Funnel handoff page with dedicated status surface:
+  - new client: `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - page shell updated: `src/app/portal/review-funnel/page.tsx`
+    - now server component with noindex metadata
+    - renders status UI instead of direct dashboard handoff
+  - new status page includes:
+    - plan + active badge card
+    - text message usage summary with progress bar
+    - connected calendar count
+    - quick links to dashboard/settings/reviews/feedback
+    - note about full dashboard analytics/settings/calendar management
+- Updated docs/checklists:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `src/app/portal/PortalDashboardClient.tsx`
+- `src/app/api/portal/me/route.ts`
+- `src/app/api/portal/review-funnel/status/route.ts` (new)
+- `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx` (new)
+- `src/app/portal/review-funnel/page.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-07 — B4-0: portal cadence usage + checklist + prompt editor + test mode
+
+### Scope completed
+- Added new portal Cadence usage API route at `src/app/api/portal/cadence/usage/route.ts`:
+  - `GET` requires portal auth
+  - resolves active Cadence service by client
+  - returns `getCadenceUsage(cadenceTenantId)` payload
+  - returns `404` when no active Cadence service exists
+- Added new portal Cadence test-call API route at `src/app/api/portal/cadence/test-call/route.ts`:
+  - `POST` requires portal auth
+  - validates `{ toPhone }` with non-empty phone
+  - resolves active Cadence service by client
+  - calls `triggerCadenceTestCall(cadenceTenantId, toPhone)`
+  - returns call result or normalized error payload
+- Updated Cadence settings API validation in `src/app/api/portal/cadence/settings/route.ts`:
+  - PATCH schema now accepts optional `systemPrompt` (`string | null`)
+- Updated Cadence API typing in `src/lib/platform/services/cadence-api.ts`:
+  - `CadenceTenantUpdate` now includes optional `systemPrompt`
+- Enhanced `src/app/portal/cadence/PortalCadenceClient.tsx`:
+  - usage card above settings with calls/minutes progress bars, usage color thresholds, and 80% warning banners
+  - graceful usage failure fallback (`Usage data unavailable`) without blocking page load
+  - onboarding checklist card (local-storage-backed dismiss + completion state + section scroll links)
+  - new `AI Personality & Instructions` textarea tied into existing save flow (`systemPrompt` patch field)
+  - new `Test Your AI Receptionist` section with phone prefill, call state transitions, success reset window, and inline errors
+  - recent calls table now supports row expand/collapse with chevron and full bullet summary lines
+- Updated verification/plan docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `src/app/api/portal/cadence/usage/route.ts` (new)
+- `src/app/api/portal/cadence/test-call/route.ts` (new)
+- `src/app/api/portal/cadence/settings/route.ts`
+- `src/lib/platform/services/cadence-api.ts`
+- `src/app/portal/cadence/PortalCadenceClient.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-07 — B3-0: portal Stripe checkout + auto-provisioning webhook
+
+### Scope completed
+- Added new platform Stripe service at `src/lib/platform/services/stripe-portal.ts`:
+  - `createPortalCheckoutSession(params)`
+    - finds/creates Stripe customer by email
+    - maps portal products to Stripe prices:
+      - Cadence -> `PORTAL_STRIPE_PRICE_CADENCE_STARTER`
+      - Review Funnel Starter/Growth -> `RF_STRIPE_PRICE_STARTER` / `RF_STRIPE_PRICE_GROWTH`
+    - writes critical checkout metadata (`portal`, `product`, `businessName`, `email`, `phone`, `areaCode`, `plan`)
+    - uses subscription mode with 7-day trial for Cadence
+  - `handlePortalWebhookEvent(event)`
+    - handles `checkout.session.completed` for portal-only events
+    - creates/updates `a8_clients` record by normalized email
+    - provisions Cadence immediately via `provisionCadenceTenant()` + `provisionService()`
+    - attempts Review Funnel service link via `provisionService(client.id, "review_funnel")` (logs deferred state when RF tenant is not ready yet)
+    - writes Stripe subscription id to `a8_client_services` for the specific purchased product
+    - sends portal welcome email with generated magic-link token
+    - handles `customer.subscription.deleted` by cancelling the mapped platform service
+- Added checkout API route `src/app/api/portal/checkout/route.ts`:
+  - `POST` validates `{ email, businessName, phone?, areaCode?, product, plan? }`
+  - no portal auth requirement (pre-purchase)
+  - returns `{ url }` from `createPortalCheckoutSession()`
+  - includes explicit CORS headers for site origin
+  - includes `OPTIONS` preflight support
+- Added Stripe portal webhook route `src/app/api/portal/webhooks/stripe/route.ts`:
+  - `dynamic = "force-dynamic"`
+  - reads raw body via `request.text()`
+  - verifies signature with `PORTAL_STRIPE_WEBHOOK_SECRET`
+  - calls `handlePortalWebhookEvent(event)`
+  - logs failures and always returns `200 { received: true }`
+- Added portal checkout UI routes:
+  - `src/app/portal/checkout/page.tsx` (metadata title `Get Started — Autom8`, robots noindex)
+  - `src/app/portal/checkout/CheckoutClient.tsx` (dark-theme checkout selector/form)
+  - `src/app/portal/checkout/success/page.tsx` (metadata title `Welcome to Autom8`, robots noindex)
+  - `src/app/portal/checkout/success/SuccessClient.tsx` (spinner -> success state after 3s)
+- Updated platform env parsing in `src/lib/platform/config.ts`:
+  - `PORTAL_STRIPE_WEBHOOK_SECRET` (optional)
+  - `PORTAL_STRIPE_PRICE_CADENCE_STARTER` (optional)
+  - both include build-phase placeholder injection pattern
+- Updated env/docs artifacts:
+  - `.env.example`
+  - `docs/ENV-VARS.md`
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `src/lib/platform/services/stripe-portal.ts` (new)
+- `src/app/api/portal/checkout/route.ts` (new)
+- `src/app/api/portal/webhooks/stripe/route.ts` (new)
+- `src/app/portal/checkout/page.tsx` (new)
+- `src/app/portal/checkout/CheckoutClient.tsx` (new)
+- `src/app/portal/checkout/success/page.tsx` (new)
+- `src/app/portal/checkout/success/SuccessClient.tsx` (new)
+- `src/lib/platform/config.ts`
+- `.env.example`
+- `docs/ENV-VARS.md`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-07 — B2 retry: commit-gate recovery + verification refresh
+
+### Scope completed
+- Re-verified the Cadence portal API fix and provisioning additions are present and aligned:
+  - `src/lib/platform/services/cadence-api.ts`
+    - `getCadenceTenantConfig()` uses `GET /api/portal/tenant/:tenantId` and returns `tenant`
+    - `updateCadenceTenantConfig()` uses `PATCH /api/portal/tenant/:tenantId` and returns `tenant`
+    - `getCadenceRecentCalls()` uses `GET /api/portal/tenant/:tenantId/calls`
+    - includes `systemPrompt` on `CadenceTenantConfig`
+    - includes `getCadenceUsage()` + `triggerCadenceTestCall()` exports
+  - `src/lib/platform/services/provisioning.ts`
+    - includes `provisionCadenceTenant()` calling `POST /api/onboard` with `X-Portal-Secret`
+    - maps onboarding response `{ result: { clientId, phoneNumber } }` -> `{ clientId, phoneNumber }`
+- Updated retry handoff docs and trimmed Ralph context to the latest 3 batches.
+
+### Files changed
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
+## 2026-03-07 — B2: Cadence portal API fix + new usage/test/provisioning methods
+
+### Scope completed
+- Updated `src/lib/platform/services/cadence-api.ts` to stop calling dashboard session endpoints and use portal-secret endpoints instead:
+  - `getCadenceTenantConfig(tenantId)` now calls `GET /api/portal/tenant/:tenantId` and returns `payload.tenant`.
+  - `updateCadenceTenantConfig(tenantId, updates)` now calls `PATCH /api/portal/tenant/:tenantId` and returns `payload.tenant`.
+  - `getCadenceRecentCalls(tenantId, limit, offset)` now calls `GET /api/portal/tenant/:tenantId/calls` with query params.
+- Added `systemPrompt: string | null` to `CadenceTenantConfig`.
+- Added new Cadence service exports:
+  - `CadenceUsageResponse`
+  - `getCadenceUsage(tenantId)`
+  - `TestCallResponse`
+  - `triggerCadenceTestCall(tenantId, toPhone)`
+- Updated `src/lib/platform/services/provisioning.ts`:
+  - added `provisionCadenceTenant({ businessName, email, phone?, areaCode? })`
+  - sends `POST ${CADENCE_API_URL}/api/onboard` with `X-Portal-Secret`
+  - maps response `{ result: { clientId, phoneNumber } }` to return payload.
+
+### Files changed
+- `src/lib/platform/services/cadence-api.ts`
+- `src/lib/platform/services/provisioning.ts`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
 
 ### Verification
 - `npm run build` ✅

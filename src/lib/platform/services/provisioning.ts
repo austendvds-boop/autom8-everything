@@ -2,6 +2,7 @@ import { and, eq, sql } from "drizzle-orm"
 import { platformDb } from "../db/client"
 import { rfTenants } from "../../review-funnel/db/schema"
 import { a8ClientServices, a8Clients, type A8ClientService } from "../db/schema"
+import { platformConfig } from "../config"
 
 type ServiceType = "cadence" | "review_funnel"
 
@@ -165,4 +166,56 @@ export async function resumeService(clientId: string, serviceType: string): Prom
       updatedAt: new Date(),
     })
     .where(and(eq(a8ClientServices.clientId, clientId), eq(a8ClientServices.serviceType, serviceType)))
+}
+
+interface CadenceOnboardResponse {
+  result?: {
+    clientId?: string
+    phoneNumber?: string
+  }
+}
+
+export async function provisionCadenceTenant(params: {
+  businessName: string
+  email: string
+  phone?: string
+  areaCode?: string
+}): Promise<{ clientId: string; phoneNumber: string }> {
+  const cadenceApiUrl = platformConfig.CADENCE_API_URL.replace(/\/+$/, "")
+
+  const response = await fetch(`${cadenceApiUrl}/api/onboard`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Portal-Secret": platformConfig.PORTAL_API_SECRET,
+    },
+    body: JSON.stringify({
+      businessName: params.businessName,
+      businessType: "service",
+      phone: params.phone || "",
+      email: params.email,
+      website: "",
+      hours: "Mon-Fri 9-5",
+      services: params.businessName,
+      greeting: "",
+      transferNumber: null,
+      faqs: "",
+    }),
+    cache: "no-store",
+  })
+
+  if (!response.ok) {
+    const bodyText = await response.text()
+    throw new Error(`Cadence onboarding failed (${response.status}): ${bodyText || response.statusText}`)
+  }
+
+  const payload = (await response.json()) as CadenceOnboardResponse
+  const clientId = payload.result?.clientId?.trim()
+  const phoneNumber = payload.result?.phoneNumber?.trim()
+
+  if (!clientId || !phoneNumber) {
+    throw new Error("Cadence onboarding response missing clientId or phoneNumber")
+  }
+
+  return { clientId, phoneNumber }
 }

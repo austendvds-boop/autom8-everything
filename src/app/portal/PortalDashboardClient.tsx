@@ -1,7 +1,11 @@
 "use client"
 
+import Link from "next/link"
+import { Phone, Star } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { PortalPageSkeleton } from "@/components/portal/LoadingSkeleton"
+import { PortalSessionExpiredError, portalFetch } from "@/lib/platform/portal-fetch"
 
 type ServiceType = "cadence" | "review_funnel" | string
 
@@ -13,6 +17,7 @@ interface PortalService {
   cadenceTenantId: string | null
   rfTenantId: string | null
   provisionedAt: string | null
+  metadata?: Record<string, unknown>
 }
 
 interface PortalClient {
@@ -33,6 +38,12 @@ interface PortalCallsPreview {
   total?: number
   count?: number
   calls?: unknown[]
+}
+
+interface CadenceSettingsPreview {
+  phoneNumber?: string | null
+  smsNumber?: string | null
+  ownerPhone?: string | null
 }
 
 function statusBadge(status: ServiceStatus) {
@@ -76,6 +87,56 @@ function getCallCount(payload: PortalCallsPreview | null): number | null {
   return null
 }
 
+function getCadenceNumber(payload: CadenceSettingsPreview | null): string | null {
+  if (!payload) {
+    return null
+  }
+
+  const options = [payload.phoneNumber, payload.smsNumber, payload.ownerPhone]
+
+  for (const value of options) {
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value.trim()
+    }
+  }
+
+  return null
+}
+
+function toTitleCasePlan(plan: string): string {
+  const cleaned = plan.trim().replace(/[_-]+/g, " ")
+
+  if (!cleaned) {
+    return ""
+  }
+
+  return cleaned
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
+}
+
+function getReviewPlanLabel(service: PortalService | undefined): string | null {
+  if (!service?.metadata || typeof service.metadata !== "object") {
+    return null
+  }
+
+  const planValue = service.metadata.plan
+
+  if (typeof planValue === "string" && planValue.trim()) {
+    return toTitleCasePlan(planValue)
+  }
+
+  const planNameValue = service.metadata.planName
+
+  if (typeof planNameValue === "string" && planNameValue.trim()) {
+    return planNameValue.trim()
+  }
+
+  return null
+}
+
 export default function PortalDashboardClient() {
   const router = useRouter()
   const [client, setClient] = useState<PortalClient | null>(null)
@@ -85,6 +146,7 @@ export default function PortalDashboardClient() {
 
   const [isLoadingCadenceStats, setIsLoadingCadenceStats] = useState(false)
   const [cadenceCallsThisMonth, setCadenceCallsThisMonth] = useState<number | null>(null)
+  const [cadencePhoneNumber, setCadencePhoneNumber] = useState<string | null>(null)
 
   const [isOpeningBilling, setIsOpeningBilling] = useState(false)
   const [billingError, setBillingError] = useState<string | null>(null)
@@ -97,15 +159,9 @@ export default function PortalDashboardClient() {
       setErrorMessage(null)
 
       try {
-        const response = await fetch("/api/portal/me", {
+        const response = await portalFetch("/api/portal/me", {
           method: "GET",
-          cache: "no-store",
         })
-
-        if (response.status === 401) {
-          router.replace("/portal/login")
-          return
-        }
 
         const payload = (await response.json().catch(() => null)) as (PortalMeResponse & { error?: string }) | null
 
@@ -120,6 +176,11 @@ export default function PortalDashboardClient() {
         setClient(payload.client)
         setServices(payload.services ?? [])
       } catch (loadError) {
+        if (loadError instanceof PortalSessionExpiredError) {
+          router.replace("/portal/login")
+          return
+        }
+
         if (isActive) {
           setErrorMessage(loadError instanceof Error ? loadError.message : "We could not load your portal right now.")
         }
@@ -147,43 +208,79 @@ export default function PortalDashboardClient() {
     [services],
   )
 
+  const reviewPlanLabel = useMemo(() => getReviewPlanLabel(reviewService), [reviewService])
+
+  const isMissingCadence = !cadenceService
+  const isMissingReviewFunnel = !reviewService
+  const showMoreProducts = isMissingCadence || isMissingReviewFunnel
+
   useEffect(() => {
     if (!cadenceService || cadenceService.status !== "active") {
+      setCadenceCallsThisMonth(null)
+      setCadencePhoneNumber(null)
       return
     }
 
     let isActive = true
 
-    async function loadCadenceStats() {
+    async function loadCadenceCardData() {
       setIsLoadingCadenceStats(true)
 
-      try {
-        const response = await fetch("/api/portal/cadence/calls?limit=1&offset=0", {
+      const [callsResult, settingsResult] = await Promise.allSettled([
+        portalFetch("/api/portal/cadence/calls?limit=1&offset=0", {
           method: "GET",
-          cache: "no-store",
-        })
+        }),
+        portalFetch("/api/portal/cadence/settings", {
+          method: "GET",
+        }),
+      ])
 
-        const payload = (await response.json().catch(() => null)) as (PortalCallsPreview & { error?: string }) | null
+      if (!isActive) {
+        return
+      }
 
-        if (!response.ok) {
-          throw new Error(payload?.error || "Could not load call stats")
-        }
+      if (callsResult.status === "rejected" && callsResult.reason instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
 
-        if (isActive) {
+      if (settingsResult.status === "rejected" && settingsResult.reason instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
+
+      if (callsResult.status === "fulfilled") {
+        const callsResponse = callsResult.value
+        const payload = (await callsResponse.json().catch(() => null)) as (PortalCallsPreview & { error?: string }) | null
+
+        if (callsResponse.ok) {
           setCadenceCallsThisMonth(getCallCount(payload))
-        }
-      } catch {
-        if (isActive) {
+        } else {
           setCadenceCallsThisMonth(null)
         }
-      } finally {
-        if (isActive) {
-          setIsLoadingCadenceStats(false)
+      } else {
+        setCadenceCallsThisMonth(null)
+      }
+
+      if (settingsResult.status === "fulfilled") {
+        const settingsResponse = settingsResult.value
+        const payload = (await settingsResponse.json().catch(() => null)) as (CadenceSettingsPreview & { error?: string }) | null
+
+        if (settingsResponse.ok) {
+          setCadencePhoneNumber(getCadenceNumber(payload))
+        } else {
+          setCadencePhoneNumber(null)
         }
+      } else {
+        setCadencePhoneNumber(null)
+      }
+
+      if (isActive) {
+        setIsLoadingCadenceStats(false)
       }
     }
 
-    void loadCadenceStats()
+    void loadCadenceCardData()
 
     return () => {
       isActive = false
@@ -195,7 +292,7 @@ export default function PortalDashboardClient() {
     setBillingError(null)
 
     try {
-      const response = await fetch("/api/portal/billing/portal", {
+      const response = await portalFetch("/api/portal/billing/portal", {
         method: "POST",
       })
 
@@ -207,6 +304,11 @@ export default function PortalDashboardClient() {
 
       window.location.href = payload.url
     } catch (billingOpenError) {
+      if (billingOpenError instanceof PortalSessionExpiredError) {
+        router.replace("/portal/login")
+        return
+      }
+
       setBillingError(
         billingOpenError instanceof Error ? billingOpenError.message : "Could not open billing right now.",
       )
@@ -215,13 +317,7 @@ export default function PortalDashboardClient() {
   }
 
   if (isLoading) {
-    return (
-      <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl space-y-4">
-          <div className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 text-[#A1A1AA]">Loading your portal...</div>
-        </div>
-      </main>
-    )
+    return <PortalPageSkeleton cards={2} />
   }
 
   if (errorMessage) {
@@ -253,7 +349,7 @@ export default function PortalDashboardClient() {
                   <p className="text-2xl" aria-hidden>
                     📞
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-white">Cadence AI Receptionist</h2>
+                  <h2 className="mt-2 text-xl font-semibold text-white">Cadence — AI Receptionist</h2>
                 </div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-[#D4D4D8]">
                   <span className={`h-2 w-2 rounded-full ${statusBadge(cadenceService.status).dot}`} />
@@ -269,12 +365,16 @@ export default function PortalDashboardClient() {
                     : "View calls and settings"}
               </p>
 
+              {cadencePhoneNumber ? (
+                <p className="mt-2 text-sm text-[#D4D4D8]">Your Cadence number: {cadencePhoneNumber}</p>
+              ) : null}
+
               <button
                 type="button"
                 onClick={() => router.push("/portal/cadence")}
                 className="mt-5 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
               >
-                Manage
+                Manage Settings
               </button>
             </article>
           ) : null}
@@ -286,7 +386,7 @@ export default function PortalDashboardClient() {
                   <p className="text-2xl" aria-hidden>
                     ⭐
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-white">Review Funnel</h2>
+                  <h2 className="mt-2 text-xl font-semibold text-white">Review Funnel — Automated Reviews</h2>
                 </div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-[#D4D4D8]">
                   <span className={`h-2 w-2 rounded-full ${statusBadge(reviewService.status).dot}`} />
@@ -294,16 +394,15 @@ export default function PortalDashboardClient() {
                 </span>
               </div>
 
-              <p className="mt-4 text-sm text-[#A1A1AA]">Open your dashboard to check recent reviews and updates.</p>
+              {reviewPlanLabel ? <p className="mt-4 text-sm text-[#D4D4D8]">Plan: {reviewPlanLabel}</p> : null}
+              <p className="mt-2 text-sm text-[#A1A1AA]">Open your dashboard to check text message usage and customer feedback.</p>
 
-              <a
-                href="/review-funnel/dashboard"
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                href="/portal/review-funnel"
                 className="mt-5 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
               >
                 Open Dashboard
-              </a>
+              </Link>
             </article>
           ) : null}
 
@@ -314,20 +413,78 @@ export default function PortalDashboardClient() {
           ) : null}
         </section>
 
+        {showMoreProducts ? (
+          <section className="space-y-3">
+            <h2 className="text-lg font-semibold text-white">More Products</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {isMissingCadence ? (
+                <article className="rounded-2xl border border-dashed border-white/15 bg-[#12121A]/70 p-6 opacity-80">
+                  <Phone className="h-6 w-6 text-[#C4B5FD]" aria-hidden />
+                  <h3 className="mt-3 text-lg font-semibold text-white">Cadence — AI Receptionist</h3>
+                  <p className="mt-2 text-sm text-[#A1A1AA]">
+                    Never miss a call. AI answers 24/7, books appointments, answers FAQs.
+                  </p>
+                  <p className="mt-3 text-sm font-medium text-[#D4D4D8]">$199/mo · 7-day free trial</p>
+                  <Link
+                    href="/portal/checkout?product=cadence"
+                    className="mt-4 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+                  >
+                    Get Started
+                  </Link>
+                </article>
+              ) : null}
+
+              {isMissingReviewFunnel ? (
+                <article className="rounded-2xl border border-dashed border-white/15 bg-[#12121A]/70 p-6 opacity-80">
+                  <Star className="h-6 w-6 text-[#C4B5FD]" aria-hidden />
+                  <h3 className="mt-3 text-lg font-semibold text-white">Review Funnel — Automated Reviews</h3>
+                  <p className="mt-2 text-sm text-[#A1A1AA]">
+                    Turn every appointment into a 5-star review. Automated follow-ups via text.
+                  </p>
+                  <p className="mt-3 text-sm font-medium text-[#D4D4D8]">From $79/mo</p>
+                  <Link
+                    href="/portal/checkout?product=review_funnel"
+                    className="mt-4 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+                  >
+                    Get Started
+                  </Link>
+                </article>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+
         <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6">
-          <h2 className="text-lg font-semibold text-white">Billing</h2>
-          <p className="mt-2 text-sm text-[#A1A1AA]">Open your secure billing page to manage payment details and invoices.</p>
+          <h2 className="text-lg font-semibold text-white">Account</h2>
+          <dl className="mt-4 space-y-2 text-sm">
+            <div>
+              <dt className="text-[#A1A1AA]">Name</dt>
+              <dd className="text-[#E4E4E7]">{client?.contactName || "Not available"}</dd>
+            </div>
+            <div>
+              <dt className="text-[#A1A1AA]">Email</dt>
+              <dd className="text-[#E4E4E7]">{client?.email || "Not available"}</dd>
+            </div>
+          </dl>
 
-          {billingError ? <p className="mt-3 text-sm text-red-300">{billingError}</p> : null}
+          {billingError ? <p className="mt-4 text-sm text-red-300">{billingError}</p> : null}
 
-          <button
-            type="button"
-            onClick={() => void handleManageBilling()}
-            disabled={isOpeningBilling}
-            className="mt-5 inline-flex rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isOpeningBilling ? "Opening billing..." : "Manage Billing"}
-          </button>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => void handleManageBilling()}
+              disabled={isOpeningBilling}
+              className="inline-flex rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isOpeningBilling ? "Opening billing..." : "Manage Billing"}
+            </button>
+            <Link
+              href="/contact"
+              className="inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+            >
+              Need help?
+            </Link>
+          </div>
         </section>
       </div>
     </main>

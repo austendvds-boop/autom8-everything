@@ -1,23 +1,96 @@
 # implementation-plan.md — Review Funnel batches
 
-## 2026-03-07 — B1: production hardening (meta noindex + robots + sitemap cleanup)
+## 2026-03-07 — B7-0: SEO hardening + error states + portal polish
 
-- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/login`
-- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal`
-- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/billing`
-- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/cadence`
-- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/review-funnel`
-- [x] Add `robots: { index: false, follow: false }` to dashboard metadata files:
-  - `src/app/review-funnel/dashboard/page.tsx`
-  - `src/app/review-funnel/dashboard/feedback/page.tsx`
-  - `src/app/review-funnel/dashboard/reviews/page.tsx`
-  - `src/app/review-funnel/dashboard/settings/page.tsx`
-- [x] Replace `public/robots.txt` with production hardening directives
-- [x] Delete static `public/sitemap.xml`
-- [x] Verify `src/app/sitemap.ts` does not include `/review-funnel/signup`
-- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Verify noindex metadata on portal routes:
+  - [x] `src/app/portal/checkout/page.tsx`
+  - [x] `src/app/portal/checkout/success/page.tsx`
+  - [x] `src/app/portal/review-funnel/page.tsx`
+- [x] Update `public/robots.txt` with portal disallow rules including `Disallow: /portal/checkout/`
+- [x] Verify `src/app/sitemap.ts` excludes `/portal/*` routes
+- [x] Add shared portal fetch helper with 401 session-expiry error:
+  - [x] `src/lib/platform/portal-fetch.ts`
+- [x] Add portal skeleton components:
+  - [x] `src/components/portal/LoadingSkeleton.tsx`
+- [x] Update portal client components to use shared session-expiry handling:
+  - [x] `src/app/portal/PortalDashboardClient.tsx`
+  - [x] `src/app/portal/cadence/PortalCadenceClient.tsx`
+  - [x] `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - [x] `src/app/portal/billing/PortalBillingClient.tsx`
+- [x] Update `src/app/portal/checkout/CheckoutClient.tsx` error copy + `Try Again` behavior
+- [x] Replace plain loading states with skeletons in:
+  - [x] `PortalDashboardClient`
+  - [x] `PortalCadenceClient`
+- [x] Ensure `← Back to portal` links on sub-pages:
+  - [x] `/portal/cadence`
+  - [x] `/portal/review-funnel`
+  - [x] `/portal/billing`
+  - [x] `/portal/checkout`
+- [x] Write platform setup runbook at `docs/platform-setup.md`
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
 - [x] Run `npm run build` and ensure pass
-- [x] Commit and push to `origin/production/hardening`
+- [x] Commit and push to `origin/feature/customer-portal`
+
+## 2026-03-07 — B6-0: product page CTAs + Cadence CRM v2 callout
+
+- [x] Add CRM v2 marketing section to `src/app/services/cadence/page.tsx` between features and downstream pricing/CTA areas
+- [x] Update Cadence primary online CTAs from onboarding/get-started to `/portal/checkout?product=cadence`
+- [x] Add trust line under Cadence primary online CTAs: `7-day free trial · No credit card required to start`
+- [x] Update Review Funnel primary CTAs to `/portal/checkout?product=review_funnel` while keeping pricing/copy unchanged
+- [x] Update pricing page product CTAs:
+  - [x] Cadence -> `/portal/checkout?product=cadence`
+  - [x] Review Funnel -> `/portal/checkout?product=review_funnel`
+  - [x] custom/contact CTAs unchanged
+- [x] Check shared homepage CTA components and update product signup links:
+  - [x] `src/components/ServicesBento.tsx`
+  - [x] `src/components/PricingOverview.tsx`
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/feature/customer-portal`
+
+## 2026-03-07 — B5-0: portal dashboard discovery + Review Funnel portal status page
+
+- [x] Update `src/app/portal/PortalDashboardClient.tsx` to add:
+  - [x] active Cadence card improvements (`X calls this month`, phone number line, `Manage Settings` button)
+  - [x] active Review Funnel card improvements (`Open Dashboard` -> `/portal/review-funnel`, plan label when available)
+  - [x] `More Products` section with muted discovery cards for unpurchased Cadence/Review Funnel offers
+  - [x] Account section at bottom with customer name/email, billing action, and `/contact` help link
+- [x] Extend `GET /api/portal/me` to include service metadata for plan display
+- [x] Create `GET /api/portal/review-funnel/status` at `src/app/api/portal/review-funnel/status/route.ts`
+- [x] Replace `/portal/review-funnel` handoff page with a dedicated status page:
+  - [x] create `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - [x] update `src/app/portal/review-funnel/page.tsx` to server shell with noindex metadata and client render
+- [x] Update `docs/UI-VERIFICATION.md` for new portal checks
+- [x] Run `npm run build` and ensure pass
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`), commit, and push to `origin/feature/customer-portal`
+
+## 2026-03-07 — B4-0: portal cadence enhancements (usage, checklist, prompt editor, test mode)
+
+- [x] Create `GET /api/portal/cadence/usage` route at `src/app/api/portal/cadence/usage/route.ts`
+- [x] Create `POST /api/portal/cadence/test-call` route at `src/app/api/portal/cadence/test-call/route.ts`
+- [x] Extend portal cadence settings PATCH validation to accept `systemPrompt`
+- [x] Extend Cadence tenant update typing to include `systemPrompt`
+- [x] Update `src/app/portal/cadence/PortalCadenceClient.tsx` with:
+  - [x] plan usage section with call/minute progress bars and over-80% warnings
+  - [x] onboarding checklist with local storage persistence and section scrolling links
+  - [x] AI prompt/persona editor field wired into existing save flow
+  - [x] test mode call section with status/error/success states and phone prefill
+  - [x] expandable recent-calls rows with chevron + bullet summary details
+- [x] Update UI verification checklist in `docs/UI-VERIFICATION.md`
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/feature/customer-portal`
+
+## 2026-03-07 — B3-0: Stripe portal checkout + auto-provisioning webhook
+
+- [x] Create `src/lib/platform/services/stripe-portal.ts` with checkout session creation and portal webhook handling
+- [x] Create `POST /api/portal/checkout` route with payload validation and CORS headers
+- [x] Create `POST /api/portal/webhooks/stripe` route with raw-body signature validation and always-200 response behavior
+- [x] Create `/portal/checkout` page shell + `CheckoutClient` UI for Cadence and Review Funnel plan selection
+- [x] Create `/portal/checkout/success` page shell + success client with spinner-to-success transition
+- [x] Update `src/lib/platform/config.ts` for `PORTAL_STRIPE_WEBHOOK_SECRET` and `PORTAL_STRIPE_PRICE_CADENCE_STARTER`
+- [x] Update env/docs artifacts (`.env.example`, `docs/ENV-VARS.md`, `docs/UI-VERIFICATION.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/feature/customer-portal`
 
 ## 2026-03-07 — B8: custom apps + footer + sticky mobile CTA + polish
 

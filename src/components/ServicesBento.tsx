@@ -57,7 +57,7 @@ const products: Product[] = [
     microProof: "5-minute setup without the tech headache",
     badge: "Pairs with Cadence",
     icon: MessageSquareHeart,
-    cta: { href: "/review-funnel/signup", label: "Get Started" },
+    cta: { href: "/portal/checkout?product=review_funnel", label: "Get Started" },
   },
   {
     tier: "small",

@@ -1,24 +1,33 @@
-# Autom8 Client Platform Setup
+# Platform Portal Setup
 
-## Environment Variables (autom8-everything)
-- `A8_ADMIN_SECRET` — password for /admin/clients login
-- `A8_JWT_SECRET` — 32+ char secret for portal JWT signing
-- `A8_MAGIC_LINK_TTL_MINUTES` — magic link expiry (default 15)
-- `A8_SESSION_TTL_HOURS` — portal session duration (default 24)
-- `CADENCE_API_URL` — cadence-v2 base URL (e.g., https://cadence-v2-production.up.railway.app)
-- `PORTAL_API_SECRET` — shared secret for cross-service API calls
+## Stripe Configuration
 
-## Environment Variables (cadence-v2)
-- `PORTAL_API_SECRET` — must match autom8-everything's value
+### Cadence Product
+1. Create a product "Cadence — AI Receptionist" in Stripe Dashboard
+2. Add a recurring price: $199/month
+3. Enable 7-day free trial on the price or subscription
+4. Copy the price ID → set as `PORTAL_STRIPE_PRICE_CADENCE_STARTER`
+
+### Webhook Registration
+1. Go to Stripe Dashboard → Developers → Webhooks
+2. Add endpoint: `https://autom8everything.com/api/portal/webhooks/stripe`
+3. Select events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+4. Copy the signing secret → set as `PORTAL_STRIPE_WEBHOOK_SECRET`
+
+## Environment Variables
+
+### Required for Portal (Vercel)
+- `STRIPE_SECRET_KEY` — Stripe API secret key
+- `PORTAL_STRIPE_WEBHOOK_SECRET` — Stripe webhook signing secret
+- `PORTAL_STRIPE_PRICE_CADENCE_STARTER` — Stripe price ID for Cadence
+- `CADENCE_API_URL` — cadence-v2 API URL (https://cadence-v2-production.up.railway.app)
+- `PORTAL_API_SECRET` — shared secret for cadence-v2 portal API auth
+- `A8_JWT_SECRET` — JWT signing secret for portal sessions
+- `A8_ADMIN_SECRET` — admin panel auth secret
+- `DATABASE_URL` — Neon Postgres connection string
+
+### Required for cadence-v2 (Railway)
+- `PORTAL_API_SECRET` — must match autom8-everything value
 
 ## Database Migration
-Run the SQL in `docs/migrations/2026-03-07-platform-tables.sql` against the Neon database.
-Or use `npx drizzle-kit push` with DATABASE_URL set.
-
-## How it works
-1. Operator logs into /admin/clients with A8_ADMIN_SECRET
-2. Creates a client record (business name, email, contact)
-3. Adds services (Cadence / Review Funnel) — links to existing service accounts
-4. Client receives welcome email with magic link to /portal
-5. Client logs in, sees their services, manages Cadence settings, views calls
-6. Billing managed via Stripe customer portal link
+Run `docs/migrations/2026-03-07-platform-tables.sql` against the production Neon database to create `a8_clients`, `a8_client_services`, and `a8_magic_links` tables.

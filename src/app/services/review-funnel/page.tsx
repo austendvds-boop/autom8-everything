@@ -37,7 +37,7 @@ const plans = [
     description: "A simple starting plan for one connected calendar.",
     features: ["1 connected calendar", "150 text messages per month", "Automatic review requests after every appointment"],
     ctaLabel: "Get Started",
-    ctaHref: "/review-funnel/signup",
+    ctaHref: "/portal/checkout?product=review_funnel",
     ctaStyle: "solid" as const,
   },
   {
@@ -47,7 +47,7 @@ const plans = [
     description: "Built for teams that need more connected calendars and messages.",
     features: ["Up to 5 connected calendars", "600 text messages per month", "Automatic review requests after every appointment"],
     ctaLabel: "Get Started",
-    ctaHref: "/review-funnel/signup",
+    ctaHref: "/portal/checkout?product=review_funnel",
     featured: true,
     badge: "Most Popular",
     ctaStyle: "solid" as const,
@@ -169,7 +169,7 @@ export default function ReviewFunnelPage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
-              href="/review-funnel/signup"
+              href="/portal/checkout?product=review_funnel"
               className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 text-center font-semibold text-white"
             >
               Get Started
@@ -392,7 +392,7 @@ export default function ReviewFunnelPage() {
           </h2>
           <p className="text-[#A1A1AA] text-lg mb-8">Start now and be live in about 5 minutes.</p>
           <Link
-            href="/review-funnel/signup"
+            href="/portal/checkout?product=review_funnel"
             className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 font-semibold text-white"
           >
             Get Started

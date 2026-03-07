@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /portal/
+Disallow: /portal/login/
+Disallow: /portal/checkout/
+Disallow: /portal/cadence/
+Disallow: /portal/review-funnel/
+Disallow: /portal/billing/
 
 Disallow: /portal/
 Disallow: /admin/

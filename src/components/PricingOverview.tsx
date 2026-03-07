@@ -9,7 +9,7 @@ const tiers = [
     title: "Start Free",
     product: "Cadence Phone Answering",
     price: "$199/mo after 7-day free trial",
-    cta: { label: "Start Free Trial", href: "/get-started" },
+    cta: { label: "Start Free Trial", href: "/portal/checkout?product=cadence" },
   },
   {
     title: "Website Plans",

@@ -1,84 +1,129 @@
 # Ralph Context — Autom8 CRO Passover
 
-## B1 (2026-03-07): Production hardening — meta noindex + robots + sitemap cleanup
-- Added page-level `metadata` exports with `robots: { index: false, follow: false }` to all portal entry routes:
-  - `src/app/portal/login/page.tsx` (`Client Portal Login`)
-  - `src/app/portal/page.tsx` (`Client Portal`)
-  - `src/app/portal/billing/page.tsx` (`Client Portal — Billing`)
-  - `src/app/portal/cadence/page.tsx` (`Client Portal — Cadence Settings`)
-  - `src/app/portal/review-funnel/page.tsx` (`Client Portal — Review Funnel`)
-- Added `robots: { index: false, follow: false }` to existing Review Funnel dashboard metadata exports:
-  - `src/app/review-funnel/dashboard/page.tsx`
-  - `src/app/review-funnel/dashboard/feedback/page.tsx`
-  - `src/app/review-funnel/dashboard/reviews/page.tsx`
-  - `src/app/review-funnel/dashboard/settings/page.tsx`
-- Replaced `public/robots.txt` with hardened private-route disallow list:
-  - `/portal/`, `/admin/`, `/review-funnel/dashboard/`, `/review-funnel/admin/`, `/review-funnel/login`, `/api/`, `/r/`, `/onboarding/`, and success/utility routes.
-- Deleted stale static `public/sitemap.xml` so dynamic sitemap route is used.
-- Verified `src/app/sitemap.ts` static routes do **not** include `/review-funnel/signup`; no `/services` index route was added (left unchanged).
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Keep noindex metadata on all private dashboard/portal pages by default.
-  - Do not re-add `public/sitemap.xml`; it shadows dynamic `src/app/sitemap.ts`.
-
-## B8 (2026-03-07): Custom Apps + Footer + Sticky Mobile CTA + polish
-- Created `src/components/StickyMobileCTA.tsx`:
-  - mobile-only fixed bottom CTA bar (`md:hidden`)
-  - appears after scroll past ~80vh
-  - actions: `Call Now` (`tel:+14806313993`) and `Book Demo` (`/contact`)
-- Updated `src/app/HomePageClient.tsx`:
-  - imported/rendered `StickyMobileCTA` after `<Footer />`
-  - main container now includes `pb-20 md:pb-0`
-- Updated all CRO service pages to render sticky CTA and reserve mobile bottom space:
-  - `src/app/services/cadence/page.tsx`
-  - `src/app/services/review-funnel/page.tsx`
-  - `src/app/services/websites/page.tsx`
-  - `src/app/services/seo-content/page.tsx`
-  - `src/app/services/custom-apps/page.tsx`
-- Reworked `src/app/services/custom-apps/page.tsx`:
-  - Hero headline now: `When Off-the-Shelf Tools Don't Fit, We Build What Does.`
-  - Hero subhead replaced with workflow-first copy + selectivity note
-  - Added new ROI section after How It Works with 3 cards (`Clock`, `ShieldCheck`, `Zap`)
-  - Upgraded examples to concrete outcomes with TODO case-study comments
-  - Pricing updated with `$2,000 to $15,000` range and 4 pricing-factor bullets
-  - Preserved required section order and structured data scripts
-  - Standardized classes: `btn-primary`/`btn-secondary`, `card-base`, `section-heading`
-- Updated `src/components/Footer.tsx`:
-  - Added prominent phone link below logo: `(480) 631-3993` -> `tel:+14806313993`
-  - Grid updated to `md:grid-cols-5` with brand block `md:col-span-2`
-  - Added new `Start Here` column with quick links
-  - Kept Products + Company columns and existing social icon aria labels
+## B7-0 (2026-03-07): portal polish (SEO + errors + consistency)
+- SEO hardening completed/verified:
+  - confirmed noindex metadata on:
+    - `src/app/portal/checkout/page.tsx`
+    - `src/app/portal/checkout/success/page.tsx`
+    - `src/app/portal/review-funnel/page.tsx`
+  - updated `public/robots.txt` with portal disallow rules:
+    - `/portal/`
+    - `/portal/login/`
+    - `/portal/checkout/`
+    - `/portal/cadence/`
+    - `/portal/review-funnel/`
+    - `/portal/billing/`
+  - verified `src/app/sitemap.ts` excludes portal routes (`/portal/*` not present in `staticRoutes`)
+- Added shared portal session/fetch utility:
+  - new `src/lib/platform/portal-fetch.ts`
+  - exports:
+    - `PortalSessionExpiredError`
+    - `portalFetch(url, init)` (`cache: "no-store"`, throws on 401)
+- Added shared portal loading skeletons:
+  - new `src/components/portal/LoadingSkeleton.tsx`
+  - exports:
+    - `PortalCardSkeleton`
+    - `PortalPageSkeleton`
+- Updated portal clients to use shared session handling (`portalFetch`):
+  - `src/app/portal/PortalDashboardClient.tsx`
+  - `src/app/portal/cadence/PortalCadenceClient.tsx`
+  - `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - `src/app/portal/billing/PortalBillingClient.tsx`
+- Loading polish:
+  - replaced plain loading text/cards with `PortalPageSkeleton` in:
+    - `PortalDashboardClient`
+    - `PortalCadenceClient`
+- Checkout polish (`src/app/portal/checkout/CheckoutClient.tsx`):
+  - added `← Back to portal` link
+  - added explicit submit error mapping:
+    - 400: `Please fill in all required fields.`
+    - 500+: `Something went wrong on our end. Please try again in a moment.`
+    - network: `Could not connect. Please check your internet and try again.`
+  - kept dismiss action and updated label to `Try Again`
+  - aligned top-level card/form styling to portal surface token usage (`bg-[#12121A]/90`, `border-white/8`)
+- Back-link consistency:
+  - verified top `← Back to portal` links on:
+    - `/portal/cadence`
+    - `/portal/review-funnel`
+    - `/portal/billing`
+    - `/portal/checkout`
 - Docs updated:
+  - `docs/platform-setup.md`
   - `docs/UI-VERIFICATION.md`
-  - `docs/CODER-CONTEXT.md`
   - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+- Build: pending
+- Gotchas for next batch:
+  - `portalFetch` intentionally throws on any 401, so future portal-client API calls should either use this utility or handle session expiry with equivalent behavior.
+  - `public/robots.txt` now disallows all known portal paths; if new portal routes are added, include them in robots disallow review.
+
+## B6-0 (2026-03-07): product page CTAs + Cadence CRM v2 callout
+- Updated `src/app/services/cadence/page.tsx`:
+  - Added new **CRM Integration Coming Soon** section between Features and the later pricing/CTA flow.
+  - Section includes:
+    - `Coming Soon` emerald badge
+    - `Automatic Lead Capture` headline + supporting copy
+    - 3 icon cards (`Incoming Call`, `AI Summary`, `CRM Sync`)
+    - closing note about CRM integration timing
+  - Updated all Cadence online trial links from `/get-started` to `/portal/checkout?product=cadence`.
+  - Added trust line below CTA groups:
+    - `7-day free trial · No credit card required to start`
+- Updated `src/app/services/review-funnel/page.tsx`:
+  - Updated primary `Get Started` CTAs to `/portal/checkout?product=review_funnel`:
+    - hero CTA
+    - Starter/Growth plan card CTAs
+    - final CTA
+  - Kept pricing tiers and copy unchanged.
+- Updated `src/app/pricing/page.tsx`:
+  - Cadence CTA -> `/portal/checkout?product=cadence`
+  - Review Funnel CTA -> `/portal/checkout?product=review_funnel`
+  - Contact/custom CTAs unchanged.
+- Updated shared homepage product CTA components:
+  - `src/components/ServicesBento.tsx`: Review Funnel CTA -> `/portal/checkout?product=review_funnel`
+  - `src/components/PricingOverview.tsx`: Cadence CTA -> `/portal/checkout?product=cadence`
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
 - Build: `npm run build` ✅
 - Gotchas for next batch:
-  - Keep sticky CTA rendered after `Footer` inside `<main>` on any newly-added top-level marketing pages.
-  - Preserve `pb-20 md:pb-0` on pages that include `StickyMobileCTA` to avoid content being covered on mobile.
+  - `/get-started` still exists and is still used by global nav/footer; this batch only moved product/homepage CTA surfaces requested for portal checkout routing.
+  - Cadence page now has both legacy trust copy and the new required trust line in final CTA area; keep both unless copy consolidation is explicitly requested.
 
-## B7 (2026-03-07): Website Creation + SEO page overhauls
-- Updated `src/app/services/websites/page.tsx`:
-  - Hero rewritten to `A Website That Gets Picked, Trusted, and Contacted.`
-  - Added `Why Your Website Matters More Than You Think` stats section after hero.
-  - Kept existing `How It Works`, then inserted mid-page CTA (`Ready to upgrade? Let's pick your tier.`).
-  - Reworked pricing tier data with `bestFor` text and `recommended` badge on Scale tier.
-  - Added `Built for Real Businesses` screenshot placeholder section after pricing.
-  - Final CTA rewritten to `Your Website Should Work as Hard as You Do.` with dual actions (phone + form).
-  - Section order now matches requested 8-part sequence.
-- Updated `src/app/services/seo-content/page.tsx`:
-  - Hero rewritten to `Get Found on Google. Get Called. Get Booked.`
-  - Added timeline section `What to Expect and When` after How It Works.
-  - Replaced monthly 2x2 grid with structured 5-item deliverables list (icons).
-  - Imported and rendered `ComparisonTable` (`@/components/ComparisonTable`) for one-off vs monthly framing.
-  - Added `SEO Works Best as Part of Your Growth Stack` pairing section (Website/Reviews/Cadence).
-  - Added pricing context list under `Contact Us` card.
-  - Section order now matches requested 9-part sequence.
-- Docs updated:
-  - `docs/UI-VERIFICATION.md` (added B7 checks for `/services/websites` and `/services/seo-content`)
+## B5-0 (2026-03-07): portal dashboard discovery + Review Funnel portal status page
+- Updated `src/app/portal/PortalDashboardClient.tsx`:
+  - Active Cadence card now attempts both:
+    - `GET /api/portal/cadence/calls?limit=1&offset=0` for monthly call count preview
+    - `GET /api/portal/cadence/settings` for Cadence phone number preview
+  - Cadence card now shows:
+    - `X calls this month` when available
+    - `Your Cadence number: ...` when settings include a number
+    - CTA `Manage Settings` -> `/portal/cadence`
+  - Active Review Funnel card now:
+    - CTA `Open Dashboard` -> `/portal/review-funnel`
+    - Optional `Plan: ...` line sourced from service metadata when present
+  - Added `More Products` section when customer is missing one or both products:
+    - Cadence discovery card -> `/portal/checkout?product=cadence`
+    - Review Funnel discovery card -> `/portal/checkout?product=review_funnel`
+    - Muted visual treatment uses `border-dashed border-white/15` and reduced opacity
+  - Replaced billing-only block with account section showing name/email, billing action, and `Need help?` link to `/contact`
+- Updated `src/app/api/portal/me/route.ts` to include `metadata` in service rows so plan labels are available to dashboard UI.
+- Added `GET /api/portal/review-funnel/status` at `src/app/api/portal/review-funnel/status/route.ts`:
+  - requires portal auth
+  - resolves active Review Funnel service + `rfTenantId`
+  - reads status from merged `platformDb` RF tables and returns:
+    - `{ plan, smsUsed, smsLimit, calendarsConnected, isActive }`
+  - returns `404` when no active Review Funnel service is linked
+- Replaced portal Review Funnel handoff route with a real status page:
+  - new client component: `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
+  - updated server page: `src/app/portal/review-funnel/page.tsx`
+    - now exports noindex metadata
+    - renders status client (no redirect/handoff-only card)
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
   - `docs/implementation-plan.md`
-- Key exports/components used:
-  - Reused existing `ComparisonTable` default export from `src/components/ComparisonTable.tsx`.
+  - `docs/CODER-CONTEXT.md`
+- Build: `npm run build` ✅
 - Gotchas for next batch:
-  - Keep `buildServiceSchema` + `buildFaqSchema` scripts intact on service pages.
-  - `ComparisonTable` is client-side; safe to import into server page components.
+  - Review Funnel plan label on `/portal` depends on `a8_client_services.metadata.plan` (or `planName`); older rows may not show plan.
+  - RF status usage uses `rf_sms_usage.month` (`YYYY-MM`) and `count` columns from current schema.
