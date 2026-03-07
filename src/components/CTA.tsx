@@ -34,30 +34,30 @@ export default function CTA() {
           style={{ fontFamily: "var(--font-playfair), serif" }}
           {...(prefersReducedMotion ? revealReduced : reveal)}
         >
-          Ready to make things easier?
+          Your Competitors Are Already Answering Their Calls.
         </motion.h2>
 
         <motion.p className="text-xl md:text-2xl text-white/80 mb-10" {...(prefersReducedMotion ? revealReduced : reveal)}>
-          Start with one tool now and add more when you need them.
+          Start with Cadence today. Add reviews, a website, and SEO when you're ready. No contracts, no risk.
         </motion.p>
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...(prefersReducedMotion ? revealReduced : reveal)}>
-          <Link
-            href="/get-started"
+          <a
+            href="tel:+14806313993"
             className="inline-block px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow"
           >
-            Start Free Trial
-          </Link>
+            Call Cadence Live — (480) 631-3993
+          </a>
           <Link
             href="/contact"
             className="inline-block px-8 py-4 rounded-full border border-white/40 text-white font-semibold text-lg hover:bg-white/10 transition-colors"
           >
-            Call Us
+            Book a 15-Minute Demo
           </Link>
         </motion.div>
 
         <motion.p className="mt-8 text-white/70 text-sm" {...(prefersReducedMotion ? revealReduced : revealReduced)}>
-          Fast setup. Straight answers. No pressure.
+          7-day free trial • No credit card for trial • Cancel anytime
         </motion.p>
       </div>
     </section>

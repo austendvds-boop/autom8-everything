@@ -1,5 +1,43 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B4: Homepage Product Stack + Verticals + FAQ + Final CTA
+- Modified: `src/components/ServicesBento.tsx`
+  - Cadence hero copy updated with urgency positioning and new micro-proof:
+    - `Every missed call is a customer your competitor answers instead...`
+    - `Live in 5 minutes. Try it right now.`
+  - Added non-hero badges:
+    - Review Funnel: `Pairs with Cadence`
+    - Website Creation: `Foundation`
+    - SEO & Content: `Ongoing Growth`
+    - Custom Apps: `Advanced`
+  - Non-hero cards now render badge pill next to eyebrow when `product.badge` exists.
+- Modified: `src/components/WhoItsFor.tsx`
+  - Replaced audience-problem cards with industry verticals section.
+  - New heading/subtitle and 6-card vertical grid:
+    - HVAC & Plumbing, Roofing & Landscaping, Dental & Medical, Med Spa & Wellness, Legal & Professional, General Contractors.
+  - Uses lucide icons (`Flame`, `Home`, `Heart`, `Sparkles`, `Scale`, `Hammer` fallback for HardHat).
+  - Added bottom section CTA: `See How It Works for Your Industry` -> `/contact`.
+- Modified: `src/components/FAQ.tsx`
+  - Replaced FAQ list with 7 buying-friction entries (pricing, website migration, service differences, tech comfort, one-product start, contracts, satisfaction/trial).
+  - Kept existing accordion behavior/animation/styling unchanged.
+- Modified: `src/components/CTA.tsx`
+  - New urgency headline/subhead.
+  - Primary CTA changed to tel `<a>`:
+    - `Call Cadence Live — (480) 631-3993` -> `tel:+14806313993`
+  - Secondary CTA updated to `Book a 15-Minute Demo` -> `/contact`.
+  - Trust line updated to `7-day free trial • No credit card for trial • Cancel anytime`.
+- Modified: `src/components/Testimonials.tsx`
+  - Removed duplicated testimonial array and marquee/infinite-scroll animation.
+  - Switched to static responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`).
+  - Trimmed to 3 testimonials and changed attribution style to role/company only with initials avatar labels.
+  - Added TODO note to replace with real client testimonials/headshots.
+- Docs updated:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+- Gotchas for next batch:
+  - `WhoItsFor` uses `Hammer` icon as fallback for the requested hard-hat visual.
+  - Testimonials are intentionally anonymized placeholders until real client proof is available.
+
 ## B3 retry: commit-gate recovery + verification
 - Verified B3 homepage implementation is present on `ui/cro-passover` and matches task spec:
   - Trust bar stats/logo placeholders in `src/components/SocialProofBar.tsx`
@@ -46,19 +84,3 @@
 - Gotchas:
   - `SocialProofBar` filename and exported component name are intentionally unchanged to avoid import breakage.
   - `OfferLadder` CTAs intentionally mix tel and contact links.
-
-## B2: Homepage hero + CTA overhaul
-- Modified: `src/components/Hero.tsx`
-- Copy updates:
-  - Eyebrow → `Growth infrastructure for local businesses`
-  - H1 → `Stop Losing Calls. Start Winning Customers.`
-  - Subhead → `Autom8 helps local businesses answer every call, collect 5-star reviews, and turn their website into a lead machine — without becoming tech experts.`
-- CTA updates:
-  - Primary CTA is now a tel link (`tel:+14806313993`) labeled `Call Cadence Live` with `PhoneCall` icon from `lucide-react`
-  - Secondary CTA now links to `/contact` labeled `Book a 15-Minute Demo`
-- Trust cues:
-  - Added micro-strip below CTAs: `7-day free trial • No contracts • Setup in 5 minutes`
-  - Added supporting note: `Try Cadence right now — it will answer like your receptionist.`
-- Gotchas:
-  - Kept Framer reveal animations, `buttonHover` preset, `BrandLogo`, and reduced-motion handling unchanged.
-  - Secondary CTA still uses `buttonHover` via a motion wrapper around `Link`.

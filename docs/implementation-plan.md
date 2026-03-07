@@ -1,5 +1,18 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — B4: homepage product stack + verticals + FAQ + final CTA
+
+- [x] Update `src/components/ServicesBento.tsx` Cadence urgency copy and micro-proof
+- [x] Add non-hero product badges (Review Funnel, Website Creation, SEO & Content, Custom Apps)
+- [x] Render non-hero badge pill next to eyebrow in ServicesBento cards
+- [x] Replace `WhoItsFor` audience section with 6-card industry verticals grid + bottom CTA
+- [x] Rewrite FAQ array to 7 buying-friction questions/answers (no accordion structural changes)
+- [x] Strengthen final CTA section copy and replace primary button with tel `<a>`
+- [x] Convert testimonials carousel to static 3-card grid and remove duplicated testimonial list
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [ ] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-06 — B3 retry: commit-gate recovery + verification
 
 - [x] Verify B3 UI files are present and match requested structure/content

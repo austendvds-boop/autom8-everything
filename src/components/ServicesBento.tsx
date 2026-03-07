@@ -29,11 +29,11 @@ const products: Product[] = [
     eyebrow: "Featured",
     productName: "Cadence",
     valueProp:
-      "Your voice receptionist answers calls day and night, handles common questions, and helps customers take the next step.",
+      "Every missed call is a customer your competitor answers instead. Cadence is your AI voice receptionist — answering calls, handling questions, and sending you summaries, 24/7.",
     price: "$199/mo",
     priceContext: "7-day free trial • cancel anytime",
     priceAriaLabel: "Price: 199 dollars per month with a seven day free trial",
-    microProof: "Experience Cadence live — you'll be set up before you hang up.",
+    microProof: "Live in 5 minutes. Try it right now.",
     features: [
       "Answers missed and after-hours calls",
       "Handles your common business questions",
@@ -55,6 +55,7 @@ const products: Product[] = [
     priceContext: "Starter plan • set it and forget it",
     priceAriaLabel: "Review Funnel starts at 79 dollars per month",
     microProof: "5-minute setup without the tech headache",
+    badge: "Pairs with Cadence",
     icon: MessageSquareHeart,
     cta: { href: "/review-funnel/signup", label: "Get Started" },
   },
@@ -68,6 +69,7 @@ const products: Product[] = [
     priceContext: "Launch / Scale / Custom tiers",
     priceAriaLabel: "Website Creation starts at 1500 dollars",
     microProof: "Clear offer pages built for real customers",
+    badge: "Foundation",
     icon: Globe,
     cta: { href: "/services/websites", label: "See Website Tiers" },
   },
@@ -81,6 +83,7 @@ const products: Product[] = [
     priceContext: "Contact us for scope",
     priceAriaLabel: "SEO and Content is offered as a monthly retainer",
     microProof: "Steady ranking gains with consistent publishing",
+    badge: "Ongoing Growth",
     icon: Search,
     cta: { href: "/services/seo-content", label: "See SEO & Content" },
   },
@@ -94,6 +97,7 @@ const products: Product[] = [
     priceContext: "Scoped after a short call",
     priceAriaLabel: "Custom Apps pricing is provided by quote",
     microProof: "Built around how your team already works",
+    badge: "Advanced",
     icon: Wrench,
     cta: { href: "/services/custom-apps", label: "Book a Consultation" },
   },
@@ -223,7 +227,14 @@ export default function ServicesBento() {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/0 to-transparent group-hover:from-[#8B5CF6]/[0.04] transition-opacity duration-500" />
                 <div className="relative z-10 h-full flex flex-col">
-                  <div className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-2">{product.eyebrow}</div>
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <div className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">{product.eyebrow}</div>
+                    {product.badge && (
+                      <span className="text-[10px] uppercase tracking-[0.12em] font-medium px-2.5 py-1 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#A78BFA]">
+                        {product.badge}
+                      </span>
+                    )}
+                  </div>
 
                   <div className="w-11 h-11 rounded-xl bg-[#8B5CF6]/[0.12] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
                     <Icon className="w-5 h-5 text-[#8B5CF6]" />

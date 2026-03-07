@@ -1,5 +1,51 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — B4: homepage product stack + verticals + FAQ + final CTA
+
+### Scope completed
+- Updated `src/components/ServicesBento.tsx`:
+  - Cadence hero value prop now uses urgency-first missed-call framing.
+  - Cadence micro-proof now reads `Live in 5 minutes. Try it right now.`
+  - Added/used non-hero product badges:
+    - Review Funnel: `Pairs with Cadence`
+    - Website Creation: `Foundation`
+    - SEO & Content: `Ongoing Growth`
+    - Custom Apps: `Advanced`
+  - Rendered badge pills beside non-hero eyebrows when `product.badge` exists.
+- Rebuilt `src/components/WhoItsFor.tsx` into a verticals section:
+  - New heading/subheading for local business operators.
+  - Added 6 industry cards with icon + title + description.
+  - Added section-level CTA button to `/contact`.
+- Replaced FAQ content in `src/components/FAQ.tsx` with 7 buying-friction questions while keeping accordion behavior unchanged.
+- Rewrote `src/components/CTA.tsx` final block:
+  - urgency headline/subhead
+  - primary CTA is now tel `<a href="tel:+14806313993">Call Cadence Live — (480) 631-3993</a>`
+  - secondary CTA now `Book a 15-Minute Demo`
+  - trust line updated to trial/risk-reversal statement
+- Cleaned `src/components/Testimonials.tsx`:
+  - removed duplicated testimonials and marquee animation
+  - switched to static responsive 3-card grid
+  - trimmed to 3 testimonials with role/company-only attribution + initials avatars
+  - added TODO to replace placeholders with real client proof assets
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+
+### Files changed
+- `src/components/ServicesBento.tsx`
+- `src/components/WhoItsFor.tsx`
+- `src/components/FAQ.tsx`
+- `src/components/CTA.tsx`
+- `src/components/Testimonials.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ⏳ pending
+
 ## 2026-03-06 — B3 retry: commit-gate recovery + verification
 
 ### Scope completed

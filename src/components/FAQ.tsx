@@ -7,30 +7,33 @@ import { reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 const faqs = [
   {
-    question: "How much does this cost?",
-    answer:
-      "It depends on what you need. Phone answering is $199/mo with a free trial. Websites and review funnels have set project prices shared upfront. Monthly SEO starts at a flat rate.",
+    question: "How much does Cadence cost?",
+    answer: "$199 per month with a 7-day free trial. Month-to-month, cancel anytime. No setup fees.",
   },
   {
-    question: "I already have a website. Can you work with it?",
-    answer:
-      "Yes. We can improve your current site or rebuild it on our platform. If we migrate your existing design, that migration is quoted separately as an add-on.",
+    question: "What if I already have a website?",
+    answer: "We can work with your existing site or rebuild it on our platform. Migration is quoted separately as an add-on.",
   },
   {
-    question: "How fast can I get started?",
-    answer: "Cadence phone answering is live in 5 minutes. Website projects usually take 2–4 weeks.",
+    question: "How is Cadence different from a normal answering service?",
+    answer:
+      "Cadence is an AI voice receptionist that answers in seconds, handles your specific business questions, routes calls based on your rules, and sends you summaries. No hold times, no outsourced call centers, no per-minute billing surprises.",
   },
   {
     question: "Do I need to be tech-savvy?",
-    answer: "No. We handle setup and technical details. You get simple updates and clear next steps.",
+    answer: "No. We handle all setup for you. You get a phone number and a simple dashboard. Most businesses are live in under 5 minutes.",
+  },
+  {
+    question: "Can I start with just one product?",
+    answer: "Yes. Most businesses start with Cadence alone and add reviews or a website later when they are ready.",
   },
   {
     question: "Is there a long-term contract?",
-    answer: "No. Cadence and monthly support are month-to-month. Project work has a clear scope and timeline.",
+    answer: "No. Everything is month-to-month or project-scoped with clear timelines. We do not lock you in.",
   },
   {
-    question: "What areas do you serve?",
-    answer: "We work with businesses across Phoenix and nationwide. Everything can be handled remotely.",
+    question: "What if I am not happy?",
+    answer: "Cadence has a 7-day free trial — cancel before it ends and you pay nothing. Website and SEO projects have clear milestones and approval steps.",
   },
 ];
 

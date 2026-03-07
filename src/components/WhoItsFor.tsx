@@ -1,20 +1,40 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { Flame, Hammer, Heart, Home, Scale, Sparkles } from "lucide-react";
 import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
 
-const audiences = [
+const verticals = [
   {
-    title: "You're missing calls after hours",
-    description: "Customers call and get voicemail. They hang up and call the next company.",
+    title: "HVAC & Plumbing",
+    description: "Answer emergency calls 24/7. Win reviews after every service visit.",
+    icon: Flame,
   },
   {
-    title: "Your website isn't bringing in leads",
-    description: "You have a site, but it doesn't rank on Google and doesn't convince people to call.",
+    title: "Roofing & Landscaping",
+    description: "Never miss a storm-season lead. Build your reputation job by job.",
+    icon: Home,
   },
   {
-    title: "You don't have time to figure out marketing",
-    description: "You're great at your work. You shouldn't need to become a tech expert to get customers.",
+    title: "Dental & Medical",
+    description: "Keep your front desk focused on patients, not phone tag.",
+    icon: Heart,
+  },
+  {
+    title: "Med Spa & Wellness",
+    description: "Fill your appointment book without chasing leads manually.",
+    icon: Sparkles,
+  },
+  {
+    title: "Legal & Professional",
+    description: "Capture every intake call. Route to the right person instantly.",
+    icon: Scale,
+  },
+  {
+    title: "General Contractors",
+    description: "One number, always answered. Summaries after every call.",
+    icon: Hammer,
   },
 ];
 
@@ -26,25 +46,39 @@ export default function WhoItsFor() {
       <div className="max-w-6xl mx-auto px-6">
         <motion.div className="text-center mb-12 md:mb-14" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Is This a Fit for <span className="gradient-text">You?</span>
+            Built for Local Businesses That Rely on Calls and Reviews
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">If any of these feel familiar, we can help.</p>
+          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-3xl mx-auto">
+            Whether you run a crew, manage a front desk, or own a practice — Autom8 is built for operators like you.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {audiences.map((item, index) => (
-            <motion.div
-              key={item.title}
-              className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 hover:shadow-[0_0_80px_rgba(139,92,246,0.08)] transition-shadow duration-300"
-              {...revealStagger(index, prefersReducedMotion)}
-              initial={false}
-              {...(prefersReducedMotion ? {} : cardHover)}
-            >
-              <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
-              <p className="text-[#A1A1AA] text-[15px] leading-relaxed">{item.description}</p>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {verticals.map((vertical, index) => {
+            const Icon = vertical.icon;
+            return (
+              <motion.div
+                key={vertical.title}
+                className="card-base rounded-3xl p-7"
+                {...revealStagger(index, prefersReducedMotion)}
+                initial={false}
+                {...(prefersReducedMotion ? {} : cardHover)}
+              >
+                <div className="w-11 h-11 rounded-xl bg-[#8B5CF6]/10 flex items-center justify-center mb-4">
+                  <Icon className="w-5 h-5 text-[#A78BFA]" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">{vertical.title}</h3>
+                <p className="text-[#A1A1AA] text-[15px] leading-relaxed">{vertical.description}</p>
+              </motion.div>
+            );
+          })}
         </div>
+
+        <motion.div className="mt-10 flex justify-center" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
+          <Link href="/contact" className="btn-secondary px-8 py-4">
+            See How It Works for Your Industry
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

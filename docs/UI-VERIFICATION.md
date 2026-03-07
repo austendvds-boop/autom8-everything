@@ -29,6 +29,42 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B4 checks (homepage product stack + verticals + FAQ + final CTA)
+- `/` Services section (`ServicesBento`)
+  - Cadence hero value prop reads: `Every missed call is a customer your competitor answers instead...` and includes `24/7`
+  - Cadence hero micro-proof reads: `Live in 5 minutes. Try it right now.`
+  - Non-hero badge pills render beside eyebrow labels:
+    - Review Funnel: `Pairs with Cadence`
+    - Website Creation: `Foundation`
+    - SEO & Content: `Ongoing Growth`
+    - Custom Apps: `Advanced`
+- `/` verticals section (`WhoItsFor`)
+  - heading reads `Built for Local Businesses That Rely on Calls and Reviews`
+  - subtitle reads `Whether you run a crew...`
+  - 6 cards render in one column on mobile and 3 columns on desktop:
+    - HVAC & Plumbing
+    - Roofing & Landscaping
+    - Dental & Medical
+    - Med Spa & Wellness
+    - Legal & Professional
+    - General Contractors
+  - each card has icon in rounded purple-tint square + title + gray description text
+  - bottom CTA renders: `See How It Works for Your Industry` -> `/contact`
+- `/` FAQ section (`FAQ`)
+  - exactly 7 buying-friction questions render in accordion
+  - includes pricing, website migration, Cadence-vs-answering-service, tech comfort, single-product start, contract, and satisfaction/trial questions
+- `/` final CTA section (`CTA`)
+  - headline reads: `Your Competitors Are Already Answering Their Calls.`
+  - subhead reads: `Start with Cadence today...`
+  - primary CTA is phone link `<a href="tel:+14806313993">Call Cadence Live — (480) 631-3993</a>`
+  - secondary CTA reads `Book a 15-Minute Demo` -> `/contact`
+  - trust line reads: `7-day free trial • No credit card for trial • Cancel anytime`
+- `/` testimonials section (`Testimonials`)
+  - subtitle reads: `What business owners say about working with Autom8.`
+  - renders static grid (`1/2/3` columns by breakpoint), no horizontal auto-scroll animation
+  - exactly 3 testimonial cards with role/company attribution style (no fake full names)
+  - initials badges render (e.g. `HS`)
+
 ## Batch B3 checks (homepage trust/proof + offer ladder + how it works)
 - `/` homepage section order
   - Navigation
