@@ -1,5 +1,18 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — Platform client portal API routes
+
+- [x] Create `POST /api/portal/auth/login` for magic-link requests with email-enumeration-safe success response
+- [x] Create `GET /api/portal/auth/verify` to consume portal magic link, set `a8_portal_session`, and redirect to `/portal`
+- [x] Create `GET /api/portal/me` to return authenticated client profile + service rows
+- [x] Create `GET/PATCH /api/portal/cadence/settings` with active Cadence service gate and Cadence settings passthrough
+- [x] Create `GET /api/portal/cadence/calls` with `limit`/`offset` support and Cadence service gate
+- [x] Create `POST /api/portal/billing/portal` using Stripe billing portal session and fixed return URL
+- [x] Ensure all portal routes except login/verify require `requirePortalAuth`
+- [x] Run `npm run build` and ensure pass
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [ ] Commit and push to `origin/master`
+
 ## 2026-03-06 — Platform operator admin API routes + provisioning/email services
 
 - [x] Create `src/lib/platform/services/email.ts` with Gmail SMTP resolution parity and portal/welcome email senders

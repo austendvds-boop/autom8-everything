@@ -1,5 +1,55 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — Batch 13: platform client portal API routes
+
+### Scope completed
+- Added portal auth login route `POST /api/portal/auth/login` at `src/app/api/portal/auth/login/route.ts`:
+  - validates `{ email }` via zod
+  - normalizes to lowercase
+  - calls `generatePortalMagicLink(email)`
+  - sends login email with `sendPortalMagicLinkEmail({ toEmail, token })`
+  - returns `{ ok: true }` for unknown emails to avoid account enumeration
+- Added portal auth verify route `GET /api/portal/auth/verify` at `src/app/api/portal/auth/verify/route.ts`:
+  - reads `token` query param
+  - validates/consumes token via `verifyPortalMagicLink(token)`
+  - on success sets `a8_portal_session` cookie using `A8_PORTAL_SESSION_COOKIE_NAME`
+  - cookie options: httpOnly, sameSite lax, secure in production, path `/`, maxAge from `platformConfig.A8_SESSION_TTL_HOURS`
+  - redirects to `/portal`
+  - invalid/missing token returns `401 { error: "Invalid or expired link" }`
+- Added portal self route `GET /api/portal/me` at `src/app/api/portal/me/route.ts`:
+  - requires `requirePortalAuth`
+  - returns client identity fields + associated `a8_client_services` rows (`serviceType`, `status`, `cadenceTenantId`, `rfTenantId`, `provisionedAt`)
+- Added Cadence settings route `src/app/api/portal/cadence/settings/route.ts`:
+  - `GET` requires portal auth, resolves active Cadence service, returns `getCadenceTenantConfig(cadenceTenantId)`
+  - `PATCH` requires portal auth, validates optional settings payload, updates via `updateCadenceTenantConfig(cadenceTenantId, body)`
+  - returns `404` when no active Cadence service exists
+- Added Cadence calls route `GET /api/portal/cadence/calls` at `src/app/api/portal/cadence/calls/route.ts`:
+  - requires portal auth
+  - resolves active Cadence service
+  - parses query params `limit` (default 50) and `offset` (default 0)
+  - returns `getCadenceRecentCalls(cadenceTenantId, limit, offset)`
+- Added billing portal route `POST /api/portal/billing/portal` at `src/app/api/portal/billing/portal/route.ts`:
+  - requires portal auth
+  - loads `stripeCustomerId` from `a8_clients`
+  - returns `400 { error: "No billing account linked" }` when missing
+  - creates Stripe billing portal session via `new Stripe(process.env.STRIPE_SECRET_KEY)` pattern
+  - fixed return URL: `https://autom8everything.com/portal`
+  - returns `{ url: portalSession.url }`
+
+### Files changed
+- `src/app/api/portal/auth/login/route.ts` (new)
+- `src/app/api/portal/auth/verify/route.ts` (new)
+- `src/app/api/portal/me/route.ts` (new)
+- `src/app/api/portal/cadence/settings/route.ts` (new)
+- `src/app/api/portal/cadence/calls/route.ts` (new)
+- `src/app/api/portal/billing/portal/route.ts` (new)
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 12: platform operator admin API routes + provisioning/email services
 
 ### Scope completed
