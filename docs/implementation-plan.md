@@ -1,5 +1,24 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B1: production hardening (meta noindex + robots + sitemap cleanup)
+
+- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/login`
+- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal`
+- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/billing`
+- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/cadence`
+- [x] Add `metadata` + `robots: { index: false, follow: false }` to `/portal/review-funnel`
+- [x] Add `robots: { index: false, follow: false }` to dashboard metadata files:
+  - `src/app/review-funnel/dashboard/page.tsx`
+  - `src/app/review-funnel/dashboard/feedback/page.tsx`
+  - `src/app/review-funnel/dashboard/reviews/page.tsx`
+  - `src/app/review-funnel/dashboard/settings/page.tsx`
+- [x] Replace `public/robots.txt` with production hardening directives
+- [x] Delete static `public/sitemap.xml`
+- [x] Verify `src/app/sitemap.ts` does not include `/review-funnel/signup`
+- [x] Update docs (`docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/production/hardening`
+
 ## 2026-03-07 — B8: custom apps + footer + sticky mobile CTA + polish
 
 - [x] Rewrite `src/app/services/custom-apps/page.tsx` hero copy and add selectivity note

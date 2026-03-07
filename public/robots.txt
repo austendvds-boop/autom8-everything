@@ -1,5 +1,18 @@
 User-agent: *
 Allow: /
 
+Disallow: /portal/
+Disallow: /admin/
+Disallow: /review-funnel/dashboard/
+Disallow: /review-funnel/admin/
+Disallow: /review-funnel/login
+Disallow: /api/
+Disallow: /r/
+Disallow: /b-copy
+Disallow: /c-copy
+Disallow: /onboarding/
+Disallow: /cadence/welcome
+Disallow: /get-started/success
+
 Host: autom8everything.com
 Sitemap: https://autom8everything.com/sitemap.xml

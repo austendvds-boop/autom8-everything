@@ -1,4 +1,14 @@
+import type { Metadata } from "next"
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Client Portal — Review Funnel",
+  description: "Autom8 Everything client portal.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default function PortalReviewFunnelPage() {
   return (

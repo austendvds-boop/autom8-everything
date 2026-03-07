@@ -29,6 +29,22 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B1 checks (Production hardening: noindex + robots + sitemap)
+- Portal routes return metadata with noindex/nofollow robots:
+  - `/portal/login`
+  - `/portal`
+  - `/portal/billing`
+  - `/portal/cadence`
+  - `/portal/review-funnel`
+- Review Funnel dashboard routes return metadata with noindex/nofollow robots:
+  - `/review-funnel/dashboard`
+  - `/review-funnel/dashboard/feedback`
+  - `/review-funnel/dashboard/reviews`
+  - `/review-funnel/dashboard/settings`
+- `/robots.txt` includes disallow entries for private routes (`/portal/`, `/admin/`, `/review-funnel/dashboard/`, `/api/`, `/r/`, onboarding and success utility paths)
+- `public/sitemap.xml` no longer exists in the repo
+- `src/app/sitemap.ts` static route list does not include `/review-funnel/signup`
+
 ## Batch B8 checks (Custom Apps + Footer + Sticky Mobile CTA)
 - `/services/custom-apps` section order is:
   1) Hero (new selectivity framing)

@@ -1,5 +1,26 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B1 (2026-03-07): Production hardening — meta noindex + robots + sitemap cleanup
+- Added page-level `metadata` exports with `robots: { index: false, follow: false }` to all portal entry routes:
+  - `src/app/portal/login/page.tsx` (`Client Portal Login`)
+  - `src/app/portal/page.tsx` (`Client Portal`)
+  - `src/app/portal/billing/page.tsx` (`Client Portal — Billing`)
+  - `src/app/portal/cadence/page.tsx` (`Client Portal — Cadence Settings`)
+  - `src/app/portal/review-funnel/page.tsx` (`Client Portal — Review Funnel`)
+- Added `robots: { index: false, follow: false }` to existing Review Funnel dashboard metadata exports:
+  - `src/app/review-funnel/dashboard/page.tsx`
+  - `src/app/review-funnel/dashboard/feedback/page.tsx`
+  - `src/app/review-funnel/dashboard/reviews/page.tsx`
+  - `src/app/review-funnel/dashboard/settings/page.tsx`
+- Replaced `public/robots.txt` with hardened private-route disallow list:
+  - `/portal/`, `/admin/`, `/review-funnel/dashboard/`, `/review-funnel/admin/`, `/review-funnel/login`, `/api/`, `/r/`, `/onboarding/`, and success/utility routes.
+- Deleted stale static `public/sitemap.xml` so dynamic sitemap route is used.
+- Verified `src/app/sitemap.ts` static routes do **not** include `/review-funnel/signup`; no `/services` index route was added (left unchanged).
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - Keep noindex metadata on all private dashboard/portal pages by default.
+  - Do not re-add `public/sitemap.xml`; it shadows dynamic `src/app/sitemap.ts`.
+
 ## B8 (2026-03-07): Custom Apps + Footer + Sticky Mobile CTA + polish
 - Created `src/components/StickyMobileCTA.tsx`:
   - mobile-only fixed bottom CTA bar (`md:hidden`)
@@ -61,14 +82,3 @@
 - Gotchas for next batch:
   - Keep `buildServiceSchema` + `buildFaqSchema` scripts intact on service pages.
   - `ComparisonTable` is client-side; safe to import into server page components.
-
-## B6 retry 6 (2026-03-07): commit gate closure — fresh push after stale HEAD
-- Confirmed the full B6 Review Funnel overhaul is present and correct in `src/app/services/review-funnel/page.tsx` at HEAD.
-- Working tree was clean; all changes already committed. Re-verified build passes.
-- Added this retry docs pass to produce a fresh commit and satisfy the commit-gate check.
-- Section order confirmed intact (10 sections, hero through final CTA).
-- `npm run build` ✅
-- Files modified: `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`
-- Gotchas for next batch:
-  - Use `;` not `&&` in PowerShell exec chains.
-  - Push explicitly: `git push origin ui/cro-passover`.
