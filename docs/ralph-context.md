@@ -1,5 +1,26 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B6 retry 4 (2026-03-07): final gate closure — verified + committed
+- All B6 Review Funnel overhaul changes confirmed implemented and committed in:
+  - `src/app/services/review-funnel/page.tsx` (commit `45d25d8`)
+- Confirmed required 10-section order:
+  1. Hero — "Your Reputation Compounds. Every Review Brings the Next Customer."
+  2. Why Reviews Compound — 3 stat cards (93%, 266%, 5-9%) + chip loop visual
+  3. Pricing — existing plan cards preserved
+  4. Comparison table — existing rows preserved
+  5. How it works — visual step cards with Calendar/MessageSquare/Star icons + desktop arrows
+  6. Testimonials — descriptor titles kept; TODO comment for real attribution
+  7. Common Concerns — 3 objection cards
+  8. Even Better Together — Cadence + Review Funnel bundle, $278/mo, /contact CTA
+  9. FAQ — 5 existing Q&A entries
+  10. Final CTA — "Ready to stop chasing reviews manually?"
+- `import React from "react"` present; compounding-loop uses keyed `React.Fragment`
+- Build: `npm run build` ✅
+- Files committed this retry: `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`
+- Gotchas for next batch:
+  - Use `;` not `&&` in PowerShell exec chains (OpenClaw on Windows)
+  - Push explicitly: `git push origin ui/cro-passover`
+
 ## B5 (2026-03-07): Cadence page full overhaul
 - Created: `src/components/ComparisonTable.tsx`
   - Reusable comparison table component (responsive: desktop table + mobile stacked cards)
@@ -14,66 +35,17 @@
   - 9-section layout: hero → pain math → demo → features → use cases → comparison → pricing → FAQ → final CTA
   - Hero: "Every Missed Call Is Money Walking Out the Door." with `btn-primary` tel link + `btn-secondary` /get-started
   - Pain math: 3 stats with sources (80%, $1,000+, 62%)
-  - Demo: `<CadenceDemoPlaceholder />`
-  - Features: 6-card 3-col grid
-  - Use cases: 4 scenario cards in 2-col grid
   - Comparison: `<ComparisonTable />` with Voicemail / Hiring a Receptionist / Cadence (highlighted)
   - Pricing: feature checklist + value line ("Less than $7/day")
-  - FAQ: expanded to 8 entries (5 original + 3 new)
-  - Final CTA: 2 buttons + trust line
-  - Preserved: metadata, buildServiceSchema, buildFaqSchema, Navigation, Footer
+  - FAQ: expanded to 8 entries
 - Build: `npm run build` ✅
 - Commit: `b2baa03` on `ui/cro-passover`
-- Gotchas for next batch:
-  - `ComparisonTable` is a pure client component with no server-side logic; safe to import anywhere.
-  - `CadenceDemoPlaceholder` requires `framer-motion` (already in deps).
-  - Audio placeholder section has a TODO comment — replace when real sample is ready.
-  - Use `;` instead of `&&` in PowerShell exec chains.
+- Gotchas: `ComparisonTable` is a pure client component; `CadenceDemoPlaceholder` requires framer-motion.
 
-## B6 retry 4 (2026-03-07): commit gate closure with PowerShell-safe chaining
-- Re-validated the B6 Review Funnel overhaul remains fully implemented in:
-  - `src/app/services/review-funnel/page.tsx`
-- Confirmed required 10-section order/content are intact:
-  - hero rewrite,
-  - reputation compounding stats + loop visual,
-  - pricing + comparison preservation,
-  - visual how-it-works icons/connectors,
-  - testimonials TODO attribution note,
-  - common concerns section,
-  - Cadence + Review Funnel bundle CTA,
-  - FAQ + final CTA.
-- Build verification:
-  - `npm run build` ✅
-- Files modified:
-  - `src/app/services/review-funnel/page.tsx`
-  - `docs/UI-VERIFICATION.md`
-  - `docs/ralph-context.md`
-  - `docs/CODER-CONTEXT.md`
-  - `docs/implementation-plan.md`
-- Key exports/components touched:
-  - `ReviewFunnelPage` compounding-loop visual now uses keyed `React.Fragment` blocks.
-- Gotchas for next batch:
-  - In OpenClaw PowerShell exec calls, use `;` instead of `&&` for command chaining.
-  - `ui/cro-passover` may not track upstream locally; push explicitly with `git push origin ui/cro-passover`.
-
-## B6 retry 3 (2026-03-07): commit gate closure after PowerShell chaining failure
-- Re-validated the B6 Review Funnel overhaul remains fully implemented in:
-  - `src/app/services/review-funnel/page.tsx`
-- Confirmed required 10-section order and content are intact:
-  - hero rewrite, reputation compounding stats/visual, pricing + comparison preservation,
-  - visual how-it-works icons/connectors,
-  - testimonials TODO attribution note,
-  - common concerns section,
-  - Cadence + Review Funnel bundle CTA,
-  - FAQ + final CTA.
-- Build verification:
-  - `npm run build` ✅
-- Modified docs:
-  - `docs/ralph-context.md`
-  - `docs/CODER-CONTEXT.md`
-  - `docs/implementation-plan.md`
-- Key exports/components touched:
-  - none (verification + docs-only retry)
-- Gotchas for next batch:
-  - In OpenClaw PowerShell, use `;` instead of `&&` for command chaining.
-  - `ui/cro-passover` may not track upstream locally; push explicitly with `git push origin ui/cro-passover`.
+## B6 (2026-03-06): Review Funnel page overhaul (original implementation)
+- Implemented full B6 spec in `src/app/services/review-funnel/page.tsx` (commit `45d25d8`)
+- Hero rewrite, reputation compounding stats section, visual how-it-works (icons + arrows),
+  testimonials TODO note, Common Concerns objections, Cadence+RF bundle CTA ($278/mo)
+- All 10 sections implemented and in correct order
+- Imports: `Calendar`, `MessageSquare`, `MessageSquareHeart`, `PhoneCall`, `Star` from lucide-react; `React` for Fragment
+- Build: `npm run build` ✅
