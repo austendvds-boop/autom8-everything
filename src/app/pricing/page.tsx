@@ -67,7 +67,7 @@ export default function PricingPage() {
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Cadence</p>
             <h2 className="text-3xl font-semibold mb-2">$199/mo</h2>
             <p className="text-[#A1A1AA] mb-6">7-day free trial included.</p>
-            <Link href="/get-started" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+            <Link href="/portal/checkout?product=cadence" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
               Start Free Trial
             </Link>
           </article>
@@ -78,7 +78,7 @@ export default function PricingPage() {
             <p className="text-[#A1A1AA] mb-3">Growth $149/mo • Pro is a contact-us plan.</p>
             <p className="text-[#A1A1AA] mb-6">Set-it-and-forget-it review follow-up for local businesses.</p>
             <div className="mt-auto flex flex-col sm:flex-row gap-3">
-              <Link href="/review-funnel/signup" className="inline-flex w-fit px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+              <Link href="/portal/checkout?product=review_funnel" className="inline-flex w-fit px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
                 Get Started
               </Link>
               <Link href="/services/review-funnel" className="inline-flex w-fit px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">

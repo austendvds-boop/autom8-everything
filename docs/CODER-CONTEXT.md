@@ -1,5 +1,43 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B6-0: product page CTAs + Cadence CRM v2 callout
+
+### Scope completed
+- Updated `src/app/services/cadence/page.tsx`:
+  - Added a new **CRM Integration Coming Soon** section between features and later CTA/pricing flow.
+  - Added `Coming Soon` emerald badge, `Automatic Lead Capture` heading, and three callout cards (`Incoming Call`, `AI Summary`, `CRM Sync`).
+  - Updated all online trial CTAs from `/get-started` to `/portal/checkout?product=cadence`.
+  - Added trust line under online CTA groups: `7-day free trial · No credit card required to start`.
+- Updated `src/app/services/review-funnel/page.tsx`:
+  - Updated primary `Get Started` CTAs to `/portal/checkout?product=review_funnel` (hero, Starter/Growth plan cards, final CTA).
+  - Kept pricing tiers/copy unchanged.
+- Updated `src/app/pricing/page.tsx`:
+  - Cadence pricing CTA -> `/portal/checkout?product=cadence`
+  - Review Funnel pricing CTA -> `/portal/checkout?product=review_funnel`
+  - Custom/contact CTAs unchanged.
+- Updated shared product CTA components:
+  - `src/components/ServicesBento.tsx` Review Funnel CTA -> `/portal/checkout?product=review_funnel`
+  - `src/components/PricingOverview.tsx` Cadence CTA -> `/portal/checkout?product=cadence`
+- Updated docs/checklists:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/app/services/cadence/page.tsx`
+- `src/app/services/review-funnel/page.tsx`
+- `src/app/pricing/page.tsx`
+- `src/components/ServicesBento.tsx`
+- `src/components/PricingOverview.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B5-0: portal dashboard discovery + Review Funnel portal status
 
 ### Scope completed

@@ -1,5 +1,22 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B6-0: product page CTAs + Cadence CRM v2 callout
+
+- [x] Add CRM v2 marketing section to `src/app/services/cadence/page.tsx` between features and downstream pricing/CTA areas
+- [x] Update Cadence primary online CTAs from onboarding/get-started to `/portal/checkout?product=cadence`
+- [x] Add trust line under Cadence primary online CTAs: `7-day free trial · No credit card required to start`
+- [x] Update Review Funnel primary CTAs to `/portal/checkout?product=review_funnel` while keeping pricing/copy unchanged
+- [x] Update pricing page product CTAs:
+  - [x] Cadence -> `/portal/checkout?product=cadence`
+  - [x] Review Funnel -> `/portal/checkout?product=review_funnel`
+  - [x] custom/contact CTAs unchanged
+- [x] Check shared homepage CTA components and update product signup links:
+  - [x] `src/components/ServicesBento.tsx`
+  - [x] `src/components/PricingOverview.tsx`
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/feature/customer-portal`
+
 ## 2026-03-07 — B5-0: portal dashboard discovery + Review Funnel portal status page
 
 - [x] Update `src/app/portal/PortalDashboardClient.tsx` to add:

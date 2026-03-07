@@ -1,5 +1,38 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B6-0 (2026-03-07): product page CTAs + Cadence CRM v2 callout
+- Updated `src/app/services/cadence/page.tsx`:
+  - Added new **CRM Integration Coming Soon** section between Features and the later pricing/CTA flow.
+  - Section includes:
+    - `Coming Soon` emerald badge
+    - `Automatic Lead Capture` headline + supporting copy
+    - 3 icon cards (`Incoming Call`, `AI Summary`, `CRM Sync`)
+    - closing note about CRM integration timing
+  - Updated all Cadence online trial links from `/get-started` to `/portal/checkout?product=cadence`.
+  - Added trust line below CTA groups:
+    - `7-day free trial · No credit card required to start`
+- Updated `src/app/services/review-funnel/page.tsx`:
+  - Updated primary `Get Started` CTAs to `/portal/checkout?product=review_funnel`:
+    - hero CTA
+    - Starter/Growth plan card CTAs
+    - final CTA
+  - Kept pricing tiers and copy unchanged.
+- Updated `src/app/pricing/page.tsx`:
+  - Cadence CTA -> `/portal/checkout?product=cadence`
+  - Review Funnel CTA -> `/portal/checkout?product=review_funnel`
+  - Contact/custom CTAs unchanged.
+- Updated shared homepage product CTA components:
+  - `src/components/ServicesBento.tsx`: Review Funnel CTA -> `/portal/checkout?product=review_funnel`
+  - `src/components/PricingOverview.tsx`: Cadence CTA -> `/portal/checkout?product=cadence`
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - `/get-started` still exists and is still used by global nav/footer; this batch only moved product/homepage CTA surfaces requested for portal checkout routing.
+  - Cadence page now has both legacy trust copy and the new required trust line in final CTA area; keep both unless copy consolidation is explicitly requested.
+
 ## B5-0 (2026-03-07): portal dashboard discovery + Review Funnel portal status page
 - Updated `src/app/portal/PortalDashboardClient.tsx`:
   - Active Cadence card now attempts both:
@@ -62,33 +95,3 @@
 - Gotchas for next batch:
   - Checklist visibility is controlled only by local storage dismiss key and tenant id availability.
   - Greeting checklist completion uses non-empty + not-in-default-greetings heuristic; adjust default list if Cadence default copy changes.
-
-## B3-0 (2026-03-07): portal Stripe checkout + auto-provisioning webhook
-- Implemented new platform Stripe service at `src/lib/platform/services/stripe-portal.ts`.
-  - Key exports:
-    - `createPortalCheckoutSession(params)`
-    - `handlePortalWebhookEvent(event)`
-  - Checkout metadata now carries `portal`, `product`, `businessName`, `email`, `phone`, `areaCode`, `plan`.
-- Added public pre-purchase checkout API route:
-  - `src/app/api/portal/checkout/route.ts`
-  - `POST` validates payload and returns `{ url }`
-  - CORS headers set for site origin + `OPTIONS` preflight
-  - `dynamic = "force-dynamic"`
-- Added Stripe webhook route for portal provisioning:
-  - `src/app/api/portal/webhooks/stripe/route.ts`
-  - raw body via `request.text()` + signature verification using `PORTAL_STRIPE_WEBHOOK_SECRET`
-  - forwards events to `handlePortalWebhookEvent(event)`
-  - logs errors and always returns `200 { received: true }`
-- Added portal checkout UI:
-  - `src/app/portal/checkout/page.tsx`
-  - `src/app/portal/checkout/CheckoutClient.tsx`
-  - `src/app/portal/checkout/success/page.tsx`
-  - `src/app/portal/checkout/success/SuccessClient.tsx`
-- Updated platform env config/docs:
-  - `src/lib/platform/config.ts` now parses optional `PORTAL_STRIPE_WEBHOOK_SECRET` and `PORTAL_STRIPE_PRICE_CADENCE_STARTER`
-  - `.env.example`, `docs/ENV-VARS.md`, `docs/UI-VERIFICATION.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Portal webhook intentionally returns 200 even on handled failures; rely on logs for triage.
-  - Review Funnel linking from portal checkout can be deferred if RF tenant is not yet created by RF webhook.
-  - Stripe SDK in this repo expects API version `2025-02-24.acacia` (older literals fail TypeScript).

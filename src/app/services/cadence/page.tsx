@@ -148,11 +148,12 @@ export default function CadencePage() {
             <a href="tel:+14806313993" className="btn-primary text-lg px-10 py-4">
               Call Cadence Live — (480) 631-3993
             </a>
-            <Link href="/get-started" className="btn-secondary text-lg px-8 py-4">
+            <Link href="/portal/checkout?product=cadence" className="btn-secondary text-lg px-8 py-4">
               Start Your 7-Day Free Trial
             </Link>
           </div>
-          <p className="mt-4 text-sm text-[#A1A1AA]">
+          <p className="mt-4 text-sm text-[#71717A]">7-day free trial · No credit card required to start</p>
+          <p className="mt-2 text-sm text-[#A1A1AA]">
             $199/mo after trial • Month-to-month • Cancel anytime
           </p>
         </div>
@@ -211,6 +212,68 @@ export default function CadencePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* CRM Integration Coming Soon */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl text-center px-6">
+          <span className="inline-block rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300 mb-6">
+            Coming Soon
+          </span>
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">Automatic Lead Capture</h2>
+          <p className="mt-4 text-lg text-[#A1A1AA] max-w-2xl mx-auto">
+            Every call logged, no manual entry. Cadence captures caller name, phone number, call topic, and outcome
+            — automatically. No more sticky notes or missed follow-ups.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3 max-w-3xl mx-auto">
+            <div className="rounded-2xl border border-white/8 bg-[#12121A]/80 p-6 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#8B5CF6]/20">
+                <svg className="h-6 w-6 text-[#8B5CF6]" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-sm font-semibold text-white">Incoming Call</h3>
+              <p className="mt-1 text-xs text-[#A1A1AA]">Cadence answers and handles the conversation</p>
+            </div>
+
+            <div className="rounded-2xl border border-white/8 bg-[#12121A]/80 p-6 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-400/20">
+                <svg className="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-sm font-semibold text-white">AI Summary</h3>
+              <p className="mt-1 text-xs text-[#A1A1AA]">Name, phone, topic, and outcome captured</p>
+            </div>
+
+            <div className="rounded-2xl border border-white/8 bg-[#12121A]/80 p-6 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-400/20">
+                <svg className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-sm font-semibold text-white">CRM Sync</h3>
+              <p className="mt-1 text-xs text-[#A1A1AA]">Auto-push to HubSpot or GoHighLevel</p>
+            </div>
+          </div>
+
+          <p className="mt-6 text-sm text-[#71717A]">
+            CRM integration coming soon. Call logging and summaries available now in your dashboard.
+          </p>
         </div>
       </section>
 
@@ -304,10 +367,11 @@ export default function CadencePage() {
               <a href="tel:+14806313993" className="btn-primary text-lg px-10 py-4">
                 Call (480) 631-3993
               </a>
-              <Link href="/get-started" className="btn-secondary text-lg px-8 py-4">
+              <Link href="/portal/checkout?product=cadence" className="btn-secondary text-lg px-8 py-4">
                 Start Your Free Trial Online
               </Link>
             </div>
+            <p className="mt-4 text-sm text-[#71717A]">7-day free trial · No credit card required to start</p>
           </div>
         </div>
       </section>
@@ -338,13 +402,12 @@ export default function CadencePage() {
             <a href="tel:+14806313993" className="btn-primary text-lg px-10 py-4">
               Call (480) 631-3993
             </a>
-            <Link href="/get-started" className="btn-secondary text-lg px-8 py-4">
+            <Link href="/portal/checkout?product=cadence" className="btn-secondary text-lg px-8 py-4">
               Start Your Free Trial Online
             </Link>
           </div>
-          <p className="mt-6 text-sm text-[#A1A1AA]">
-            7-day free trial • No credit card • Live in 5 minutes
-          </p>
+          <p className="mt-6 text-sm text-[#71717A]">7-day free trial · No credit card required to start</p>
+          <p className="mt-2 text-sm text-[#A1A1AA]">7-day free trial • No credit card • Live in 5 minutes</p>
         </div>
       </section>
 

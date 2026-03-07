@@ -31,6 +31,35 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B6-0 checks (product CTAs + Cadence CRM v2 callout)
+- `/services/cadence`
+  - New section appears between `Everything Cadence Does For You` and later pricing sections:
+    - badge: `Coming Soon` with emerald accent styling (`bg-emerald-400/10`, `text-emerald-300`, `border-emerald-400/30`)
+    - heading: `Automatic Lead Capture`
+    - 3 icon cards render in one column on mobile and 3 columns on `sm+`:
+      - `Incoming Call`
+      - `AI Summary`
+      - `CRM Sync`
+    - footer note: `CRM integration coming soon. Call logging and summaries available now in your dashboard.`
+  - Primary online CTA links now point to portal checkout:
+    - hero secondary CTA -> `/portal/checkout?product=cadence`
+    - pricing secondary CTA -> `/portal/checkout?product=cadence`
+    - final CTA secondary CTA -> `/portal/checkout?product=cadence`
+  - trust line appears under CTA groups: `7-day free trial · No credit card required to start`
+- `/services/review-funnel`
+  - All primary `Get Started` links now route to `/portal/checkout?product=review_funnel`:
+    - hero CTA
+    - Starter/Growth plan card CTAs
+    - final CTA
+  - pricing copy/tiers remain unchanged
+- `/pricing`
+  - Cadence card CTA points to `/portal/checkout?product=cadence`
+  - Review Funnel card CTA points to `/portal/checkout?product=review_funnel`
+  - custom/contact CTAs remain unchanged
+- Homepage/shared product CTA components
+  - `src/components/ServicesBento.tsx` Review Funnel CTA points to `/portal/checkout?product=review_funnel`
+  - `src/components/PricingOverview.tsx` Cadence CTA points to `/portal/checkout?product=cadence`
+
 ## Batch B5-0 checks (portal dashboard discovery + Review Funnel portal status)
 - `/portal`
   - active Cadence card:
