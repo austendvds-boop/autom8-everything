@@ -1,5 +1,19 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B6 retry (2026-03-07): commit/push gate recovery
+- Re-verified B6 implementation remains complete in:
+  - `src/app/services/review-funnel/page.tsx`
+- Build verification:
+  - `npm run build` ✅
+- Modified docs:
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/implementation-plan.md`
+- Key exports/components touched:
+  - none (verification + doc update retry; page export surface unchanged)
+- Gotchas for next batch:
+  - Use PowerShell-safe command chaining (`;`) instead of `&&`.
+
 ## B6 (2026-03-07): Review Funnel page overhaul
 - Modified: `src/app/services/review-funnel/page.tsx`
   - Hero headline replaced with: `Your Reputation Compounds. Every Review Brings the Next Customer.`
@@ -61,21 +75,3 @@
   - none (verification-only pass; existing default exports unchanged)
 - Gotchas for next batch:
   - If `next build` fails with `.next/lock` acquisition error, remove stale `.next/lock` and rerun.
-
-## B4 retry (2026-03-07): content parity + commit-gate recovery
-- Modified: `src/components/WhoItsFor.tsx`
-  - Swapped fallback `Hammer` icon to `HardHat` for the `General Contractors` vertical now that `lucide-react` availability is confirmed.
-- Modified: `src/components/FAQ.tsx`
-  - Updated the `Do I need to be tech-savvy?` answer to exact requested phrasing:
-    - `No. We handle all setup and configuration...`
-- Modified docs:
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
-  - `docs/CODER-CONTEXT.md`
-  - `docs/ralph-context.md`
-- Key exports/components touched:
-  - `WhoItsFor` (default export, unchanged API)
-  - `FAQ` (default export, unchanged API)
-- Gotchas for next batch:
-  - Hard-hat icon now relies on `HardHat` export from current `lucide-react`; keep `Hammer` fallback only if icon package changes.
-  - FAQ copy intentionally uses `setup and configuration` to match stakeholder-approved wording.

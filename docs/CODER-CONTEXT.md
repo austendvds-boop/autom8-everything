@@ -1,5 +1,23 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B6 retry: commit/push gate recovery
+
+### Scope completed
+- Re-validated that the full B6 Review Funnel overhaul remains implemented in `src/app/services/review-funnel/page.tsx` (hero rewrite, compounding section, visual how-it-works, objections section, bundle CTA, testimonial TODO, and required section order).
+- Re-ran build verification for this retry pass.
+- Updated retry handoff docs for commit-gate closure:
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B6: Review Funnel page overhaul
 
 ### Scope completed
