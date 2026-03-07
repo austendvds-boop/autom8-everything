@@ -21,13 +21,34 @@
 18. /portal/cadence — client Cadence settings + recent calls
 19. /portal/billing — billing redirect/loading state
 20. /portal/review-funnel — review funnel dashboard handoff card
-21. site footer — subtle `Client Portal` link to `/portal/login`
+21. /portal/checkout — self-serve signup page for Cadence/Review Funnel
+22. /portal/checkout/success — post-checkout setup confirmation page
+23. site footer — subtle `Client Portal` link to `/portal/login`
 
 ## Smoke tests (no auth required)
 - GET /review-funnel/login → must render login form, NOT redirect
 - GET /review-funnel/signup → must render Step 1 of 4 wizard
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
+
+## Batch B3-0 checks (portal checkout + post-purchase setup)
+- `/portal/checkout`
+  - dark theme background `#0A0A0F` with card surface `#12121A`
+  - shows two product cards:
+    - Cadence (`$199/month`, mentions `7-day free trial`)
+    - Review Funnel (`Starter $79/month • Growth $149/month`)
+  - supports query preselect: `/portal/checkout?product=review_funnel` selects Review Funnel card on first paint
+  - form fields render: Business name, Email, Phone (optional)
+  - Cadence selection shows area-code dropdown defaulted to `480`
+  - Review Funnel selection hides area code and shows Starter/Growth plan choices
+  - submit button shows loading copy `Redirecting to secure checkout...` during checkout request
+  - server-side validation errors render in the red inline error box and can be dismissed with `Try again`
+- `/portal/checkout/success`
+  - initially shows spinner + `Setting up your account...`
+  - after ~3 seconds, spinner fades and success state appears
+  - success message includes: `Your account is being set up. Check your email for a login link.`
+  - when `email` query param is present, it is displayed in the success card
+  - link `Already have a login link? Go to Portal →` points to `/portal/login`
 
 ## Batch B8 checks (Custom Apps + Footer + Sticky Mobile CTA)
 - `/services/custom-apps` section order is:

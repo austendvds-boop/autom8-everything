@@ -1,5 +1,35 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B3-0 (2026-03-07): portal Stripe checkout + auto-provisioning webhook
+- Implemented new platform Stripe service at `src/lib/platform/services/stripe-portal.ts`.
+  - Key exports:
+    - `createPortalCheckoutSession(params)`
+    - `handlePortalWebhookEvent(event)`
+  - Checkout metadata now carries `portal`, `product`, `businessName`, `email`, `phone`, `areaCode`, `plan`.
+- Added public pre-purchase checkout API route:
+  - `src/app/api/portal/checkout/route.ts`
+  - `POST` validates payload and returns `{ url }`
+  - CORS headers set for site origin + `OPTIONS` preflight
+  - `dynamic = "force-dynamic"`
+- Added Stripe webhook route for portal provisioning:
+  - `src/app/api/portal/webhooks/stripe/route.ts`
+  - raw body via `request.text()` + signature verification using `PORTAL_STRIPE_WEBHOOK_SECRET`
+  - forwards events to `handlePortalWebhookEvent(event)`
+  - logs errors and always returns `200 { received: true }`
+- Added portal checkout UI:
+  - `src/app/portal/checkout/page.tsx`
+  - `src/app/portal/checkout/CheckoutClient.tsx`
+  - `src/app/portal/checkout/success/page.tsx`
+  - `src/app/portal/checkout/success/SuccessClient.tsx`
+- Updated platform env config/docs:
+  - `src/lib/platform/config.ts` now parses optional `PORTAL_STRIPE_WEBHOOK_SECRET` and `PORTAL_STRIPE_PRICE_CADENCE_STARTER`
+  - `.env.example`, `docs/ENV-VARS.md`, `docs/UI-VERIFICATION.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - Portal webhook intentionally returns 200 even on handled failures; rely on logs for triage.
+  - Review Funnel linking from portal checkout can be deferred if RF tenant is not yet created by RF webhook.
+  - Stripe SDK in this repo expects API version `2025-02-24.acacia` (older literals fail TypeScript).
+
 ## B2 retry (2026-03-07): commit-gate recovery + verification pass
 - Re-verified Cadence portal API wiring and onboarding provisioning changes for this batch:
   - `getCadenceTenantConfig()` -> `GET /api/portal/tenant/:tenantId` and returns `tenant`
@@ -38,13 +68,3 @@
 - Gotchas for next batch:
   - Portal endpoint response wrappers differ (`{ tenant }`, `{ ok, tenant }`) — do not assume legacy `{ settings }` shape.
   - `provisionCadenceTenant()` includes `areaCode` in the function signature for caller parity, but `/api/onboard` payload in this scope does not consume it.
-
-## B1 (2026-03-07): Production hardening — meta noindex + robots + sitemap cleanup
-- Added page-level `metadata` exports with `robots: { index: false, follow: false }` to all portal entry routes.
-- Added noindex metadata to Review Funnel dashboard pages.
-- Replaced `public/robots.txt` with hardened private-route disallow list.
-- Deleted stale static `public/sitemap.xml` so dynamic sitemap route is used.
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Keep noindex metadata on private dashboard/portal pages by default.
-  - Do not re-add `public/sitemap.xml`; it shadows dynamic `src/app/sitemap.ts`.

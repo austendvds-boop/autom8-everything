@@ -1,5 +1,17 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B3-0: Stripe portal checkout + auto-provisioning webhook
+
+- [x] Create `src/lib/platform/services/stripe-portal.ts` with checkout session creation and portal webhook handling
+- [x] Create `POST /api/portal/checkout` route with payload validation and CORS headers
+- [x] Create `POST /api/portal/webhooks/stripe` route with raw-body signature validation and always-200 response behavior
+- [x] Create `/portal/checkout` page shell + `CheckoutClient` UI for Cadence and Review Funnel plan selection
+- [x] Create `/portal/checkout/success` page shell + success client with spinner-to-success transition
+- [x] Update `src/lib/platform/config.ts` for `PORTAL_STRIPE_WEBHOOK_SECRET` and `PORTAL_STRIPE_PRICE_CADENCE_STARTER`
+- [x] Update env/docs artifacts (`.env.example`, `docs/ENV-VARS.md`, `docs/UI-VERIFICATION.md`)
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/feature/customer-portal`
+
 ## 2026-03-07 — B8: custom apps + footer + sticky mobile CTA + polish
 
 - [x] Rewrite `src/app/services/custom-apps/page.tsx` hero copy and add selectivity note

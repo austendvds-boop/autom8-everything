@@ -1,5 +1,70 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B3-0: portal Stripe checkout + auto-provisioning webhook
+
+### Scope completed
+- Added new platform Stripe service at `src/lib/platform/services/stripe-portal.ts`:
+  - `createPortalCheckoutSession(params)`
+    - finds/creates Stripe customer by email
+    - maps portal products to Stripe prices:
+      - Cadence -> `PORTAL_STRIPE_PRICE_CADENCE_STARTER`
+      - Review Funnel Starter/Growth -> `RF_STRIPE_PRICE_STARTER` / `RF_STRIPE_PRICE_GROWTH`
+    - writes critical checkout metadata (`portal`, `product`, `businessName`, `email`, `phone`, `areaCode`, `plan`)
+    - uses subscription mode with 7-day trial for Cadence
+  - `handlePortalWebhookEvent(event)`
+    - handles `checkout.session.completed` for portal-only events
+    - creates/updates `a8_clients` record by normalized email
+    - provisions Cadence immediately via `provisionCadenceTenant()` + `provisionService()`
+    - attempts Review Funnel service link via `provisionService(client.id, "review_funnel")` (logs deferred state when RF tenant is not ready yet)
+    - writes Stripe subscription id to `a8_client_services` for the specific purchased product
+    - sends portal welcome email with generated magic-link token
+    - handles `customer.subscription.deleted` by cancelling the mapped platform service
+- Added checkout API route `src/app/api/portal/checkout/route.ts`:
+  - `POST` validates `{ email, businessName, phone?, areaCode?, product, plan? }`
+  - no portal auth requirement (pre-purchase)
+  - returns `{ url }` from `createPortalCheckoutSession()`
+  - includes explicit CORS headers for site origin
+  - includes `OPTIONS` preflight support
+- Added Stripe portal webhook route `src/app/api/portal/webhooks/stripe/route.ts`:
+  - `dynamic = "force-dynamic"`
+  - reads raw body via `request.text()`
+  - verifies signature with `PORTAL_STRIPE_WEBHOOK_SECRET`
+  - calls `handlePortalWebhookEvent(event)`
+  - logs failures and always returns `200 { received: true }`
+- Added portal checkout UI routes:
+  - `src/app/portal/checkout/page.tsx` (metadata title `Get Started — Autom8`, robots noindex)
+  - `src/app/portal/checkout/CheckoutClient.tsx` (dark-theme checkout selector/form)
+  - `src/app/portal/checkout/success/page.tsx` (metadata title `Welcome to Autom8`, robots noindex)
+  - `src/app/portal/checkout/success/SuccessClient.tsx` (spinner -> success state after 3s)
+- Updated platform env parsing in `src/lib/platform/config.ts`:
+  - `PORTAL_STRIPE_WEBHOOK_SECRET` (optional)
+  - `PORTAL_STRIPE_PRICE_CADENCE_STARTER` (optional)
+  - both include build-phase placeholder injection pattern
+- Updated env/docs artifacts:
+  - `.env.example`
+  - `docs/ENV-VARS.md`
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+
+### Files changed
+- `src/lib/platform/services/stripe-portal.ts` (new)
+- `src/app/api/portal/checkout/route.ts` (new)
+- `src/app/api/portal/webhooks/stripe/route.ts` (new)
+- `src/app/portal/checkout/page.tsx` (new)
+- `src/app/portal/checkout/CheckoutClient.tsx` (new)
+- `src/app/portal/checkout/success/page.tsx` (new)
+- `src/app/portal/checkout/success/SuccessClient.tsx` (new)
+- `src/lib/platform/config.ts`
+- `.env.example`
+- `docs/ENV-VARS.md`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B2 retry: commit-gate recovery + verification refresh
 
 ### Scope completed
