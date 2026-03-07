@@ -1,5 +1,42 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B1: Production hardening (meta noindex + robots + sitemap cleanup)
+
+### Scope completed
+- Added page-level `metadata` exports with `robots: { index: false, follow: false }` for portal pages that were missing metadata:
+  - `src/app/portal/login/page.tsx` (`Client Portal Login`)
+  - `src/app/portal/page.tsx` (`Client Portal`)
+  - `src/app/portal/billing/page.tsx` (`Client Portal — Billing`)
+  - `src/app/portal/cadence/page.tsx` (`Client Portal — Cadence Settings`)
+  - `src/app/portal/review-funnel/page.tsx` (`Client Portal — Review Funnel`)
+- Updated existing Review Funnel dashboard metadata to include noindex/nofollow robots:
+  - `src/app/review-funnel/dashboard/page.tsx`
+  - `src/app/review-funnel/dashboard/feedback/page.tsx`
+  - `src/app/review-funnel/dashboard/reviews/page.tsx`
+  - `src/app/review-funnel/dashboard/settings/page.tsx`
+- Replaced `public/robots.txt` with tightened disallow rules for private routes (`/portal/`, `/admin/`, `/review-funnel/dashboard/`, `/api/`, `/r/`, onboarding/success utility paths, etc.).
+- Removed stale static sitemap file `public/sitemap.xml` so the dynamic `src/app/sitemap.ts` is used.
+- Verified `src/app/sitemap.ts` static routes do not include `/review-funnel/signup` and left `/services` index route unchanged per spec.
+
+### Files changed
+- `src/app/portal/login/page.tsx`
+- `src/app/portal/page.tsx`
+- `src/app/portal/billing/page.tsx`
+- `src/app/portal/cadence/page.tsx`
+- `src/app/portal/review-funnel/page.tsx`
+- `src/app/review-funnel/dashboard/page.tsx`
+- `src/app/review-funnel/dashboard/feedback/page.tsx`
+- `src/app/review-funnel/dashboard/reviews/page.tsx`
+- `src/app/review-funnel/dashboard/settings/page.tsx`
+- `public/robots.txt`
+- `public/sitemap.xml` (deleted)
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/implementation-plan.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B8: Custom Apps + Footer + Sticky Mobile CTA + sitewide polish
 
 ### Scope completed
