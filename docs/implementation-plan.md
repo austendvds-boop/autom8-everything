@@ -46,6 +46,25 @@
 - [x] Run `npm run build` and ensure pass
 - [x] Commit and push to `origin/ui/cro-passover`
 
+## 2026-03-07 — B5: Cadence page full overhaul
+
+- [x] Create `src/components/ComparisonTable.tsx` — reusable responsive table component
+- [x] Create `src/components/CadenceDemoPlaceholder.tsx` — 3-col demo section
+- [x] Rewrite `src/app/services/cadence/page.tsx` — 9-section layout
+- [x] Hero: new headline, tel CTA, /get-started CTA, trust line
+- [x] Pain-point math section: 3 stat cards with sources
+- [x] Demo section: CadenceDemoPlaceholder component
+- [x] Features section: 6 cards in 3-col grid
+- [x] Use-cases section: 4 scenario cards in 2-col grid
+- [x] Comparison section: ComparisonTable with 7 rows × 3 columns
+- [x] Pricing section: checklist + value framing line + 2 CTAs
+- [x] FAQ: expanded from 5 to 8 entries
+- [x] Final CTA section: 2 buttons + trust line
+- [x] Preserve structured data schemas (service + FAQ)
+- [x] Update docs (UI-VERIFICATION.md, ralph-context.md, CODER-CONTEXT.md, implementation-plan.md)
+- [x] `npm run build` ✅
+- [x] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-07 — B4 retry 2: verification + commit-gate recovery
 
 - [x] Re-verify requested B4 homepage changes are present in all 5 target components

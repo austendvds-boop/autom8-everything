@@ -1,5 +1,35 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B5: Cadence page full overhaul
+
+### Scope completed
+- Created `src/components/ComparisonTable.tsx` (new reusable component):
+  - Client component, responsive: desktop table + mobile stacked cards
+  - Props: `title`, `subtitle?`, `columns[]` with optional `highlight`, `rows[]`
+- Created `src/components/CadenceDemoPlaceholder.tsx` (new):
+  - 3-col demo section: audio placeholder, call flow steps, call summary preview
+  - Uses framer-motion + `reveal`/`revealReduced` from `@/lib/motion`
+- Rewrote `src/app/services/cadence/page.tsx`:
+  - 9-section layout: hero, pain-point math, demo, features, use-cases, comparison, pricing, FAQ, final CTA
+  - All CTAs use `btn-primary`/`btn-secondary` utility classes from globals.css
+  - Pricing section now has feature checklist and value-framing line
+  - FAQ expanded from 5 to 8 entries
+  - Preserved: metadata, buildServiceSchema, buildFaqSchema, Navigation, Footer, structured data
+- Updated docs: `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/UI-VERIFICATION.md`, `docs/implementation-plan.md`
+
+### Files changed
+- `src/components/ComparisonTable.tsx` (new)
+- `src/components/CadenceDemoPlaceholder.tsx` (new)
+- `src/app/services/cadence/page.tsx`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+
+### Verification
+- `npm run build` ✅
+- Commit: `b2baa03` on `ui/cro-passover`
+
 ## 2026-03-07 — B6 retry 4: commit-gate closure with PowerShell-safe chaining
 
 ### Scope completed

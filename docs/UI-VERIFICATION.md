@@ -71,6 +71,40 @@
   - supporting line reads `Cadence $199/mo + Review Funnel Starter $79/mo`
   - CTA button `Start with Both` links to `/contact`
 
+## Batch B5 checks (Cadence page full overhaul)
+- `/services/cadence`
+  - **Section order (top to bottom):** hero → pain math → demo → features → use cases → comparison → pricing → FAQ → final CTA
+  - **Hero:**
+    - eyebrow: `AI Voice Receptionist`
+    - headline: `Every Missed Call Is Money Walking Out the Door.`
+    - primary CTA: `Call Cadence Live — (480) 631-3993` → `tel:+14806313993`
+    - secondary CTA: `Start Your 7-Day Free Trial` → `/get-started`
+    - trust line: `$199/mo after trial • Month-to-month • Cancel anytime`
+  - **Pain math:**
+    - 3 stat cards: `80%`, `$1,000+`, `62%` with source attribution
+    - prompt line at bottom: `Stop losing money. Let Cadence answer.`
+  - **Demo (`CadenceDemoPlaceholder`):**
+    - 3-column grid renders: audio placeholder card, call flow steps card, call summary preview card
+    - audio card shows "Audio sample coming soon" placeholder box
+    - call flow lists 5 numbered steps
+    - summary preview card shows mock caller/action/follow-up entries
+    - bottom CTA: `Call (480) 631-3993` → `tel:+14806313993`
+  - **Features:** 6 cards in 3-col desktop / 1-col mobile grid
+  - **Use cases:** 4 scenario cards in 2-col grid with purple title treatment
+  - **Comparison (`ComparisonTable`):**
+    - Desktop: renders as `<table>` with 4 columns (Feature, Voicemail, Hiring a Receptionist, Cadence)
+    - Cadence column header is purple (`#C4B5FD`) and cells have subtle tint
+    - Mobile: stacked cards per row with column labels on left, values on right
+    - 7 rows: Availability, Monthly cost, Setup time, Handles FAQs, Routes calls, Call summaries, Brand consistency
+  - **Pricing:**
+    - price: `$199/month`
+    - value line: `Less than $7/day. Less than a single missed lead.`
+    - 5-item checklist with green checkmarks
+    - 2 CTAs: tel link + `/get-started`
+  - **FAQ:** 8 questions render (no accordion — static card layout)
+  - **Final CTA:** headline `Ready to Stop Losing Calls?`, 2 buttons, trust line: `7-day free trial • No credit card • Live in 5 minutes`
+  - Navigation and Footer render on all viewport sizes
+
 ## Batch B4 checks (homepage product stack + verticals + FAQ + final CTA)
 - `/` Services section (`ServicesBento`)
   - Cadence hero value prop reads: `Every missed call is a customer your competitor answers instead...` and includes `24/7`
