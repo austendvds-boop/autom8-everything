@@ -5,8 +5,9 @@ import { Star } from "lucide-react";
 import { reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 const stats = [
-  { value: "25+", label: "Businesses Served" },
-  { value: "24/7", label: "Coverage for Calls & Follow-Up" },
+  { value: "Local Businesses", label: "Active Clients" },
+  { value: "24/7", label: "Call Coverage" },
+  { value: "5 min", label: "Average Setup Time" },
 ];
 
 export default function SocialProofBar() {
@@ -22,7 +23,7 @@ export default function SocialProofBar() {
           Trusted by local teams that want growth without extra busywork
         </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -36,7 +37,7 @@ export default function SocialProofBar() {
 
           <motion.div
             className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111118] px-6 py-4"
-            {...revealStagger(2, prefersReducedMotion)}
+            {...revealStagger(3, prefersReducedMotion)}
           >
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(245,158,11,0.24),transparent_62%)]"
@@ -62,6 +63,15 @@ export default function SocialProofBar() {
               <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">5-Star Client Feedback</p>
             </div>
           </motion.div>
+        </div>
+
+        {/* TODO: Replace text labels with real integration logos */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 opacity-50">
+          {["Google Business", "Stripe", "Twilio", "Google Calendar"].map((name) => (
+            <span key={name} className="text-xs uppercase tracking-widest text-[#52525B]">
+              {name}
+            </span>
+          ))}
         </div>
       </div>
     </section>

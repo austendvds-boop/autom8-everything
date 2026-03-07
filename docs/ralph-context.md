@@ -1,5 +1,36 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B3: Homepage trust/proof bar + offer ladder + how it works refresh
+- Modified: `src/components/SocialProofBar.tsx`
+  - Stats now: `Local Businesses / Active Clients`, `24/7 / Call Coverage`, `5 min / Average Setup Time`
+  - Existing five-star card retained with same motion/reduced-motion behavior
+  - Added trust-logo placeholder row: `Google Business`, `Stripe`, `Twilio`, `Google Calendar`
+  - Added TODO note to replace text with real integration logos later
+- Created: `src/components/ProofBar.tsx`
+  - New proof strip with three sourced stat callouts:
+    - `80%` callers won't leave voicemail (Ruby Receptionist)
+    - `$1,000+` missed call value (Industry average)
+    - `93%` review-reading behavior (BrightLocal 2024)
+- Created: `src/components/OfferLadder.tsx`
+  - New 4-tier pricing bundle section with heading/subheading
+  - Tiers: Start, Grow (featured), Expand, Custom
+  - Grow card is highlighted and includes `Most Popular` badge
+  - Includes icons, value props, checkmark feature lists, and CTA buttons
+  - Section id: `offer-ladder` for internal anchor linking
+- Modified: `src/components/HowItWorks.tsx`
+  - Rewrote 3 steps with conversion-focused copy
+  - Bottom CTA now `See Pricing` linking to `#offer-ladder` using `btn-secondary`
+- Modified: `src/app/HomePageClient.tsx`
+  - Added imports for `ProofBar` and `OfferLadder`
+  - Updated section order: Hero -> SocialProofBar -> ProofBar -> ServicesBento -> OfferLadder -> WhoItsFor -> HowItWorks -> Testimonials -> FAQ -> CTA -> Footer
+- Docs updated:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/CODER-CONTEXT.md`
+- Gotchas:
+  - `SocialProofBar` filename and exported component name are intentionally unchanged to avoid import breakage.
+  - `OfferLadder` CTAs intentionally mix tel and contact links.
+
 ## B2: Homepage hero + CTA overhaul
 - Modified: `src/components/Hero.tsx`
 - Copy updates:

@@ -4,7 +4,9 @@ import { ReactLenis } from "lenis/react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import SocialProofBar from "@/components/SocialProofBar";
+import ProofBar from "@/components/ProofBar";
 import ServicesBento from "@/components/ServicesBento";
+import OfferLadder from "@/components/OfferLadder";
 import HowItWorks from "@/components/HowItWorks";
 import WhoItsFor from "@/components/WhoItsFor";
 import Testimonials from "@/components/Testimonials";
@@ -25,7 +27,9 @@ export default function HomePageClient() {
         <Navigation />
         <Hero />
         <SocialProofBar />
+        <ProofBar />
         <ServicesBento />
+        <OfferLadder />
         <WhoItsFor />
         <HowItWorks />
         <Testimonials />

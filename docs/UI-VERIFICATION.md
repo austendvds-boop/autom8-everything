@@ -29,6 +29,47 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B3 checks (homepage trust/proof + offer ladder + how it works)
+- `/` homepage section order
+  - Navigation
+  - Hero
+  - Trust bar (`SocialProofBar`)
+  - Proof bar (`ProofBar`)
+  - Services
+  - Offer ladder
+  - Who it's for
+  - How it works
+  - Testimonials
+  - FAQ
+  - CTA
+  - Footer
+- Trust bar (`SocialProofBar`)
+  - three stat cards read:
+    - `Local Businesses` / `Active Clients`
+    - `24/7` / `Call Coverage`
+    - `5 min` / `Average Setup Time`
+  - existing five-star card still renders
+  - trust logos row renders text labels:
+    - `Google Business`, `Stripe`, `Twilio`, `Google Calendar`
+- Proof bar (`ProofBar`)
+  - shows 3 stat blocks with sources:
+    - `80%` / `of callers won't leave a voicemail` / `Ruby Receptionist`
+    - `$1,000+` / `average value of a missed service call` / `Industry average`
+    - `93%` / `of consumers read reviews before choosing` / `BrightLocal 2024`
+- Offer ladder (`OfferLadder`)
+  - heading reads `One Platform. Pick Your Starting Point.`
+  - subheading reads `Start with what you need today. Add more when you're ready.`
+  - four tiers render: Start, Grow, Expand, Custom
+  - Grow card has `Most Popular` badge and highlighted border treatment
+  - CTA buttons:
+    - Start -> `Try Cadence Free` (`tel:+14806313993`)
+    - Grow -> `Get Started` (`/contact`)
+    - Expand -> `Get a Quote` (`/contact`)
+    - Custom -> `Book a Consultation` (`/contact`)
+- How it works (`HowItWorks`)
+  - updated 3 step titles and conversion-focused descriptions
+  - bottom CTA reads `See Pricing` and links to `#offer-ladder`
+
 ## Batch B2 checks (homepage hero + CTA overhaul)
 - `/` homepage hero
   - eyebrow reads: `Growth infrastructure for local businesses`

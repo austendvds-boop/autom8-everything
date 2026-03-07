@@ -1,5 +1,18 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — B3: Homepage trust/proof + offer ladder + how it works
+
+- [x] Rewrite `src/components/SocialProofBar.tsx` stats and keep 5-star card
+- [x] Add trust-logo placeholder row and TODO note in `SocialProofBar`
+- [x] Create `src/components/ProofBar.tsx` with 3 proof stat callouts + sources
+- [x] Create `src/components/OfferLadder.tsx` with 4 offer tiers and featured Grow card badge/highlight
+- [x] Rewrite `src/components/HowItWorks.tsx` step titles/descriptions to conversion-focused copy
+- [x] Update How It Works bottom CTA to `See Pricing` linking to `#offer-ladder`
+- [x] Update `src/app/HomePageClient.tsx` imports and section order to include `ProofBar` + `OfferLadder`
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-06 — B2: Homepage hero + CTA overhaul
 
 - [x] Rewrite `src/components/Hero.tsx` eyebrow, headline, and subhead copy

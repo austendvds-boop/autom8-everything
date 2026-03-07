@@ -1,5 +1,46 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — B3: homepage trust/proof + offer ladder + how it works refresh
+
+### Scope completed
+- Updated `src/components/SocialProofBar.tsx` into trust-bar layout while preserving existing star card and motion behavior.
+- Replaced stats with:
+  - `Local Businesses` / `Active Clients`
+  - `24/7` / `Call Coverage`
+  - `5 min` / `Average Setup Time`
+- Added integration placeholder row under stats with labels:
+  - `Google Business`, `Stripe`, `Twilio`, `Google Calendar`
+- Added TODO note to swap text placeholders for real logos later.
+- Created new proof strip component `src/components/ProofBar.tsx` with three sourced proof callouts.
+- Created new tiered bundle section `src/components/OfferLadder.tsx`:
+  - 4 tiers: Start, Grow, Expand, Custom
+  - Grow card highlighted with `Most Popular` badge and featured border treatment
+  - icons, value props, checkmark feature lists, and CTA buttons wired per spec
+- Updated `src/components/HowItWorks.tsx` with conversion-focused step titles/descriptions and bottom CTA:
+  - CTA now `See Pricing` linking to `#offer-ladder`
+- Updated homepage composition in `src/app/HomePageClient.tsx`:
+  - added imports for `ProofBar` and `OfferLadder`
+  - section order now: Navigation, Hero, SocialProofBar, ProofBar, ServicesBento, OfferLadder, WhoItsFor, HowItWorks, Testimonials, FAQ, CTA, Footer
+- Updated docs:
+  - `docs/UI-VERIFICATION.md`
+  - `docs/implementation-plan.md`
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+
+### Files changed
+- `src/components/SocialProofBar.tsx`
+- `src/components/ProofBar.tsx` (new)
+- `src/components/OfferLadder.tsx` (new)
+- `src/components/HowItWorks.tsx`
+- `src/app/HomePageClient.tsx`
+- `docs/UI-VERIFICATION.md`
+- `docs/implementation-plan.md`
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — B2: homepage hero + CTA overhaul
 
 ### Scope completed
