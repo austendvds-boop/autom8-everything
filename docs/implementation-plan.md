@@ -14,7 +14,7 @@
   - [x] expandable recent-calls rows with chevron + bullet summary details
 - [x] Update UI verification checklist in `docs/UI-VERIFICATION.md`
 - [x] Run `npm run build` and ensure pass
-- [ ] Commit and push to `origin/feature/customer-portal`
+- [x] Commit and push to `origin/feature/customer-portal`
 
 ## 2026-03-07 — B3-0: Stripe portal checkout + auto-provisioning webhook
 
