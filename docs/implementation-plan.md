@@ -17,7 +17,7 @@
 - [x] Keep service schema + FAQ schema scripts intact on both pages
 - [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
 - [x] Run `npm run build` and ensure pass
-- [ ] Commit and push to `origin/ui/cro-passover`
+- [x] Commit and push to `origin/ui/cro-passover`
 
 ## 2026-03-07 — B6 retry 6: fresh commit to close commit-gate
 
