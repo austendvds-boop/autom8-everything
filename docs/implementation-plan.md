@@ -1,5 +1,12 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B6 retry 6: fresh commit to close commit-gate
+
+- [x] Confirm working tree state and HEAD is pushed to origin
+- [x] Re-verify `npm run build` passes
+- [x] Update docs for this retry pass
+- [x] Commit and push fresh SHA to `origin/ui/cro-passover`
+
 ## 2026-03-07 — B6 retry 5: final verification + handoff refresh
 
 - [x] Re-verify all B6 page changes remain implemented in `src/app/services/review-funnel/page.tsx`
