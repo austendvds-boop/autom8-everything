@@ -1,5 +1,27 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-07 — B2 retry: commit-gate recovery + verification refresh
+
+### Scope completed
+- Re-verified the Cadence portal API fix and provisioning additions are present and aligned:
+  - `src/lib/platform/services/cadence-api.ts`
+    - `getCadenceTenantConfig()` uses `GET /api/portal/tenant/:tenantId` and returns `tenant`
+    - `updateCadenceTenantConfig()` uses `PATCH /api/portal/tenant/:tenantId` and returns `tenant`
+    - `getCadenceRecentCalls()` uses `GET /api/portal/tenant/:tenantId/calls`
+    - includes `systemPrompt` on `CadenceTenantConfig`
+    - includes `getCadenceUsage()` + `triggerCadenceTestCall()` exports
+  - `src/lib/platform/services/provisioning.ts`
+    - includes `provisionCadenceTenant()` calling `POST /api/onboard` with `X-Portal-Secret`
+    - maps onboarding response `{ result: { clientId, phoneNumber } }` -> `{ clientId, phoneNumber }`
+- Updated retry handoff docs and trimmed Ralph context to the latest 3 batches.
+
+### Files changed
+- `docs/ralph-context.md`
+- `docs/CODER-CONTEXT.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-07 — B2: Cadence portal API fix + new usage/test/provisioning methods
 
 ### Scope completed

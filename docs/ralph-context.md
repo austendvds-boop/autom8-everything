@@ -1,5 +1,20 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B2 retry (2026-03-07): commit-gate recovery + verification pass
+- Re-verified Cadence portal API wiring and onboarding provisioning changes for this batch:
+  - `getCadenceTenantConfig()` -> `GET /api/portal/tenant/:tenantId` and returns `tenant`
+  - `updateCadenceTenantConfig()` -> `PATCH /api/portal/tenant/:tenantId` and returns `tenant`
+  - `getCadenceRecentCalls()` -> `GET /api/portal/tenant/:tenantId/calls`
+  - Added/confirmed `getCadenceUsage()` and `triggerCadenceTestCall()` exports
+  - Added/confirmed `provisionCadenceTenant()` calling `POST /api/onboard` with `X-Portal-Secret`
+- Files modified in this retry batch:
+  - `docs/ralph-context.md`
+  - `docs/CODER-CONTEXT.md`
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - Portal endpoint response wrappers differ (`{ tenant }`, `{ ok, tenant }`) — do not assume legacy shapes.
+  - `provisionCadenceTenant()` keeps `areaCode` in signature for caller parity; payload currently does not use it.
+
 ## B2 (2026-03-07): Cadence portal API endpoint fix + provisioning hook
 - Updated `src/lib/platform/services/cadence-api.ts` to use Cadence portal endpoints authenticated by `X-Portal-Secret` instead of dashboard cookie endpoints:
   - `getCadenceTenantConfig(tenantId)` now calls `GET /api/portal/tenant/:tenantId` and returns `payload.tenant`
@@ -33,12 +48,3 @@
 - Gotchas for next batch:
   - Keep noindex metadata on private dashboard/portal pages by default.
   - Do not re-add `public/sitemap.xml`; it shadows dynamic `src/app/sitemap.ts`.
-
-## B8 (2026-03-07): Custom Apps + Footer + Sticky Mobile CTA + polish
-- Added `src/components/StickyMobileCTA.tsx` and wired it into homepage + service pages.
-- Reworked `src/app/services/custom-apps/page.tsx` with ROI/pricing structure updates.
-- Updated `src/components/Footer.tsx` with prominent phone and a `Start Here` column.
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Keep sticky CTA rendered after `Footer` inside `<main>` on new marketing pages.
-  - Keep `pb-20 md:pb-0` on pages that include `StickyMobileCTA`.
