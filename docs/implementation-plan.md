@@ -1,5 +1,24 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-07 — B7: websites + SEO services page overhauls
+
+- [x] Update `src/app/services/websites/page.tsx` hero copy
+- [x] Add `Why Your Website Matters` stat section after hero
+- [x] Insert mid-page CTA between How It Works and Pricing
+- [x] Upgrade website tiers with `bestFor` and `recommended` badge support
+- [x] Add `Built for Real Businesses` proof placeholder section
+- [x] Update website final CTA headline and two-button action row
+- [x] Update `src/app/services/seo-content/page.tsx` hero copy
+- [x] Add timeline expectations section after How It Works
+- [x] Replace monthly work grid with deliverables icon list
+- [x] Import and render `ComparisonTable` one-off vs retainer section
+- [x] Add `SEO Works Best as Part of Your Growth Stack` pairing section
+- [x] Add pricing context bullets under `Contact Us`
+- [x] Keep service schema + FAQ schema scripts intact on both pages
+- [x] Update docs (`docs/UI-VERIFICATION.md`, `docs/ralph-context.md`, `docs/CODER-CONTEXT.md`, `docs/implementation-plan.md`)
+- [x] Run `npm run build` and ensure pass
+- [ ] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-07 — B6 retry 6: fresh commit to close commit-gate
 
 - [x] Confirm working tree state and HEAD is pushed to origin

@@ -1,5 +1,31 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B7 (2026-03-07): Website Creation + SEO page overhauls
+- Updated `src/app/services/websites/page.tsx`:
+  - Hero rewritten to `A Website That Gets Picked, Trusted, and Contacted.`
+  - Added `Why Your Website Matters More Than You Think` stats section after hero.
+  - Kept existing `How It Works`, then inserted mid-page CTA (`Ready to upgrade? Let's pick your tier.`).
+  - Reworked pricing tier data with `bestFor` text and `recommended` badge on Scale tier.
+  - Added `Built for Real Businesses` screenshot placeholder section after pricing.
+  - Final CTA rewritten to `Your Website Should Work as Hard as You Do.` with dual actions (phone + form).
+  - Section order now matches requested 8-part sequence.
+- Updated `src/app/services/seo-content/page.tsx`:
+  - Hero rewritten to `Get Found on Google. Get Called. Get Booked.`
+  - Added timeline section `What to Expect and When` after How It Works.
+  - Replaced monthly 2x2 grid with structured 5-item deliverables list (icons).
+  - Imported and rendered `ComparisonTable` (`@/components/ComparisonTable`) for one-off vs monthly framing.
+  - Added `SEO Works Best as Part of Your Growth Stack` pairing section (Website/Reviews/Cadence).
+  - Added pricing context list under `Contact Us` card.
+  - Section order now matches requested 9-part sequence.
+- Docs updated:
+  - `docs/UI-VERIFICATION.md` (added B7 checks for `/services/websites` and `/services/seo-content`)
+  - `docs/implementation-plan.md`
+- Key exports/components used:
+  - Reused existing `ComparisonTable` default export from `src/components/ComparisonTable.tsx`.
+- Gotchas for next batch:
+  - Keep `buildServiceSchema` + `buildFaqSchema` scripts intact on service pages.
+  - `ComparisonTable` is client-side; safe to import into server page components.
+
 ## B6 retry 6 (2026-03-07): commit gate closure — fresh push after stale HEAD
 - Confirmed the full B6 Review Funnel overhaul is present and correct in `src/app/services/review-funnel/page.tsx` at HEAD.
 - Working tree was clean; all changes already committed. Re-verified build passes.
@@ -30,24 +56,3 @@
 - Gotchas for next batch:
   - Use PowerShell-safe separators (`;`) in chained commands.
   - Branch push target remains `origin/ui/cro-passover`.
-
-## B5 (2026-03-07): Cadence page full overhaul
-- Created: `src/components/ComparisonTable.tsx`
-  - Reusable comparison table component (responsive: desktop table + mobile stacked cards)
-  - Props: `title`, `subtitle?`, `columns: { label, highlight? }[]`, `rows: { feature, values[] }[]`
-  - `highlight` column gets `#C4B5FD` header and `#DDD6FE` cell values with subtle purple tint bg
-- Created: `src/components/CadenceDemoPlaceholder.tsx`
-  - 3-column demo section: audio sample placeholder, call flow steps, call summary preview
-  - Uses `motion` + `useReducedMotion` + `reveal`/`revealReduced` from `@/lib/motion`
-  - Lucide icons: `Play`, `ArrowRight`, `FileText`
-  - TODO: replace audio placeholder with real recording when available
-- Rewrote: `src/app/services/cadence/page.tsx`
-  - 9-section layout: hero → pain math → demo → features → use cases → comparison → pricing → FAQ → final CTA
-  - Hero: "Every Missed Call Is Money Walking Out the Door." with `btn-primary` tel link + `btn-secondary` /get-started
-  - Pain math: 3 stats with sources (80%, $1,000+, 62%)
-  - Comparison: `<ComparisonTable />` with Voicemail / Hiring a Receptionist / Cadence (highlighted)
-  - Pricing: feature checklist + value line ("Less than $7/day")
-  - FAQ: expanded to 8 entries
-- Build: `npm run build` ✅
-- Commit: `b2baa03` on `ui/cro-passover`
-- Gotchas: `ComparisonTable` is a pure client component; `CadenceDemoPlaceholder` requires framer-motion.

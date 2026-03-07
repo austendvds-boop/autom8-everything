@@ -29,6 +29,53 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B7 checks (Websites + SEO page overhauls)
+- `/services/websites` section order is:
+  1) Hero
+  2) Why Your Website Matters
+  3) How It Works
+  4) Mid-page CTA
+  5) Pricing Tiers
+  6) Built for Real Businesses
+  7) FAQ
+  8) Final CTA
+- `/services/websites` hero copy
+  - headline: `A Website That Gets Picked, Trusted, and Contacted.`
+  - subhead starts with: `Most local business websites exist but don't convert...`
+- `/services/websites` pricing cards
+  - each tier shows `Best for:` line above description
+  - `Scale` card shows `Recommended` badge
+  - Launch/Scale/Custom pricing still reads `$1,500`, `$3,500`, `Let's Talk`
+- `/services/websites` includes proof placeholder section
+  - cards: `Home Services`, `Medical Practice`, `Professional Services`
+  - each card shows `Website Preview` placeholder block
+- `/services/websites` includes mid-page CTA text `Ready to upgrade? Let's pick your tier.`
+- `/services/websites` final CTA
+  - headline: `Your Website Should Work as Hard as You Do.`
+  - two actions render: phone call button + form button
+- `/services/seo-content` section order is:
+  1) Hero
+  2) How It Works
+  3) What to Expect and When
+  4) What We Deliver Every Month
+  5) Comparison table (`SEO Is Not a Project. It's a Growth Engine.`)
+  6) SEO Works Best as Part of Your Growth Stack
+  7) Pricing
+  8) FAQ
+  9) Final CTA
+- `/services/seo-content` hero copy
+  - headline: `Get Found on Google. Get Called. Get Booked.`
+  - subhead starts with: `Monthly local SEO and content that builds compounding visibility...`
+- `/services/seo-content` monthly deliverables
+  - renders 5 single-column icon rows (blog posts, service pages, Google profile, citations, monthly report)
+- `/services/seo-content` comparison section
+  - uses shared `ComparisonTable` with two columns: `One-Time SEO Audit`, `Monthly SEO Retainer`
+  - monthly column is highlighted
+- `/services/seo-content` pairing section
+  - 3 cards render: `SEO + Website`, `SEO + Reviews`, `SEO + Cadence`
+  - CTA button: `Build Your Full Growth Stack`
+- `/services/seo-content` pricing card includes `What affects pricing:` list with 4 bullets
+
 ## Batch B6 retry 4 checks (compounding-loop fragment alignment)
 - `/services/review-funnel`
   - `Why Reviews Compound` chip loop still renders as: More reviews → Higher ranking → More clicks → More customers → More reviews

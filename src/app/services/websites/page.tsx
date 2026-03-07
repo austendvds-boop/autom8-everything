@@ -22,21 +22,43 @@ const steps = [
 const tiers = [
   {
     name: "Launch",
-    description: "Basic professional site, mobile responsive, 5 pages",
+    bestFor: "New businesses that need a professional presence fast",
+    description: "A clean, mobile-ready site that makes calling you the obvious next step.",
     price: "$1,500",
-    highlights: ["Professional 5-page site", "Mobile responsive layout", "Clear calls to action"],
+    highlights: [
+      "Professional 5-page site",
+      "Mobile responsive layout",
+      "Every page drives visitors to call or contact",
+      "Clear service descriptions",
+      "Basic local SEO setup",
+    ],
   },
   {
     name: "Scale",
-    description: "Custom design, SEO optimized, blog, 10+ pages",
+    bestFor: "Businesses ready to rank on Google and capture leads",
+    description: "A custom site built to rank for your target keywords and convert traffic into calls.",
     price: "$3,500",
-    highlights: ["Custom design and structure", "SEO-optimized service pages", "Blog setup + 10+ pages"],
+    highlights: [
+      "Custom design and brand identity",
+      "Service pages built to rank for target keywords",
+      "Blog setup for ongoing content",
+      "10+ optimized pages",
+      "Conversion-optimized CTAs on every page",
+    ],
+    recommended: true,
   },
   {
     name: "Custom",
-    description: "Full bespoke build, integrations, ongoing support",
+    bestFor: "Multi-location or complex businesses with integrations",
+    description: "A fully bespoke build with integrations, custom features, and ongoing support.",
     price: "Let's Talk",
-    highlights: ["Fully bespoke build", "Integrations with your tools", "Ongoing support options"],
+    highlights: [
+      "Fully bespoke design and architecture",
+      "Integrations with your existing tools",
+      "Custom features and functionality",
+      "Ongoing support and updates",
+      "Priority development queue",
+    ],
   },
 ];
 
@@ -88,36 +110,48 @@ export default function WebsitesPage() {
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-4">Website Creation</p>
           <h1 className="text-5xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Get a professional website that helps people choose you.
+            A Website That Gets Picked, Trusted, and Contacted.
           </h1>
           <p className="text-xl text-[#A1A1AA] max-w-3xl">
-            We build clean, modern sites for non-technical business owners who want more calls, better trust, and less hassle.
+            Most local business websites exist but don&apos;t convert. We build sites that rank on Google, earn trust in
+            seconds, and make calling you the obvious next step.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
-            <Link
-              href="/contact"
-              className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
-            >
+            <Link href="/contact" className="btn-primary px-8 py-4">
               Get Started
             </Link>
-            <Link
-              href="#pricing"
-              className="inline-block px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60"
-            >
+            <Link href="#pricing" className="btn-secondary px-8 py-4">
               View Tiers
             </Link>
           </div>
         </div>
       </section>
 
+      <section className="py-20 bg-[#12121A]">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="section-heading mb-10">Why Your Website Matters More Than You Think</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { stat: "75%", text: "of consumers judge credibility by website design", source: "Stanford Research" },
+              { stat: "88%", text: "of users won't return after a bad mobile experience", source: "Sweor" },
+              { stat: "60%+", text: "of local search traffic comes from mobile devices", source: "Google" },
+            ].map((item) => (
+              <div key={item.stat} className="card-base p-8 text-center">
+                <p className="text-4xl font-bold gradient-text mb-3">{item.stat}</p>
+                <p className="text-[#A1A1AA] text-sm mb-2">{item.text}</p>
+                <p className="text-xs text-[#52525B]">Source: {item.source}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="how-it-works" className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-10" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            How It Works
-          </h2>
+          <h2 className="section-heading mb-10">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {steps.map((step, index) => (
-              <div key={step.title} className="rounded-2xl border border-white/10 bg-[#12121A] p-6">
+              <div key={step.title} className="card-base p-6">
                 <p className="text-[#8B5CF6] font-semibold mb-3">Step {index + 1}</p>
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
                 <p className="text-[#A1A1AA]">{step.description}</p>
@@ -127,36 +161,42 @@ export default function WebsitesPage() {
         </div>
       </section>
 
+      <section className="py-12">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <p className="text-xl text-[#A1A1AA] mb-6">Ready to upgrade? Let&apos;s pick your tier.</p>
+          <Link href="/contact" className="btn-primary px-8 py-4">
+            Get Started
+          </Link>
+        </div>
+      </section>
+
       <section id="pricing" className="py-20 bg-[#12121A]">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-10 text-center" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Pricing Tiers
-          </h2>
+          <h2 className="section-heading mb-10 text-center">Pricing Tiers</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {tiers.map((tier, index) => (
+            {tiers.map((tier) => (
               <article
                 key={tier.name}
-                className={`rounded-2xl p-8 border h-full flex flex-col ${
-                  index === 1 ? "border-[#8B5CF6]/45 bg-[#0A0A0F]" : "border-white/10 bg-[#0A0A0F]"
+                className={`card-base relative p-8 h-full flex flex-col ${
+                  tier.recommended ? "border-[#8B5CF6]/45 bg-[#0A0A0F]" : ""
                 }`}
               >
+                {tier.recommended && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs uppercase tracking-wide font-semibold px-3 py-1 rounded-full bg-[#8B5CF6] text-white">
+                    Recommended
+                  </span>
+                )}
                 <h3 className="text-2xl font-semibold mb-2">{tier.name}</h3>
-                <p className="text-[#A1A1AA] mb-4 min-h-[52px]">{tier.description}</p>
+                <p className="text-xs text-[#8B5CF6] uppercase tracking-wide mb-2">Best for: {tier.bestFor}</p>
+                <p className="text-[#A1A1AA] mb-4 min-h-[72px]">{tier.description}</p>
                 <p className="text-4xl font-bold mb-5">{tier.price}</p>
                 <ul className="space-y-2 text-[#D4D4D8] text-sm mb-8 flex-1">
                   {tier.highlights.map((item) => (
                     <li key={item}>• {item}</li>
                   ))}
                 </ul>
-                <Link
-                  href="/contact"
-                  className={`inline-flex w-full justify-center mt-auto px-5 py-3 rounded-full font-semibold ${
-                    index === 1
-                      ? "bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white"
-                      : "border border-white/20 text-white hover:border-[#8B5CF6]/60 transition-colors"
-                  }`}
-                >
+                <Link href="/contact" className={tier.recommended ? "btn-primary w-full justify-center" : "btn-secondary w-full justify-center"}>
                   {tier.name === "Custom" ? "Let's Talk" : "Get Started"}
                 </Link>
               </article>
@@ -166,13 +206,34 @@ export default function WebsitesPage() {
       </section>
 
       <section className="py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="section-heading mb-10 text-center">Built for Real Businesses</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {["Home Services", "Medical Practice", "Professional Services"].map((industry) => (
+              <div key={industry} className="card-base overflow-hidden">
+                {/* Screenshot placeholder */}
+                <div className="h-48 bg-white/[0.02] border-b border-white/5 flex items-center justify-center">
+                  <span className="text-sm text-[#52525B]">Website Preview</span>
+                </div>
+                <div className="p-6">
+                  <p className="text-xs uppercase tracking-wide text-[#8B5CF6] mb-2">{industry}</p>
+                  <p className="text-sm text-[#A1A1AA]">
+                    {/* TODO: Add real screenshot, business name, and results */}
+                    Real project screenshot and results coming soon.
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-8" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Frequently Asked Questions
-          </h2>
+          <h2 className="section-heading mb-8">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {faqs.map((faq) => (
-              <div key={faq.question} className="rounded-2xl border border-white/10 bg-[#12121A] p-6">
+              <div key={faq.question} className="card-base p-6">
                 <h3 className="text-lg font-semibold mb-2">{faq.question}</h3>
                 <p className="text-[#A1A1AA]">{faq.answer}</p>
               </div>
@@ -183,16 +244,16 @@ export default function WebsitesPage() {
 
       <section className="py-20 bg-[#12121A]">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Ready to upgrade your website?
-          </h2>
+          <h2 className="section-heading mb-4">Your Website Should Work as Hard as You Do.</h2>
           <p className="text-[#A1A1AA] text-lg mb-8">We&apos;ll help you choose the right tier and timeline.</p>
-          <Link
-            href="/contact"
-            className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
-          >
-            Get Started
-          </Link>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="tel:+14806313993" className="btn-primary px-8 py-4">
+              Call (480) 631-3993
+            </a>
+            <Link href="/contact" className="btn-secondary px-8 py-4">
+              Fill Out the Form
+            </Link>
+          </div>
         </div>
       </section>
 
