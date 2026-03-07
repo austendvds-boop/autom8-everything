@@ -58,6 +58,12 @@
   --motion-stagger-text: 0.06s;
   --motion-stagger-card: 0.1s;
   --motion-scroll-offset: 30px;
+
+  /* Section Spacing */
+  --section-py-sm: 5rem;
+  --section-py-md: 7rem;
+  --section-py-lg: 8rem;
+  --section-gap: 1.5rem;
 }
 
 @theme inline {
@@ -231,5 +237,106 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Card System */
+.card-base {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #111118;
+}
+
+.card-elevated {
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #111118;
+  transition: all 0.3s ease;
+}
+
+.card-elevated:hover {
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.32), 0 0 78px rgba(139, 92, 246, 0.12);
+}
+
+/* Button System */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.625rem 2rem;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #8B5CF6, #A78BFA);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.625rem 2rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  color: #A1A1AA;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.btn-ghost:hover {
+  color: white;
+}
+
+/* Typography */
+.section-heading {
+  font-size: 2.25rem;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-family: var(--font-playfair), serif;
+}
+
+@media (min-width: 768px) {
+  .section-heading {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-heading {
+    font-size: 3.75rem;
+  }
+}
+
+.section-subheading {
+  color: #A1A1AA;
+  font-size: 1.125rem;
+  max-width: 42rem;
+}
+
+@media (min-width: 768px) {
+  .section-subheading {
+    font-size: 1.25rem;
   }
 }

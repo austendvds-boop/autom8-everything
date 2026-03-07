@@ -1,5 +1,30 @@
 # CODER-CONTEXT.md — autom8-everything
 
+## 2026-03-06 — B1: CRO passover branch + sitewide design tokens
+
+### Scope completed
+- Checked out branch `ui/cro-passover` (branch already existed locally; switched to it).
+- Updated `src/app/globals.css`:
+  - added section spacing custom properties in `:root` (`--section-py-sm`, `--section-py-md`, `--section-py-lg`, `--section-gap`)
+  - added shared utility classes:
+    - card system: `.card-base`, `.card-elevated` (+ hover state)
+    - button system: `.btn-primary`, `.btn-secondary`, `.btn-ghost` (+ hover states)
+    - typography: `.section-heading` responsive scale, `.section-subheading` responsive scale
+- Added `src/lib/design-tokens.ts` exporting:
+  - `SECTION_PY`
+  - `CARD_BASE`
+  - `CARD_ELEVATED`
+  - `COLORS`
+- Replaced `docs/ralph-context.md` with CRO-passover batch context notes for next batches.
+
+### Files changed
+- `src/app/globals.css`
+- `src/lib/design-tokens.ts` (new)
+- `docs/ralph-context.md`
+
+### Verification
+- `npm run build` ✅
+
 ## 2026-03-06 — Batch 16: platform final integration wiring + setup docs
 
 ### Scope completed

@@ -1,5 +1,16 @@
 # implementation-plan.md — Review Funnel batches
 
+## 2026-03-06 — B1: CRO passover branch + design tokens
+
+- [x] Checkout `master` and ensure branch base is current
+- [x] Create/switch to branch `ui/cro-passover`
+- [x] Add section spacing CSS custom properties to `src/app/globals.css`
+- [x] Add shared card/button/typography utility classes to `src/app/globals.css`
+- [x] Create `src/lib/design-tokens.ts` with `SECTION_PY`, `CARD_BASE`, `CARD_ELEVATED`, `COLORS`
+- [x] Create/update `docs/ralph-context.md` with B1 handoff notes and gotchas
+- [x] Run `npm run build` and ensure pass
+- [x] Commit and push to `origin/ui/cro-passover`
+
 ## 2026-03-06 — Platform final integration wiring + docs
 
 - [x] Keep public `Navigation` free of portal/admin entry links

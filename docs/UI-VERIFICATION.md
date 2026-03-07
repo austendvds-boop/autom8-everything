@@ -29,6 +29,14 @@
 - GET /services/review-funnel → must render pricing/marketing page, NOT redirect
 - GET /api/review-funnel/funnel/nonexistent → must return 404, not 500
 
+## Batch B1 checks (CRO passover design tokens)
+- Confirm shared utility classes apply consistently where used:
+  - buttons: `.btn-primary`, `.btn-secondary`, `.btn-ghost`
+  - cards: `.card-base`, `.card-elevated` with hover glow treatment
+  - typography: `.section-heading`, `.section-subheading`
+- Verify section spacing rhythm is available from root custom properties:
+  - `--section-py-sm`, `--section-py-md`, `--section-py-lg`, `--section-gap`
+
 ## Batch 16 checks (final integration wiring)
 - Footer
   - bottom of the `Company` links includes a small `Client Portal` link
