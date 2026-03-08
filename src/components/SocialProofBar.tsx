@@ -48,7 +48,6 @@ export default function SocialProofBar() {
                 {[0, 1, 2, 3, 4].map((starIndex) => (
                   <motion.span
                     key={starIndex}
-                    className=""
                     animate={prefersReducedMotion ? undefined : { opacity: [0.9, 1, 0.9], scale: [1, 1.05, 1] }}
                     transition={
                       prefersReducedMotion
