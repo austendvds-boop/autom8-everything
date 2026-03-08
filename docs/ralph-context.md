@@ -1,29 +1,5 @@
 # Ralph Context — Autom8 CRO Passover
 
-## B1-1 (2026-03-07): mobile perf CSS compositing + transition specificity
-- Updated `src/components/SocialProofBar.tsx`:
-  - removed the leftover empty className on star `<motion.span>` elements so stars rely only on Framer animation (no CSS `star-twinkle` class usage).
-- Verified existing requested animation/perf changes are now in place across scoped files:
-  - `src/app/globals.css`
-    - `pulse-glow` keyframe uses `opacity`
-    - `star-twinkle` keyframe uses `opacity`
-    - `.star-twinkle` includes `will-change: opacity`
-    - removed `gradient-shift`/`.animate-gradient`
-    - removed unused `.animate-float` and `.animate-pulse-glow`
-    - kept `@keyframes shimmer`
-    - `.section-glow` includes `will-change: transform`
-  - `src/components/Navigation.tsx`
-    - `transition-all` replaced with specific transition property lists for nav wrappers and underline spans
-  - `src/components/ServicesBento.tsx`
-    - card wrappers use `transition-[box-shadow,border-color] duration-300`
-  - `src/components/FAQ.tsx`
-    - FAQ item button uses `transition-[border-color,box-shadow] duration-200`
-  - `src/components/Hero.tsx`
-    - glow elements use `.section-glow` class (inherits compositing hint)
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - There are still `transition-all` uses elsewhere in the repo (outside this batch scope); this pass only changed the requested files/components.
-
 ## B3-0 (2026-03-07): portal usage limits + overage UX
 - Updated Cadence API typing in `src/lib/platform/services/cadence-api.ts`:
   - `CadenceUsageResponse.plan` now includes optional overage pricing fields:
@@ -108,3 +84,25 @@
     - `/portal/review-funnel`
     - `/portal/billing`
     - `/portal/checkout`
+
+## B2-0 (2026-03-07): homepage JS bundle reduction via dynamic imports
+- Updated `src/app/HomePageClient.tsx`:
+  - added `import dynamic from "next/dynamic"`
+  - kept above-the-fold static imports unchanged:
+    - `Navigation`, `Hero`, `SocialProofBar`, `ProofBar`, `ServicesBento`
+  - converted below-fold homepage sections to dynamic imports (SSR kept enabled):
+    - `OfferLadder`, `HowItWorks`, `WhoItsFor`, `Testimonials`, `FAQ`, `CTA`, `Footer`, `StickyMobileCTA`
+  - replaced static Lenis import with lazy-loaded client-only dynamic import:
+    - `const ReactLenis = dynamic(() => import("lenis/react").then((mod) => mod.ReactLenis), { ssr: false })`
+  - preserved JSX structure and section order exactly, including `<ReactLenis root>` wrapper.
+- Updated dependency intent in `package.json`:
+  - moved `gsap` from `dependencies` to `devDependencies`
+  - ran `npm install` to refresh lockfile metadata (`package-lock.json`).
+- Updated `src/app/layout.tsx`:
+  - added `<head>` preconnect hints before `<body>`:
+    - `https://fonts.googleapis.com`
+    - `https://fonts.gstatic.com` with `crossOrigin="anonymous"`
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - `ReactLenis` is now client-only (`ssr: false`) by design; avoid moving it back to a static import or enabling SSR.
+  - Dynamic imports intentionally do not include custom loading placeholders to keep section rendering behavior simple.

@@ -1,19 +1,24 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
+import dynamic from "next/dynamic";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import SocialProofBar from "@/components/SocialProofBar";
 import ProofBar from "@/components/ProofBar";
 import ServicesBento from "@/components/ServicesBento";
-import OfferLadder from "@/components/OfferLadder";
-import HowItWorks from "@/components/HowItWorks";
-import WhoItsFor from "@/components/WhoItsFor";
-import Testimonials from "@/components/Testimonials";
-import FAQ from "@/components/FAQ";
-import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
-import StickyMobileCTA from "@/components/StickyMobileCTA";
+
+const OfferLadder = dynamic(() => import("@/components/OfferLadder"));
+const HowItWorks = dynamic(() => import("@/components/HowItWorks"));
+const WhoItsFor = dynamic(() => import("@/components/WhoItsFor"));
+const Testimonials = dynamic(() => import("@/components/Testimonials"));
+const FAQ = dynamic(() => import("@/components/FAQ"));
+const CTA = dynamic(() => import("@/components/CTA"));
+const Footer = dynamic(() => import("@/components/Footer"));
+const StickyMobileCTA = dynamic(() => import("@/components/StickyMobileCTA"));
+
+const ReactLenis = dynamic(() => import("lenis/react").then((mod) => mod.ReactLenis), {
+  ssr: false,
+});
 
 export default function HomePageClient() {
   return (
