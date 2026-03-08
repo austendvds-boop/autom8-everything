@@ -79,6 +79,14 @@ interface CadenceUsageResponse {
   plan: {
     callLimit: number
     minuteLimit: number
+    overageRateCents?: number
+    overageCapCents?: number
+  }
+  overage?: {
+    preauthIntentId: string | null
+    billedCents: number
+    disabled: boolean
+    notifiedAt: string | null
   }
 }
 
@@ -330,16 +338,16 @@ function toSafeRatio(used: number, limit: number): number {
   return Math.max(0, Math.min(used / limit, 1))
 }
 
-function usageFillClass(usedRatio: number): string {
-  if (usedRatio > 0.8) {
-    return "bg-red-400"
+function usageFillClass(usagePercent: number): string {
+  if (usagePercent >= 100) {
+    return "bg-red-500"
   }
 
-  if (usedRatio >= 0.6) {
-    return "bg-amber-400"
+  if (usagePercent >= 80) {
+    return "bg-amber-500"
   }
 
-  return "bg-emerald-400"
+  return "bg-emerald-500"
 }
 
 function formatWholeNumber(value: number): string {
@@ -351,7 +359,7 @@ function roundToMinutes(totalSeconds: number): number {
     return 0
   }
 
-  return Math.round(totalSeconds / 60)
+  return Math.ceil(totalSeconds / 60)
 }
 
 function scrollToSection(sectionId: string): void {
@@ -411,13 +419,10 @@ export default function PortalCadenceClient() {
     return keySource ? `cadence_test_completed_${keySource}` : ""
   }, [cadenceTenantId, settings.tenantId])
 
-  const callsUsage = usage?.usage?.totalCalls ?? 0
-  const callsLimit = usage?.plan?.callLimit ?? 0
-  const minutesUsage = roundToMinutes(usage?.usage?.totalDurationSeconds ?? 0)
-  const minutesLimit = usage?.plan?.minuteLimit ?? 0
-
-  const callsRatio = toSafeRatio(callsUsage, callsLimit)
-  const minutesRatio = toSafeRatio(minutesUsage, minutesLimit)
+  const minutesUsed = roundToMinutes(usage?.usage?.totalDurationSeconds ?? 0)
+  const minuteLimit = usage?.plan?.minuteLimit ?? 0
+  const usagePercent = minuteLimit > 0 ? Math.min((minutesUsed / minuteLimit) * 100, 100) : 0
+  const isOverLimit = minuteLimit > 0 && minutesUsed >= minuteLimit
 
   const cadenceNumber = settings.phoneNumber.trim() || portalPhone.trim() || "Not available yet"
   const greetingLooksCustom =
@@ -497,15 +502,15 @@ export default function PortalCadenceClient() {
         const activeCadenceTenantId = findCadenceTenantId(authPayload.services ?? [])
 
         const [settingsResponse, callsResponse, usageResponse] = await Promise.all([
-          fetch("/api/portal/cadence/settings", {
+          portalFetch("/api/portal/cadence/settings", {
             method: "GET",
             cache: "no-store",
           }),
-          fetch(`/api/portal/cadence/calls?limit=${CALL_PAGE_SIZE}&offset=0`, {
+          portalFetch(`/api/portal/cadence/calls?limit=${CALL_PAGE_SIZE}&offset=0`, {
             method: "GET",
             cache: "no-store",
           }),
-          fetch("/api/portal/cadence/usage", {
+          portalFetch("/api/portal/cadence/usage", {
             method: "GET",
             cache: "no-store",
           }),
@@ -551,7 +556,23 @@ export default function PortalCadenceClient() {
             plan: {
               callLimit: Number(usagePayload.plan?.callLimit ?? 0),
               minuteLimit: Number(usagePayload.plan?.minuteLimit ?? 0),
+              overageRateCents:
+                typeof usagePayload.plan?.overageRateCents === "number"
+                  ? usagePayload.plan.overageRateCents
+                  : undefined,
+              overageCapCents:
+                typeof usagePayload.plan?.overageCapCents === "number"
+                  ? usagePayload.plan.overageCapCents
+                  : undefined,
             },
+            overage: usagePayload.overage
+              ? {
+                  preauthIntentId: usagePayload.overage.preauthIntentId ?? null,
+                  billedCents: Number(usagePayload.overage.billedCents ?? 0),
+                  disabled: Boolean(usagePayload.overage.disabled),
+                  notifiedAt: usagePayload.overage.notifiedAt ?? null,
+                }
+              : undefined,
           })
           setUsageUnavailable(false)
         } else {
@@ -845,46 +866,47 @@ export default function PortalCadenceClient() {
           {usageUnavailable || !usage ? (
             <p className="text-sm text-[#A1A1AA]">Usage data unavailable</p>
           ) : (
-            <div className="space-y-5">
-              <div>
-                <p className="mb-2 text-sm text-[#D4D4D8]">
-                  Calls: {formatWholeNumber(callsUsage)} / {formatWholeNumber(callsLimit)} used this month
-                </p>
+            <div className="space-y-3">
+              <p className="text-sm text-[#D4D4D8]">
+                {minuteLimit > 0
+                  ? `${formatWholeNumber(minutesUsed)} of ${formatWholeNumber(minuteLimit)} minutes used this month`
+                  : `${formatWholeNumber(minutesUsed)} minutes used this month`}
+              </p>
+
+              {minuteLimit > 0 ? (
                 <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
                   <div
-                    className={`h-full rounded-full transition-all ${usageFillClass(callsRatio)}`}
-                    style={{ width: `${callsRatio * 100}%` }}
+                    className={`h-full rounded-full transition-all ${usageFillClass(usagePercent)}`}
+                    style={{ width: `${usagePercent}%` }}
                   />
-                </div>
-              </div>
-
-              <div>
-                <p className="mb-2 text-sm text-[#D4D4D8]">
-                  Minutes: {formatWholeNumber(minutesUsage)} / {formatWholeNumber(minutesLimit)} used this month
-                </p>
-                <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className={`h-full rounded-full transition-all ${usageFillClass(minutesRatio)}`}
-                    style={{ width: `${minutesRatio * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              {callsRatio > 0.8 ? (
-                <div className="rounded-xl border border-amber-300/30 bg-amber-500/10 p-3 text-sm text-amber-200">
-                  You&apos;ve used over 80% of your monthly calls. Upgrade your plan to avoid interruptions. {" "}
-                  <Link href="/portal/billing" className="underline decoration-amber-200/60 underline-offset-2">
-                    Manage Billing
-                  </Link>
                 </div>
               ) : null}
 
-              {minutesRatio > 0.8 ? (
-                <div className="rounded-xl border border-amber-300/30 bg-amber-500/10 p-3 text-sm text-amber-200">
-                  You&apos;ve used over 80% of your monthly minutes. Upgrade your plan to avoid interruptions. {" "}
-                  <Link href="/portal/billing" className="underline decoration-amber-200/60 underline-offset-2">
-                    Manage Billing
-                  </Link>
+              {isOverLimit ? (
+                <div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+                  <p className="text-sm font-medium text-amber-400">You&apos;ve exceeded your monthly limit</p>
+                  <p className="mt-1 text-xs text-amber-300/70">
+                    Overage rate: ${((usage.plan.overageRateCents || 15) / 100).toFixed(2)} per minute
+                    {usage.overage?.billedCents
+                      ? ` · Current overage: $${(usage.overage.billedCents / 100).toFixed(2)}`
+                      : ""}
+                  </p>
+                </div>
+              ) : null}
+
+              {usage.overage?.disabled ? (
+                <div className="mt-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3">
+                  <p className="text-sm font-medium text-red-400">Your Cadence line is temporarily paused</p>
+                  <p className="mt-1 text-xs text-red-300/70">
+                    We couldn&apos;t authorize your payment method for overage charges. Update your payment method to
+                    resume.
+                  </p>
+                  <a
+                    href="/portal/billing"
+                    className="mt-2 inline-block text-xs font-medium text-red-300 underline hover:text-red-200"
+                  >
+                    Update payment method →
+                  </a>
                 </div>
               ) : null}
             </div>
@@ -1342,3 +1364,4 @@ export default function PortalCadenceClient() {
     </main>
   )
 }
+

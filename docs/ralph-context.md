@@ -1,5 +1,42 @@
 # Ralph Context — Autom8 CRO Passover
 
+## B3-0 (2026-03-07): portal usage limits + overage UX
+- Updated Cadence API typing in `src/lib/platform/services/cadence-api.ts`:
+  - `CadenceUsageResponse.plan` now includes optional overage pricing fields:
+    - `overageRateCents?`
+    - `overageCapCents?`
+  - `CadenceUsageResponse` now includes optional `overage` object:
+    - `preauthIntentId`
+    - `billedCents`
+    - `disabled`
+    - `notifiedAt`
+- Updated portal Cadence client usage UI in `src/app/portal/cadence/PortalCadenceClient.tsx`:
+  - local `CadenceUsageResponse` interface now includes overage fields
+  - usage fetch now uses `portalFetch` for `/api/portal/cadence/settings|calls|usage`
+  - minutes usage now uses `Math.ceil(totalDurationSeconds / 60)`
+  - replaced dual calls/minutes bars with minute-focused usage surface
+  - Pro/unlimited handling: if `minuteLimit <= 0`, shows minutes text only (no bar)
+  - progress bar color tiers:
+    - `< 80%` -> `bg-emerald-500`
+    - `80-99%` -> `bg-amber-500`
+    - `>= 100%` -> `bg-red-500`
+  - added over-limit warning card showing overage rate + billed amount when present
+  - added paused-service warning card when `overage.disabled === true` with billing link
+  - removed old separate calls/minutes 80% warning banners
+- Updated portal billing client in `src/app/portal/billing/PortalBillingClient.tsx`:
+  - fetches cadence usage from `/api/portal/cadence/usage` before redirecting
+  - uses `Promise.race` with 2s timeout for usage fetch (non-blocking behavior)
+  - still opens Stripe billing portal regardless of usage fetch outcome
+  - renders overage summary card when billed overage exists or minutes are over limit
+  - uses existing dark theme card tokens (`bg-[#12121A]/90`, `border-white/8`)
+- Verified pass-through behavior in `src/app/api/portal/cadence/usage/route.ts`:
+  - route still returns `getCadenceUsage(cadenceTenantId)` payload directly
+  - no code changes required in this route
+- Build: `npm run build` ✅
+- Gotchas for next batch:
+  - Billing page overage card is intentionally brief (`~1.5s`) before redirect so users can see current overage while still being taken to Stripe.
+  - Cadence usage UI now treats `minuteLimit <= 0` as unlimited/Pro and suppresses progress bar.
+
 ## B7-0 (2026-03-07): portal polish (SEO + errors + consistency)
 - SEO hardening completed/verified:
   - confirmed noindex metadata on:
@@ -47,15 +84,6 @@
     - `/portal/review-funnel`
     - `/portal/billing`
     - `/portal/checkout`
-- Docs updated:
-  - `docs/platform-setup.md`
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
-  - `docs/CODER-CONTEXT.md`
-- Build: pending
-- Gotchas for next batch:
-  - `portalFetch` intentionally throws on any 401, so future portal-client API calls should either use this utility or handle session expiry with equivalent behavior.
-  - `public/robots.txt` now disallows all known portal paths; if new portal routes are added, include them in robots disallow review.
 
 ## B6-0 (2026-03-07): product page CTAs + Cadence CRM v2 callout
 - Updated `src/app/services/cadence/page.tsx`:
@@ -81,49 +109,4 @@
 - Updated shared homepage product CTA components:
   - `src/components/ServicesBento.tsx`: Review Funnel CTA -> `/portal/checkout?product=review_funnel`
   - `src/components/PricingOverview.tsx`: Cadence CTA -> `/portal/checkout?product=cadence`
-- Updated docs:
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
-  - `docs/CODER-CONTEXT.md`
 - Build: `npm run build` ✅
-- Gotchas for next batch:
-  - `/get-started` still exists and is still used by global nav/footer; this batch only moved product/homepage CTA surfaces requested for portal checkout routing.
-  - Cadence page now has both legacy trust copy and the new required trust line in final CTA area; keep both unless copy consolidation is explicitly requested.
-
-## B5-0 (2026-03-07): portal dashboard discovery + Review Funnel portal status page
-- Updated `src/app/portal/PortalDashboardClient.tsx`:
-  - Active Cadence card now attempts both:
-    - `GET /api/portal/cadence/calls?limit=1&offset=0` for monthly call count preview
-    - `GET /api/portal/cadence/settings` for Cadence phone number preview
-  - Cadence card now shows:
-    - `X calls this month` when available
-    - `Your Cadence number: ...` when settings include a number
-    - CTA `Manage Settings` -> `/portal/cadence`
-  - Active Review Funnel card now:
-    - CTA `Open Dashboard` -> `/portal/review-funnel`
-    - Optional `Plan: ...` line sourced from service metadata when present
-  - Added `More Products` section when customer is missing one or both products:
-    - Cadence discovery card -> `/portal/checkout?product=cadence`
-    - Review Funnel discovery card -> `/portal/checkout?product=review_funnel`
-    - Muted visual treatment uses `border-dashed border-white/15` and reduced opacity
-  - Replaced billing-only block with account section showing name/email, billing action, and `Need help?` link to `/contact`
-- Updated `src/app/api/portal/me/route.ts` to include `metadata` in service rows so plan labels are available to dashboard UI.
-- Added `GET /api/portal/review-funnel/status` at `src/app/api/portal/review-funnel/status/route.ts`:
-  - requires portal auth
-  - resolves active Review Funnel service + `rfTenantId`
-  - reads status from merged `platformDb` RF tables and returns:
-    - `{ plan, smsUsed, smsLimit, calendarsConnected, isActive }`
-  - returns `404` when no active Review Funnel service is linked
-- Replaced portal Review Funnel handoff route with a real status page:
-  - new client component: `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
-  - updated server page: `src/app/portal/review-funnel/page.tsx`
-    - now exports noindex metadata
-    - renders status client (no redirect/handoff-only card)
-- Updated docs:
-  - `docs/UI-VERIFICATION.md`
-  - `docs/implementation-plan.md`
-  - `docs/CODER-CONTEXT.md`
-- Build: `npm run build` ✅
-- Gotchas for next batch:
-  - Review Funnel plan label on `/portal` depends on `a8_client_services.metadata.plan` (or `planName`); older rows may not show plan.
-  - RF status usage uses `rf_sms_usage.month` (`YYYY-MM`) and `count` columns from current schema.

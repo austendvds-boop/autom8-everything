@@ -64,6 +64,14 @@ export interface CadenceUsageResponse {
     name: string
     callLimit: number
     minuteLimit: number
+    overageRateCents?: number
+    overageCapCents?: number
+  }
+  overage?: {
+    preauthIntentId: string | null
+    billedCents: number
+    disabled: boolean
+    notifiedAt: string | null
   }
 }
 
