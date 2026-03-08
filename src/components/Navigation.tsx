@@ -34,7 +34,7 @@ export default function Navigation() {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-3 md:px-4 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 px-3 md:px-4 ${
           isScrolled ? "pt-3" : "pt-0"
         }`}
         initial={prefersReducedMotion ? { opacity: 0 } : { y: -100 }}
@@ -42,7 +42,7 @@ export default function Navigation() {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         <div
-          className={`h-16 flex items-center justify-between gap-3 transition-all duration-300 border border-transparent ${
+          className={`h-16 flex items-center justify-between gap-3 transition-[background-color,border-color,backdrop-filter] duration-300 border border-transparent ${
             isScrolled ? "glass max-w-4xl mx-auto rounded-full border-white/10 px-5" : "max-w-7xl mx-auto px-6"
           }`}
         >
@@ -52,7 +52,7 @@ export default function Navigation() {
             <div className="relative group">
               <button className="relative text-[#A1A1AA] group-hover:text-white transition-colors inline-flex items-center gap-1">
                 Products <span className="text-xs">▾</span>
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#8B5CF6] transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#8B5CF6] transition-[width] duration-300 group-hover:w-full" />
               </button>
               <div className="absolute top-full left-0 pt-4 hidden group-hover:block">
                 <div className="w-64 rounded-2xl border border-white/10 bg-[#111118] p-3 shadow-xl">
@@ -72,7 +72,7 @@ export default function Navigation() {
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href} className="relative text-[#A1A1AA] hover:text-white transition-colors group">
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#8B5CF6] transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#8B5CF6] transition-[width] duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
