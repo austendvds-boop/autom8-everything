@@ -1,41 +1,47 @@
 # Ralph Context — Autom8 CRO Passover
 
-## B3-0 (2026-03-07): portal usage limits + overage UX
-- Updated Cadence API typing in `src/lib/platform/services/cadence-api.ts`:
-  - `CadenceUsageResponse.plan` now includes optional overage pricing fields:
-    - `overageRateCents?`
-    - `overageCapCents?`
-  - `CadenceUsageResponse` now includes optional `overage` object:
-    - `preauthIntentId`
-    - `billedCents`
-    - `disabled`
-    - `notifiedAt`
-- Updated portal Cadence client usage UI in `src/app/portal/cadence/PortalCadenceClient.tsx`:
-  - local `CadenceUsageResponse` interface now includes overage fields
-  - usage fetch now uses `portalFetch` for `/api/portal/cadence/settings|calls|usage`
-  - minutes usage now uses `Math.ceil(totalDurationSeconds / 60)`
-  - replaced dual calls/minutes bars with minute-focused usage surface
-  - Pro/unlimited handling: if `minuteLimit <= 0`, shows minutes text only (no bar)
-  - progress bar color tiers:
-    - `< 80%` -> `bg-emerald-500`
-    - `80-99%` -> `bg-amber-500`
-    - `>= 100%` -> `bg-red-500`
-  - added over-limit warning card showing overage rate + billed amount when present
-  - added paused-service warning card when `overage.disabled === true` with billing link
-  - removed old separate calls/minutes 80% warning banners
-- Updated portal billing client in `src/app/portal/billing/PortalBillingClient.tsx`:
-  - fetches cadence usage from `/api/portal/cadence/usage` before redirecting
-  - uses `Promise.race` with 2s timeout for usage fetch (non-blocking behavior)
-  - still opens Stripe billing portal regardless of usage fetch outcome
-  - renders overage summary card when billed overage exists or minutes are over limit
-  - uses existing dark theme card tokens (`bg-[#12121A]/90`, `border-white/8`)
-- Verified pass-through behavior in `src/app/api/portal/cadence/usage/route.ts`:
-  - route still returns `getCadenceUsage(cadenceTenantId)` payload directly
-  - no code changes required in this route
+## B1-0 (2026-03-07): CSS animation fixes + transition specificity (feature/mobile-perf)
+- Branch: `feature/mobile-perf`
+- Goal: eliminate PageSpeed "non-composited animations" warnings
+
+### globals.css changes
+- `.section-glow` — added `will-change: transform` for GPU compositing on blur elements
+- `@keyframes pulse-glow` — replaced `filter: drop-shadow()` with `opacity` animation (0.7 → 1 → 0.7)
+- `@keyframes gradient-shift` — **removed** entirely (animated `background-position`, non-composited, unused)
+- `.animate-gradient` — **removed** (no TSX usages found)
+- `.animate-float` — **removed** (no TSX usages found)
+- `.animate-pulse-glow` — **removed** (no TSX usages found)
+- `@keyframes star-twinkle` — replaced `filter: drop-shadow()` with `opacity` animation (0.85 → 1 → 0.85)
+- `.star-twinkle` — added `will-change: opacity`
+- `@keyframes shimmer` — kept (used in `b-copy` route, not homepage critical path)
+- `@keyframes float` — kept (composited; uses `transform: translateY`)
+
+### SocialProofBar.tsx
+- Removed `star-twinkle` className from star `<motion.span>` elements
+  - framer-motion `animate` (opacity/scale) is already composited — no double animation needed
+
+### Navigation.tsx
+- `transition-all duration-300` on outer `<motion.header>` → `transition-[background-color,border-color,box-shadow] duration-300`
+- `transition-all duration-300` on inner container div → `transition-[background-color,border-color,backdrop-filter] duration-300`
+- Both underline `<span>` elements (Products button + navLinks map) → `transition-[width] duration-300`
+
+### ServicesBento.tsx
+- Hero card `transition-all duration-300` → `transition-[box-shadow,border-color] duration-300`
+- Non-hero card `transition-all duration-300` → `transition-[box-shadow,border-color] duration-300`
+- Icon container already used `transition-transform duration-300` — no change needed
+
+### FAQ.tsx
+- FAQ button `transition-all` → `transition-[border-color,box-shadow] duration-200`
+
+### Hero.tsx
+- No changes needed — glow divs use `.section-glow` class which now has `will-change: transform`
+
 - Build: `npm run build` ✅
+- Commit: `4b29250` on `feature/mobile-perf`
 - Gotchas for next batch:
-  - Billing page overage card is intentionally brief (`~1.5s`) before redirect so users can see current overage while still being taken to Stripe.
-  - Cadence usage UI now treats `minuteLimit <= 0` as unlimited/Pro and suppresses progress bar.
+  - `animate-float`, `animate-pulse-glow`, `animate-gradient` classes are now gone from globals.css — do not reference them
+  - `shimmer` keyframe and class still exists (used by `/b-copy` route)
+  - `@keyframes float` still exists (may be used by inline styles)
 
 ## B7-0 (2026-03-07): portal polish (SEO + errors + consistency)
 - SEO hardening completed/verified:
@@ -43,70 +49,19 @@
     - `src/app/portal/checkout/page.tsx`
     - `src/app/portal/checkout/success/page.tsx`
     - `src/app/portal/review-funnel/page.tsx`
-  - updated `public/robots.txt` with portal disallow rules:
-    - `/portal/`
-    - `/portal/login/`
-    - `/portal/checkout/`
-    - `/portal/cadence/`
-    - `/portal/review-funnel/`
-    - `/portal/billing/`
-  - verified `src/app/sitemap.ts` excludes portal routes (`/portal/*` not present in `staticRoutes`)
-- Added shared portal session/fetch utility:
-  - new `src/lib/platform/portal-fetch.ts`
-  - exports:
-    - `PortalSessionExpiredError`
-    - `portalFetch(url, init)` (`cache: "no-store"`, throws on 401)
-- Added shared portal loading skeletons:
-  - new `src/components/portal/LoadingSkeleton.tsx`
-  - exports:
-    - `PortalCardSkeleton`
-    - `PortalPageSkeleton`
-- Updated portal clients to use shared session handling (`portalFetch`):
-  - `src/app/portal/PortalDashboardClient.tsx`
-  - `src/app/portal/cadence/PortalCadenceClient.tsx`
-  - `src/app/portal/review-funnel/PortalReviewFunnelClient.tsx`
-  - `src/app/portal/billing/PortalBillingClient.tsx`
-- Loading polish:
-  - replaced plain loading text/cards with `PortalPageSkeleton` in:
-    - `PortalDashboardClient`
-    - `PortalCadenceClient`
-- Checkout polish (`src/app/portal/checkout/CheckoutClient.tsx`):
-  - added `← Back to portal` link
-  - added explicit submit error mapping:
-    - 400: `Please fill in all required fields.`
-    - 500+: `Something went wrong on our end. Please try again in a moment.`
-    - network: `Could not connect. Please check your internet and try again.`
-  - kept dismiss action and updated label to `Try Again`
-  - aligned top-level card/form styling to portal surface token usage (`bg-[#12121A]/90`, `border-white/8`)
-- Back-link consistency:
-  - verified top `← Back to portal` links on:
-    - `/portal/cadence`
-    - `/portal/review-funnel`
-    - `/portal/billing`
-    - `/portal/checkout`
+  - updated `public/robots.txt` with portal disallow rules
+  - verified `src/app/sitemap.ts` excludes portal routes
+- Added shared portal session/fetch utility: `src/lib/platform/portal-fetch.ts`
+- Added shared portal loading skeletons: `src/components/portal/LoadingSkeleton.tsx`
+- Updated portal clients to use `portalFetch` session handling
+- Loading polish: `PortalPageSkeleton` in `PortalDashboardClient` + `PortalCadenceClient`
+- Checkout polish: back link, mapped submit errors, aligned card styling
+- Build: `npm run build` ✅
 
 ## B6-0 (2026-03-07): product page CTAs + Cadence CRM v2 callout
-- Updated `src/app/services/cadence/page.tsx`:
-  - Added new **CRM Integration Coming Soon** section between Features and the later pricing/CTA flow.
-  - Section includes:
-    - `Coming Soon` emerald badge
-    - `Automatic Lead Capture` headline + supporting copy
-    - 3 icon cards (`Incoming Call`, `AI Summary`, `CRM Sync`)
-    - closing note about CRM integration timing
-  - Updated all Cadence online trial links from `/get-started` to `/portal/checkout?product=cadence`.
-  - Added trust line below CTA groups:
-    - `7-day free trial · No credit card required to start`
-- Updated `src/app/services/review-funnel/page.tsx`:
-  - Updated primary `Get Started` CTAs to `/portal/checkout?product=review_funnel`:
-    - hero CTA
-    - Starter/Growth plan card CTAs
-    - final CTA
-  - Kept pricing tiers and copy unchanged.
-- Updated `src/app/pricing/page.tsx`:
-  - Cadence CTA -> `/portal/checkout?product=cadence`
-  - Review Funnel CTA -> `/portal/checkout?product=review_funnel`
-  - Contact/custom CTAs unchanged.
-- Updated shared homepage product CTA components:
-  - `src/components/ServicesBento.tsx`: Review Funnel CTA -> `/portal/checkout?product=review_funnel`
-  - `src/components/PricingOverview.tsx`: Cadence CTA -> `/portal/checkout?product=cadence`
+- Updated `src/app/services/cadence/page.tsx`: CRM Coming Soon section + portal checkout CTAs
+- Updated `src/app/services/review-funnel/page.tsx`: Get Started CTAs → `/portal/checkout?product=review_funnel`
+- Updated `src/app/pricing/page.tsx`: Cadence + Review Funnel CTAs → portal checkout
+- Updated `src/components/ServicesBento.tsx`: Review Funnel CTA → portal checkout
+- Updated `src/components/PricingOverview.tsx`: Cadence CTA → portal checkout
 - Build: `npm run build` ✅
