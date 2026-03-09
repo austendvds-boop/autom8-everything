@@ -6,7 +6,25 @@ import { rfDb } from "@/lib/review-funnel/db/client"
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
-type TableCheckResult = string | null
+const REQUIRED_TABLES = [
+  "a8_clients",
+  "a8_client_services",
+  "a8_magic_links",
+  "rf_tenants",
+  "rf_locations",
+  "rf_google_oauth_tokens",
+  "rf_calendar_watches",
+  "rf_review_requests",
+  "rf_pending_sms",
+  "rf_sms_opt_outs",
+  "rf_sms_usage",
+  "rf_magic_links",
+  "rf_consent_log",
+] as const
+
+type RequiredTable = (typeof REQUIRED_TABLES)[number]
+type TableRow = { table_name: string }
+type ColumnRow = { column_name: string }
 
 function hasEnvValue(name: string): boolean {
   return Boolean(process.env[name]?.trim())
@@ -57,8 +75,9 @@ export async function GET() {
 
   let platformDatabase = false
   let reviewFunnelDatabase = false
-  let a8ClientsTable: TableCheckResult = null
-  let rfConsentLogTable: TableCheckResult = null
+  let existingTables: RequiredTable[] = []
+  let missingTables: RequiredTable[] = [...REQUIRED_TABLES]
+  let hasReviewPlatformColumn = false
 
   try {
     await platformDb.execute(sql`SELECT 1`)
@@ -75,24 +94,65 @@ export async function GET() {
   }
 
   try {
-    const result = await platformDb.execute<{ table_name: TableCheckResult }>(
-      sql`SELECT to_regclass('public.a8_clients') AS table_name`,
+    const result = await platformDb.execute<TableRow>(
+      sql`
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+          AND table_name IN (
+            'a8_clients',
+            'a8_client_services',
+            'a8_magic_links',
+            'rf_tenants',
+            'rf_locations',
+            'rf_google_oauth_tokens',
+            'rf_calendar_watches',
+            'rf_review_requests',
+            'rf_pending_sms',
+            'rf_sms_opt_outs',
+            'rf_sms_usage',
+            'rf_magic_links',
+            'rf_consent_log'
+          )
+      `,
     )
-    a8ClientsTable = result.rows[0]?.table_name ?? null
+
+    const existingTableSet = new Set(
+      result.rows.map((row) => row.table_name).filter((tableName): tableName is RequiredTable =>
+        REQUIRED_TABLES.includes(tableName as RequiredTable),
+      ),
+    )
+
+    existingTables = REQUIRED_TABLES.filter((tableName) => existingTableSet.has(tableName))
+    missingTables = REQUIRED_TABLES.filter((tableName) => !existingTableSet.has(tableName))
   } catch {
-    a8ClientsTable = null
+    existingTables = []
+    missingTables = [...REQUIRED_TABLES]
   }
 
   try {
-    const result = await rfDb.execute<{ table_name: TableCheckResult }>(
-      sql`SELECT to_regclass('public.rf_consent_log') AS table_name`,
+    const result = await platformDb.execute<ColumnRow>(
+      sql`
+        SELECT column_name
+        FROM information_schema.columns
+        WHERE table_name = 'rf_tenants' AND column_name = 'review_platform'
+      `,
     )
-    rfConsentLogTable = result.rows[0]?.table_name ?? null
+    hasReviewPlatformColumn = result.rows.some((row) => row.column_name === "review_platform")
   } catch {
-    rfConsentLogTable = null
+    hasReviewPlatformColumn = false
   }
 
   const cadenceReachable = await checkCadenceReachability()
+  const migrations = {
+    tables: {
+      existing: existingTables,
+      missing: missingTables,
+    },
+    columns: {
+      "rf_tenants.review_platform": hasReviewPlatformColumn,
+    },
+  }
 
   const checks = {
     db: {
@@ -100,10 +160,6 @@ export async function GET() {
       platformDb: platformDatabase,
     },
     env: envChecks,
-    tables: {
-      a8_clients: a8ClientsTable,
-      rf_consent_log: rfConsentLogTable,
-    },
     cadence: {
       reachable: cadenceReachable,
     },
@@ -113,14 +169,15 @@ export async function GET() {
     platformDatabase &&
     reviewFunnelDatabase &&
     Object.values(envChecks).every(Boolean) &&
-    a8ClientsTable !== null &&
-    rfConsentLogTable !== null &&
+    missingTables.length === 0 &&
+    hasReviewPlatformColumn &&
     cadenceReachable
 
   return NextResponse.json(
     {
       healthy,
       checks,
+      migrations,
       timestamp: new Date().toISOString(),
     },
     { status: healthy ? 200 : 503 },
