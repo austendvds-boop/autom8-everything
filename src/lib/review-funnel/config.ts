@@ -29,7 +29,7 @@ function getReviewFunnelEnvSource() {
 
 export const reviewFunnelEnvSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_SITE_URL: z.string().url().default("https://autom8everything.com"),
 
   RF_ENCRYPTION_KEY: z
     .string()

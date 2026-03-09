@@ -1,80 +1,85 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
+import { createPortalCheckoutSession } from "@/lib/platform/services/stripe-portal";
 
-type OnboardingRequest = {
-  business_name?: string;
-  owner_name?: string;
-  owner_email?: string;
-  owner_phone?: string;
-  hours?: string;
-  business_description?: string;
-  faqs?: string;
-  area_code?: string;
-  transfer_number?: string;
-};
+const onboardingCheckoutSchema = z.object({
+  business_name: z.string().trim().min(1),
+  owner_name: z.string().trim().min(1),
+  owner_email: z.string().trim().email(),
+  owner_phone: z.string().trim().min(1),
+  hours: z.string().trim().min(1),
+  business_description: z.string().trim().min(1),
+  faqs: z.string().trim().min(1),
+  area_code: z.string().trim().regex(/^\d{3}$/),
+  transfer_number: z.string().trim().min(1),
+});
 
-function asTrimmedString(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+function getAllowedOrigin(): string {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+  if (!siteUrl) {
+    return "https://autom8everything.com";
+  }
+
+  try {
+    return new URL(siteUrl).origin;
+  } catch {
+    return "https://autom8everything.com";
+  }
 }
 
-function normalizeAreaCode(value: string): string {
-  const digits = value.replace(/\D/g, "");
-  return digits.length === 3 ? digits : "";
+function getCorsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": getAllowedOrigin(),
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    Vary: "Origin",
+  };
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: getCorsHeaders(),
+  });
 }
 
 export async function POST(request: Request) {
+  let rawBody: unknown;
+
   try {
-    const body = (await request.json()) as OnboardingRequest;
+    rawBody = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request." }, { status: 400, headers: getCorsHeaders() });
+  }
 
-    const businessName = asTrimmedString(body.business_name);
-    const ownerName = asTrimmedString(body.owner_name);
-    const ownerEmail = asTrimmedString(body.owner_email).toLowerCase();
-    const ownerPhone = asTrimmedString(body.owner_phone);
-    const transferNumber = asTrimmedString(body.transfer_number);
-    const areaCode = normalizeAreaCode(asTrimmedString(body.area_code));
-    const hours = asTrimmedString(body.hours);
-    const businessDescription = asTrimmedString(body.business_description);
-    const faqs = asTrimmedString(body.faqs);
+  const parsed = onboardingCheckoutSchema.safeParse(rawBody);
 
-    if (!businessName || !ownerName || !ownerEmail || !ownerPhone || !hours || !businessDescription || !faqs || !areaCode || !transferNumber) {
-      return NextResponse.json({ error: "Please complete all required fields." }, { status: 400 });
-    }
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Please complete all required fields." },
+      { status: 400, headers: getCorsHeaders() },
+    );
+  }
 
-    const cadenceBaseUrl = process.env.CADENCE_API_URL || process.env.NEXT_PUBLIC_CADENCE_API_URL;
-    if (!cadenceBaseUrl) {
-      return NextResponse.json({ error: "Cadence API URL is not configured." }, { status: 500 });
-    }
+  const payload = parsed.data;
 
-    const cadenceResponse = await fetch(`${cadenceBaseUrl}/api/stripe/checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-      body: JSON.stringify({
-        email: ownerEmail,
-        businessName,
-        ownerName,
-        ownerPhone,
-        transferNumber,
-        areaCode,
-        hours,
-        businessDescription,
-        faqs,
-        subscriptionStatus: "pending",
-      }),
+  try {
+    const session = await createPortalCheckoutSession({
+      product: "cadence",
+      email: payload.owner_email,
+      businessName: payload.business_name,
+      phone: payload.owner_phone,
+      areaCode: payload.area_code,
     });
 
-    const payload = (await cadenceResponse.json().catch(() => ({}))) as { url?: string; error?: string };
+    return NextResponse.json({ url: session.url }, { headers: getCorsHeaders() });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to create checkout link right now.";
 
-    if (!cadenceResponse.ok || !payload.url) {
-      return NextResponse.json(
-        { error: payload.error || "Unable to create checkout link right now." },
-        { status: cadenceResponse.status || 500 }
-      );
-    }
-
-    return NextResponse.json({ url: payload.url });
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    return NextResponse.json({ error: message }, { status: 500, headers: getCorsHeaders() });
   }
 }

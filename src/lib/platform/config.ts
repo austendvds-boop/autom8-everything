@@ -37,7 +37,7 @@ function getPlatformEnvSource() {
 
 export const platformEnvSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_SITE_URL: z.string().url().default("https://autom8everything.com"),
 
   A8_ADMIN_SECRET: z.string().min(16, "A8_ADMIN_SECRET must be at least 16 characters"),
   A8_JWT_SECRET: z.string().min(32, "A8_JWT_SECRET must be at least 32 characters"),
