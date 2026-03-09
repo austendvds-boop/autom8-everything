@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { and, asc, eq, lte, sql } from "drizzle-orm"
+import twilio from "twilio"
 import { rfDb } from "@/lib/review-funnel/db/client"
-import { rfPendingSms } from "@/lib/review-funnel/db/schema"
+import { rfPendingSms, rfReviewRequests } from "@/lib/review-funnel/db/schema"
+import { sendReviewRequestEmail } from "@/lib/review-funnel/services/email-review-request"
 import { sendReviewRequest } from "@/lib/review-funnel/services/sms"
 
 export const dynamic = "force-dynamic"
@@ -18,6 +20,46 @@ function isAuthorizedCronRequest(request: NextRequest): boolean {
   return authorizationHeader === `Bearer ${cronSecret}` || explicitCronHeader === cronSecret
 }
 
+function isTwilioError(error: unknown): boolean {
+  return error instanceof twilio.RestException
+}
+
+async function markPendingSmsFailure({
+  pendingSmsId,
+  reviewRequestId,
+  attempts,
+  errorMessage,
+}: {
+  pendingSmsId: string
+  reviewRequestId: string
+  attempts: number
+  errorMessage: string
+}): Promise<boolean> {
+  const nextAttempts = attempts + 1
+
+  await rfDb
+    .update(rfPendingSms)
+    .set({
+      attempts: sql`${rfPendingSms.attempts} + 1`,
+      lastError: errorMessage,
+      ...(nextAttempts >= 3 ? { status: "failed" } : {}),
+    })
+    .where(eq(rfPendingSms.id, pendingSmsId))
+
+  if (nextAttempts >= 3) {
+    await rfDb
+      .update(rfReviewRequests)
+      .set({
+        smsStatus: "failed",
+      })
+      .where(eq(rfReviewRequests.id, reviewRequestId))
+
+    return true
+  }
+
+  return false
+}
+
 export async function GET(request: NextRequest) {
   if (!isAuthorizedCronRequest(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -30,8 +72,10 @@ export async function GET(request: NextRequest) {
       id: rfPendingSms.id,
       reviewRequestId: rfPendingSms.reviewRequestId,
       attempts: rfPendingSms.attempts,
+      customerEmail: rfReviewRequests.customerEmail,
     })
     .from(rfPendingSms)
+    .innerJoin(rfReviewRequests, eq(rfPendingSms.reviewRequestId, rfReviewRequests.id))
     .where(
       and(
         eq(rfPendingSms.status, "queued"),
@@ -46,6 +90,7 @@ export async function GET(request: NextRequest) {
   let skipped = 0
   let failed = 0
   let rescheduled = 0
+  let sentEmail = 0
 
   for (const row of queuedRows) {
     try {
@@ -106,18 +151,56 @@ export async function GET(request: NextRequest) {
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown SMS processing failure"
-      const nextAttempts = row.attempts + 1
 
-      await rfDb
-        .update(rfPendingSms)
-        .set({
-          attempts: sql`${rfPendingSms.attempts} + 1`,
-          lastError: errorMessage,
-          ...(nextAttempts >= 3 ? { status: "failed" } : {}),
-        })
-        .where(eq(rfPendingSms.id, row.id))
+      if (isTwilioError(error) && row.customerEmail?.trim()) {
+        try {
+          await sendReviewRequestEmail(row.reviewRequestId)
 
-      if (nextAttempts >= 3) {
+          await rfDb.transaction(async (tx) => {
+            await tx
+              .update(rfPendingSms)
+              .set({
+                attempts: sql`${rfPendingSms.attempts} + 1`,
+                status: "sent_email",
+                lastError: errorMessage,
+              })
+              .where(eq(rfPendingSms.id, row.id))
+
+            await tx
+              .update(rfReviewRequests)
+              .set({
+                smsStatus: "sent_email",
+              })
+              .where(eq(rfReviewRequests.id, row.reviewRequestId))
+          })
+
+          sentEmail += 1
+          continue
+        } catch (emailError) {
+          const emailErrorMessage = emailError instanceof Error ? emailError.message : "Unknown email fallback failure"
+          const failureRecorded = await markPendingSmsFailure({
+            pendingSmsId: row.id,
+            reviewRequestId: row.reviewRequestId,
+            attempts: row.attempts,
+            errorMessage: `${errorMessage} | Email fallback failed: ${emailErrorMessage}`,
+          })
+
+          if (failureRecorded) {
+            failed += 1
+          }
+
+          continue
+        }
+      }
+
+      const failureRecorded = await markPendingSmsFailure({
+        pendingSmsId: row.id,
+        reviewRequestId: row.reviewRequestId,
+        attempts: row.attempts,
+        errorMessage,
+      })
+
+      if (failureRecorded) {
         failed += 1
       }
     }
@@ -126,6 +209,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     processed: queuedRows.length,
     sent,
+    sentEmail,
     skipped,
     failed,
     rescheduled,

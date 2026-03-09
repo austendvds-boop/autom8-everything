@@ -51,6 +51,7 @@ const DEFAULT_FILTERS: ReviewFilters = {
 const SMS_STATUS_OPTIONS = [
   "pending",
   "sent",
+  "sent_email",
   "delivered",
   "failed",
   "opted_out",

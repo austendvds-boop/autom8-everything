@@ -35,6 +35,11 @@ interface SmsUsagePayload {
   limit: number | null
   unlimited: boolean
   percent: number | null
+  smsHealthy: boolean
+}
+
+interface SmsStatusPayload {
+  smsLimited: boolean
 }
 
 function formatDate(value: string | null): string {
@@ -63,6 +68,7 @@ function formatSmsStatus(status: string): string {
 export default function DashboardOverview() {
   const [statsPayload, setStatsPayload] = useState<StatsPayload | null>(null)
   const [smsUsage, setSmsUsage] = useState<SmsUsagePayload | null>(null)
+  const [smsStatus, setSmsStatus] = useState<SmsStatusPayload | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isCalendarBusy, setIsCalendarBusy] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -73,9 +79,10 @@ export default function DashboardOverview() {
     setErrorMessage(null)
 
     try {
-      const [statsResponse, usageResponse] = await Promise.all([
+      const [statsResponse, usageResponse, smsStatusResponse] = await Promise.all([
         fetch("/api/review-funnel/dashboard/stats", { cache: "no-store" }),
         fetch("/api/review-funnel/dashboard/sms-usage", { cache: "no-store" }),
+        fetch("/api/review-funnel/dashboard/sms-status", { cache: "no-store" }),
       ])
 
       if (!statsResponse.ok) {
@@ -86,11 +93,17 @@ export default function DashboardOverview() {
         throw new Error("Could not load text message usage")
       }
 
+      if (!smsStatusResponse.ok) {
+        throw new Error("Could not load text message status")
+      }
+
       const stats = (await statsResponse.json()) as StatsPayload
       const usage = (await usageResponse.json()) as SmsUsagePayload
+      const status = (await smsStatusResponse.json()) as SmsStatusPayload
 
       setStatsPayload(stats)
       setSmsUsage(usage)
+      setSmsStatus(status)
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Failed to load dashboard")
     } finally {
@@ -173,6 +186,12 @@ export default function DashboardOverview() {
 
       {errorMessage ? (
         <p className="rounded-xl border border-red-400/30 bg-red-500/10 p-4 text-sm text-red-200">{errorMessage}</p>
+      ) : null}
+
+      {smsStatus?.smsLimited ? (
+        <p className="rounded-xl border border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-100">
+          SMS delivery is temporarily limited. Review requests will be sent via email when possible.
+        </p>
       ) : null}
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
