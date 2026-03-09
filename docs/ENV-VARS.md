@@ -1,5 +1,7 @@
 # ENV-VARS.md — autom8everything.com Review Funnel
 
+Last updated: 2026-03-09 (Batch 1 verification + Vercel API sync)
+
 ## Core
 - DATABASE_URL — Neon Postgres (set ✅)
 - CRON_SECRET — Cron endpoint auth (set ✅)
@@ -16,7 +18,7 @@
 ## Twilio (SMS)
 - TWILIO_ACCOUNT_SID — set ✅
 - TWILIO_AUTH_TOKEN — set ✅
-- RF_TWILIO_PHONE_NUMBER — PENDING: dedicated RF number not yet purchased
+- RF_TWILIO_PHONE_NUMBER — set ✅ (updated 2026-03-09: `+14806313993`)
 
 ## Stripe
 - STRIPE_SECRET_KEY — Autom8 Stripe (set ✅)
@@ -26,16 +28,16 @@
 
 ## Google
 - GOOGLE_PLACES_API_KEY — set ✅
-- GOOGLE_CLIENT_ID — PENDING: needs GCP OAuth setup for Calendar
-- GOOGLE_CLIENT_SECRET — PENDING
-- GOOGLE_REDIRECT_URI — PENDING: https://autom8everything.com/api/review-funnel/google/callback
+- GOOGLE_CLIENT_ID — set ✅ (updated 2026-03-09)
+- GOOGLE_CLIENT_SECRET — set ✅ (updated 2026-03-09)
+- GOOGLE_REDIRECT_URI — set ✅ (updated 2026-03-09: `https://autom8everything.com/api/review-funnel/google/callback`)
 
 ## Platform (Autom8 client portal)
-- A8_ADMIN_SECRET — required; password for `/admin/clients` operator login (source: generated secret)
-- A8_JWT_SECRET — required; 32+ char secret for portal sessions (source: generated secret)
+- A8_ADMIN_SECRET — set ✅ (updated 2026-03-09)
+- A8_JWT_SECRET — set ✅ (updated 2026-03-09)
 - A8_MAGIC_LINK_TTL_MINUTES — optional (default `15`)
 - A8_SESSION_TTL_HOURS — optional (default `24`)
-- CADENCE_API_URL — required; cadence-v2 base URL (source: cadence-v2 deployment URL)
+- CADENCE_API_URL — set ✅ (updated 2026-03-09: `https://cadence-v2-production.up.railway.app`)
 - PORTAL_API_SECRET — required; must match cadence-v2 value (source: shared secret in both apps)
-- PORTAL_STRIPE_WEBHOOK_SECRET — required for `/api/portal/webhooks/stripe` signature checks (source: Stripe Dashboard webhook endpoint secret)
-- PORTAL_STRIPE_PRICE_CADENCE_STARTER — required for Cadence self-serve checkout (source: Stripe Dashboard price ID)
+- PORTAL_STRIPE_WEBHOOK_SECRET — set ✅ (updated 2026-03-09)
+- PORTAL_STRIPE_PRICE_CADENCE_STARTER — set ✅ (updated 2026-03-09: `price_1T98KrBxWKNs26XEEQfthu8s`)
