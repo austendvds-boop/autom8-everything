@@ -1,6 +1,7 @@
 # ENV-VARS.md — autom8everything.com Review Funnel
 
 Last updated: 2026-03-09 (Batch 1 verification + Vercel API sync)
+Verification: 9 required Batch 1 vars confirmed present in Vercel via `GET /v9/projects/prj_VDUyHtQs8yg3QUy1BEvVyEyY96aj/env` on 2026-03-09.
 
 ## Core
 - DATABASE_URL — Neon Postgres (set ✅)
