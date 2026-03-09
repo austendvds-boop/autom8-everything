@@ -23,6 +23,16 @@ function normalizeSearchParam(value: string | string[] | undefined): string | nu
   return null
 }
 
+function normalizeProduct(value: string | string[] | undefined): "cadence" | "review_funnel" | null {
+  const normalized = normalizeSearchParam(value)
+
+  if (normalized === "cadence" || normalized === "review_funnel") {
+    return normalized
+  }
+
+  return null
+}
+
 export default async function PortalCheckoutSuccessPage({
   searchParams,
 }: {
@@ -30,6 +40,7 @@ export default async function PortalCheckoutSuccessPage({
 }) {
   const resolvedSearchParams = await searchParams
   const email = normalizeSearchParam(resolvedSearchParams.email)
+  const product = normalizeProduct(resolvedSearchParams.product)
 
-  return <SuccessClient email={email} />
+  return <SuccessClient email={email} product={product} />
 }

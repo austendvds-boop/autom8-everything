@@ -127,7 +127,7 @@ export async function createPortalCheckoutSession(params: CheckoutParams): Promi
         product: params.product,
       },
     },
-    success_url: `${siteOrigin}/portal/checkout/success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(normalizedEmail)}`,
+    success_url: `${siteOrigin}/portal/checkout/success?session_id={CHECKOUT_SESSION_ID}&email=${encodeURIComponent(normalizedEmail)}&product=${params.product}`,
     cancel_url: `${siteOrigin}/portal/checkout`,
   })
 

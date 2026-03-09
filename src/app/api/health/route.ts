@@ -30,8 +30,23 @@ function hasEnvValue(name: string): boolean {
   return Boolean(process.env[name]?.trim())
 }
 
-async function checkCadenceReachability() {
+function trimCadenceApiUrl(): string | null {
   const cadenceApiUrl = process.env.CADENCE_API_URL?.trim()
+
+  if (!cadenceApiUrl) {
+    return null
+  }
+
+  return cadenceApiUrl.replace(/\/+$/, "")
+}
+
+function getPortalSecret(): string | null {
+  const portalSecret = process.env.PORTAL_API_SECRET?.trim()
+  return portalSecret || null
+}
+
+async function checkCadenceReachability() {
+  const cadenceApiUrl = trimCadenceApiUrl()
 
   if (!cadenceApiUrl) {
     return false
@@ -41,7 +56,7 @@ async function checkCadenceReachability() {
   const timeout = setTimeout(() => controller.abort(), 5_000)
 
   try {
-    const response = await fetch(cadenceApiUrl, {
+    const response = await fetch(`${cadenceApiUrl}/`, {
       cache: "no-store",
       signal: controller.signal,
     })
@@ -52,6 +67,41 @@ async function checkCadenceReachability() {
 
     const payload = (await response.json().catch(() => null)) as { status?: string } | null
     return payload?.status === "ok"
+  } catch {
+    return false
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+async function checkCadencePortalAuth() {
+  const cadenceApiUrl = trimCadenceApiUrl()
+  const portalSecret = getPortalSecret()
+
+  if (!cadenceApiUrl || !portalSecret) {
+    return false
+  }
+
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 5_000)
+
+  try {
+    const response = await fetch(
+      `${cadenceApiUrl}/api/portal/tenant/00000000-0000-0000-0000-000000000000`,
+      {
+        cache: "no-store",
+        headers: {
+          "X-Portal-Secret": portalSecret,
+        },
+        signal: controller.signal,
+      },
+    )
+
+    if (response.status === 401) {
+      return false
+    }
+
+    return response.status === 404 || response.status === 200
   } catch {
     return false
   } finally {
@@ -143,7 +193,8 @@ export async function GET() {
     hasReviewPlatformColumn = false
   }
 
-  const cadenceReachable = await checkCadenceReachability()
+  const cadence = await checkCadenceReachability()
+  const cadencePortalAuth = await checkCadencePortalAuth()
   const migrations = {
     tables: {
       existing: existingTables,
@@ -160,9 +211,8 @@ export async function GET() {
       platformDb: platformDatabase,
     },
     env: envChecks,
-    cadence: {
-      reachable: cadenceReachable,
-    },
+    cadence,
+    cadencePortalAuth,
   }
 
   const healthy =
@@ -171,7 +221,8 @@ export async function GET() {
     Object.values(envChecks).every(Boolean) &&
     missingTables.length === 0 &&
     hasReviewPlatformColumn &&
-    cadenceReachable
+    cadence &&
+    cadencePortalAuth
 
   return NextResponse.json(
     {
