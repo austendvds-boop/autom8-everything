@@ -8,17 +8,15 @@ import { businessProfile } from "@/lib/business";
 const productLinks = [
   { label: "Cadence", href: "/services/cadence" },
   { label: "Review Funnel", href: "/services/review-funnel" },
-  { label: "Website Creation", href: "/services/websites" },
-  { label: "SEO & Content", href: "/services/seo-content" },
+  { label: "Web + Monthly SEO", href: "/services/websites" },
   { label: "Custom Apps", href: "/services/custom-apps" },
-  { label: "Get Started", href: "/get-started" },
   { label: "Pricing", href: "/pricing" },
 ];
 
 const startHereLinks = [
   { label: "Try Cadence Free", href: "tel:+14806313993" },
-  { label: "Get a Growth Audit", href: "/contact" },
-  { label: "See Pricing", href: "/pricing" },
+  { label: "See Our Products", href: "/#services" },
+  { label: "Get a Free Quote", href: "/contact" },
   { label: "Book a Demo", href: "/contact" },
 ];
 
@@ -49,7 +47,7 @@ export default function Footer() {
               (480) 631-3993
             </a>
             <p className="text-[#A1A1AA] mb-3 max-w-sm">
-              Simple tools that help local businesses answer more calls, get more reviews, and stay visible online.
+              Answer every call, collect more reviews, and get found online - we handle the tech so you don't have to.
             </p>
             <p className="text-sm text-[#A1A1AA] mb-6 max-w-sm leading-relaxed">
               {businessProfile.name} • {businessProfile.city}, {businessProfile.state}
