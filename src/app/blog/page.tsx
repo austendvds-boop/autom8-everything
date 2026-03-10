@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BlogPageClient from "./BlogPageClient";
+import { getAllPosts } from "@/lib/blog";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -16,5 +17,5 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function BlogPage() {
-  return <BlogPageClient />;
+  return <BlogPageClient posts={getAllPosts()} />;
 }
