@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { businessProfile } from "@/lib/business";
+import { fadeUp, viewportOnce } from "@/lib/motion";
 
 const productLinks = [
   { label: "Cadence", href: "/services/cadence" },
@@ -37,9 +39,17 @@ const socialLinks = [
 ].filter((social) => Boolean(social.href));
 
 export default function Footer() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <footer className="py-16 bg-[#0A0A0F] border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6">
+      <motion.div
+        className="max-w-7xl mx-auto px-6 will-change-transform"
+        variants={fadeUp}
+        initial={prefersReducedMotion ? false : "hidden"}
+        whileInView="visible"
+        viewport={viewportOnce}
+      >
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
           <div className="md:col-span-2">
             <BrandLogo size="md" className="mb-4" />
@@ -131,7 +141,7 @@ export default function Footer() {
           </p>
           <p className="text-[#52525B] text-sm">Built in Phoenix, AZ</p>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }

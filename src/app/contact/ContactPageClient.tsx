@@ -3,16 +3,18 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ReactLenis } from "lenis/react";
+import { motion, useReducedMotion } from "framer-motion";
+import { Mail, MapPin, Clock, Send, Check, Phone } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
-import { Mail, MapPin, Clock, Send, Check, Phone } from "lucide-react";
 import { businessProfile } from "@/lib/business";
 import { trackContactFormSubmit } from "@/lib/analytics";
+import { buttonHover, fadeUp, viewportOnce } from "@/lib/motion";
 
 const helpOptions = ["Phone Answering", "Website", "Reviews", "SEO", "Not Sure Yet"];
 
 export default function ContactPageClient() {
+  const prefersReducedMotion = useReducedMotion();
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -49,50 +51,46 @@ export default function ContactPageClient() {
       <main className="min-h-screen bg-[#0A0A0F]">
         <Navigation />
 
-        <section className="pt-32 pb-20 mesh-bg">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <motion.h1 className="text-5xl md:text-7xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <section className="mesh-bg pt-32 pb-20">
+          <div className="mx-auto max-w-4xl px-6 text-center">
+            <motion.h1 className="mb-6 text-5xl font-semibold will-change-transform md:text-7xl" style={{ fontFamily: "var(--font-playfair), serif" }} variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible">
               Tell Us About <span className="gradient-text">Your Business</span>
             </motion.h1>
-            <motion.p className="text-xl text-[#A1A1AA] max-w-2xl mx-auto" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
+            <motion.p className="mx-auto max-w-2xl text-xl text-[#A1A1AA] will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible" transition={prefersReducedMotion ? undefined : { delay: 0.12 }}>
               Fill out this quick intake form and we&apos;ll recommend the best next step.
             </motion.p>
           </div>
         </section>
 
         <section className="py-20">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
-                <h2 className="text-2xl font-semibold mb-6">Quick Intake Form</h2>
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+              <motion.div className="rounded-2xl border border-white/5 bg-[#12121A] p-8 will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} whileInView="visible" viewport={viewportOnce} transition={prefersReducedMotion ? undefined : { delay: 0.08 }}>
+                <h2 className="mb-6 text-2xl font-semibold">Quick Intake Form</h2>
                 {isSubmitted ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#10B981]/20 flex items-center justify-center">
-                      <Check className="w-8 h-8 text-[#10B981]" />
+                  <div className="py-12 text-center">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#10B981]/20">
+                      <Check className="h-8 w-8 text-[#10B981]" />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">Thanks — we got it</h3>
+                    <h3 className="mb-2 text-xl font-semibold">Thanks - we got it</h3>
                     <p className="text-[#A1A1AA]">We&apos;ll follow up within 24 hours.</p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">
-                    <input required value={formState.name} onChange={(e) => setFormState({ ...formState, name: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Name *" />
-                    <input type="email" required value={formState.email} onChange={(e) => setFormState({ ...formState, email: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Email *" />
-                    <input value={formState.company} onChange={(e) => setFormState({ ...formState, company: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Business name" />
-                    <input value={formState.phone} onChange={(e) => setFormState({ ...formState, phone: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg" placeholder="Phone number (optional)" />
+                    <input required value={formState.name} onChange={(e) => setFormState({ ...formState, name: e.target.value })} className="w-full rounded-lg border border-white/10 bg-[#1A1A23] px-4 py-3" placeholder="Name *" />
+                    <input type="email" required value={formState.email} onChange={(e) => setFormState({ ...formState, email: e.target.value })} className="w-full rounded-lg border border-white/10 bg-[#1A1A23] px-4 py-3" placeholder="Email *" />
+                    <input value={formState.company} onChange={(e) => setFormState({ ...formState, company: e.target.value })} className="w-full rounded-lg border border-white/10 bg-[#1A1A23] px-4 py-3" placeholder="Business name" />
+                    <input value={formState.phone} onChange={(e) => setFormState({ ...formState, phone: e.target.value })} className="w-full rounded-lg border border-white/10 bg-[#1A1A23] px-4 py-3" placeholder="Phone number (optional)" />
 
                     <div>
-                      <p className="text-sm text-[#A1A1AA] mb-2">What do you need help with?</p>
+                      <p className="mb-2 text-sm text-[#A1A1AA]">What do you need help with?</p>
                       <div className="flex flex-wrap gap-2">
                         {helpOptions.map((option) => (
                           <button
                             type="button"
                             key={option}
                             onClick={() => toggleHelp(option)}
-                            className={`px-3 py-2 rounded-full border text-sm ${
-                              formState.helpWith.includes(option)
-                                ? "border-[#8B5CF6] bg-[#8B5CF6]/20 text-white"
-                                : "border-white/15 text-[#A1A1AA]"
-                            }`}
+                            className={`rounded-full border px-3 py-2 text-sm ${formState.helpWith.includes(option) ? "border-[#8B5CF6] bg-[#8B5CF6]/20 text-white" : "border-white/15 text-[#A1A1AA]"}`}
                           >
                             {option}
                           </button>
@@ -100,31 +98,31 @@ export default function ContactPageClient() {
                       </div>
                     </div>
 
-                    <textarea required rows={5} value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className="w-full px-4 py-3 bg-[#1A1A23] border border-white/10 rounded-lg resize-none" placeholder="Anything else we should know? *" />
+                    <textarea required rows={5} value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className="w-full resize-none rounded-lg border border-white/10 bg-[#1A1A23] px-4 py-3" placeholder="Anything else we should know? *" />
 
-                    <motion.button type="submit" disabled={isSubmitting} className="w-full py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-50" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      {isSubmitting ? "Sending..." : <><Send className="w-5 h-5" /> Send Intake</>}
+                    <motion.button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] py-4 font-semibold text-white disabled:opacity-50 will-change-transform" {...(prefersReducedMotion ? {} : buttonHover)}>
+                      {isSubmitting ? "Sending..." : <><Send className="h-5 w-5" /> Send Intake</>}
                     </motion.button>
                   </form>
                 )}
-              </div>
+              </motion.div>
 
               <div className="space-y-6">
-                <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
-                  <h3 className="text-xl font-semibold mb-4">Prefer to try something first?</h3>
-                  <p className="text-[#A1A1AA] mb-6">Start Cadence free and see live phone answering in minutes.</p>
-                  <Link href="/get-started" className="inline-block px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Start Free Trial</Link>
+                <div className="rounded-2xl border border-white/5 bg-[#12121A] p-8">
+                  <h3 className="mb-4 text-xl font-semibold">Prefer to try something first?</h3>
+                  <p className="mb-6 text-[#A1A1AA]">Start Cadence free and see live phone answering in minutes.</p>
+                  <Link href="/get-started" className="inline-block rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-[#8B5CF6]/60">Start Free Trial</Link>
                 </div>
 
-                <div className="bg-[#12121A] border border-white/5 rounded-2xl p-8">
-                  <h2 className="text-2xl font-semibold mb-6">Business Info</h2>
+                <div className="rounded-2xl border border-white/5 bg-[#12121A] p-8">
+                  <h2 className="mb-6 text-2xl font-semibold">Business Info</h2>
                   <div className="space-y-5 text-[#A1A1AA]">
-                    <p className="flex items-center gap-3"><Mail className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.email}</p>
-                    {businessProfile.phoneDisplay && <p className="flex items-center gap-3"><Phone className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.phoneDisplay}</p>}
-                    <p className="flex items-center gap-3"><MapPin className="w-5 h-5 text-[#8B5CF6]" />{businessProfile.city}, {businessProfile.state}</p>
-                    <p className="flex items-center gap-3"><Clock className="w-5 h-5 text-[#8B5CF6]" />Response within 24 hours</p>
+                    <p className="flex items-center gap-3"><Mail className="h-5 w-5 text-[#8B5CF6]" />{businessProfile.email}</p>
+                    {businessProfile.phoneDisplay && <p className="flex items-center gap-3"><Phone className="h-5 w-5 text-[#8B5CF6]" />{businessProfile.phoneDisplay}</p>}
+                    <p className="flex items-center gap-3"><MapPin className="h-5 w-5 text-[#8B5CF6]" />{businessProfile.city}, {businessProfile.state}</p>
+                    <p className="flex items-center gap-3"><Clock className="h-5 w-5 text-[#8B5CF6]" />Response within 24 hours</p>
                   </div>
-                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%20call`} className="inline-block mt-6 px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">Book a Call</Link>
+                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%20call`} className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-[#8B5CF6]/60">Book a Call</Link>
                 </div>
               </div>
             </div>

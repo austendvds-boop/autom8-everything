@@ -8,6 +8,7 @@ export interface ShimmerButtonProps {
   children: ReactNode;
   href?: string;
   onClick?: () => void;
+  ariaLabel?: string;
   variant?: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
   className?: string;
@@ -28,6 +29,7 @@ export default function ShimmerButton({
   children,
   href,
   onClick,
+  ariaLabel,
   variant = "primary",
   size = "md",
   className,
@@ -52,14 +54,14 @@ export default function ShimmerButton({
 
   if (href) {
     return (
-      <motion.a href={href} onClick={onClick} className={classes} {...interactionProps}>
+      <motion.a href={href} onClick={onClick} className={classes} aria-label={ariaLabel} {...interactionProps}>
         {children}
       </motion.a>
     );
   }
 
   return (
-    <motion.button type="button" onClick={onClick} className={classes} {...interactionProps}>
+    <motion.button type="button" onClick={onClick} className={classes} aria-label={ariaLabel} {...interactionProps}>
       {children}
     </motion.button>
   );

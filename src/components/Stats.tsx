@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useMotionValueEvent, useSpring } from "framer-motion";
+import { motion, useInView, useMotionValueEvent, useSpring, useReducedMotion } from "framer-motion";
 import { staggerContainer, staggerItem, viewportOnce } from "@/lib/motion";
 
 type Stat = {
@@ -46,6 +46,7 @@ function Counter({ value, suffix, label, inView, decimals }: { value: number; su
 }
 
 export default function Stats() {
+  const prefersReducedMotion = useReducedMotion();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -58,7 +59,7 @@ export default function Stats() {
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12"
           variants={staggerContainer}
-          initial="hidden"
+          initial={prefersReducedMotion ? false : "hidden"}
           whileInView="visible"
           viewport={viewportOnce}
         >

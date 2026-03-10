@@ -1,7 +1,7 @@
 "use client";
 
 import type { Variants } from "framer-motion";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
@@ -48,6 +48,8 @@ const faqs = [
 ];
 
 export default function PricingPageClient() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <main className="min-h-screen bg-[#0A0A0F]">
       <Navigation />
@@ -58,7 +60,7 @@ export default function PricingPageClient() {
             className="text-5xl md:text-6xl font-semibold mb-6 will-change-transform"
             style={{ fontFamily: "var(--font-playfair), serif" }}
             variants={fadeUp}
-            initial="hidden"
+            initial={prefersReducedMotion ? false : "hidden"}
             animate="visible"
           >
             Pricing
@@ -66,7 +68,7 @@ export default function PricingPageClient() {
           <motion.p
             className="text-xl text-[#A1A1AA] max-w-3xl mx-auto will-change-transform"
             variants={fadeUp}
-            initial="hidden"
+            initial={prefersReducedMotion ? false : "hidden"}
             animate="visible"
             transition={{ delay: 0.08 }}
           >
@@ -80,7 +82,7 @@ export default function PricingPageClient() {
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
             variants={staggerContainer}
-            initial="hidden"
+            initial={prefersReducedMotion ? false : "hidden"}
             whileInView="visible"
             viewport={viewportOnce}
           >
@@ -119,7 +121,7 @@ export default function PricingPageClient() {
             <motion.div
               className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
               variants={staggerContainer}
-              initial="hidden"
+              initial={prefersReducedMotion ? false : "hidden"}
               whileInView="visible"
               viewport={viewportOnce}
             >
@@ -151,7 +153,7 @@ export default function PricingPageClient() {
           <motion.article
             className="rounded-2xl border border-white/10 bg-[#12121A] p-8 md:col-span-2 h-full flex flex-col"
             variants={staggerContainer}
-            initial="hidden"
+            initial={prefersReducedMotion ? false : "hidden"}
             whileInView="visible"
             viewport={viewportOnce}
           >
@@ -193,7 +195,7 @@ export default function PricingPageClient() {
           <motion.article
             className="rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col"
             variants={fadeUp}
-            initial="hidden"
+            initial={prefersReducedMotion ? false : "hidden"}
             whileInView="visible"
             viewport={viewportOnce}
           >
@@ -213,7 +215,7 @@ export default function PricingPageClient() {
             className="text-3xl md:text-4xl font-semibold mb-8 will-change-transform"
             style={{ fontFamily: "var(--font-playfair), serif" }}
             variants={fadeUp}
-            initial="hidden"
+            initial={prefersReducedMotion ? false : "hidden"}
             whileInView="visible"
             viewport={viewportOnce}
           >
