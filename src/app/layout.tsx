@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
+import { Inter, JetBrains_Mono, Playfair_Display, Syne } from "next/font/google";
 import "./globals.css";
 import { businessProfile, businessSameAs } from "@/lib/business";
 import { defaultDescription, defaultOgImage, defaultTitle, siteName, siteUrl } from "@/lib/seo";
@@ -22,6 +22,13 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
+});
+
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["700", "800"],
 });
 
 const localBusinessSchema = {
@@ -150,7 +157,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${playfair.variable} antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${playfair.variable} ${syne.variable} antialiased`}
         style={{
           fontFamily: "var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif",
         }}

@@ -6,7 +6,7 @@ import Hero from "@/components/Hero";
 import ScrollFade from "@/components/ScrollFade";
 import SocialProofBar from "@/components/SocialProofBar";
 import ProofBar from "@/components/ProofBar";
-import ServicesBento from "@/components/ServicesBento";
+import ProductSidebar from "@/components/ProductSidebar";
 
 const OfferLadder = dynamic(() => import("@/components/OfferLadder"));
 const HowItWorks = dynamic(() => import("@/components/HowItWorks"));
@@ -36,7 +36,7 @@ export default function HomePageClient() {
         <ScrollFade />
         <SocialProofBar />
         <ProofBar />
-        <ServicesBento />
+        <ProductSidebar />
         <ScrollFade />
         <OfferLadder />
         <WhoItsFor />
