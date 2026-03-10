@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Serif_Display, Space_Grotesk, Space_Mono } from "next/font/google";
 import CCopyPageClient from "./CCopyPageClient";
 import "./c-copy.css";
+import { buildMetadata } from "@/lib/seo";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -25,8 +26,11 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Preset C Local Preview",
-  description: "Local preview route for Preset C Brutalist Signal cinematic landing page.",
+  ...buildMetadata({
+    title: "Preset C Local Preview",
+    description: "Local preview route for Preset C Brutalist Signal cinematic landing page.",
+    path: "/c-copy",
+  }),
   robots: {
     index: false,
     follow: false,

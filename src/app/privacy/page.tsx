@@ -48,6 +48,20 @@ const sections = [
       "You can also ask us to stop non-essential communications.",
     ],
   },
+  {
+    title: "Cookies and analytics",
+    body: [
+      "We may use cookies, analytics tools, and similar technology to understand site traffic, improve performance, and measure marketing activity.",
+      "You can control cookies through your browser settings, but some site features may work differently if you disable them.",
+    ],
+  },
+  {
+    title: "Arizona and contact details",
+    body: [
+      "Autom8 Everything operates as an Arizona service-area business and does not publish a public storefront address on this site.",
+      "If you have a privacy request or question, email hello@autom8everything.com and we will respond as soon as practical.",
+    ],
+  },
 ];
 
 export const metadata: Metadata = buildMetadata({
@@ -63,11 +77,12 @@ export default function PrivacyPage() {
       <section className="pt-32 pb-20 mesh-bg">
         <div className="max-w-4xl mx-auto px-6">
           <p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6]">Last updated: March 2026</p>
+          <p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6]">Effective date: March 9, 2026</p>
           <h1 className="text-5xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Privacy Policy
           </h1>
           <p className="text-[#A1A1AA] text-lg mb-10">
-            This page explains what information we collect, why we collect it, and how you can control it.
+            This page explains what information Autom8 Everything collects, why we collect it, and how you can control it.
           </p>
 
           <div className="space-y-6">
@@ -84,7 +99,7 @@ export default function PrivacyPage() {
           </div>
 
           <p className="text-[#A1A1AA] text-lg mt-10">
-            Questions about privacy? <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]">Contact us</Link>.
+            Questions about privacy? Email <a href="mailto:hello@autom8everything.com" className="text-[#8B5CF6] hover:text-[#A78BFA]">hello@autom8everything.com</a> or <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]">contact us</Link>.
           </p>
         </div>
       </section>

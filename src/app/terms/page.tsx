@@ -55,6 +55,20 @@ const sections = [
       "Our total liability is limited to the amount paid by you for the service period tied to the claim.",
     ],
   },
+  {
+    title: "Arizona law",
+    body: [
+      "These terms are governed by Arizona law.",
+      "Any dispute that cannot be resolved directly will be handled in Arizona.",
+    ],
+  },
+  {
+    title: "Questions about these terms",
+    body: [
+      "Autom8 Everything is a service-area business, so we do not list a public storefront address on this site.",
+      "For questions about these terms, email hello@autom8everything.com before placing an order or starting service.",
+    ],
+  },
 ];
 
 export const metadata: Metadata = buildMetadata({
@@ -70,11 +84,12 @@ export default function TermsPage() {
       <section className="pt-32 pb-20 mesh-bg">
         <div className="max-w-4xl mx-auto px-6">
           <p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6]">Last updated: March 2026</p>
+          <p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6]">Effective date: March 9, 2026</p>
           <h1 className="text-5xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
             Terms of Service
           </h1>
           <p className="text-[#A1A1AA] text-lg mb-10">
-            These terms explain how we work together and what both sides can expect.
+            These terms explain how Autom8 Everything works with you and what both sides can expect.
           </p>
 
           <div className="space-y-6">
@@ -91,7 +106,7 @@ export default function TermsPage() {
           </div>
 
           <p className="text-[#A1A1AA] text-lg mt-10">
-            Need contract details for your business? <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]">Contact us</Link>.
+            Need contract details for your business? Email <a href="mailto:hello@autom8everything.com" className="text-[#8B5CF6] hover:text-[#A78BFA]">hello@autom8everything.com</a> or <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]">contact us</Link>.
           </p>
         </div>
       </section>
