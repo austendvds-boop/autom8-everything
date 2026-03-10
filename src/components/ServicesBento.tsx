@@ -66,9 +66,9 @@ const products: Product[] = [
     productName: "Web + Monthly SEO",
     valueProp:
       "A professional website built to turn visitors into calls, plus monthly content and local SEO so customers find you instead of your competition.",
-    price: "From $500",
+    price: "From $499",
     priceContext: "One-time build + optional monthly plans",
-    priceAriaLabel: "Websites start at 500 dollars",
+    priceAriaLabel: "Websites start at 499 dollars",
     microProof: "Show up when customers search for what you do.",
     icon: Globe,
     cta: { href: "/contact", label: "Get a Free Quote" },
@@ -219,6 +219,7 @@ export default function ServicesBento() {
             {product.price}
           </p>
           <p className="text-xs text-[#71717A] mt-1 mb-4">{product.priceContext}</p>
+          {product.productName === "Web + Monthly SEO" ? <p className="text-xs text-[#71717A] mt-1">+ $50/mo hosting required</p> : null}
 
           <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium mb-4">
             <Check className="w-3.5 h-3.5" aria-hidden="true" />

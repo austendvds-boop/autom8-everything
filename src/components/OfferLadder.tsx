@@ -49,11 +49,12 @@ const tiers: Tier[] = [
   {
     name: "Websites + SEO",
     product: "Web + Monthly SEO",
-    price: "From $500",
+    price: "From $499",
     valueProp: "Get found on Google",
     features: [
-      "Launch website: $500 (up to 5 pages)",
-      "Enterprise website: $1,000 (up to 10 pages)",
+      "Launch website: $499 (up to 5 pages)",
+      "Enterprise website: $999 (up to 10 pages)",
+      "+ $50/mo hosting required",
       "Hosting: $50/mo",
       "Growth plan: $299/mo (blog + SEO + reports)",
     ],

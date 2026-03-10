@@ -21,12 +21,12 @@ const featuredScale: Variants = {
 const websiteTiers = [
   {
     name: "Launch",
-    price: "$500",
+    price: "$499",
     details: ["Up to 5 pages", "Mobile-ready", "Contact/booking form", "Basic on-page SEO"],
   },
   {
     name: "Enterprise",
-    price: "$1,000",
+    price: "$999",
     details: ["Up to 10 pages", "Everything in Launch", "Custom features", "Built for your workflow"],
     featured: true,
   },
@@ -131,6 +131,7 @@ export default function PricingPageClient() {
                 >
                   <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-1">{tier.name}</p>
                   <p className="text-2xl font-semibold mb-3">{tier.price}</p>
+                  <p className="text-xs text-[#71717A] mt-1 mb-3">+ $50/mo hosting required</p>
                   <ul className="space-y-2 text-sm text-[#A1A1AA] flex-1">
                     {tier.details.map((detail) => (
                       <li key={detail} className="flex items-start gap-2.5">
