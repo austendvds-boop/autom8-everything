@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { LucideIcon, ClipboardList, Wrench, PhoneCall } from "lucide-react";
-import { reveal, revealReduced, revealStagger } from "@/lib/motion";
+import { fadeUp, slideInLeft, slideInRight, springSnappy, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type Step = {
   number: string;
@@ -46,20 +46,37 @@ export default function HowItWorks() {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-        <motion.div className="text-center mb-12 md:mb-14" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
+        <motion.div
+          className="text-center mb-12 md:mb-14"
+          variants={fadeUp}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             How It <span className="gradient-text">Works</span>
           </h2>
           <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">Simple steps. Clear timeline. No technical work on your side.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12"
+          variants={staggerContainer}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isLast = index === steps.length - 1;
 
             return (
-              <motion.div key={step.number} className="relative" {...revealStagger(index, prefersReducedMotion)} initial={false}>
+              <motion.div
+                key={step.number}
+                className="relative"
+                variants={index % 2 === 0 ? slideInLeft : slideInRight}
+                initial={prefersReducedMotion ? false : undefined}
+              >
                 {!isLast && (
                   <div className="hidden md:block absolute top-16 left-full w-full h-0.5">
                     <motion.div
@@ -80,8 +97,8 @@ export default function HowItWorks() {
 
                   <motion.div
                     className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-[#111118] border border-white/[0.04] flex items-center justify-center"
-                    whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
+                    whileHover={prefersReducedMotion ? undefined : { scale: 1.1, rotate: 5 }}
+                    transition={springSnappy}
                   >
                     <Icon className="w-10 h-10 text-[#8B5CF6]" />
                   </motion.div>
@@ -92,9 +109,15 @@ export default function HowItWorks() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        <motion.div className="text-center mt-10 md:mt-12" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
+        <motion.div
+          className="text-center mt-10 md:mt-12"
+          variants={fadeUp}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           <Link href="#services" className="btn-secondary px-8 py-4">
             See Our Products
           </Link>
