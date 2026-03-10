@@ -1,11 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import type { ComponentType } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import type { ComponentType, KeyboardEvent } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  LayoutGroup,
+} from "framer-motion";
 import { Check, Globe, MessageSquareHeart, PhoneCall, Wrench } from "lucide-react";
-import { fadeUp, viewportOnce } from "@/lib/motion";
+import {
+  fadeUp,
+  staggerContainer,
+  staggerItem,
+  viewportOnce,
+} from "@/lib/motion";
 
 type ProductTier = "hero" | "small";
 
@@ -88,19 +98,17 @@ const products: Product[] = [
   },
 ];
 
-function DetailPanel({ product }: { product: Product }) {
+const PANEL_ID = "product-detail-panel";
+
+/* ─── Detail panel content (shared between mobile & desktop) ─── */
+function DetailPanelContent({ product }: { product: Product }) {
   const Icon = product.icon;
   const isHero = product.tier === "hero";
   const features = Array.isArray(product.features) ? product.features : [];
+  const hasFeatures = features.length > 0;
 
   return (
-    <motion.div
-      key={product.productName}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="bg-[#111118]/60 border border-white/[0.06] rounded-3xl p-8 md:p-10"
-    >
+    <div className="bg-[#111118]/60 border border-white/[0.06] rounded-3xl p-8 md:p-10 min-h-[420px] lg:min-h-[480px]">
       {isHero ? (
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-7 md:gap-10 items-start">
           {/* Left column */}
@@ -164,7 +172,7 @@ function DetailPanel({ product }: { product: Product }) {
             </div>
           </div>
 
-          {/* Right column - features */}
+          {/* Right column - features sub-card */}
           <div className="rounded-2xl border border-white/[0.12] bg-[#0F0F18]/70 p-5 md:p-6 shadow-[inset_0_0_60px_rgba(139,92,246,0.1)]">
             <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-4">
               What Cadence handles
@@ -182,7 +190,7 @@ function DetailPanel({ product }: { product: Product }) {
           </div>
         </div>
       ) : (
-        /* Non-hero: simpler single-column layout */
+        /* Non-hero layout */
         <div className="flex flex-col">
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <span className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">
@@ -206,7 +214,11 @@ function DetailPanel({ product }: { product: Product }) {
             {product.productName}
           </h3>
 
-          <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-5">
+          <p
+            className={`text-[#A1A1AA] leading-relaxed ${
+              !hasFeatures ? "text-base mb-6" : "text-[15px] mb-5"
+            }`}
+          >
             {product.valueProp}
           </p>
 
@@ -220,8 +232,15 @@ function DetailPanel({ product }: { product: Product }) {
           </p>
           <p className="text-xs text-[#71717A] mt-1 mb-4">{product.priceContext}</p>
 
-          <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium mb-6">
-            <Check className="w-3.5 h-3.5" aria-hidden="true" />
+          <div
+            className={`inline-flex items-center gap-1.5 font-medium mb-6 ${
+              !hasFeatures ? "text-sm text-[#A78BFA]" : "text-xs text-[#A78BFA]"
+            }`}
+          >
+            <Check
+              className={!hasFeatures ? "w-4 h-4" : "w-3.5 h-3.5"}
+              aria-hidden="true"
+            />
             <span>{product.microProof}</span>
           </div>
 
@@ -243,14 +262,100 @@ function DetailPanel({ product }: { product: Product }) {
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
+/* ─── Animated detail panel wrapper ─── */
+function AnimatedDetailPanel({
+  product,
+  selectedIndex,
+  reducedMotion,
+}: {
+  product: Product;
+  selectedIndex: number;
+  reducedMotion: boolean | null;
+}) {
+  return (
+    <div
+      id={PANEL_ID}
+      role="tabpanel"
+      aria-labelledby={`product-tab-${selectedIndex}`}
+      tabIndex={0}
+    >
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={selectedIndex}
+          initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
+          animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+          exit={
+            reducedMotion
+              ? { opacity: 0, transition: { duration: 0.1 } }
+              : { opacity: 0, y: 8, transition: { duration: 0.15, ease: "easeIn" } }
+          }
+          transition={
+            reducedMotion
+              ? { duration: 0.15 }
+              : { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+          }
+        >
+          <DetailPanelContent product={product} />
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ─── Main component ─── */
 export default function ProductSidebar() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
   const selectedProduct = products[selectedIndex];
+
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const tabStripRef = useRef<HTMLDivElement>(null);
+  const sidebarRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Auto-scroll active tab into view (mobile)
+  useEffect(() => {
+    const activeTab = tabRefs.current[selectedIndex];
+    if (activeTab) {
+      activeTab.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [selectedIndex]);
+
+  // Keyboard navigation
+  const handleTabKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLButtonElement>, direction: "horizontal" | "vertical") => {
+      const prev = direction === "horizontal" ? "ArrowLeft" : "ArrowUp";
+      const next = direction === "horizontal" ? "ArrowRight" : "ArrowDown";
+
+      if (e.key === prev) {
+        e.preventDefault();
+        const newIndex = selectedIndex > 0 ? selectedIndex - 1 : products.length - 1;
+        setSelectedIndex(newIndex);
+        if (direction === "horizontal") {
+          tabRefs.current[newIndex]?.focus();
+        } else {
+          sidebarRefs.current[newIndex]?.focus();
+        }
+      } else if (e.key === next) {
+        e.preventDefault();
+        const newIndex = selectedIndex < products.length - 1 ? selectedIndex + 1 : 0;
+        setSelectedIndex(newIndex);
+        if (direction === "horizontal") {
+          tabRefs.current[newIndex]?.focus();
+        } else {
+          sidebarRefs.current[newIndex]?.focus();
+        }
+      }
+    },
+    [selectedIndex],
+  );
 
   return (
     <section className="pt-28 pb-16 md:pt-32 md:pb-20 bg-transparent relative" id="services">
@@ -276,55 +381,141 @@ export default function ProductSidebar() {
           </p>
         </motion.div>
 
-        {/* Mobile layout (< 1024px): horizontal scroll labels + detail below */}
-        <div className="lg:hidden">
-          <div className="flex gap-4 overflow-x-auto pb-4 mb-6 scrollbar-hide">
-            {products.map((product, index) => (
-              <button
-                key={product.productName}
-                onClick={() => setSelectedIndex(index)}
-                className={`shrink-0 text-xl font-extrabold transition-colors duration-200 pb-2 ${
-                  selectedIndex === index
-                    ? "text-white border-b-2 border-[#8B5CF6]"
-                    : "text-[#52525B] hover:text-[#A1A1AA]"
-                }`}
-                style={{ fontFamily: "var(--font-syne), sans-serif" }}
-              >
-                {product.productName}
-              </button>
-            ))}
+        <LayoutGroup>
+          {/* ─── Mobile/Tablet layout (< 1024px) ─── */}
+          <div className="lg:hidden">
+            {/* Tab strip */}
+            <div
+              ref={tabStripRef}
+              role="tablist"
+              aria-label="Product selector"
+              className="flex gap-2 overflow-x-auto hide-scrollbar pb-4 mb-6"
+              style={{ scrollSnapType: "x mandatory" }}
+            >
+              {products.map((product, index) => {
+                const isActive = selectedIndex === index;
+                return (
+                  <motion.button
+                    key={product.productName}
+                    id={`product-tab-mobile-${index}`}
+                    ref={(el) => {
+                      tabRefs.current[index] = el;
+                    }}
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls={PANEL_ID}
+                    tabIndex={isActive ? 0 : -1}
+                    onClick={() => setSelectedIndex(index)}
+                    onKeyDown={(e) => handleTabKeyDown(e, "horizontal")}
+                    whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
+                    className={`relative shrink-0 px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors duration-200 ${
+                      isActive
+                        ? "text-white"
+                        : "text-[#52525B] border border-transparent hover:text-[#A1A1AA]"
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-syne), sans-serif",
+                      scrollSnapAlign: "start",
+                    }}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="tab-indicator"
+                        className="absolute inset-0 rounded-full bg-[#8B5CF6]/20 border border-[#8B5CF6]/40"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{product.productName}</span>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Detail panel */}
+            <motion.div
+              variants={fadeUp}
+              initial={prefersReducedMotion ? false : "hidden"}
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
+              <AnimatedDetailPanel
+                product={selectedProduct}
+                selectedIndex={selectedIndex}
+                reducedMotion={prefersReducedMotion}
+              />
+            </motion.div>
           </div>
-          <DetailPanel product={selectedProduct} />
-        </div>
 
-        {/* Desktop layout (≥ 1024px): sidebar + detail panel */}
-        <div className="hidden lg:grid lg:grid-cols-[28%_72%] lg:gap-8 items-start">
-          {/* Sidebar labels */}
-          <nav className="flex flex-col gap-6 pt-4" aria-label="Product selector">
-            {products.map((product, index) => (
-              <button
-                key={product.productName}
-                onClick={() => setSelectedIndex(index)}
-                className={`text-left text-4xl lg:text-5xl font-extrabold transition-colors duration-200 cursor-pointer leading-tight ${
-                  selectedIndex === index
-                    ? "text-white border-l-[3px] border-[#8B5CF6] pl-5"
-                    : "text-[#52525B] hover:text-[#A1A1AA] pl-[calc(3px+1.25rem)]"
-                }`}
-                style={{
-                  fontFamily: "var(--font-syne), sans-serif",
-                  ...(selectedIndex === index
-                    ? { textShadow: "0 0 30px rgba(139,92,246,0.3)" }
-                    : {}),
-                }}
-              >
-                {product.productName}
-              </button>
-            ))}
-          </nav>
+          {/* ─── Desktop layout (≥ 1024px) ─── */}
+          <div className="hidden lg:grid lg:grid-cols-[28%_72%] lg:gap-8 items-start">
+            {/* Sidebar labels */}
+            <motion.nav
+              role="tablist"
+              aria-label="Product selector"
+              aria-orientation="vertical"
+              className="relative flex flex-col gap-6 pt-4"
+              variants={staggerContainer}
+              initial={prefersReducedMotion ? false : "hidden"}
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
+              {products.map((product, index) => {
+                const isActive = selectedIndex === index;
+                return (
+                  <motion.button
+                    key={product.productName}
+                    id={`product-tab-${index}`}
+                    ref={(el) => {
+                      sidebarRefs.current[index] = el;
+                    }}
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls={PANEL_ID}
+                    tabIndex={isActive ? 0 : -1}
+                    onClick={() => setSelectedIndex(index)}
+                    onKeyDown={(e) => handleTabKeyDown(e, "vertical")}
+                    variants={prefersReducedMotion ? undefined : staggerItem}
+                    whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+                    whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className={`relative text-left text-4xl lg:text-5xl font-extrabold cursor-pointer leading-tight transition-colors duration-200 pl-[calc(3px+1.25rem)] ${
+                      isActive ? "text-white" : "text-[#52525B] hover:text-[#A1A1AA]"
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-syne), sans-serif",
+                      ...(isActive
+                        ? { textShadow: "0 0 30px rgba(139,92,246,0.3)" }
+                        : {}),
+                    }}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="sidebar-indicator"
+                        className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#8B5CF6] rounded-full"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    {product.productName}
+                  </motion.button>
+                );
+              })}
+            </motion.nav>
 
-          {/* Detail panel */}
-          <DetailPanel product={selectedProduct} />
-        </div>
+            {/* Detail panel */}
+            <motion.div
+              variants={fadeUp}
+              initial={prefersReducedMotion ? false : "hidden"}
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
+              <AnimatedDetailPanel
+                product={selectedProduct}
+                selectedIndex={selectedIndex}
+                reducedMotion={prefersReducedMotion}
+              />
+            </motion.div>
+          </div>
+        </LayoutGroup>
       </div>
     </section>
   );
