@@ -2,9 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { trackGetStartedCompletion } from "@/lib/analytics";
+import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 const ONBOARD_ENDPOINT = "https://cadence-v2-production.up.railway.app/api/onboard";
 
@@ -395,6 +397,7 @@ const initialState: FormState = {
 
 export default function GetStartedClient() {
   const router = useRouter();
+  const prefersReducedMotion = useReducedMotion();
 
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(initialState);
@@ -619,13 +622,23 @@ export default function GetStartedClient() {
 
       <section className="mesh-bg pb-20 pt-32">
         <div className="mx-auto max-w-5xl px-6">
-          <p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6]">Cadence Onboarding</p>
-          <h1 className="mb-4 text-4xl font-semibold md:text-5xl">Get Started with Your AI Receptionist</h1>
-          <p className="mb-8 max-w-3xl text-lg text-[#A1A1AA]">
+          <motion.p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6] will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible">
+            Cadence Onboarding
+          </motion.p>
+          <motion.h1 className="mb-4 text-4xl font-semibold md:text-5xl will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible">
+            Get Started with Your AI Receptionist
+          </motion.h1>
+          <motion.p className="mb-8 max-w-3xl text-lg text-[#A1A1AA] will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible" transition={prefersReducedMotion ? undefined : { delay: 0.12 }}>
             Complete this onboarding wizard and we will configure Cadence for your business.
-          </p>
+          </motion.p>
 
-          <div className="rounded-2xl border border-white/10 bg-[#12121A]/90 p-6 md:p-8">
+          <motion.div
+            className="rounded-2xl border border-white/10 bg-[#12121A]/90 p-6 md:p-8 will-change-transform"
+            variants={staggerContainer}
+            initial={prefersReducedMotion ? false : "hidden"}
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             <div className="mb-8">
               <div className="mb-3 flex items-center justify-between gap-3 text-xs uppercase tracking-wide text-[#A1A1AA]">
                 <span>Step {step} of 5</span>
@@ -1137,7 +1150,7 @@ export default function GetStartedClient() {
                 </button>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 

@@ -2,12 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+  useReducedMotion,
+  useTransform,
+  useMotionTemplate,
+} from "framer-motion";
 import BrandLogo from "@/components/BrandLogo";
-import { buttonHover } from "@/lib/motion";
+import { buttonHover, scaleIn } from "@/lib/motion";
 
 const productLinks = [
-  { href: "/services/cadence", label: "Cadence — AI Phone Agent" },
+  { href: "/services/cadence", label: "Cadence - AI Phone Agent" },
   { href: "/services/review-funnel", label: "Review Funnel" },
   { href: "/services/websites", label: "Web + Monthly SEO" },
   { href: "/services/custom-apps", label: "Custom Apps" },
@@ -23,8 +31,16 @@ const navLinks = [
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
   const { scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
+  const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.85]);
+  const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.1]);
+  const blur = useTransform(scrollY, [0, 100], [0, 12]);
+  const navScale = useTransform(scrollY, [0, 100], [1, 0.98]);
+  const background = useMotionTemplate`rgba(10, 10, 15, ${bgOpacity})`;
+  const backdropFilter = useMotionTemplate`blur(${blur}px)`;
+  const border = useMotionTemplate`1px solid rgba(255, 255, 255, ${borderOpacity})`;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 50);
@@ -33,74 +49,101 @@ export default function Navigation() {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 px-3 md:px-4 ${
-          isScrolled ? "pt-3" : "pt-0"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 px-3 transition-[background-color,border-color,box-shadow] duration-300 md:px-4 ${isScrolled ? "pt-3" : "pt-0"}`}
         initial={prefersReducedMotion ? { opacity: 0 } : { y: -100 }}
         animate={prefersReducedMotion ? { opacity: 1 } : { y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div
-          className={`h-16 flex items-center justify-between gap-3 transition-[background-color,border-color,backdrop-filter] duration-300 border border-transparent ${
-            isScrolled ? "glass max-w-4xl mx-auto rounded-full border-white/10 px-5" : "max-w-7xl mx-auto px-6"
-          }`}
+        <motion.div
+          className={`mx-auto flex h-16 items-center justify-between gap-3 border border-transparent px-6 transition-[background-color,border-color,backdrop-filter] duration-300 ${isScrolled ? "glass max-w-4xl rounded-full border-white/10 px-5" : "max-w-7xl"}`}
+          style={
+            prefersReducedMotion
+              ? undefined
+              : {
+                  background,
+                  backdropFilter,
+                  WebkitBackdropFilter: backdropFilter,
+                  border,
+                  scale: navScale,
+                }
+          }
         >
           <BrandLogo size="sm" showDescriptor={false} className="shrink-0" />
 
-          <nav className="hidden md:flex items-center gap-8">
-            <div className="relative group">
-              <button className="relative text-[#A1A1AA] group-hover:text-white transition-colors inline-flex items-center gap-1">
-                Products <span className="text-xs">▾</span>
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#8B5CF6] transition-[width] duration-300 group-hover:w-full" />
+          <nav className="hidden items-center gap-8 md:flex">
+            <div
+              className="relative"
+              onMouseEnter={() => setIsProductsOpen(true)}
+              onMouseLeave={() => setIsProductsOpen(false)}
+              onFocusCapture={() => setIsProductsOpen(true)}
+              onBlurCapture={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  setIsProductsOpen(false);
+                }
+              }}
+            >
+              <button className="relative inline-flex items-center gap-1 text-[#A1A1AA] transition-colors hover:text-white">
+                Products <span className="text-xs">▼</span>
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-[#8B5CF6] transition-[width] duration-300 ${isProductsOpen ? "w-full" : "w-0"}`} />
               </button>
-              <div className="absolute top-full left-0 pt-4 hidden group-hover:block">
-                <div className="w-64 rounded-2xl border border-white/10 bg-[#111118] p-3 shadow-xl">
-                  {productLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="block rounded-xl px-3 py-2 text-[#A1A1AA] hover:text-white hover:bg-white/5 transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <AnimatePresence>
+                {isProductsOpen && (
+                  <motion.div
+                    className="absolute left-0 top-full origin-top-left pt-4"
+                    initial={prefersReducedMotion ? { opacity: 1 } : "hidden"}
+                    animate={prefersReducedMotion ? { opacity: 1 } : "visible"}
+                    exit={prefersReducedMotion ? { opacity: 0 } : "hidden"}
+                    variants={prefersReducedMotion ? undefined : scaleIn}
+                  >
+                    <div className="w-64 rounded-2xl border border-white/10 bg-[#111118] p-3 shadow-xl">
+                      {productLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="block rounded-xl px-3 py-2 text-[#A1A1AA] transition-colors hover:bg-white/5 hover:text-white"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="relative text-[#A1A1AA] hover:text-white transition-colors group">
+              <Link key={link.href} href={link.href} className="group relative text-[#A1A1AA] transition-colors hover:text-white">
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#8B5CF6] transition-[width] duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-[#8B5CF6] transition-[width] duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden items-center gap-4 md:flex">
             <Link
               href="https://cadence-m48n.onrender.com/login"
-              className="text-sm text-[#A1A1AA] hover:text-white transition-colors"
+              className="text-sm text-[#A1A1AA] transition-colors hover:text-white"
             >
               Client Login
             </Link>
             <Link href="/get-started">
               <motion.button
-                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium text-sm"
-                {...buttonHover}
+                className="rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-6 py-2.5 text-sm font-medium text-white will-change-transform"
+                {...(prefersReducedMotion ? {} : buttonHover)}
               >
                 Get Started
               </motion.button>
             </Link>
           </div>
 
-          <button className="md:hidden p-2 text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Toggle menu">
-            <div className="w-6 h-5 flex flex-col justify-between">
-              <motion.span animate={{ rotate: isMobileMenuOpen ? 45 : 0, y: isMobileMenuOpen ? 8 : 0 }} className="w-full h-0.5 bg-white origin-left" />
-              <motion.span animate={{ opacity: isMobileMenuOpen ? 0 : 1 }} className="w-full h-0.5 bg-white" />
-              <motion.span animate={{ rotate: isMobileMenuOpen ? -45 : 0, y: isMobileMenuOpen ? -8 : 0 }} className="w-full h-0.5 bg-white origin-left" />
+          <button className="p-2 text-white md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Toggle menu">
+            <div className="flex h-5 w-6 flex-col justify-between">
+              <motion.span animate={{ rotate: isMobileMenuOpen ? 45 : 0, y: isMobileMenuOpen ? 8 : 0 }} className="h-0.5 w-full origin-left bg-white" />
+              <motion.span animate={{ opacity: isMobileMenuOpen ? 0 : 1 }} className="h-0.5 w-full bg-white" />
+              <motion.span animate={{ rotate: isMobileMenuOpen ? -45 : 0, y: isMobileMenuOpen ? -8 : 0 }} className="h-0.5 w-full origin-left bg-white" />
             </div>
           </button>
-        </div>
+        </motion.div>
       </motion.header>
 
       <AnimatePresence>
@@ -112,7 +155,7 @@ export default function Navigation() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <nav className="flex flex-col items-center justify-center h-full gap-6">
+            <nav className="flex h-full flex-col items-center justify-center gap-6">
               <BrandLogo size="md" showDescriptor className="mb-4" />
               {productLinks.map((link, index) => (
                 <motion.div key={link.href} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }}>
@@ -146,7 +189,7 @@ export default function Navigation() {
               >
                 <Link
                   href="https://cadence-m48n.onrender.com/login"
-                  className="text-sm text-[#A1A1AA] hover:text-white transition-colors"
+                  className="text-sm text-[#A1A1AA] transition-colors hover:text-white"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Client Login
@@ -155,7 +198,7 @@ export default function Navigation() {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.78 }}>
                 <Link
                   href="/get-started"
-                  className="mt-8 px-8 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-medium"
+                  className="mt-8 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-3 font-medium text-white"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Get Started

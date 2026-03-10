@@ -4,8 +4,9 @@ import Link from "next/link";
 import { ReactLenis } from "lenis/react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { TrendingUp, Clock, Users, DollarSign, ArrowRight } from "lucide-react";
+import { fadeUp, viewportOnce } from "@/lib/motion";
 
 const caseStudies = [
   {
@@ -59,6 +60,8 @@ const caseStudies = [
 ];
 
 export default function AutomationsPageClient() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <ReactLenis root>
       <main className="min-h-screen bg-[#0A0A0F]">
@@ -69,17 +72,18 @@ export default function AutomationsPageClient() {
             <motion.h1
               className="text-5xl md:text-7xl font-semibold mb-6"
               style={{ fontFamily: "var(--font-playfair), serif" }}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              variants={fadeUp}
+              initial={prefersReducedMotion ? false : "hidden"}
+              animate="visible"
             >
               Automation <span className="gradient-text">Case Studies</span>
             </motion.h1>
             <motion.p
               className="text-xl text-[#A1A1AA] max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              variants={fadeUp}
+              initial={prefersReducedMotion ? false : "hidden"}
+              animate="visible"
+              transition={prefersReducedMotion ? undefined : { delay: 0.12 }}
             >
               Real business automation results from operations, sales, and customer support workflows.
             </motion.p>
@@ -96,9 +100,9 @@ export default function AutomationsPageClient() {
                 <motion.div
                   key={study.company}
                   className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={viewportOnce}
                   transition={{ duration: 0.6 }}
                 >
                   <div className={index % 2 === 1 ? "order-2 lg:order-2" : "order-2 lg:order-1"}>
@@ -141,7 +145,7 @@ export default function AutomationsPageClient() {
 
         <section className="py-20 bg-[#12121A]">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <motion.div initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={viewportOnce}>
               <h2 className="text-3xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
                 Want Similar <span className="gradient-text">Results</span>?
               </h2>

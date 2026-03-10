@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { Calendar, PhoneCall } from "lucide-react";
+import ShimmerButton from "@/components/ShimmerButton";
+import { springSmooth } from "@/lib/motion";
 
 export default function StickyMobileCTA() {
   const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,8 +23,11 @@ export default function StickyMobileCTA() {
   if (!isVisible) return null;
 
   return (
-    <div
+    <motion.div
       className="fixed bottom-0 left-0 right-0 z-40 md:hidden"
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 80 }}
+      animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      transition={prefersReducedMotion ? undefined : springSmooth}
       style={{
         background: "rgba(10, 10, 15, 0.85)",
         backdropFilter: "blur(12px)",
@@ -29,14 +36,10 @@ export default function StickyMobileCTA() {
       }}
     >
       <div className="flex gap-3 px-4 py-3 max-w-lg mx-auto">
-        <a
-          href="tel:+14806313993"
-          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold text-sm"
-          aria-label="Call Cadence"
-        >
+        <ShimmerButton href="tel:+14806313993" ariaLabel="Call Cadence" className="flex-1 py-3">
           <PhoneCall className="w-4 h-4" />
           Call Now
-        </a>
+        </ShimmerButton>
         <Link
           href="/contact"
           className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full border border-white/20 text-white font-semibold text-sm"
@@ -46,6 +49,6 @@ export default function StickyMobileCTA() {
           Book Demo
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }

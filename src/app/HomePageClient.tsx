@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
+import ScrollFade from "@/components/ScrollFade";
 import SocialProofBar from "@/components/SocialProofBar";
 import ProofBar from "@/components/ProofBar";
 import ServicesBento from "@/components/ServicesBento";
@@ -32,12 +33,15 @@ export default function HomePageClient() {
       <main id="main-content" className="min-h-screen bg-[#0A0A0F] pb-20 md:pb-0">
         <Navigation />
         <Hero />
+        <ScrollFade />
         <SocialProofBar />
         <ProofBar />
         <ServicesBento />
+        <ScrollFade />
         <OfferLadder />
         <WhoItsFor />
         <HowItWorks />
+        <ScrollFade />
         <Testimonials />
         <FAQ />
         <CTA />

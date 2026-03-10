@@ -55,14 +55,14 @@ export default function FAQ() {
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
-              <motion.div key={index} {...revealStagger(index, prefersReducedMotion)}>
+              <motion.div key={index} {...revealStagger(index, prefersReducedMotion)} initial={prefersReducedMotion ? false : undefined}>
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="w-full text-left p-6 bg-[#111118] border border-white/[0.04] rounded-2xl hover:border-[#8B5CF6]/30 hover:shadow-[0_0_80px_rgba(139,92,246,0.08)] transition-[border-color,box-shadow] duration-200 group"
                 >
                   <div className="flex items-center justify-between gap-4">
                     <span className="font-semibold text-lg text-white group-hover:text-[#8B5CF6] transition-colors">{faq.question}</span>
-                    <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                    <motion.div animate={prefersReducedMotion ? undefined : { rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
                       {isOpen ? <Minus className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" /> : <Plus className="w-5 h-5 text-[#52525B] group-hover:text-[#8B5CF6] transition-colors" />}
                     </motion.div>
                   </div>
@@ -70,9 +70,9 @@ export default function FAQ() {
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
+                        initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
+                        animate={prefersReducedMotion ? { opacity: 1 } : { height: "auto", opacity: 1 }}
+                        exit={prefersReducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >

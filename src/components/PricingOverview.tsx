@@ -13,7 +13,7 @@ const tiers = [
   },
   {
     title: "Website Plans",
-    product: "Launch $500 • Enterprise $1,000",
+    product: "Launch $499 • Enterprise $999",
     price: "One-time build + optional monthly plans",
     cta: { label: "Get a Free Quote", href: "/contact" },
   },
@@ -50,6 +50,7 @@ export default function PricingOverview() {
               <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">{tier.title}</p>
               <h3 className="text-xl font-semibold mb-2">{tier.product}</h3>
               <p className="text-[#A1A1AA] mb-4 text-[15px] leading-relaxed">{tier.price}</p>
+              {tier.title === "Website Plans" ? <p className="text-xs text-[#71717A] mt-1 mb-4">+ $50/mo hosting required</p> : null}
               <Link href={tier.cta.href} className="inline-flex w-fit mt-auto px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">
                 {tier.cta.label}
               </Link>

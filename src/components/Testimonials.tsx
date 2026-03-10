@@ -1,10 +1,10 @@
 "use client";
 
 import { ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Star } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
-import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
+import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type Testimonial = {
   quote: ReactNode;
@@ -36,27 +36,48 @@ const testimonials: Testimonial[] = [
   },
 ];
 
+const testimonialReveal: Variants = {
+  hidden: { opacity: 0, y: 30, rotate: -2 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotate: 0,
+    transition: { type: "spring", stiffness: 100, damping: 20, mass: 0.5 },
+  },
+};
+
 export default function Testimonials() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
     <section className="py-28 md:py-32 relative overflow-hidden mesh-bg">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.div className="text-center mb-14 md:mb-16" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
+        <motion.div
+          className="text-center mb-14 md:mb-16"
+          variants={fadeUp}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
             What Business Owners <span className="gradient-text">Say</span>
           </h2>
           <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">What business owners say about working with Autom8.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={staggerContainer}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
+          {testimonials.map((testimonial) => (
             <motion.div
               key={testimonial.attribution}
               className="h-full"
-              {...revealStagger(index, prefersReducedMotion)}
-              initial={false}
-              {...(prefersReducedMotion ? {} : cardHover)}
+              variants={testimonialReveal}
+              initial={prefersReducedMotion ? false : undefined}
             >
               <div className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 h-full">
                 <div className="flex gap-1 mb-4">
@@ -66,9 +87,9 @@ export default function Testimonials() {
                 </div>
 
                 <p className="text-[#A1A1AA] mb-6 leading-relaxed text-[15px]">
-                  <span aria-hidden="true">“</span>
+                  <span aria-hidden="true">&ldquo;</span>
                   {testimonial.quote}
-                  <span aria-hidden="true">”</span>
+                  <span aria-hidden="true">&rdquo;</span>
                 </p>
 
                 <div className="flex items-center gap-4">
@@ -82,7 +103,7 @@ export default function Testimonials() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

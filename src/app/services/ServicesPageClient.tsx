@@ -4,8 +4,9 @@ import Link from "next/link";
 import { ReactLenis } from "lenis/react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Globe, Wrench, Star, LineChart, Check } from "lucide-react";
+import { fadeUp, viewportOnce } from "@/lib/motion";
 
 const services = [
   {
@@ -35,6 +36,8 @@ const services = [
 ];
 
 export default function ServicesPageClient() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <ReactLenis root>
       <main className="min-h-screen bg-[#0A0A0F]">
@@ -45,17 +48,18 @@ export default function ServicesPageClient() {
             <motion.h1
               className="text-5xl md:text-7xl font-semibold mb-6"
               style={{ fontFamily: "var(--font-playfair), serif" }}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              variants={fadeUp}
+              initial={prefersReducedMotion ? false : "hidden"}
+              animate="visible"
             >
 Tools for Local Businesses
             </motion.h1>
             <motion.p
               className="text-xl text-[#A1A1AA] max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              variants={fadeUp}
+              initial={prefersReducedMotion ? false : "hidden"}
+              animate="visible"
+              transition={prefersReducedMotion ? undefined : { delay: 0.12 }}
             >
 Answer every call, collect more reviews, and get found online - without the tech headache.
             </motion.p>
@@ -72,11 +76,11 @@ What We Build
                 <motion.div
                   key={service.title}
                   className="bg-[#12121A] border border-white/5 rounded-2xl p-8 hover:border-[#8B5CF6]/30 transition-all duration-300 group"
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={viewportOnce}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -5 }}
+                  whileHover={prefersReducedMotion ? undefined : { y: -5 }}
                 >
                   <div className="w-14 h-14 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <service.icon className="w-7 h-7 text-[#8B5CF6]" />
@@ -147,7 +151,7 @@ More Services
 
         <section className="py-20">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <motion.div initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={viewportOnce}>
               <h2 className="text-3xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
                 Plan Your Build and Growth Timeline
               </h2>
