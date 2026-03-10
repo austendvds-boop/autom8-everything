@@ -7,26 +7,21 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Pricing | Autom8 Everything",
-  description: "Simple pricing for Cadence, review funnel, websites, SEO/content, and custom apps.",
+  description: "Simple pricing for Cadence, review funnel, websites, monthly plans, and custom apps.",
   path: "/pricing",
 });
 
 const websiteTiers = [
   {
     name: "Launch",
-    price: "$1,500",
-    details: ["5 pages", "Mobile responsive", "Professional design", "Core SEO setup"],
+    price: "$500",
+    details: ["Up to 5 pages", "Mobile-ready", "Contact/booking form", "Basic on-page SEO"],
   },
   {
-    name: "Scale",
-    price: "$3,500",
-    details: ["10+ pages", "Custom design", "SEO-focused structure", "Blog setup"],
+    name: "Enterprise",
+    price: "$1,000",
+    details: ["Up to 10 pages", "Everything in Launch", "Custom features", "Built for your workflow"],
     featured: true,
-  },
-  {
-    name: "Custom",
-    price: "Let's Talk",
-    details: ["Bespoke build", "Advanced integrations", "Ongoing support", "Built for your workflow"],
   },
 ];
 
@@ -74,23 +69,19 @@ export default function PricingPage() {
 
           <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Review Funnel</p>
-            <h2 className="text-3xl font-semibold mb-2">Starter $79/mo</h2>
-            <p className="text-[#A1A1AA] mb-3">Growth $149/mo • Pro is a contact-us plan.</p>
-            <p className="text-[#A1A1AA] mb-6">Set-it-and-forget-it review follow-up for local businesses.</p>
+            <h2 className="text-3xl font-semibold mb-2">$79/mo</h2>
+            <p className="text-[#A1A1AA] mb-6">Automatic review follow-ups after every job. Set it and forget it.</p>
             <div className="mt-auto flex flex-col sm:flex-row gap-3">
               <Link href="/portal/checkout?product=review_funnel" className="inline-flex w-fit px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
-                Get Started
-              </Link>
-              <Link href="/services/review-funnel" className="inline-flex w-fit px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
-                Learn More
+                Get More Reviews
               </Link>
             </div>
           </article>
 
           <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 md:col-span-2 h-full flex flex-col">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-3">Website Creation</p>
-            <h2 className="text-3xl font-semibold mb-6">Launch / Scale / Custom</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <h2 className="text-3xl font-semibold mb-6">Launch / Enterprise</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {websiteTiers.map((tier) => (
                 <div
                   key={tier.name}
@@ -109,17 +100,38 @@ export default function PricingPage() {
                 </div>
               ))}
             </div>
-            <Link href="/services/websites" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
-              View Website Details
+            <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+              Get a Free Quote
             </Link>
           </article>
 
-          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col">
-            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">SEO & Content</p>
-            <h2 className="text-3xl font-semibold mb-2">Monthly Retainer</h2>
-            <p className="text-[#A1A1AA] mb-6">Contact us for a quote based on your market and goals.</p>
-            <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60">
-              Contact Us
+          <article className="rounded-2xl border border-white/10 bg-[#12121A] p-8 md:col-span-2 h-full flex flex-col">
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-3">Monthly Plans</p>
+            <h2 className="text-3xl font-semibold mb-2">Add-on to any website</h2>
+            <p className="text-[#A1A1AA] mb-6">Keep your site running and growing after launch.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div className="rounded-xl p-5 border border-white/10 bg-[#0F0F16] h-full flex flex-col">
+                <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-1">Hosting</p>
+                <p className="text-2xl font-semibold mb-3">$50<span className="text-base text-[#A1A1AA]">/mo</span></p>
+                <ul className="space-y-2 text-sm text-[#A1A1AA] flex-1">
+                  <li className="flex items-start gap-2.5"><Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden /><span>Hosting + uptime monitoring</span></li>
+                  <li className="flex items-start gap-2.5"><Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden /><span>1 site edit per month</span></li>
+                </ul>
+              </div>
+              <div className="rounded-xl p-5 border border-[#8B5CF6]/50 bg-[#0A0A0F] h-full flex flex-col">
+                <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-1">Growth</p>
+                <p className="text-2xl font-semibold mb-3">$299<span className="text-base text-[#A1A1AA]">/mo</span></p>
+                <ul className="space-y-2 text-sm text-[#A1A1AA] flex-1">
+                  <li className="flex items-start gap-2.5"><Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden /><span>Everything in Hosting</span></li>
+                  <li className="flex items-start gap-2.5"><Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden /><span>2 blog posts per month</span></li>
+                  <li className="flex items-start gap-2.5"><Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden /><span>Google Business profile updates</span></li>
+                  <li className="flex items-start gap-2.5"><Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden /><span>Local SEO optimization</span></li>
+                  <li className="flex items-start gap-2.5"><Check className="h-4 w-4 shrink-0 mt-0.5 text-[#8B5CF6]" aria-hidden /><span>Monthly performance report</span></li>
+                </ul>
+              </div>
+            </div>
+            <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
+              Get a Free Quote
             </Link>
           </article>
 
@@ -128,7 +140,7 @@ export default function PricingPage() {
             <h2 className="text-3xl font-semibold mb-2">Custom Scope</h2>
             <p className="text-[#A1A1AA] mb-6">Bespoke app builds for your exact workflow and business needs.</p>
             <Link href="/contact" className="inline-flex w-fit mt-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold">
-              Book a Consultation
+              Let's Talk
             </Link>
           </article>
         </div>
