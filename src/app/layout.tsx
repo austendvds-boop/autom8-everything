@@ -4,6 +4,7 @@ import "./globals.css";
 import { businessProfile, businessSameAs } from "@/lib/business";
 import { defaultDescription, defaultOgImage, defaultTitle, siteName, siteUrl } from "@/lib/seo";
 import AnalyticsClickTracker from "@/components/AnalyticsClickTracker";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -167,6 +168,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
         <AnalyticsClickTracker />
+        <GoogleAnalytics />
         {children}
       </body>
     </html>
