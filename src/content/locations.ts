@@ -21,7 +21,8 @@ export const locationPages: LocationPage[] = [
       "We help Phoenix service businesses build automation systems that improve response speed, reduce manual admin, and increase close rates.",
     highlights: [
       "Lead capture and response automations tuned for local-intent traffic",
-      "CRM automation for routing, follow-up, and pipeline hygiene",
+      "CRM automation for routing, follow-up, pipeline hygiene, and review request timing",
+      "Cadence AI receptionist coverage for after-hours calls and missed-lead prevention",
       "Local SEO infrastructure with service pages, schema, and citation consistency",
     ],
     faqs: [
@@ -46,8 +47,9 @@ export const locationPages: LocationPage[] = [
       "Scottsdale businesses can combine premium web experiences with backend automation to create a faster and more reliable sales process.",
     highlights: [
       "Conversion-first service page architecture with automation-ready forms",
-      "Automated appointment reminders and lead routing sequences",
+      "Automated appointment reminders, lead routing, and review follow-up sequences",
       "CRM and reporting setup for clear attribution and close-rate visibility",
+      "Cadence AI receptionist workflows for premium brands that need every call answered",
     ],
     faqs: [
       {
@@ -71,8 +73,9 @@ export const locationPages: LocationPage[] = [
       "Our Glendale automation services focus on practical systems that help owners respond faster and operate with less manual overhead.",
     highlights: [
       "Immediate lead acknowledgment and qualification workflows",
-      "Pipeline automation to reduce stale opportunities",
+      "Pipeline automation to reduce stale opportunities and trigger review collection",
       "Location-aware SEO and internal linking support",
+      "Cadence call handling support for busy teams that miss inbound leads",
     ],
     faqs: [
       {
@@ -96,8 +99,9 @@ export const locationPages: LocationPage[] = [
       "Tempe teams use our automation frameworks to reduce repetitive operations and improve consistency across lead and delivery workflows.",
     highlights: [
       "Lead-to-appointment automations for faster pipeline movement",
-      "Email and SMS follow-up sequences by lifecycle stage",
+      "Email and SMS follow-up sequences by lifecycle stage, including review asks",
       "Monthly workflow optimization and reporting",
+      "Cadence receptionist support for after-hours and overflow call coverage",
     ],
     faqs: [
       {
@@ -121,8 +125,9 @@ export const locationPages: LocationPage[] = [
       "Mesa business owners use automation to streamline team handoffs, protect follow-up speed, and improve client delivery consistency.",
     highlights: [
       "Business process automation for daily operations",
-      "CRM automation for lead assignment and follow-up",
+      "CRM automation for lead assignment, follow-up, and review funnel triggers",
       "Service-page SEO support for Mesa local search intent",
+      "Cadence AI call coverage to protect lead response outside business hours",
     ],
     faqs: [
       {
@@ -146,8 +151,9 @@ export const locationPages: LocationPage[] = [
       "Our Chandler automation agency services combine growth-focused workflow design with local SEO support and measurable conversion tracking.",
     highlights: [
       "End-to-end sales workflow automation",
-      "AI-assisted operations workflows for lean teams",
+      "AI-assisted operations workflows for lean teams, including Cadence call coverage",
       "Local content and citation support tied to conversion goals",
+      "Review follow-up systems that help Chandler businesses collect more 5-star feedback",
     ],
     faqs: [
       {

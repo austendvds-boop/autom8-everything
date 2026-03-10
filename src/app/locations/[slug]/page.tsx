@@ -85,8 +85,10 @@ export default async function LocationDetailPage({ params }: { params: Promise<{
             <h2 className="text-2xl font-semibold mb-3">Build your local automation system</h2>
             <p className="text-[#A1A1AA] mb-5">
               Review our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">service offerings</Link>, explore
-              <Link href="/services/seo-content" className="text-[#8B5CF6] hover:text-[#A78BFA]"> local SEO automation</Link>, and
-              request your <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]">custom roadmap</Link>.
+              <Link href="/services/seo-content" className="text-[#8B5CF6] hover:text-[#A78BFA]"> local SEO automation</Link>,
+              try <Link href="/services/cadence" className="text-[#8B5CF6] hover:text-[#A78BFA]">Cadence AI receptionist</Link> for after-hours calls, or set up a
+              <Link href="/services/review-funnel" className="text-[#8B5CF6] hover:text-[#A78BFA]"> review collection system</Link> to build your reputation. Ready?
+              <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]"> Request your custom roadmap</Link>.
             </p>
             <Link
               href="/contact"
