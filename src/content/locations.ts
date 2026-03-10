@@ -160,6 +160,81 @@ export const locationPages: LocationPage[] = [
       },
     ],
   },
+  {
+    slug: "gilbert",
+    city: "Gilbert",
+    state: "AZ",
+    title: "Gilbert Small Business Automation Services",
+    metaDescription:
+      "Gilbert automation services for small businesses that need lead systems, CRM follow-up, and faster response times.",
+    intro:
+      "Gilbert businesses get automation systems that capture more leads, reduce follow-up gaps, and keep sales moving without extra manual work.",
+    highlights: [
+      "Lead capture automations that respond to new inquiries fast",
+      "CRM follow-up systems that keep prospects from going cold",
+      "Small business workflows built to reduce admin and missed opportunities",
+    ],
+    faqs: [
+      {
+        question: "What kind of Gilbert businesses benefit most from automation?",
+        answer: "Service businesses that depend on phone calls, forms, and fast lead follow-up usually see the biggest gains first.",
+      },
+      {
+        question: "Can you set up lead systems for a small Gilbert team?",
+        answer: "Yes, we build lightweight lead and follow-up systems that fit small teams without adding operational overhead.",
+      },
+    ],
+  },
+  {
+    slug: "peoria",
+    city: "Peoria",
+    state: "AZ",
+    title: "Peoria Operations Automation Services",
+    metaDescription:
+      "Peoria automation services for operations workflows, team handoffs, and process optimization that reduce delays.",
+    intro:
+      "Peoria companies use our automation systems to streamline internal workflows, cut repetitive tasks, and improve operational consistency.",
+    highlights: [
+      "Workflow automation for approvals, handoffs, and recurring tasks",
+      "Operational systems that reduce bottlenecks and manual coordination",
+      "Process optimization tied to measurable speed and accountability gains",
+    ],
+    faqs: [
+      {
+        question: "Do you help improve internal workflows for Peoria teams?",
+        answer: "Yes, we map your current process, identify friction points, and automate the repetitive steps slowing your team down.",
+      },
+      {
+        question: "Can Peoria businesses start with one workflow first?",
+        answer: "Yes, many projects begin with one high-impact operations workflow before expanding into broader automation.",
+      },
+    ],
+  },
+  {
+    slug: "surprise",
+    city: "Surprise",
+    state: "AZ",
+    title: "Surprise Growth Automation Services",
+    metaDescription:
+      "Surprise automation services for CRM systems, lead management, and growth workflows that help local businesses scale.",
+    intro:
+      "Surprise businesses get growth-focused automation that strengthens CRM systems, improves lead handling, and supports more consistent revenue generation.",
+    highlights: [
+      "CRM systems configured for lead tracking and follow-up visibility",
+      "Growth automation that supports faster response and cleaner pipelines",
+      "Lead management workflows designed to help local teams scale reliably",
+    ],
+    faqs: [
+      {
+        question: "Can you improve our CRM setup for a Surprise business?",
+        answer: "Yes, we optimize CRM structure, lead stages, and follow-up workflows so your team can manage growth with less friction.",
+      },
+      {
+        question: "Do Surprise automation projects focus on lead generation only?",
+        answer: "No, we connect lead capture, CRM workflows, and follow-up systems so growth is supported end to end.",
+      },
+    ],
+  },
 ];
 
 export function getLocationBySlug(slug: string) {

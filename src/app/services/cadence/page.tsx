@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import CadenceDemoPlaceholder from "@/components/CadenceDemoPlaceholder";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import ComparisonTable from "@/components/ComparisonTable";
-import { buildFaqSchema, buildMetadata, buildServiceSchema } from "@/lib/seo";
+import { buildFaqSchema, buildMetadata } from "@/lib/seo";
 
 const faqs = [
   {
@@ -42,6 +42,46 @@ const faqs = [
     question: "Can I listen to call recordings?",
     answer:
       "You get detailed summaries after every call. Recording options depend on your plan and local regulations.",
+  },
+  {
+    question: "What is AI phone answering?",
+    answer:
+      "AI phone answering uses voice AI to answer your business calls in real time. It handles common questions, takes messages, and routes urgent calls - without a human receptionist.",
+  },
+  {
+    question: "How does an AI receptionist work for small businesses?",
+    answer:
+      "An AI receptionist like Cadence answers every call with your custom greeting, handles FAQs about your services and hours, and sends you a summary. It works 24/7 so you never miss a lead.",
+  },
+  {
+    question: "Is AI phone answering better than voicemail?",
+    answer:
+      "Yes. 80% of callers won't leave a voicemail. AI phone answering engages callers immediately, answers their questions, and captures their information - so you don't lose the lead.",
+  },
+  {
+    question: "Can I use an automated phone answering service in Phoenix?",
+    answer:
+      "Yes. Cadence is built by Autom8 Everything in Phoenix, AZ and serves local businesses across the Valley. Setup takes about 5 minutes.",
+  },
+  {
+    question: "How much does an AI receptionist cost compared to hiring?",
+    answer:
+      "Cadence costs $199/month. A full-time receptionist costs $2,500-$4,000+/month. You get 24/7 coverage at a fraction of the cost.",
+  },
+  {
+    question: "Will callers know they're talking to AI?",
+    answer:
+      "Cadence sounds natural and conversational. Most callers don't realize it's AI - they just get their questions answered quickly.",
+  },
+  {
+    question: "Can an automated phone answering service book appointments?",
+    answer:
+      "Yes. Cadence can collect caller information and schedule follow-ups based on rules you set during onboarding.",
+  },
+  {
+    question: "What types of businesses use AI phone answering?",
+    answer:
+      "HVAC companies, plumbers, dentists, contractors, law firms, and any service business that loses leads to missed calls. If you rely on phone leads, Cadence helps.",
   },
 ];
 
@@ -97,11 +137,14 @@ const useCases = [
 ];
 
 export const metadata: Metadata = buildMetadata({
-  title: "Cadence Voice Receptionist for Local Businesses | Autom8 Everything",
+  title: "AI Phone Answering for Small Business | Cadence by Autom8 Everything",
   description:
     "Cadence answers your business calls, handles common questions, and helps customers take the next step. 7-day free trial, then $199/month.",
   path: "/services/cadence",
   keywords: [
+    "AI phone answering",
+    "AI receptionist for small business",
+    "automated phone answering service Phoenix",
     "voice receptionist",
     "business call answering",
     "small business phone answering",
@@ -111,12 +154,39 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function CadencePage() {
-  const serviceSchema = buildServiceSchema({
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: "AI Voice Receptionist",
     name: "Cadence Voice Receptionist",
     description:
-      "Voice receptionist service that answers calls, handles common questions, and routes customers based on your rules.",
-    path: "/services/cadence",
-  });
+      "AI-powered voice receptionist that answers business calls 24/7, handles FAQs, routes urgent calls, and sends call summaries. Built for small businesses in Phoenix, Arizona.",
+    provider: {
+      "@type": "LocalBusiness",
+      name: "Autom8 Everything",
+      url: "https://autom8everything.com",
+    },
+    areaServed: "Phoenix, Arizona",
+    url: "https://autom8everything.com/services/cadence",
+    offers: {
+      "@type": "Offer",
+      price: "199",
+      priceCurrency: "USD",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: "199",
+        priceCurrency: "USD",
+        unitText: "MONTH",
+        referenceQuantity: {
+          "@type": "QuantitativeValue",
+          value: "1",
+          unitCode: "MON",
+        },
+      },
+      description: "Monthly subscription. 7-day free trial. Cancel anytime.",
+      availability: "https://schema.org/InStock",
+    },
+  };
 
   return (
     <main className="min-h-screen bg-[#0A0A0F] pb-20 md:pb-0">
