@@ -3,3 +3,4 @@
 - Created consolidated migration script at docs/migrations/000-full-schema.sql
 - Created Stripe webhook registration documentation at docs/STRIPE-WEBHOOKS.md
 2026-03-09: Notification test batch — verifying Codex → Telegram direct ping
+2026-03-09: Pipeline notification test — Scout-written prompt
