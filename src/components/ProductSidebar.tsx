@@ -98,7 +98,8 @@ const products: Product[] = [
   },
 ];
 
-const PANEL_ID = "product-detail-panel";
+const MOBILE_PANEL_ID = "product-detail-panel-mobile";
+const DESKTOP_PANEL_ID = "product-detail-panel-desktop";
 
 /* ─── Detail panel content (shared between mobile & desktop) ─── */
 function DetailPanelContent({ product }: { product: Product }) {
@@ -270,33 +271,37 @@ function DetailPanelContent({ product }: { product: Product }) {
 function AnimatedDetailPanel({
   product,
   selectedIndex,
-  reducedMotion,
+  panelId,
+  labelledBy,
+  useFadeUp,
 }: {
   product: Product;
   selectedIndex: number;
-  reducedMotion: boolean | null;
+  panelId: string;
+  labelledBy: string;
+  useFadeUp: boolean;
 }) {
   return (
     <div
-      id={PANEL_ID}
+      id={panelId}
       role="tabpanel"
-      aria-labelledby={`product-tab-${selectedIndex}`}
+      aria-labelledby={labelledBy}
       tabIndex={0}
     >
       <AnimatePresence mode="wait">
         <motion.div
           key={selectedIndex}
-          initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
-          animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+          initial={useFadeUp ? { opacity: 0, y: 8 } : { opacity: 0 }}
+          animate={useFadeUp ? { opacity: 1, y: 0 } : { opacity: 1 }}
           exit={
-            reducedMotion
-              ? { opacity: 0, transition: { duration: 0.1 } }
-              : { opacity: 0, y: 8, transition: { duration: 0.15, ease: "easeIn" } }
+            useFadeUp
+              ? { opacity: 0, y: 8, transition: { duration: 0.15 } }
+              : { opacity: 0, transition: { duration: 0.15 } }
           }
           transition={
-            reducedMotion
-              ? { duration: 0.15 }
-              : { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+            useFadeUp
+              ? { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+              : { duration: 0.3 }
           }
         >
           <DetailPanelContent product={product} />
@@ -311,9 +316,9 @@ export default function ProductSidebar() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
   const selectedProduct = products[selectedIndex];
+  const useFadeUp = !prefersReducedMotion;
 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const tabStripRef = useRef<HTMLDivElement>(null);
   const sidebarRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Auto-scroll active tab into view (mobile)
@@ -364,10 +369,11 @@ export default function ProductSidebar() {
         {/* Section heading */}
         <motion.div
           className="text-center mb-14 md:mb-16"
-          variants={fadeUp}
-          initial={prefersReducedMotion ? false : "hidden"}
-          whileInView="visible"
+          variants={useFadeUp ? fadeUp : undefined}
+          initial={useFadeUp ? "hidden" : { opacity: 0 }}
+          whileInView={useFadeUp ? "visible" : { opacity: 1 }}
           viewport={viewportOnce}
+          transition={useFadeUp ? undefined : { duration: 0.3 }}
         >
           <h2
             className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4"
@@ -385,12 +391,17 @@ export default function ProductSidebar() {
           {/* ─── Mobile/Tablet layout (< 1024px) ─── */}
           <div className="lg:hidden">
             {/* Tab strip */}
-            <div
-              ref={tabStripRef}
+            <motion.div
               role="tablist"
               aria-label="Product selector"
+              aria-orientation="horizontal"
               className="flex gap-2 overflow-x-auto hide-scrollbar pb-4 mb-6"
               style={{ scrollSnapType: "x mandatory" }}
+              variants={useFadeUp ? staggerContainer : undefined}
+              initial={useFadeUp ? "hidden" : { opacity: 0 }}
+              whileInView={useFadeUp ? "visible" : { opacity: 1 }}
+              viewport={viewportOnce}
+              transition={useFadeUp ? undefined : { duration: 0.3 }}
             >
               {products.map((product, index) => {
                 const isActive = selectedIndex === index;
@@ -403,11 +414,12 @@ export default function ProductSidebar() {
                     }}
                     role="tab"
                     aria-selected={isActive}
-                    aria-controls={PANEL_ID}
+                    aria-controls={MOBILE_PANEL_ID}
                     tabIndex={isActive ? 0 : -1}
                     onClick={() => setSelectedIndex(index)}
                     onKeyDown={(e) => handleTabKeyDown(e, "horizontal")}
                     whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
+                    variants={useFadeUp ? staggerItem : undefined}
                     className={`relative shrink-0 px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors duration-200 ${
                       isActive
                         ? "text-white"
@@ -429,19 +441,22 @@ export default function ProductSidebar() {
                   </motion.button>
                 );
               })}
-            </div>
+            </motion.div>
 
             {/* Detail panel */}
             <motion.div
-              variants={fadeUp}
-              initial={prefersReducedMotion ? false : "hidden"}
-              whileInView="visible"
+              variants={useFadeUp ? fadeUp : undefined}
+              initial={useFadeUp ? "hidden" : { opacity: 0 }}
+              whileInView={useFadeUp ? "visible" : { opacity: 1 }}
               viewport={viewportOnce}
+              transition={useFadeUp ? undefined : { duration: 0.3 }}
             >
               <AnimatedDetailPanel
                 product={selectedProduct}
                 selectedIndex={selectedIndex}
-                reducedMotion={prefersReducedMotion}
+                panelId={MOBILE_PANEL_ID}
+                labelledBy={`product-tab-mobile-${selectedIndex}`}
+                useFadeUp={useFadeUp}
               />
             </motion.div>
           </div>
@@ -454,10 +469,11 @@ export default function ProductSidebar() {
               aria-label="Product selector"
               aria-orientation="vertical"
               className="relative flex flex-col gap-6 pt-4"
-              variants={staggerContainer}
-              initial={prefersReducedMotion ? false : "hidden"}
-              whileInView="visible"
+              variants={useFadeUp ? staggerContainer : undefined}
+              initial={useFadeUp ? "hidden" : { opacity: 0 }}
+              whileInView={useFadeUp ? "visible" : { opacity: 1 }}
               viewport={viewportOnce}
+              transition={useFadeUp ? undefined : { duration: 0.3 }}
             >
               {products.map((product, index) => {
                 const isActive = selectedIndex === index;
@@ -470,11 +486,11 @@ export default function ProductSidebar() {
                     }}
                     role="tab"
                     aria-selected={isActive}
-                    aria-controls={PANEL_ID}
+                    aria-controls={DESKTOP_PANEL_ID}
                     tabIndex={isActive ? 0 : -1}
                     onClick={() => setSelectedIndex(index)}
                     onKeyDown={(e) => handleTabKeyDown(e, "vertical")}
-                    variants={prefersReducedMotion ? undefined : staggerItem}
+                    variants={useFadeUp ? staggerItem : undefined}
                     whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
                     whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
                     transition={{ duration: 0.2 }}
@@ -503,15 +519,18 @@ export default function ProductSidebar() {
 
             {/* Detail panel */}
             <motion.div
-              variants={fadeUp}
-              initial={prefersReducedMotion ? false : "hidden"}
-              whileInView="visible"
+              variants={useFadeUp ? fadeUp : undefined}
+              initial={useFadeUp ? "hidden" : { opacity: 0 }}
+              whileInView={useFadeUp ? "visible" : { opacity: 1 }}
               viewport={viewportOnce}
+              transition={useFadeUp ? undefined : { duration: 0.3 }}
             >
               <AnimatedDetailPanel
                 product={selectedProduct}
                 selectedIndex={selectedIndex}
-                reducedMotion={prefersReducedMotion}
+                panelId={DESKTOP_PANEL_ID}
+                labelledBy={`product-tab-${selectedIndex}`}
+                useFadeUp={useFadeUp}
               />
             </motion.div>
           </div>
