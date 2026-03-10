@@ -16,19 +16,22 @@ const steps: Step[] = [
   {
     number: "01",
     title: "Tell Us About Your Business",
-    description: "Quick call, 15 minutes. We figure out which tools make sense and what will get you results fastest.",
+    description:
+      "Quick call, 15 minutes. We figure out which tools make sense and what will get you results fastest.",
     icon: ClipboardList,
   },
   {
     number: "02",
     title: "We Set Everything Up",
-    description: "Live in days, not months. We handle all the technical work - you don't touch a thing.",
+    description:
+      "Live in days, not months. We handle all the technical work - you don't touch a thing.",
     icon: Wrench,
   },
   {
     number: "03",
     title: "Customers Start Reaching You",
-    description: "Calls answered, reviews coming in, rankings climbing. We keep optimizing every month.",
+    description:
+      "Calls answered, reviews coming in, rankings climbing. We keep optimizing every month.",
     icon: PhoneCall,
   },
 ];
