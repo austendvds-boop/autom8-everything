@@ -31,35 +31,20 @@ const steps = [
 
 const plans = [
   {
-    name: "Starter",
+    name: "Review Funnel",
     price: "$79",
     priceSuffix: "/month",
-    description: "A simple starting plan for one connected calendar.",
-    features: ["1 connected calendar", "150 text messages per month", "Automatic review requests after every appointment"],
-    ctaLabel: "Get Started",
-    ctaHref: "/portal/checkout?product=review_funnel",
-    ctaStyle: "solid" as const,
-  },
-  {
-    name: "Growth",
-    price: "$149",
-    priceSuffix: "/month",
-    description: "Built for teams that need more connected calendars and messages.",
-    features: ["Up to 5 connected calendars", "600 text messages per month", "Automatic review requests after every appointment"],
-    ctaLabel: "Get Started",
+    description: "Automatic review follow-ups after every job. Set it and forget it.",
+    features: [
+      "Automated follow-up texts after each job",
+      "Happy customers sent straight to Google",
+      "Works while you sleep",
+      "Month-to-month, cancel anytime",
+    ],
+    ctaLabel: "Get More Reviews",
     ctaHref: "/portal/checkout?product=review_funnel",
     featured: true,
-    badge: "Most Popular",
     ctaStyle: "solid" as const,
-  },
-  {
-    name: "Pro",
-    price: "Let's talk",
-    description: "For businesses that need a custom setup and extra support.",
-    features: ["Unlimited calendars", "Custom message volume", "Priority support"],
-    ctaLabel: "Contact Us",
-    ctaHref: "mailto:aust@autom8everything.com",
-    ctaStyle: "outline" as const,
   },
 ];
 
@@ -172,13 +157,13 @@ export default function ReviewFunnelPage() {
               href="/portal/checkout?product=review_funnel"
               className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 text-center font-semibold text-white"
             >
-              Get Started
+              Get More Reviews
             </Link>
             <Link
-              href="#pricing"
+              href="#how-it-works"
               className="inline-flex items-center justify-center rounded-full border border-white/20 px-8 py-4 text-center font-semibold text-white hover:border-[#8B5CF6]/60"
             >
-              See Pricing
+              See How It Works
             </Link>
           </div>
           <p className="mt-4 text-sm text-[#A1A1AA]">Dead simple setup. Most businesses are live in about 5 minutes.</p>
@@ -221,7 +206,7 @@ export default function ReviewFunnelPage() {
           <p className="text-[#A1A1AA] mb-10 max-w-3xl">
             Pick the plan that fits your monthly volume. Setup is quick and day-to-day use stays simple.
           </p>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 max-w-lg mx-auto gap-6">
             {plans.map((plan) => (
               <PlanCard key={plan.name} {...plan} />
             ))}
@@ -360,10 +345,10 @@ export default function ReviewFunnelPage() {
           </div>
 
           <div className="text-center">
-            <p className="text-2xl font-bold mb-2">$278/mo combined</p>
-            <p className="text-sm text-[#A1A1AA] mb-6">Cadence $199/mo + Review Funnel Starter $79/mo</p>
+            <p className="text-2xl font-bold mb-2">$278/mo for both</p>
+            <p className="text-sm text-[#A1A1AA] mb-6">Cadence $199/mo + Review Funnel $79/mo</p>
             <Link href="/contact" className="btn-primary text-lg px-10 py-4">
-              Start with Both
+              Get Both
             </Link>
           </div>
         </div>
@@ -395,7 +380,7 @@ export default function ReviewFunnelPage() {
             href="/portal/checkout?product=review_funnel"
             className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 font-semibold text-white"
           >
-            Get Started
+            Get More Reviews
           </Link>
         </div>
       </section>
