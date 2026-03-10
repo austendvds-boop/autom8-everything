@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useMotionValueEvent, useSpring } from "framer-motion";
+import { staggerContainer, staggerItem, viewportOnce } from "@/lib/motion";
 
 type Stat = {
   value: number;
@@ -19,34 +20,24 @@ const stats: Stat[] = [
 
 function Counter({ value, suffix, label, inView, decimals }: { value: number; suffix: string; label: string; inView: boolean; decimals?: number }) {
   const [count, setCount] = useState(0);
+  const motionValue = useSpring(0, { stiffness: 50, damping: 20 });
 
   useEffect(() => {
-    if (!inView) return;
+    if (inView) {
+      motionValue.set(value);
+    }
+  }, [inView, motionValue, value]);
 
-    const duration = 2000;
-    const steps = 60;
-    const increment = value / steps;
-    let current = 0;
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= value) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current * 10) / 10);
-      }
-    }, duration / steps);
-
-    return () => clearInterval(timer);
-  }, [inView, value]);
+  useMotionValueEvent(motionValue, "change", (latest) => {
+    setCount(latest);
+  });
 
   const baseDisplayValue = value >= 100 ? Math.floor(count) : count;
   const displayValue = typeof decimals === "number" ? baseDisplayValue.toFixed(decimals) : baseDisplayValue;
 
   return (
-    <div className="text-center">
-      <div className="text-5xl md:text-7xl font-bold gradient-text mb-2">
+    <div className="text-center will-change-transform">
+      <div className="text-5xl md:text-7xl font-bold gradient-text mb-2 will-change-transform">
         {displayValue}{suffix}
       </div>
       <div className="text-[#A1A1AA] text-lg">{label}</div>
@@ -64,15 +55,15 @@ export default function Stats() {
       <div className="absolute inset-0 grid-pattern opacity-50" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-            >
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
+          {stats.map((stat) => (
+            <motion.div key={stat.label} variants={staggerItem} className="will-change-transform">
               <Counter
                 value={stat.value}
                 suffix={stat.suffix}
@@ -82,7 +73,7 @@ export default function Stats() {
               />
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
