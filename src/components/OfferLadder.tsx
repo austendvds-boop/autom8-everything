@@ -19,41 +19,61 @@ type Tier = {
 
 const tiers: Tier[] = [
   {
-    name: "Start",
+    name: "AI Receptionist",
     product: "Cadence",
     price: "$199/mo",
-    valueProp: "Answer every call, day and night",
-    features: ["AI voice receptionist", "Call summaries to your phone", "After-hours coverage", "7-day free trial"],
-    cta: { label: "Try Cadence Free", href: "tel:+14806313993" },
+    valueProp: "Never miss a customer call",
+    features: [
+      "Answers calls around the clock",
+      "Books appointments automatically",
+      "Sounds like a real person",
+      "7-day free trial, no contracts",
+    ],
+    cta: { label: "Call Cadence Live", href: "tel:+14806313993" },
     icon: PhoneCall,
   },
   {
-    name: "Grow",
-    product: "Cadence + Review Funnel",
-    price: "$278/mo",
-    valueProp: "Answer calls + collect 5-star reviews",
-    features: ["Everything in Start", "Automatic review requests", "Google review page integration", "Reputation tracking"],
-    cta: { label: "Get Started", href: "/contact" },
+    name: "Reviews",
+    product: "Review Funnel",
+    price: "$79/mo",
+    valueProp: "Turn happy customers into 5-star reviews",
+    features: [
+      "Automated follow-up after each job",
+      "Happy customers sent to Google",
+      "More reviews = better rankings",
+      "Works while you sleep",
+    ],
+    cta: { label: "Get More Reviews", href: "/services/review-funnel" },
     icon: MessageSquareHeart,
+  },
+  {
+    name: "Websites + SEO",
+    product: "Web + Monthly SEO",
+    price: "From $500",
+    valueProp: "Get found on Google",
+    features: [
+      "Launch website: $500 (up to 5 pages)",
+      "Enterprise website: $1,000 (up to 10 pages)",
+      "Hosting: $50/mo",
+      "Growth plan: $299/mo (blog + SEO + reports)",
+    ],
+    cta: { label: "Get a Quote", href: "/contact" },
+    icon: Globe,
     featured: true,
     badge: "Most Popular",
   },
   {
-    name: "Expand",
-    product: "Growth Stack",
-    price: "Get a Quote",
-    valueProp: "Website + SEO + calls + reviews",
-    features: ["Everything in Grow", "Professional website", "Monthly SEO & content", "Full lead generation stack"],
-    cta: { label: "Get a Quote", href: "/contact" },
-    icon: Globe,
-  },
-  {
-    name: "Custom",
-    product: "Full Stack",
-    price: "Get a Quote",
-    valueProp: "Custom tools built for your workflow",
-    features: ["Everything in Expand", "Custom app development", "Workflow automations", "Dedicated support"],
-    cta: { label: "Book a Consultation", href: "/contact" },
+    name: "Built for You",
+    product: "Custom Apps",
+    price: "Custom Quote",
+    valueProp: "If it saves time or makes money, we build it",
+    features: [
+      "Scrapers, dashboards, automations",
+      "Internal tools for your workflow",
+      "Scoped after a short call",
+      "No templates — built from scratch",
+    ],
+    cta: { label: "Let's Talk", href: "/contact" },
     icon: Wrench,
   },
 ];
@@ -66,8 +86,8 @@ export default function OfferLadder() {
     <section id="offer-ladder" className="py-16 md:py-20 bg-[#0A0A0F]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div className="text-center max-w-3xl mx-auto mb-10 md:mb-12" {...revealPreset}>
-          <h2 className="section-heading mb-4">One Platform. Pick Your Starting Point.</h2>
-          <p className="section-subheading">Start with what you need today. Add more when you&apos;re ready.</p>
+          <h2 className="section-heading mb-4">Simple Pricing. No Surprises.</h2>
+          <p className="section-subheading">Every price is right here. No hidden fees, no long contracts.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

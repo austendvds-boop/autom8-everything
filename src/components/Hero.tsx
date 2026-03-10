@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { PhoneCall } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
@@ -28,7 +27,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.p className="text-sm uppercase tracking-widest text-[#8B5CF6] mb-4" {...revealPreset}>
-          Growth infrastructure for local businesses
+          Tools for local businesses
         </motion.p>
 
         <motion.h1
@@ -40,7 +39,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p className="text-xl md:text-2xl text-[#A1A1AA] max-w-4xl mx-auto mb-10" {...revealPreset}>
-          Autom8 helps local businesses answer every call, collect 5-star reviews, and turn their website into a lead machine — without becoming tech experts.
+          Answer every call, collect more reviews, and get found online - without the tech headache.
         </motion.p>
 
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...revealPreset}>
@@ -53,11 +52,9 @@ export default function Hero() {
             Call Cadence Live
           </motion.a>
 
-          <motion.div {...buttonHover}>
-            <Link href="/contact" className="btn-secondary text-lg px-8 py-4">
-              Book a 15-Minute Demo
-            </Link>
-          </motion.div>
+          <motion.a href="#services" className="btn-secondary text-lg px-8 py-4" {...buttonHover}>
+            See Our Products
+          </motion.a>
         </motion.div>
 
         <motion.p className="mt-6 text-sm text-[#A1A1AA] flex items-center justify-center gap-3 flex-wrap" {...revealPreset}>
@@ -66,10 +63,6 @@ export default function Hero() {
           <span>No contracts</span>
           <span className="text-white/20">•</span>
           <span>Setup in 5 minutes</span>
-        </motion.p>
-
-        <motion.p className="mt-3 text-sm text-[#C4B5FD]" {...revealPreset}>
-          Try Cadence right now — it will answer like your receptionist.
         </motion.p>
       </div>
     </section>

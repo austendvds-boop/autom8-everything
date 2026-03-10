@@ -20,71 +20,68 @@ const steps = [
   },
 ];
 
-const tiers = [
+const websiteTiers = [
   {
     name: "Launch",
-    bestFor: "New businesses that need a professional presence fast",
-    description: "A clean, mobile-ready site that makes calling you the obvious next step.",
-    price: "$1,500",
-    highlights: [
-      "Professional 5-page site",
-      "Mobile responsive layout",
-      "Every page drives visitors to call or contact",
-      "Clear service descriptions",
-      "Basic local SEO setup",
-    ],
+    bestFor: "New businesses that need a professional site fast",
+    description: "A clean, mobile-ready website that makes your business look credible and easy to contact.",
+    price: "$500",
+    priceNote: "one-time",
+    highlights: ["Up to 5 pages", "Mobile-ready design", "Contact or booking form", "Basic on-page SEO"],
   },
   {
-    name: "Scale",
-    bestFor: "Businesses ready to rank on Google and capture leads",
-    description: "A custom site built to rank for your target keywords and convert traffic into calls.",
-    price: "$3,500",
-    highlights: [
-      "Custom design and brand identity",
-      "Service pages built to rank for target keywords",
-      "Blog setup for ongoing content",
-      "10+ optimized pages",
-      "Conversion-optimized CTAs on every page",
-    ],
+    name: "Enterprise",
+    bestFor: "Businesses that need more pages and custom features",
+    description: "Everything in Launch plus custom features, more pages, and room to grow.",
+    price: "$1,000",
+    priceNote: "one-time",
+    highlights: ["Up to 10 pages", "Everything in Launch", "Custom features and functionality", "Built for your specific workflow"],
     recommended: true,
   },
+];
+
+const monthlyPlans = [
   {
-    name: "Custom",
-    bestFor: "Multi-location or complex businesses that need tools to work together",
-    description: "A fully bespoke build with integrations, custom features, and ongoing support.",
-    price: "Let's Talk",
+    name: "Hosting",
+    price: "$50",
+    priceNote: "/mo",
+    description: "Keep your site running smoothly after launch.",
+    highlights: ["Hosting + uptime monitoring", "1 site edit per month"],
+  },
+  {
+    name: "Growth",
+    price: "$299",
+    priceNote: "/mo",
+    description: "Hosting plus blog content, local SEO, and monthly reports so customers find you on Google.",
     highlights: [
-      "Fully bespoke design and architecture",
-      "Connects with the tools you already use",
-      "Custom features and functionality",
-      "Ongoing support and updates",
-      "Priority development queue",
+      "Everything in Hosting",
+      "2 blog posts published per month",
+      "Google Business profile updates",
+      "Local SEO optimization",
+      "Monthly performance report",
     ],
+    recommended: true,
   },
 ];
 
 const faqs = [
+  { question: "Can you rebuild my existing site?", answer: "Yes. We can migrate and rebuild older websites. Ask us for a quote." },
+  { question: "Do I need to write all the content?", answer: "No. We handle the writing and structure. You just tell us about your business." },
+  { question: "How long does a website take to build?", answer: "Most Launch sites are live in about a week. Enterprise projects take 2-3 weeks." },
   {
-    question: "Can you rebuild my existing site?",
-    answer: "Yes. We can migrate and rebuild older websites into the Autom8 stack as an upcharge.",
+    question: "Can I start with Launch and add Growth later?",
+    answer: "Yes. Many businesses start with a Launch site and Hosting, then add Growth when they are ready to invest in SEO.",
   },
   {
-    question: "Do I need to write all the content?",
-    answer: "No. We handle the writing and structure with your input.",
-  },
-  {
-    question: "How long does launch take?",
-    answer: "Most projects launch in a few weeks depending on tier and scope.",
-  },
-  {
-    question: "Can I start small and upgrade later?",
-    answer: "Yes. Many businesses begin with Launch and upgrade as they grow.",
+    question: "What is the difference between Hosting and Growth?",
+    answer:
+      "Hosting keeps your site running and includes 1 edit per month. Growth adds blog posts, Google Business updates, local SEO, and a monthly report so you show up in more searches.",
   },
 ];
 
 export const metadata: Metadata = buildMetadata({
   title: "Website Creation | Autom8 Everything",
-  description: "Professional business websites with Launch, Scale, and Custom tiers.",
+  description: "Professional business websites starting at $500. Mobile-ready, SEO-friendly, built for local businesses.",
   path: "/services/websites",
   keywords: [
     "website creation",
@@ -97,7 +94,7 @@ export const metadata: Metadata = buildMetadata({
 export default function WebsitesPage() {
   const serviceSchema = buildServiceSchema({
     name: "Website Creation",
-    description: "Professional business websites with Launch, Scale, and Custom tiers.",
+    description: "Professional business websites starting at $500. Mobile-ready, SEO-friendly, built for local businesses.",
     path: "/services/websites",
   });
 
@@ -114,15 +111,15 @@ export default function WebsitesPage() {
             A Website That Gets Picked, Trusted, and Contacted.
           </h1>
           <p className="text-xl text-[#A1A1AA] max-w-3xl">
-            Most local business websites exist but don&apos;t convert. We build sites that rank on Google, earn trust in
-            seconds, and make calling you the obvious next step.
+            We build professional websites for local businesses. Your site will be mobile-ready, easy to find on Google,
+            and designed to get you more calls.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <Link href="/contact" className="btn-primary px-8 py-4">
-              Get Started
+              Get a Free Quote
             </Link>
             <Link href="#pricing" className="btn-secondary px-8 py-4">
-              View Tiers
+              See Pricing
             </Link>
           </div>
         </div>
@@ -164,9 +161,9 @@ export default function WebsitesPage() {
 
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-xl text-[#A1A1AA] mb-6">Ready to upgrade? Let&apos;s pick your tier.</p>
+          <p className="text-xl text-[#A1A1AA] mb-6">Know what you need? Let&apos;s get started.</p>
           <Link href="/contact" className="btn-primary px-8 py-4">
-            Get Started
+            Get a Free Quote
           </Link>
         </div>
       </section>
@@ -175,8 +172,8 @@ export default function WebsitesPage() {
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="section-heading mb-10 text-center">Pricing Tiers</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {tiers.map((tier) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {websiteTiers.map((tier) => (
               <article
                 key={tier.name}
                 className={`card-base relative p-8 h-full flex flex-col ${
@@ -191,14 +188,49 @@ export default function WebsitesPage() {
                 <h3 className="text-2xl font-semibold mb-2">{tier.name}</h3>
                 <p className="text-xs text-[#8B5CF6] uppercase tracking-wide mb-2">Best for: {tier.bestFor}</p>
                 <p className="text-[#A1A1AA] mb-4 min-h-[72px]">{tier.description}</p>
-                <p className="text-4xl font-bold mb-5">{tier.price}</p>
+                <div className="mb-5">
+                  <p className="text-4xl font-bold">{tier.price}</p>
+                  <p className="text-sm text-[#A1A1AA]">{tier.priceNote}</p>
+                </div>
                 <ul className="space-y-2 text-[#D4D4D8] text-sm mb-8 flex-1">
                   {tier.highlights.map((item) => (
-                    <li key={item}>• {item}</li>
+                    <li key={item}>&bull; {item}</li>
                   ))}
                 </ul>
                 <Link href="/contact" className={tier.recommended ? "btn-primary w-full justify-center" : "btn-secondary w-full justify-center"}>
-                  {tier.name === "Custom" ? "Let's Talk" : "Get Started"}
+                  Get a Free Quote
+                </Link>
+              </article>
+            ))}
+          </div>
+
+          <h3 className="text-2xl font-semibold mt-16 mb-10 text-center">Monthly Plans</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {monthlyPlans.map((plan) => (
+              <article
+                key={plan.name}
+                className={`card-base relative p-8 h-full flex flex-col ${
+                  plan.recommended ? "border-[#8B5CF6]/45 bg-[#0A0A0F]" : ""
+                }`}
+              >
+                {plan.recommended && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs uppercase tracking-wide font-semibold px-3 py-1 rounded-full bg-[#8B5CF6] text-white">
+                    Recommended
+                  </span>
+                )}
+                <h3 className="text-2xl font-semibold mb-2">{plan.name}</h3>
+                <p className="text-[#A1A1AA] mb-4 min-h-[72px]">{plan.description}</p>
+                <div className="mb-5">
+                  <p className="text-4xl font-bold">{plan.price}</p>
+                  <p className="text-sm text-[#A1A1AA]">{plan.priceNote}</p>
+                </div>
+                <ul className="space-y-2 text-[#D4D4D8] text-sm mb-8 flex-1">
+                  {plan.highlights.map((item) => (
+                    <li key={item}>&bull; {item}</li>
+                  ))}
+                </ul>
+                <Link href="/contact" className={plan.recommended ? "btn-primary w-full justify-center" : "btn-secondary w-full justify-center"}>
+                  Get a Free Quote
                 </Link>
               </article>
             ))}
@@ -212,16 +244,12 @@ export default function WebsitesPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {["Home Services", "Medical Practice", "Professional Services"].map((industry) => (
               <div key={industry} className="card-base overflow-hidden">
-                {/* Screenshot placeholder */}
                 <div className="h-48 bg-white/[0.02] border-b border-white/5 flex items-center justify-center">
                   <span className="text-sm text-[#52525B]">Website Preview</span>
                 </div>
                 <div className="p-6">
                   <p className="text-xs uppercase tracking-wide text-[#8B5CF6] mb-2">{industry}</p>
-                  <p className="text-sm text-[#A1A1AA]">
-                    {/* TODO: Add real screenshot, business name, and results */}
-                    Real project screenshot and results coming soon.
-                  </p>
+                  <p className="text-sm text-[#A1A1AA]">Real project screenshot and results coming soon.</p>
                 </div>
               </div>
             ))}

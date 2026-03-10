@@ -18,30 +18,22 @@ const steps = [
   },
   {
     title: "Improve rankings over time",
-    description: "We keep refining pages and local SEO signals so your visibility keeps climbing.",
+    description: "We keep refining pages and local SEO so your visibility keeps climbing.",
   },
 ];
 
 const deliverables = [
-  { title: "2–4 blog posts per month", description: "Targeting local search terms your customers already use.", icon: FileText },
-  { title: "Service page optimization", description: "Better structure, headings, and internal links for ranking.", icon: Search },
-  {
-    title: "Google Business Profile management",
-    description: "Optimized listing, posts, and review response support.",
-    icon: MapPin,
-  },
-  {
-    title: "Local citation management",
-    description: "Consistent business info across directories and platforms.",
-    icon: Globe,
-  },
-  { title: "Monthly performance report", description: "Clear metrics on rankings, traffic, and lead trends.", icon: BarChart3 },
+  { title: "2 blog posts per month", description: "Targeting local search terms your customers already use.", icon: FileText },
+  { title: "Google Business profile updates", description: "Keep your listing current so you show up in the map pack.", icon: MapPin },
+  { title: "Local SEO optimization", description: "On-page improvements so your pages rank for local searches.", icon: Search },
+  { title: "Monthly performance report", description: "Clear numbers on rankings, traffic, and what is working.", icon: BarChart3 },
+  { title: "Hosting + 1 site edit per month", description: "Your site stays up, fast, and current.", icon: Globe },
 ];
 
 const faqs = [
   {
     question: "How long until I see results?",
-    answer: "Most businesses see traction in a few months, then results compound with consistency.",
+    answer: "Most businesses see traction in a few months, then results build over time with consistency.",
   },
   {
     question: "Do you write the content?",
@@ -59,7 +51,7 @@ const faqs = [
 
 export const metadata: Metadata = buildMetadata({
   title: "SEO & Content for Local Businesses | Autom8 Everything",
-  description: "Monthly local SEO and blog publishing to help your business rank higher and get more inbound leads.",
+  description: "Monthly local SEO and blog content for $299/mo. Show up in local Google searches and get more calls.",
   path: "/services/seo-content",
   keywords: [
     "local seo",
@@ -72,7 +64,7 @@ export const metadata: Metadata = buildMetadata({
 export default function SeoContentPage() {
   const serviceSchema = buildServiceSchema({
     name: "SEO & Content",
-    description: "Monthly local SEO and content publishing service for long-term search growth.",
+    description: "Monthly local SEO and blog content for $299/mo. Show up in local Google searches and get more calls.",
     path: "/services/seo-content",
   });
 
@@ -86,15 +78,15 @@ export default function SeoContentPage() {
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-4">SEO & Content</p>
           <h1 className="text-5xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
-            Get Found on Google. Get Called. Get Booked.
+            Show Up When Customers Search for What You Do.
           </h1>
           <p className="text-xl text-[#A1A1AA] max-w-3xl">
-            Monthly local SEO and content that builds compounding visibility. Show up in the map pack, earn organic
-            traffic, and turn searches into service calls.
+            We publish fresh content to your site every month and keep your Google Business profile up to date. Customers
+            find you instead of your competition.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <Link href="/contact" className="btn-primary px-8 py-4">
-              Contact Us
+              Get a Free Quote
             </Link>
             <Link href="#how-it-works" className="btn-secondary px-8 py-4">
               How It Works
@@ -124,19 +116,19 @@ export default function SeoContentPage() {
           <div className="space-y-6">
             {[
               {
-                period: "Month 1–2",
+                period: "Month 1-2",
                 phase: "Foundation",
                 detail: "Keyword research, technical fixes, initial content, Google Business Profile optimization",
               },
-              { period: "Month 3–4", phase: "Traction", detail: "Rankings start moving, traffic increases, local visibility improves" },
+              { period: "Month 3-4", phase: "Traction", detail: "Rankings start moving, traffic increases, local visibility improves" },
               {
-                period: "Month 5–6",
+                period: "Month 5-6",
                 phase: "Momentum",
                 detail: "Map pack visibility, inbound lead growth, content library building",
               },
               {
                 period: "Month 6+",
-                phase: "Compounding",
+                phase: "Long-term growth",
                 detail: "Consistent leads, expanding keyword coverage, competitive positioning",
               },
             ].map((item, i) => (
@@ -152,7 +144,7 @@ export default function SeoContentPage() {
               </div>
             ))}
           </div>
-          <p className="mt-8 text-sm text-[#A1A1AA] italic">SEO is not instant. It is a compounding investment that builds over time.</p>
+          <p className="mt-8 text-sm text-[#A1A1AA] italic">SEO is not instant. It is an investment that builds over time.</p>
         </div>
       </section>
 
@@ -186,14 +178,14 @@ export default function SeoContentPage() {
           { feature: "Rankings stability", values: ["Temporary boost", "Sustained and improving"] },
           { feature: "Content freshness", values: ["Stale after launch", "New content every month"] },
           { feature: "Competitive response", values: ["Competitors catch up", "You stay ahead"] },
-          { feature: "ROI timeline", values: ["Short-term only", "Compounds over months and years"] },
+          { feature: "ROI timeline", values: ["Short-term only", "Builds over months and years"] },
           { feature: "Algorithm updates", values: ["You fall behind", "We adapt for you"] },
         ]}
       />
 
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="section-heading mb-10">SEO Works Best as Part of Your Growth Stack</h2>
+          <h2 className="section-heading mb-10">SEO Works Best Alongside Your Other Tools</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
@@ -226,7 +218,7 @@ export default function SeoContentPage() {
           </div>
           <div className="text-center mt-8">
             <Link href="/contact" className="btn-primary px-8 py-4">
-              Build Your Full Growth Stack
+              Get a Free Quote
             </Link>
           </div>
         </div>
@@ -236,19 +228,20 @@ export default function SeoContentPage() {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="section-heading">Pricing</h2>
           <div className="card-base border-[#8B5CF6]/40 p-10 mt-8">
-            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Monthly Retainer</p>
-            <p className="text-4xl font-bold mb-3">Contact Us</p>
-            <p className="text-[#A1A1AA] mb-6">Scope depends on your market, goals, and how much content you want each month.</p>
+            <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Growth Plan</p>
+            <p className="text-4xl font-bold mb-3">$299/mo</p>
+            <p className="text-[#A1A1AA] mb-6">Add-on to any website plan. Includes hosting.</p>
             <Link href="/contact" className="btn-primary px-8 py-4">
-              Contact Us
+              Get a Free Quote
             </Link>
             <div className="mt-6 text-left max-w-sm mx-auto">
-              <p className="text-sm text-[#A1A1AA] mb-3">What affects pricing:</p>
               <ul className="space-y-1.5 text-sm text-[#A1A1AA]">
-                <li>• Market competitiveness in your area</li>
-                <li>• Number of service areas to target</li>
-                <li>• Monthly content volume</li>
-                <li>• Current site health and authority</li>
+                <li>&bull; Hosting + uptime</li>
+                <li>&bull; 1 site edit/mo</li>
+                <li>&bull; 2 blog posts/mo</li>
+                <li>&bull; Google Business updates</li>
+                <li>&bull; Local SEO</li>
+                <li>&bull; Monthly report</li>
               </ul>
             </div>
           </div>
@@ -274,7 +267,7 @@ export default function SeoContentPage() {
           <h2 className="section-heading mb-4">Ready to grow your search traffic each month?</h2>
           <p className="text-[#A1A1AA] text-lg mb-8">We will show you exactly where to start.</p>
           <Link href="/contact" className="btn-primary px-8 py-4">
-            Contact Us
+            Get a Free Quote
           </Link>
         </div>
       </section>

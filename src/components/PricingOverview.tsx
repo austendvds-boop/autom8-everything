@@ -9,19 +9,19 @@ const tiers = [
     title: "Start Free",
     product: "Cadence Phone Answering",
     price: "$199/mo after 7-day free trial",
-    cta: { label: "Start Free Trial", href: "/portal/checkout?product=cadence" },
+    cta: { label: "Call Cadence Live", href: "tel:+14806313993" },
   },
   {
     title: "Website Plans",
-    product: "Launch • Scale • Custom",
-    price: "Launch $799 · Scale $1,499 · Custom $2,499+",
-    cta: { label: "See Plans", href: "/pricing" },
+    product: "Launch $500 • Enterprise $1,000",
+    price: "One-time build + optional monthly plans",
+    cta: { label: "Get a Free Quote", href: "/contact" },
   },
   {
     title: "Grow Every Month",
-    product: "SEO + Monthly Content",
-    price: "From $500/mo",
-    cta: { label: "Book a Call", href: "/contact" },
+    product: "Hosting $50/mo • Growth $299/mo",
+    price: "Blog posts, local SEO, monthly reports",
+    cta: { label: "Get a Free Quote", href: "/contact" },
   },
 ];
 
@@ -50,16 +50,6 @@ export default function PricingOverview() {
               <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">{tier.title}</p>
               <h3 className="text-xl font-semibold mb-2">{tier.product}</h3>
               <p className="text-[#A1A1AA] mb-4 text-[15px] leading-relaxed">{tier.price}</p>
-              {tier.title === "Website Plans" && (
-                <>
-                  <ul className="space-y-2 text-[#A1A1AA] text-sm mb-4">
-                    <li>• Launch: quick launch essentials</li>
-                    <li>• Scale: conversion-focused + integrations</li>
-                    <li>• Custom: bespoke functionality/workflows</li>
-                  </ul>
-                  <p className="text-[#A1A1AA] text-xs mb-6">Existing site clone/migration is an upcharge, quoted after review.</p>
-                </>
-              )}
               <Link href={tier.cta.href} className="inline-flex w-fit mt-auto px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-[#8B5CF6]/60 transition-colors">
                 {tier.cta.label}
               </Link>

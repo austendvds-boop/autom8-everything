@@ -15,20 +15,23 @@ type Step = {
 const steps: Step[] = [
   {
     number: "01",
-    title: "Tell Us Where You're Losing Leads",
-    description: "Fill out a quick form or book a 15-minute call. We'll figure out where customers are slipping through the cracks.",
+    title: "Tell Us About Your Business",
+    description:
+      "Quick call, 15 minutes. We figure out which tools make sense and what will get you results fastest.",
     icon: ClipboardList,
   },
   {
     number: "02",
-    title: "We Build Your Growth Stack",
-    description: "Phone answering, reviews, website, and SEO — configured to your business. Most teams are live in days, not months.",
+    title: "We Set Everything Up",
+    description:
+      "Live in days, not months. We handle all the technical work - you don't touch a thing.",
     icon: Wrench,
   },
   {
     number: "03",
-    title: "Leads Start Coming In",
-    description: "More answered calls, more 5-star reviews, better Google rankings. We keep optimizing every month so results compound.",
+    title: "Customers Start Reaching You",
+    description:
+      "Calls answered, reviews coming in, rankings climbing. We keep optimizing every month.",
     icon: PhoneCall,
   },
 ];
@@ -92,8 +95,8 @@ export default function HowItWorks() {
         </div>
 
         <motion.div className="text-center mt-10 md:mt-12" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
-          <Link href="#offer-ladder" className="btn-secondary px-8 py-4">
-            See Pricing
+          <Link href="#services" className="btn-secondary px-8 py-4">
+            See Our Products
           </Link>
         </motion.div>
       </div>

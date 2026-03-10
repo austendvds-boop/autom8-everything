@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Check, Globe, MessageSquareHeart, PhoneCall, Search, Wrench } from "lucide-react";
+import { Check, Globe, MessageSquareHeart, PhoneCall, Wrench } from "lucide-react";
 import { cardHover, reveal, revealReduced, revealStagger } from "@/lib/motion";
 
 type ProductTier = "hero" | "small";
@@ -26,80 +26,63 @@ type Product = {
 const products: Product[] = [
   {
     tier: "hero",
-    eyebrow: "Featured",
+    eyebrow: "AI Receptionist",
     productName: "Cadence",
     valueProp:
-      "Every missed call is a customer your competitor answers instead. Cadence is your AI voice receptionist — answering calls, handling questions, and sending you summaries, 24/7.",
+      "Cadence answers your phone like a real receptionist - 24/7. It handles questions, books appointments, and takes messages so no call goes unanswered.",
     price: "$199/mo",
-    priceContext: "7-day free trial • cancel anytime",
+    priceContext: "7-day free trial - No contracts - Setup in 5 minutes",
     priceAriaLabel: "Price: 199 dollars per month with a seven day free trial",
-    microProof: "Live in 5 minutes. Try it right now.",
+    microProof: "Never miss a customer call.",
     features: [
-      "Answers missed and after-hours calls",
-      "Handles your common business questions",
+      "Answers calls around the clock",
+      "Books appointments automatically",
+      "Sounds like a real person",
       "Sends call summaries to your phone",
-      "Books or routes calls based on your rules",
     ],
     icon: PhoneCall,
     badge: "7-DAY FREE TRIAL",
-    cta: { href: "tel:+14806313993", label: "Call (480) 631-3993" },
-    secondaryCta: { href: "/services/cadence", label: "Learn More" },
+    cta: { href: "tel:+14806313993", label: "Call Cadence Live" },
+    secondaryCta: { href: "/services/cadence", label: "How It Works" },
   },
   {
     tier: "small",
     eyebrow: "Reviews",
     productName: "Review Funnel",
     valueProp:
-      "Ask for reviews automatically after each job and keep responses consistent so your reputation keeps growing.",
+      "After every job, we automatically reach out to your customer and ask for a review. Happy customers get sent straight to Google. It runs itself.",
     price: "$79/mo",
-    priceContext: "Starter plan • set it and forget it",
-    priceAriaLabel: "Review Funnel starts at 79 dollars per month",
-    microProof: "5-minute setup without the tech headache",
-    badge: "Pairs with Cadence",
+    priceContext: "Set it and forget it",
+    priceAriaLabel: "Review Funnel: 79 dollars per month",
+    microProof: "Turn happy customers into 5-star reviews.",
     icon: MessageSquareHeart,
-    cta: { href: "/portal/checkout?product=review_funnel", label: "Get Started" },
+    cta: { href: "/services/review-funnel", label: "Get More Reviews" },
   },
   {
     tier: "small",
-    eyebrow: "Websites",
-    productName: "Website Creation",
+    eyebrow: "Websites + SEO",
+    productName: "Web + Monthly SEO",
     valueProp:
-      "Professional sites built to turn visitors into calls, with Launch, Scale, and Custom options based on your stage.",
-    price: "From $1,500",
-    priceContext: "Launch / Scale / Custom tiers",
-    priceAriaLabel: "Website Creation starts at 1500 dollars",
-    microProof: "Clear offer pages built for real customers",
-    badge: "Foundation",
+      "A professional website built to turn visitors into calls, plus monthly content and local SEO so customers find you instead of your competition.",
+    price: "From $500",
+    priceContext: "One-time build + optional monthly plans",
+    priceAriaLabel: "Websites start at 500 dollars",
+    microProof: "Show up when customers search for what you do.",
     icon: Globe,
-    cta: { href: "/services/websites", label: "See Website Tiers" },
-  },
-  {
-    tier: "small",
-    eyebrow: "Growth",
-    productName: "SEO & Content",
-    valueProp:
-      "Monthly blog posts and local SEO work that helps your business show up in search and stay visible over time.",
-    price: "Monthly Retainer",
-    priceContext: "Contact us for scope",
-    priceAriaLabel: "SEO and Content is offered as a monthly retainer",
-    microProof: "Steady ranking gains with consistent publishing",
-    badge: "Ongoing Growth",
-    icon: Search,
-    cta: { href: "/services/seo-content", label: "See SEO & Content" },
+    cta: { href: "/contact", label: "Get a Free Quote" },
   },
   {
     tier: "small",
     eyebrow: "Built for You",
     productName: "Custom Apps",
     valueProp:
-      "Need something specific? We build custom tools for your workflow, from lead scrapers to internal dashboards.",
+      "Scrapers, dashboards, automations, internal tools - if it saves you time or makes you money, we can build it.",
     price: "Custom Quote",
     priceContext: "Scoped after a short call",
     priceAriaLabel: "Custom Apps pricing is provided by quote",
-    microProof: "Built around how your team already works",
-    badge: "Advanced",
+    microProof: "Something specific in mind? Let's build it.",
     icon: Wrench,
-    cta: { href: "/services/custom-apps", label: "Book a Consultation" },
+    cta: { href: "/contact", label: "Let's Talk" },
   },
 ];
 
@@ -126,7 +109,7 @@ export default function ServicesBento() {
             Products That Keep Your Business <span className="gradient-text">Running Smoothly</span>
           </h2>
           <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">
-            Start with one tool or combine a few. Everything is built to be simple for real business owners.
+            Start with one or combine a few. Each one works on its own - no bundles, no upsells.
           </p>
         </motion.div>
 
