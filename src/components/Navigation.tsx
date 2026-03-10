@@ -7,7 +7,7 @@ import BrandLogo from "@/components/BrandLogo";
 import { buttonHover } from "@/lib/motion";
 
 const productLinks = [
-  { href: "/services/cadence", label: "Cadence" },
+  { href: "/services/cadence", label: "Cadence — AI Phone Agent" },
   { href: "/services/review-funnel", label: "Review Funnel" },
   { href: "/services/websites", label: "Web + Monthly SEO" },
   { href: "/services/custom-apps", label: "Custom Apps" },
