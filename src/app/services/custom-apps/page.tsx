@@ -98,15 +98,14 @@ export default function CustomAppsPage() {
             When Off-the-Shelf Tools Don&apos;t Fit, We Build What Does.
           </h1>
           <p className="text-xl text-[#A1A1AA] max-w-3xl">
-            Custom apps designed around your actual workflow. Not a template. Not a workaround. A tool built specifically for
-            how your team operates.
+            Scrapers, dashboards, automations, internal tools - if it saves you time or makes you money, we can build it.
           </p>
           <p className="mt-4 text-sm text-[#A78BFA] italic">
             We take on a limited number of custom builds to ensure quality. Not every request is a fit — and that is by design.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <Link href="/contact" className="btn-primary px-8 py-4">
-              Book a Consultation
+              Let&apos;s Talk
             </Link>
             <Link href="#how-it-works" className="btn-secondary px-8 py-4">
               How It Works
@@ -185,11 +184,11 @@ export default function CustomAppsPage() {
           <h2 className="section-heading">Pricing</h2>
           <div className="card-base border-[#8B5CF6]/40 p-10 mt-8">
             <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-2">Custom Scope</p>
-            <p className="text-4xl font-bold mb-3">Book a Consultation</p>
-            <p className="text-[#A1A1AA] mb-4">Most custom builds range from $2,000 to $15,000 depending on scope.</p>
+            <p className="text-4xl font-bold mb-3">Let&apos;s Talk</p>
+            <p className="text-[#A1A1AA] mb-4">Every build is scoped after a short call. We quote each project based on your workflow and goals.</p>
             <p className="text-[#A1A1AA] mb-6">We quote each build after understanding your workflow and goals.</p>
             <Link href="/contact" className="btn-primary px-8 py-4">
-              Book a Consultation
+              Let&apos;s Talk
             </Link>
             <div className="text-left max-w-sm mx-auto mt-6">
               <p className="text-sm text-[#A1A1AA] mb-3">What affects pricing:</p>
@@ -223,7 +222,7 @@ export default function CustomAppsPage() {
           <h2 className="section-heading mb-4">Need a custom tool built around your process?</h2>
           <p className="text-[#A1A1AA] text-lg mb-8">Let&apos;s scope it and show you the fastest path to launch.</p>
           <Link href="/contact" className="btn-primary px-8 py-4">
-            Book a Consultation
+            Let&apos;s Talk
           </Link>
         </div>
       </section>
