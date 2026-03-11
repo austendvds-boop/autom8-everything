@@ -42,13 +42,13 @@ export default function WhoItsFor() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="pt-14 pb-20 md:pt-20 md:pb-24 bg-[#0A0A0F]">
+    <section className="pt-14 pb-20 md:pt-20 md:pb-24 bg-[#0E1015]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div className="text-center mb-12 md:mb-14" {...(prefersReducedMotion ? revealReduced : reveal)} initial={false}>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-manrope), sans-serif" }}>
             Built for Local Businesses That Rely on Calls and Reviews
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-3xl mx-auto">
+          <p className="text-[#9B978F] text-lg md:text-xl max-w-3xl mx-auto">
             Whether you run a crew, manage a front desk, or own a practice — Autom8 is built for operators like you.
           </p>
         </motion.div>
@@ -64,11 +64,11 @@ export default function WhoItsFor() {
                 initial={false}
                 {...(prefersReducedMotion ? {} : cardHover)}
               >
-                <div className="w-11 h-11 rounded-xl bg-[#8B5CF6]/10 flex items-center justify-center mb-4">
-                  <Icon className="w-5 h-5 text-[#A78BFA]" />
+                <div className="w-11 h-11 rounded-xl bg-[rgba(212,160,48,0.10)] flex items-center justify-center mb-4">
+                  <Icon className="w-5 h-5 text-[#D4A030]" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{vertical.title}</h3>
-                <p className="text-[#A1A1AA] text-[15px] leading-relaxed">{vertical.description}</p>
+                <p className="text-[#9B978F] text-[15px] leading-relaxed">{vertical.description}</p>
               </motion.div>
             );
           })}

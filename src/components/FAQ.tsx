@@ -46,7 +46,7 @@ export default function FAQ() {
       <div className="section-glow section-glow--mixed -top-20 right-0" />
       <div className="max-w-3xl mx-auto px-6 relative z-10">
         <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-manrope), sans-serif" }}>
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
         </motion.div>
@@ -58,12 +58,12 @@ export default function FAQ() {
               <motion.div key={index} {...revealStagger(index, prefersReducedMotion)} initial={prefersReducedMotion ? false : undefined}>
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full text-left p-6 bg-[#111118] border border-white/[0.04] rounded-2xl hover:border-[#8B5CF6]/30 hover:shadow-[0_0_80px_rgba(139,92,246,0.08)] transition-[border-color,box-shadow] duration-200 group"
+                  className="w-full text-left p-6 bg-[#161920] border border-white/[0.04] rounded-2xl hover:border-[#D4A030]/30 hover:shadow-[0_0_80px_rgba(212,160,48,0.08)] transition-[border-color,box-shadow] duration-200 group"
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <span className="font-semibold text-lg text-white group-hover:text-[#8B5CF6] transition-colors">{faq.question}</span>
+                    <span className="font-semibold text-lg text-white group-hover:text-[#D4A030] transition-colors">{faq.question}</span>
                     <motion.div animate={prefersReducedMotion ? undefined : { rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                      {isOpen ? <Minus className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" /> : <Plus className="w-5 h-5 text-[#52525B] group-hover:text-[#8B5CF6] transition-colors" />}
+                      {isOpen ? <Minus className="w-5 h-5 text-[#D4A030] flex-shrink-0" /> : <Plus className="w-5 h-5 text-[#5E5B56] group-hover:text-[#D4A030] transition-colors" />}
                     </motion.div>
                   </div>
 
@@ -76,7 +76,7 @@ export default function FAQ() {
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >
-                        <p className="pt-4 text-[#A1A1AA] leading-relaxed text-[15px]">{faq.answer}</p>
+                        <p className="pt-4 text-[#9B978F] leading-relaxed text-[15px]">{faq.answer}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
