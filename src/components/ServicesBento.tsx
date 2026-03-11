@@ -101,34 +101,34 @@ export default function ServicesBento() {
   const heroCard = (
     <motion.article
       aria-label={hero.productName}
-      className="glass-card group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(140deg,rgba(21,18,33,0.96),rgba(15,15,24,0.96))_padding-box,linear-gradient(135deg,rgba(139,92,246,0.72),rgba(6,182,212,0.42))_border-box] p-7 md:p-10 shadow-[0_0_0_1px_rgba(139,92,246,0.3),0_0_88px_rgba(139,92,246,0.16)] hover:shadow-[0_0_0_1px_rgba(167,139,250,0.42),0_0_120px_rgba(139,92,246,0.24)] transition-[box-shadow,border-color] duration-300"
+      className="glass-card group relative overflow-hidden rounded-3xl border border-transparent bg-[linear-gradient(140deg,rgba(22,20,14,0.96),rgba(14,16,21,0.96))_padding-box,linear-gradient(135deg,rgba(212,160,48,0.72),rgba(232,192,104,0.42))_border-box] p-7 md:p-10 shadow-[0_0_0_1px_rgba(212,160,48,0.3),0_0_88px_rgba(212,160,48,0.16)] hover:shadow-[0_0_0_1px_rgba(232,192,104,0.42),0_0_120px_rgba(212,160,48,0.24)] transition-[box-shadow,border-color] duration-300"
       variants={scaleIn}
       initial={prefersReducedMotion ? false : "hidden"}
       whileInView="visible"
       viewport={viewportOnce}
     >
-      <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.28),transparent_60%)] opacity-90 blur-3xl" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/[0.11] via-transparent to-[#06B6D4]/[0.08]" />
+      <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(circle_at_top_left,rgba(212,160,48,0.20),transparent_60%)] opacity-90 blur-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#D4A030]/[0.08] via-transparent to-[#E8C068]/[0.04]" />
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-7 md:gap-10 items-start">
         <div className="flex flex-col">
           <div className="flex flex-wrap items-center gap-3 mb-3">
-            <span className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">{hero.eyebrow}</span>
+            <span className="text-xs uppercase tracking-[0.16em] font-medium text-[#D4A030]">{hero.eyebrow}</span>
             {hero.badge && (
-              <span className="inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.14em] font-semibold px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#7C3AED] via-[#8B5CF6] to-[#A78BFA] border border-[#DDD6FE]/70 ring-1 ring-[#DDD6FE]/35 text-white shadow-[0_0_30px_rgba(167,139,250,0.5)]">
+              <span className="inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.14em] font-semibold px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#B8892A] via-[#D4A030] to-[#E8C068] border border-[#E8C068]/70 ring-1 ring-[#E8C068]/35 text-white shadow-[0_0_30px_rgba(232,192,104,0.5)]">
                 {hero.badge}
               </span>
             )}
           </div>
 
-          <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/[0.22] shadow-[0_0_20px_rgba(139,92,246,0.24)] flex items-center justify-center mb-4">
-            <HeroIcon className="w-5 h-5 text-[#8B5CF6]" />
+          <div className="w-12 h-12 rounded-xl bg-[#D4A030]/[0.22] shadow-[0_0_20px_rgba(212,160,48,0.24)] flex items-center justify-center mb-4">
+            <HeroIcon className="w-5 h-5 text-[#D4A030]" />
           </div>
 
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-playfair), serif" }}>
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-manrope), sans-serif" }}>
             {hero.productName}
           </h3>
 
-          <p className="text-[#A1A1AA] text-[15px] leading-relaxed max-w-2xl mb-4">{hero.valueProp}</p>
+          <p className="text-[#9B978F] text-[15px] leading-relaxed max-w-2xl mb-4">{hero.valueProp}</p>
           <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-4" />
 
           <p
@@ -137,9 +137,9 @@ export default function ServicesBento() {
           >
             {hero.price}
           </p>
-          <p className="text-xs text-[#A78BFA] mt-2 mb-4">{hero.priceContext}</p>
+          <p className="text-xs text-[#E8C068] mt-2 mb-4">{hero.priceContext}</p>
 
-          <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium mb-6">
+          <div className="inline-flex items-center gap-1.5 text-xs text-[#E8C068] font-medium mb-6">
             <Check className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{hero.microProof}</span>
           </div>
@@ -147,14 +147,14 @@ export default function ServicesBento() {
           <div className="flex flex-col sm:flex-row gap-3 mt-auto">
             <a
               href={hero.cta.href}
-              className="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white text-sm font-semibold"
+              className="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] text-[#0E1015] text-sm font-semibold"
             >
               {hero.cta.label}
             </a>
             {hero.secondaryCta && (
               <Link
                 href={hero.secondaryCta.href}
-                className="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full border border-white/20 text-white text-sm font-semibold hover:border-[#8B5CF6]/60 transition-colors"
+                className="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full border border-white/20 text-[#EDEBE8] text-sm font-semibold hover:border-[#D4A030]/50 transition-colors"
               >
                 {hero.secondaryCta.label}
               </Link>
@@ -162,15 +162,15 @@ export default function ServicesBento() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/[0.12] bg-[#0F0F18]/70 p-5 md:p-6 shadow-[inset_0_0_60px_rgba(139,92,246,0.1)]">
-          <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6] mb-4">What Cadence handles</p>
+        <div className="rounded-2xl border border-white/[0.12] bg-[#0E1015]/70 p-5 md:p-6 shadow-[inset_0_0_60px_rgba(212,160,48,0.1)]">
+          <p className="text-xs uppercase tracking-[0.16em] font-medium text-[#D4A030] mb-4">What Cadence handles</p>
           <ul className="space-y-3">
             {heroFeatures.map((feature) => (
               <li key={feature} className="flex items-start gap-2.5">
-                <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#8B5CF6]/20 text-[#C4B5FD]">
+                <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#D4A030]/15 text-[#E8C068]">
                   <Check className="h-3 w-3" aria-hidden="true" />
                 </span>
-                <span className="text-sm leading-relaxed text-[#D4D4D8]">{feature}</span>
+                <span className="text-sm leading-relaxed text-[#9B978F]">{feature}</span>
               </li>
             ))}
           </ul>
@@ -185,30 +185,30 @@ export default function ServicesBento() {
     return (
       <motion.article
         aria-label={product.productName}
-        className="glass-card group relative overflow-hidden bg-[#111118] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[320px] hover:border-[#8B5CF6]/35 hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)] transition-[box-shadow,border-color] duration-300"
+        className="glass-card group relative overflow-hidden bg-[#161920] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[320px] hover:border-[#D4A030]/30 hover:shadow-[0_0_0_1px_rgba(212,160,48,0.32),0_0_40px_rgba(212,160,48,0.20)] transition-[box-shadow,border-color] duration-300"
         variants={scaleIn}
         initial={prefersReducedMotion ? false : undefined}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/0 to-transparent group-hover:from-[#8B5CF6]/[0.04] transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#D4A030]/0 to-transparent group-hover:from-[#D4A030]/[0.04] transition-opacity duration-500" />
         <div className="relative z-10 h-full flex flex-col">
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <div className="text-xs uppercase tracking-[0.16em] font-medium text-[#8B5CF6]">{product.eyebrow}</div>
+            <div className="text-xs uppercase tracking-[0.16em] font-medium text-[#D4A030]">{product.eyebrow}</div>
             {product.badge && (
-              <span className="text-[10px] uppercase tracking-[0.12em] font-medium px-2.5 py-1 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#A78BFA]">
+              <span className="text-[10px] uppercase tracking-[0.12em] font-medium px-2.5 py-1 rounded-full bg-[#D4A030]/10 border border-[#D4A030]/20 text-[#E8C068]">
                 {product.badge}
               </span>
             )}
           </div>
 
-          <div className="w-11 h-11 rounded-xl bg-[#8B5CF6]/[0.12] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
-            <Icon className="w-5 h-5 text-[#8B5CF6]" />
+          <div className="w-11 h-11 rounded-xl bg-[#D4A030]/[0.12] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+            <Icon className="w-5 h-5 text-[#D4A030]" />
           </div>
 
-          <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-playfair), serif" }}>
+          <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-manrope), sans-serif" }}>
             {product.productName}
           </h3>
 
-          <p className="text-[#A1A1AA] text-[15px] leading-relaxed mb-5">{product.valueProp}</p>
+          <p className="text-[#9B978F] text-[15px] leading-relaxed mb-5">{product.valueProp}</p>
 
           <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-5" />
 
@@ -218,10 +218,10 @@ export default function ServicesBento() {
           >
             {product.price}
           </p>
-          <p className="text-xs text-[#71717A] mt-1 mb-4">{product.priceContext}</p>
-          {product.productName === "Web + Monthly SEO" ? <p className="text-xs text-[#71717A] mt-1">+ $50/mo hosting required</p> : null}
+          <p className="text-xs text-[#5E5B56] mt-1 mb-4">{product.priceContext}</p>
+          {product.productName === "Web + Monthly SEO" ? <p className="text-xs text-[#5E5B56] mt-1">+ $50/mo hosting required</p> : null}
 
-          <div className="inline-flex items-center gap-1.5 text-xs text-[#A78BFA] font-medium mb-4">
+          <div className="inline-flex items-center gap-1.5 text-xs text-[#E8C068] font-medium mb-4">
             <Check className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{product.microProof}</span>
           </div>
@@ -229,7 +229,7 @@ export default function ServicesBento() {
           <div className="mt-auto pt-2">
             <Link
               href={product.cta.href}
-              className="inline-flex items-center justify-center min-h-11 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white text-sm font-semibold"
+              className="inline-flex items-center justify-center min-h-11 px-5 py-2.5 rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] text-[#0E1015] text-sm font-semibold"
             >
               {product.cta.label}
             </Link>
@@ -252,11 +252,11 @@ export default function ServicesBento() {
         >
           <h2
             className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4"
-            style={{ fontFamily: "var(--font-playfair), serif" }}
+            style={{ fontFamily: "var(--font-manrope), sans-serif" }}
           >
             Products That Keep Your Business <span className="gradient-text">Running Smoothly</span>
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-[#9B978F] text-lg md:text-xl max-w-2xl mx-auto">
             Start with one or combine a few. Each one works on its own — no bundles, no upsells.
           </p>
         </motion.div>

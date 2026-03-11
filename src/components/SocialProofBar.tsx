@@ -14,10 +14,11 @@ export default function SocialProofBar() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="py-8 bg-[#0A0A0F] border-y border-white/5">
+    <section className="py-8 bg-[#0E1015] border-y border-white/5">
       <div className="max-w-6xl mx-auto px-6">
         <motion.p
-          className="text-center text-[#A1A1AA] text-sm uppercase tracking-widest mb-6"
+          className="text-center text-[#9B978F] text-sm uppercase tracking-widest mb-6"
+          style={{ fontFamily: "var(--font-manrope), sans-serif" }}
           {...(prefersReducedMotion ? revealReduced : reveal)}
         >
           Trusted by local teams that want growth without extra busywork
@@ -27,16 +28,16 @@ export default function SocialProofBar() {
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              className="rounded-2xl border border-white/[0.06] bg-[#111118] px-6 py-4 text-center"
+              className="rounded-2xl border border-white/[0.06] bg-[#161920] px-6 py-4 text-center"
               {...revealStagger(index, prefersReducedMotion)}
             >
               <p className="text-2xl font-bold gradient-text">{stat.value}</p>
-              <p className="text-sm text-[#A1A1AA]">{stat.label}</p>
+              <p className="text-sm text-[#9B978F]">{stat.label}</p>
             </motion.div>
           ))}
 
           <motion.div
-            className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111118] px-6 py-4"
+            className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#161920] px-6 py-4"
             {...revealStagger(3, prefersReducedMotion)}
           >
             <div
@@ -59,7 +60,7 @@ export default function SocialProofBar() {
                   </motion.span>
                 ))}
               </div>
-              <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">5-Star Client Feedback</p>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#9B978F]">5-Star Client Feedback</p>
             </div>
           </motion.div>
         </div>
