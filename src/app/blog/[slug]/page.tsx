@@ -114,7 +114,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </p>
             <Link
               href="/contact"
-              className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] text-[#0E1015] font-semibold"
+              className="inline-block select-none rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-6 py-3 font-semibold text-[#0E1015]"
             >
               Book Your Free Audit
             </Link>

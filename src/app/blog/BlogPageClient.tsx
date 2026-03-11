@@ -142,7 +142,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
             <p className="mb-6 text-[#A1A1AA]">
               Explore our <Link href="/pricing" className="text-[#D4A030] hover:text-[#E5B544]">automation services</Link>, review Phoenix-area coverage in the <Link href="/locations" className="text-[#D4A030] hover:text-[#E5B544]">location hub</Link>, and request a <Link href="/contact" className="text-[#D4A030] hover:text-[#E5B544]">quote or strategy call</Link>.
             </p>
-            <Link href="/contact" className="inline-block rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-6 py-3 font-semibold text-[#0E1015]">
+            <Link href="/contact" className="inline-block select-none rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-6 py-3 font-semibold text-[#0E1015]">
               Book a Free Automation Audit
             </Link>
           </div>

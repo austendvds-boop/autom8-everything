@@ -36,7 +36,7 @@ export default function ShimmerButton({
 }: ShimmerButtonProps) {
   const prefersReducedMotion = useReducedMotion();
   const classes = [
-    "rounded-full font-semibold inline-flex items-center justify-center gap-2 will-change-transform",
+    "rounded-full font-semibold inline-flex items-center justify-center gap-2 will-change-transform select-none",
     sizeClasses[size],
     variantClasses[variant],
     className,

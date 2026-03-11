@@ -179,7 +179,7 @@ export default function OnboardingClient() {
             <p className="text-sm uppercase tracking-wide text-[#A78BFA] mb-3">Phone-first setup</p>
             <a
               href="tel:+14806313993"
-              className="inline-flex w-full md:w-auto items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 text-lg md:text-2xl font-semibold text-white"
+              className="inline-flex w-full select-none items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 text-lg font-semibold text-white md:w-auto md:text-2xl"
             >
               Call (480) 631-3993
             </a>

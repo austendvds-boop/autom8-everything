@@ -330,6 +330,16 @@ body {
   border-color: var(--border-active);
 }
 
+/* Prevent text selection on interactive elements */
+button,
+[role="button"],
+.btn-primary,
+.btn-secondary,
+.shimmer-btn {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .btn-ghost {
   display: inline-flex;
   align-items: center;

@@ -110,7 +110,7 @@ export default function AboutPageClient() {
               <motion.p variants={staggerItem} className="mb-8 text-lg text-[#A1A1AA] will-change-transform">
                 Tell us about your business and we&apos;ll point you in the right direction.
               </motion.p>
-              <Link href="/contact" className="inline-block rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-8 py-4 font-semibold text-[#0E1015]">
+              <Link href="/contact" className="inline-block select-none rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-8 py-4 font-semibold text-[#0E1015]">
                 Contact Us
               </Link>
             </motion.div>

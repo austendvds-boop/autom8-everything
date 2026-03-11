@@ -206,7 +206,7 @@ export default function PortalReviewFunnelClient() {
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href="/review-funnel/dashboard"
-              className="inline-flex rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95"
+              className="inline-flex select-none rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95"
             >
               Open Full Dashboard
             </Link>
