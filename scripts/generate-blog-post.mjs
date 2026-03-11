@@ -3,12 +3,26 @@ import path from "node:path";
 import { execSync } from "node:child_process";
 
 const rootDir = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
-const queuePath = path.join(rootDir, "scripts/blog-keyword-queue.json");
+const poolPath = path.join(rootDir, "scripts/blog-keyword-pool.json");
 const outputDir = path.join(rootDir, "content/blog");
 const gatewayUrl = "http://localhost:18789/v1/chat/completions";
 const gatewayTokenPath = "C:/Users/austen/.openclaw/credentials/openclaw-gateway-token.txt";
 
-const categories = ["Automation Strategy", "CRM Automation", "Local SEO", "Comparisons", "Phoenix Local"];
+const categoryDisplayNames = {
+  cadence: "AI Voice & Answering",
+  "review-funnel": "Review Automation",
+  website: "Website Creation",
+  seo: "Local SEO",
+  newlywed: "Small Business Tips",
+};
+
+const promptsByCategory = {
+  cadence: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 offers Cadence - an AI voice receptionist that answers business calls 24/7, routes urgent calls, and sends call summaries, for $199/mo. Topic: {keyword}. Include: the problem it solves, how Cadence specifically helps, a real example scenario, CTA to try Cadence free. Plain professional tone. No emojis. Output ONLY the markdown content.",
+  "review-funnel": "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 offers a Review Funnel - automated SMS follow-ups after every job that guide happy customers to leave Google reviews, for $79/mo. Topic: {keyword}. Include: why Google reviews matter, how the funnel works, a realistic example, CTA to get more reviews. Plain professional tone. No emojis. Output ONLY the markdown content.",
+  website: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 builds professional websites for local businesses starting at $799, always bundled with monthly SEO. Topic: {keyword}. Include: what local businesses actually need in a website, why SEO must be built in from day one, how Autom8 delivers both, CTA to get a free quote. Plain professional tone. No emojis. Output ONLY the markdown content.",
+  seo: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 offers monthly SEO and blog content for local businesses at $299-$599/mo. Topic: {keyword}. Include: what local SEO actually involves, why ongoing content matters, how small businesses can compete, CTA to get started. Plain professional tone. No emojis. Output ONLY the markdown content.",
+  newlywed: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 builds professional websites and handles digital marketing for new business owners, starting at $799. Topic: {keyword}. Include: why the post-wedding period is great for starting a business, what digital presence new business owners need, how Autom8 makes it simple, CTA to get a free quote. Warm, practical tone. No emojis. Output ONLY the markdown content.",
+};
 
 function toSlug(value) {
   return value
@@ -19,45 +33,80 @@ function toSlug(value) {
     .replace(/-+/g, "-");
 }
 
-function toTitle(keyword) {
-  return keyword
+function keywordToTags(keyword, category) {
+  const keywordTags = keyword
+    .toLowerCase()
     .split(/\s+/)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
-function pickCategory(keyword) {
-  const lower = keyword.toLowerCase();
-  if (lower.includes("crm") || lower.includes("gohighlevel")) return "CRM Automation";
-  if (lower.includes("seo")) return "Local SEO";
-  if (lower.includes("vs") || lower.includes("compare")) return "Comparisons";
-  if (lower.includes("phoenix")) return "Phoenix Local";
-  return "Automation Strategy";
-}
-
-function pickTags(keyword, category) {
-  const base = keyword.toLowerCase();
-  const tags = [base, category.toLowerCase(), "phoenix automation"];
-  return [...new Set(tags)].slice(0, 3);
+    .map((part) => toSlug(part))
+    .filter(Boolean);
+  return [...new Set([...keywordTags, toSlug(category)])];
 }
 
 function pickImage(keyword) {
   const lower = keyword.toLowerCase();
-  if (lower.includes("crm")) {
-    return "https://images.unsplash.com/photo-1551281044-8f7b0f63f8b0?auto=format&fit=crop&w=1600&q=80";
+  if (lower.includes("review") || lower.includes("google")) {
+    return "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80";
+  }
+  if (lower.includes("website")) {
+    return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80";
   }
   if (lower.includes("seo")) {
     return "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1600&q=80";
   }
-  if (lower.includes("hvac") || lower.includes("contractor")) {
-    return "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80";
+  if (lower.includes("call") || lower.includes("phone") || lower.includes("receptionist")) {
+    return "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=80";
   }
-  return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80";
+  return "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80";
 }
 
-async function generateBody(keyword, gatewayToken) {
-  const prompt = `Write a 500-600 word SEO blog post for autom8everything.com, a Phoenix Arizona automation agency. Topic: ${keyword}. Include: what the topic is, why local Phoenix businesses care, how Autom8 Everything helps, CTA to contact. No emojis. Plain professional tone. Output ONLY the markdown content (no code blocks, no commentary).`;
+function makeMetaDescription(keyword) {
+  const raw = `Learn how ${keyword} helps small businesses grow with practical guidance from Autom8 Everything.`;
+  return raw.length <= 155 ? raw : `${raw.slice(0, 152)}...`;
+}
 
+function escapeYaml(value) {
+  return String(value).replace(/"/g, '\\"');
+}
+
+function getSortedEntries(entries) {
+  return [...entries].sort((left, right) => {
+    const leftPriority = Number.isFinite(left?.priority) ? left.priority : Number.MAX_SAFE_INTEGER;
+    const rightPriority = Number.isFinite(right?.priority) ? right.priority : Number.MAX_SAFE_INTEGER;
+    return leftPriority - rightPriority;
+  });
+}
+
+function selectKeyword(poolData) {
+  const rotation = Array.isArray(poolData.categoryRotation) ? poolData.categoryRotation : [];
+  const published = new Set(Array.isArray(poolData.published) ? poolData.published : []);
+
+  if (rotation.length === 0) {
+    return null;
+  }
+
+  const lastIndex = rotation.indexOf(poolData.lastCategory);
+  const startIndex = lastIndex === -1 ? 0 : (lastIndex + 1) % rotation.length;
+
+  for (let offset = 0; offset < rotation.length; offset += 1) {
+    const category = rotation[(startIndex + offset) % rotation.length];
+    const entries = Array.isArray(poolData.pool?.[category]) ? getSortedEntries(poolData.pool[category]) : [];
+    const match = entries.find((entry) => !published.has(entry.keyword));
+    if (match) {
+      return { category, entry: match };
+    }
+  }
+
+  return null;
+}
+
+async function generateBody(category, keyword, gatewayToken) {
+  const template = promptsByCategory[category];
+
+  if (!template) {
+    throw new Error(`Unsupported category: ${category}`);
+  }
+
+  const prompt = template.replace("{keyword}", keyword);
   const response = await fetch(gatewayUrl, {
     method: "POST",
     headers: {
@@ -80,56 +129,51 @@ async function generateBody(keyword, gatewayToken) {
   return json?.choices?.[0]?.message?.content?.trim() || "";
 }
 
-function escapeYaml(value) {
-  return String(value).replace(/"/g, '\\"');
-}
-
-function makeMetaDescription(keyword) {
-  const raw = `Learn ${keyword} strategies for Phoenix businesses with practical automation steps from Autom8 Everything.`;
-  return raw.length <= 155 ? raw : `${raw.slice(0, 152)}...`;
-}
-
 async function main() {
   if (!fs.existsSync(gatewayTokenPath)) {
     console.log("Missing gateway token at credentials/openclaw-gateway-token.txt");
     process.exit(0);
   }
 
-  if (!fs.existsSync(queuePath)) {
-    throw new Error(`Queue file not found at ${queuePath}`);
+  if (!fs.existsSync(poolPath)) {
+    throw new Error(`Pool file not found at ${poolPath}`);
   }
 
-  const queueData = JSON.parse(fs.readFileSync(queuePath, "utf8"));
-  const queue = Array.isArray(queueData.queue) ? queueData.queue : [];
+  const poolData = JSON.parse(fs.readFileSync(poolPath, "utf8"));
+  const selection = selectKeyword(poolData);
 
-  if (queue.length === 0) {
-    console.log("Queue empty");
+  if (!selection) {
+    console.log("Keyword pool exhausted");
     process.exit(0);
   }
 
-  const keyword = queue[0];
+  const { category, entry } = selection;
+  const { keyword, title } = entry;
   const slug = toSlug(keyword);
-  const title = toTitle(keyword);
-  const category = categories.includes(pickCategory(keyword)) ? pickCategory(keyword) : "Automation Strategy";
-  const tags = pickTags(keyword, category);
+  const displayCategory = categoryDisplayNames[category] || "General";
+  const tags = keywordToTags(keyword, category);
   const publishedAt = new Date().toISOString().slice(0, 10);
-  const seoTitle = `${title} | Phoenix Automation Guide | Autom8 Everything`;
+  const seoTitle = `${title} | Autom8 Everything`;
   const metaDescription = makeMetaDescription(keyword);
   const featuredImage = pickImage(keyword);
 
   const gatewayToken = fs.readFileSync(gatewayTokenPath, "utf8").trim();
-  const body = await generateBody(keyword, gatewayToken);
+  const body = await generateBody(category, keyword, gatewayToken);
 
   if (!body) {
     throw new Error("Moonshot returned empty content");
   }
+
+  poolData.lastCategory = category;
+  poolData.published = [...(Array.isArray(poolData.published) ? poolData.published : []), keyword];
+  fs.writeFileSync(poolPath, JSON.stringify(poolData, null, 2) + "\n", "utf8");
 
   const markdown = [
     "---",
     `title: \"${escapeYaml(title)}\"`,
     `seoTitle: \"${escapeYaml(seoTitle)}\"`,
     `metaDescription: \"${escapeYaml(metaDescription)}\"`,
-    `category: \"${escapeYaml(category)}\"`,
+    `category: \"${escapeYaml(displayCategory)}\"`,
     `tags: [${tags.map((tag) => `\"${escapeYaml(tag)}\"`).join(", ")}]`,
     `publishedAt: ${publishedAt}`,
     `featuredImage: \"${escapeYaml(featuredImage)}\"`,
@@ -144,11 +188,7 @@ async function main() {
   const postPath = path.join(outputDir, `${slug}.md`);
   fs.writeFileSync(postPath, markdown, "utf8");
 
-  queueData.queue = queue.slice(1);
-  queueData.published = [...(Array.isArray(queueData.published) ? queueData.published : []), keyword];
-  fs.writeFileSync(queuePath, JSON.stringify(queueData, null, 2) + "\n", "utf8");
-
-  execSync(`git add content/blog/${slug}.md scripts/blog-keyword-queue.json`, { stdio: "inherit" });
+  execSync(`git add content/blog/${slug}.md scripts/blog-keyword-pool.json`, { stdio: "inherit" });
   execSync(`git commit -m \"Auto-publish: ${title}\"`, { stdio: "inherit" });
   execSync("git push origin master", { stdio: "inherit" });
 

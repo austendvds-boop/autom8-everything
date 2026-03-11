@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "categoryRotation": ["cadence", "review-funnel", "website", "seo", "newlywed"],
+  "lastCategory": null,
+  "published": [],
+  "pool": {
+    "cadence": [
+      { "keyword": "how much does an AI answering service cost", "title": "How Much Does an AI Answering Service Cost in 2026?", "competition": "low", "priority": 1 },
+      { "keyword": "AI answering service vs live receptionist", "title": "AI Answering Service vs Live Receptionist: Which Is Right for Your Business?", "competition": "low", "priority": 2 },
+      { "keyword": "best AI phone answering service for small business", "title": "The Best AI Phone Answering Services for Small Businesses (2026)", "competition": "high", "priority": 3 },
+      { "keyword": "AI answering service for HVAC companies", "title": "AI Phone Answering for HVAC Companies: Stop Losing Emergency Calls", "competition": "low", "priority": 4 },
+      { "keyword": "AI receptionist that books appointments", "title": "How an AI Receptionist Can Book Appointments While You Work", "competition": "low", "priority": 5 },
+      { "keyword": "after hours answering service small business", "title": "After-Hours Answering Service for Small Businesses: Never Miss a Call Again", "competition": "medium", "priority": 6 },
+      { "keyword": "AI answering service for plumbers", "title": "AI Answering Service for Plumbers: Answer Every Emergency Call 24/7", "competition": "low", "priority": 7 },
+      { "keyword": "AI phone agent for contractors", "title": "Why Contractors Are Switching to AI Phone Agents in 2026", "competition": "low", "priority": 8 }
+    ],
+    "review-funnel": [
+      { "keyword": "how to get more Google reviews automatically", "title": "How to Get More Google Reviews Automatically (Without Begging)", "competition": "low", "priority": 1 },
+      { "keyword": "Google review follow up text message template", "title": "Google Review Follow-Up Text Templates That Actually Get Responses", "competition": "low", "priority": 2 },
+      { "keyword": "review automation for contractors", "title": "Review Automation for Contractors: Get 5-Star Reviews on Autopilot", "competition": "low", "priority": 3 },
+      { "keyword": "Podium alternatives under $100 per month", "title": "Podium vs Cheaper Alternatives: Review Tools Under $100/Month", "competition": "medium", "priority": 4 },
+      { "keyword": "best way to collect Google reviews 2026", "title": "The Best Way to Collect Google Reviews in 2026 (What Actually Works)", "competition": "low", "priority": 5 },
+      { "keyword": "automated review request software small business", "title": "Automated Review Request Software: How Small Businesses Get More 5-Star Reviews", "competition": "medium", "priority": 6 },
+      { "keyword": "how to ask customers for Google reviews", "title": "How to Ask Customers for Google Reviews Without Feeling Awkward", "competition": "low", "priority": 7 }
+    ],
+    "website": [
+      { "keyword": "how much does a small business website cost", "title": "How Much Does a Small Business Website Cost in 2026?", "competition": "medium", "priority": 1 },
+      { "keyword": "small business website with monthly SEO included", "title": "Why Your Small Business Website Should Include Monthly SEO", "competition": "low", "priority": 2 },
+      { "keyword": "website design for local service business", "title": "Website Design for Local Service Businesses: What You Actually Need", "competition": "low", "priority": 3 },
+      { "keyword": "website design for med spa", "title": "Med Spa Website Design: What Separates Good From Great", "competition": "low", "priority": 4 },
+      { "keyword": "website design for plumbers Phoenix", "title": "Plumber Website Design in Phoenix: Get Found Before Your Competitors", "competition": "low", "priority": 5 },
+      { "keyword": "affordable professional website for small business", "title": "How to Get a Professional Business Website Without Overpaying", "competition": "medium", "priority": 6 }
+    ],
+    "seo": [
+      { "keyword": "is monthly SEO worth it for small business", "title": "Is Monthly SEO Worth It for Small Businesses? Here's the Math", "competition": "low", "priority": 1 },
+      { "keyword": "how much does local SEO cost per month", "title": "How Much Does Local SEO Cost Per Month in 2026?", "competition": "medium", "priority": 2 },
+      { "keyword": "local SEO vs DIY for small business", "title": "Local SEO vs DIY: What Actually Moves the Needle for Small Businesses", "competition": "low", "priority": 3 },
+      { "keyword": "SEO for contractors Phoenix AZ", "title": "SEO for Contractors in Phoenix AZ: How to Rank Before Your Competitors", "competition": "low", "priority": 4 },
+      { "keyword": "blog writing service for small business", "title": "Blog Writing for Small Businesses: Why Consistent Content Wins", "competition": "medium", "priority": 5 },
+      { "keyword": "monthly SEO plan with blog posts for local business", "title": "What a Monthly SEO Plan With Blog Posts Does for Local Businesses", "competition": "low", "priority": 6 }
+    ],
+    "newlywed": [
+      { "keyword": "starting a business after getting married", "title": "Just Got Married? Here's Why Now Is the Best Time to Start a Business", "competition": "low", "priority": 1 },
+      { "keyword": "newlywed couple side hustle ideas 2026", "title": "Best Side Hustle Ideas for Newlyweds in 2026 (That Actually Pay Off)", "competition": "low", "priority": 2 },
+      { "keyword": "first business website for new entrepreneurs", "title": "Your First Business Website: Everything New Business Owners Need to Know", "competition": "low", "priority": 3 },
+      { "keyword": "building a brand as a couple after marriage", "title": "Building a Brand Together: How Married Couples Launch Successful Businesses", "competition": "low", "priority": 4 },
+      { "keyword": "website for new small business owner", "title": "New Business Owner? Here's What Your Website Needs From Day One", "competition": "medium", "priority": 5 }
+    ]
+  }
+}
