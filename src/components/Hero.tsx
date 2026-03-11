@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { PhoneCall } from "lucide-react";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import GradientMesh from "@/components/GradientMesh";
 import BrandLogo from "@/components/BrandLogo";
@@ -88,12 +87,11 @@ export default function Hero() {
               })}
         >
           <motion.a
-            href="tel:+14806313993"
-            className="btn-primary text-lg gap-2 px-10 py-4 shadow-[0_0_30px_rgba(212,160,48,0.3)]"
+            href="/contact"
+            className="btn-primary text-lg px-10 py-4 shadow-[0_0_30px_rgba(212,160,48,0.3)]"
             variants={prefersReducedMotion ? undefined : staggerItem}
             {...(prefersReducedMotion ? {} : buttonHover)}
           >
-            <PhoneCall className="w-5 h-5" />
             Try Cadence Free
           </motion.a>
 
