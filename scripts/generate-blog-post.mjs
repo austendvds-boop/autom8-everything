@@ -5,8 +5,8 @@ import { execSync } from "node:child_process";
 const rootDir = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
 const poolPath = path.join(rootDir, "scripts/blog-keyword-pool.json");
 const outputDir = path.join(rootDir, "content/blog");
-const gatewayUrl = "http://localhost:18789/v1/chat/completions";
-const gatewayTokenPath = "C:/Users/austen/.openclaw/credentials/openclaw-gateway-token.txt";
+const gatewayUrl = "https://api.openai.com/v1/chat/completions";
+const gatewayTokenPath = "C:/Users/austen/.openclaw/credentials/openai-api-key.txt";
 
 const categoryDisplayNames = {
   cadence: "AI Voice & Answering",
@@ -114,7 +114,7 @@ async function generateBody(category, keyword, gatewayToken) {
       Authorization: `Bearer ${gatewayToken}`,
     },
     body: JSON.stringify({
-      model: "moonshot/kimi-k2.5",
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     }),
