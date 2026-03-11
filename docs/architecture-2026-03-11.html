@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steve Orchestration Architecture &#8212; 2026-03-11</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #111827;
+      --panel-2: #0f1724;
+      --grid: rgba(148, 163, 184, 0.08);
+      --text: #e5eefb;
+      --muted: #94a3b8;
+      --human: #f4b942;
+      --agent: #2dd4ff;
+      --agent-2: #34d399;
+      --infra: #d946ef;
+      --external-telegram: #2aabee;
+      --external-github: #9ca3af;
+      --cron: #4fd1c5;
+      --project: #ff7a59;
+      --prompt: #fb7185;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 1240px;
+      color: var(--text);
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(45, 212, 255, 0.11), transparent 26%),
+        radial-gradient(circle at 82% 14%, rgba(217, 70, 239, 0.14), transparent 24%),
+        linear-gradient(180deg, #0d1117 0%, #09101b 100%);
+    }
+
+    .page {
+      padding: 28px 28px 40px;
+    }
+
+    .frame {
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(17, 24, 39, 0.96), rgba(12, 18, 30, 0.96)),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        linear-gradient(0deg, var(--grid) 1px, transparent 1px);
+      background-size: auto, 28px 28px, 28px 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .legend {
+      min-width: 320px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      background: rgba(15, 23, 36, 0.86);
+      backdrop-filter: blur(8px);
+    }
+
+    .legend h2 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #cbd5e1;
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 10px 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      box-shadow: 0 0 14px currentColor;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(45, 212, 255, 0.06), transparent 40%),
+        linear-gradient(180deg, rgba(10, 16, 26, 0.8), rgba(8, 12, 20, 0.95));
+    }
+
+    .footnote {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.01em;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="frame">
+      <div class="header">
+        <div>
+          <h1>Steve Orchestration Architecture &#8212; 2026-03-11</h1>
+          <p class="subtitle">
+            End-to-end control path for requests, research, coding, hook wakeups, gate retries, scheduled jobs,
+            and project delivery. Steve sits at the center, with Lobster coordinating the pipeline and Telegram
+            carrying operator-facing notifications.
+          </p>
+        </div>
+        <div class="legend">
+          <h2>Legend</h2>
+          <div class="legend-grid">
+            <div class="legend-item"><span class="swatch" style="background:#f4b942;color:#f4b942"></span>Human operator</div>
+            <div class="legend-item"><span class="swatch" style="background:#2dd4ff;color:#2dd4ff"></span>AI agents</div>
+            <div class="legend-item"><span class="swatch" style="background:#d946ef;color:#d946ef"></span>Infrastructure</div>
+            <div class="legend-item"><span class="swatch" style="background:#2aabee;color:#2aabee"></span>Telegram / external</div>
+            <div class="legend-item"><span class="swatch" style="background:#4fd1c5;color:#4fd1c5"></span>Scheduled crons</div>
+            <div class="legend-item"><span class="swatch" style="background:#ff7a59;color:#ff7a59"></span>Target projects</div>
+            <div class="legend-item"><span class="swatch" style="background:#fb7185;color:#fb7185"></span>Batch prompts</div>
+            <div class="legend-item"><span class="swatch" style="background:#9ca3af;color:#9ca3af"></span>GitHub</div>
+          </div>
+        </div>
+      </div>
+
+      <svg viewBox="0 0 1460 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Steve orchestration architecture diagram">
+        <defs>
+          <linearGradient id="humanFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#3a2a05" />
+            <stop offset="100%" stop-color="#5a3a09" />
+          </linearGradient>
+          <linearGradient id="agentFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#10283a" />
+            <stop offset="100%" stop-color="#0d3a47" />
+          </linearGradient>
+          <linearGradient id="agentFill2" x1="0" x2="1">
+            <stop offset="0%" stop-color="#10283a" />
+            <stop offset="100%" stop-color="#143a31" />
+          </linearGradient>
+          <linearGradient id="infraFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#2a1037" />
+            <stop offset="100%" stop-color="#3a1238" />
+          </linearGradient>
+          <linearGradient id="telegramFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#0c2940" />
+            <stop offset="100%" stop-color="#10456a" />
+          </linearGradient>
+          <linearGradient id="githubFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#1a202c" />
+            <stop offset="100%" stop-color="#2a3342" />
+          </linearGradient>
+          <linearGradient id="cronFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#0f2c2c" />
+            <stop offset="100%" stop-color="#10393b" />
+          </linearGradient>
+          <linearGradient id="projectFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#3c1d14" />
+            <stop offset="100%" stop-color="#5b2617" />
+          </linearGradient>
+          <linearGradient id="promptFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#361624" />
+            <stop offset="100%" stop-color="#4a1c2e" />
+          </linearGradient>
+
+          <filter id="glowHuman" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#f4b942" flood-opacity="0.35"/>
+          </filter>
+          <filter id="glowAgent" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#2dd4ff" flood-opacity="0.34"/>
+          </filter>
+          <filter id="glowAgent2" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#34d399" flood-opacity="0.34"/>
+          </filter>
+          <filter id="glowInfra" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#d946ef" flood-opacity="0.34"/>
+          </filter>
+          <filter id="glowExternal" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#2aabee" flood-opacity="0.28"/>
+          </filter>
+          <filter id="glowProject" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ff7a59" flood-opacity="0.32"/>
+          </filter>
+
+          <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#7dd3fc" />
+          </marker>
+          <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#6ee7b7" />
+          </marker>
+          <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#e879f9" />
+          </marker>
+          <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#f4b942" />
+          </marker>
+          <marker id="arrowCoral" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff9a7a" />
+          </marker>
+
+          <style>
+            .zone {
+              fill: rgba(15, 23, 36, 0.58);
+              stroke: rgba(148, 163, 184, 0.12);
+              stroke-width: 1.2;
+              stroke-dasharray: 8 10;
+            }
+            .zone-label {
+              font: 700 13px 'Segoe UI', sans-serif;
+              letter-spacing: 0.18em;
+              text-transform: uppercase;
+              fill: #7c8ea8;
+            }
+            .node-title {
+              font: 700 18px 'Segoe UI', sans-serif;
+              fill: #f8fafc;
+            }
+            .node-sub {
+              font: 500 12px 'Segoe UI', sans-serif;
+              fill: #afbdd2;
+            }
+            .mini {
+              font: 600 11px 'Segoe UI', sans-serif;
+              fill: #d7e3f3;
+            }
+            .flow {
+              fill: none;
+              stroke-width: 3;
+            }
+            .flow-label {
+              font: 600 12px 'Segoe UI', sans-serif;
+              fill: #dce8f8;
+            }
+            .small-label {
+              font: 600 11px 'Segoe UI', sans-serif;
+              fill: #cbd5e1;
+            }
+          </style>
+        </defs>
+
+        <rect x="30" y="70" width="360" height="760" rx="24" class="zone" />
+        <rect x="410" y="70" width="640" height="760" rx="24" class="zone" />
+        <rect x="1070" y="70" width="360" height="760" rx="24" class="zone" />
+
+        <text x="52" y="102" class="zone-label">Operator + External Signals</text>
+        <text x="432" y="102" class="zone-label">Core Orchestration</text>
+        <text x="1092" y="102" class="zone-label">Execution + Delivery</text>
+
+        <rect x="80" y="140" width="250" height="92" rx="18" fill="url(#humanFill)" stroke="#f4b942" stroke-width="2" filter="url(#glowHuman)" />
+        <text x="104" y="176" class="node-title">Austen</text>
+        <text x="104" y="200" class="node-sub">Human operator</text>
+        <text x="104" y="218" class="node-sub">Top of the command chain</text>
+
+        <rect x="70" y="330" width="270" height="106" rx="18" fill="url(#telegramFill)" stroke="#2aabee" stroke-width="2" filter="url(#glowExternal)" />
+        <text x="95" y="368" class="node-title">Telegram</text>
+        <text x="95" y="392" class="node-sub">Operator notifications + inbound requests</text>
+        <text x="95" y="410" class="node-sub">Shared transport for Steve and Scout</text>
+
+        <rect x="80" y="560" width="250" height="132" rx="18" fill="url(#cronFill)" stroke="#4fd1c5" stroke-width="2" filter="url(#glowExternal)" />
+        <text x="105" y="596" class="node-title">Crons</text>
+        <text x="105" y="621" class="mini">heartbeat</text>
+        <text x="105" y="643" class="mini">self-improvement</text>
+        <text x="105" y="665" class="mini">daily audit</text>
+        <text x="105" y="687" class="mini">blog publish</text>
+
+        <rect x="520" y="140" width="410" height="120" rx="22" fill="url(#agentFill)" stroke="#2dd4ff" stroke-width="2.2" filter="url(#glowAgent)" />
+        <text x="548" y="180" class="node-title">Steve</text>
+        <text x="548" y="203" class="node-sub">Main brain · claude-sonnet-4-6</text>
+        <text x="548" y="224" class="node-sub">Receives requests, spawns Scout and Codex, runs gates, reports back</text>
+        <text x="548" y="245" class="node-sub">Connected to Telegram and auto-advanced by hook wakeups</text>
+
+        <rect x="440" y="330" width="250" height="112" rx="18" fill="url(#agentFill)" stroke="#2dd4ff" stroke-width="2" filter="url(#glowAgent)" />
+        <text x="466" y="368" class="node-title">Scout</text>
+        <text x="466" y="392" class="node-sub">Researcher / architect</text>
+        <text x="466" y="410" class="node-sub">claude-opus-4-6</text>
+        <text x="466" y="428" class="node-sub">Blueprints + batch prompts</text>
+
+        <rect x="760" y="338" width="220" height="96" rx="18" fill="url(#promptFill)" stroke="#fb7185" stroke-width="2" filter="url(#glowInfra)" />
+        <text x="786" y="375" class="node-title" style="font-size:17px">Batch Prompts</text>
+        <text x="786" y="398" class="node-sub">B1.md, B2.md, ...</text>
+        <text x="786" y="418" class="node-sub">Execution packets</text>
+
+        <rect x="474" y="540" width="230" height="104" rx="18" fill="url(#infraFill)" stroke="#d946ef" stroke-width="2" filter="url(#glowInfra)" />
+        <text x="500" y="577" class="node-title">Lobster</text>
+        <text x="500" y="601" class="node-sub">Pipeline runner</text>
+        <text x="500" y="621" class="node-sub">preflight -> spawn -> wait</text>
+        <text x="500" y="639" class="node-sub">hook -> gate -> notify</text>
+
+        <rect x="780" y="520" width="210" height="92" rx="18" fill="url(#infraFill)" stroke="#d946ef" stroke-width="2" filter="url(#glowInfra)" />
+        <text x="805" y="555" class="node-title" style="font-size:17px">Gateway Hooks</text>
+        <text x="805" y="579" class="node-sub">localhost:18789/hooks/agent</text>
+        <text x="805" y="598" class="node-sub">Batch completion ingress</text>
+
+        <rect x="770" y="675" width="220" height="94" rx="18" fill="url(#infraFill)" stroke="#d946ef" stroke-width="2" filter="url(#glowInfra)" />
+        <text x="795" y="710" class="node-title" style="font-size:17px">Steve's Main Session</text>
+        <text x="795" y="734" class="node-sub">woken by sessions_send</text>
+        <text x="795" y="754" class="node-sub">Triggers auto-advance</text>
+
+        <rect x="520" y="700" width="180" height="98" rx="18" fill="url(#infraFill)" stroke="#d946ef" stroke-width="2" filter="url(#glowInfra)" />
+        <text x="547" y="736" class="node-title">Gate</text>
+        <text x="547" y="760" class="node-sub">Run build/test</text>
+        <text x="547" y="780" class="node-sub">Pass / fail / retry</text>
+
+        <rect x="1120" y="170" width="250" height="120" rx="20" fill="url(#agentFill2)" stroke="#34d399" stroke-width="2.2" filter="url(#glowAgent2)" />
+        <text x="1148" y="209" class="node-title">Codex</text>
+        <text x="1148" y="232" class="node-sub">Coder · gpt-5.4</text>
+        <text x="1148" y="253" class="node-sub">Spawned by Steve via ACP runtime</text>
+        <text x="1148" y="274" class="node-sub">Executes batch prompts</text>
+
+        <rect x="1140" y="372" width="230" height="92" rx="18" fill="url(#githubFill)" stroke="#9ca3af" stroke-width="2" filter="url(#glowExternal)" />
+        <text x="1166" y="407" class="node-title">GitHub</text>
+        <text x="1166" y="431" class="node-sub">Remote repo host</text>
+        <text x="1166" y="450" class="node-sub">Receives pushed commits</text>
+
+        <rect x="1095" y="565" width="300" height="170" rx="20" fill="url(#projectFill)" stroke="#ff7a59" stroke-width="2" filter="url(#glowProject)" />
+        <text x="1122" y="602" class="node-title">Projects</text>
+        <text x="1122" y="628" class="mini">DVDS</text>
+        <text x="1122" y="652" class="mini">Autom8</text>
+        <text x="1122" y="676" class="mini">ChalkTalk</text>
+        <text x="1122" y="700" class="mini">Cadence</text>
+        <text x="1122" y="724" class="node-sub">Target repos and codebases operated on by coders</text>
+
+        <path d="M 205 232 L 205 330" class="flow" stroke="#f4b942" marker-end="url(#arrowAmber)" />
+        <text x="220" y="287" class="flow-label">request via Telegram</text>
+
+        <path d="M 340 383 C 420 383, 420 200, 520 200" class="flow" stroke="#7dd3fc" marker-end="url(#arrowBlue)" />
+        <text x="336" y="307" class="flow-label">request via Telegram</text>
+
+        <path d="M 725 260 C 725 285, 596 295, 596 330" class="flow" stroke="#7dd3fc" marker-end="url(#arrowBlue)" />
+        <text x="584" y="294" class="flow-label">spawn sub-agent</text>
+        <text x="589" y="311" class="small-label">(research + batch prompts)</text>
+
+        <path d="M 690 386 L 760 386" class="flow" stroke="#6ee7b7" marker-end="url(#arrowGreen)" />
+        <text x="706" y="372" class="flow-label">writes B1.md, B2.md...</text>
+
+        <path d="M 566 442 C 566 500, 200 500, 200 436" class="flow" stroke="#6ee7b7" marker-end="url(#arrowGreen)" />
+        <text x="278" y="486" class="flow-label">notify on Telegram</text>
+        <text x="302" y="503" class="small-label">(blueprint ready)</text>
+
+        <path d="M 340 635 C 430 635, 440 218, 520 218" class="flow" stroke="#59d7cb" marker-end="url(#arrowBlue)" />
+        <text x="338" y="556" class="flow-label">scheduled triggers</text>
+
+        <path d="M 704 592 C 760 592, 748 220, 1120 220" class="flow" stroke="#7dd3fc" marker-end="url(#arrowBlue)" />
+        <text x="815" y="211" class="flow-label">spawn via ACP</text>
+        <text x="816" y="228" class="small-label">(batch prompt)</text>
+
+        <path d="M 930 386 C 1040 386, 1034 220, 1120 220" class="flow" stroke="#fb7185" marker-end="url(#arrowGreen)" />
+        <text x="983" y="315" class="flow-label">execution packet</text>
+
+        <path d="M 1245 290 L 1245 372" class="flow" stroke="#6ee7b7" marker-end="url(#arrowGreen)" />
+        <text x="1260" y="334" class="flow-label">commit + push</text>
+
+        <path d="M 1255 464 L 1255 565" class="flow" stroke="#ff9a7a" marker-end="url(#arrowCoral)" />
+        <text x="1270" y="523" class="flow-label">commit + push</text>
+
+        <path d="M 1120 252 C 1032 252, 1032 566, 990 566" class="flow" stroke="#e879f9" marker-end="url(#arrowPurple)" />
+        <text x="997" y="430" class="flow-label">POST /hooks/agent</text>
+        <text x="1008" y="447" class="small-label">(batch complete)</text>
+
+        <path d="M 885 612 L 885 675" class="flow" stroke="#e879f9" marker-end="url(#arrowPurple)" />
+        <text x="904" y="647" class="flow-label">sessions_send</text>
+        <text x="904" y="664" class="small-label">(wake Steve)</text>
+
+        <path d="M 780 722 C 740 722, 740 742, 700 742" class="flow" stroke="#e879f9" marker-end="url(#arrowPurple)" />
+        <text x="713" y="718" class="flow-label">auto-advance</text>
+
+        <path d="M 610 260 L 610 700" class="flow" stroke="#7dd3fc" marker-end="url(#arrowBlue)" />
+        <text x="624" y="500" class="flow-label">run build/test command</text>
+
+        <path d="M 610 700 L 610 260" class="flow" stroke="#e879f9" marker-end="url(#arrowPurple)" />
+        <text x="626" y="548" class="flow-label">pass/fail result</text>
+
+        <path d="M 700 770 C 950 770, 950 246, 1120 246" class="flow" stroke="#e879f9" marker-end="url(#arrowPurple)" />
+        <text x="802" y="788" class="flow-label">retry with escalated thinking</text>
+        <text x="875" y="805" class="small-label">(on fail, up to 3 attempts)</text>
+
+        <path d="M 520 236 C 430 236, 430 350, 340 350" class="flow" stroke="#7dd3fc" marker-end="url(#arrowBlue)" />
+        <text x="365" y="255" class="flow-label">gate result / completion notice</text>
+
+        <path d="M 205 330 L 205 232" class="flow" stroke="#2aabee" marker-end="url(#arrowAmber)" />
+        <text x="74" y="278" class="small-label">Telegram carries Steve + Scout notices to Austen</text>
+
+        <path d="M 704 620 C 770 620, 780 620, 780 620" class="flow" stroke="#e879f9" marker-end="url(#arrowPurple)" />
+        <text x="713" y="606" class="small-label">orchestrates preflight -> spawn -> wait -> gate -> notify</text>
+      </svg>
+
+      <p class="footnote">
+        Diagram intent: Steve is the decision-making hub, Lobster is the control loop, hooks wake the main session,
+        and Codex delivers changes into GitHub-backed project repos while Telegram closes the loop with Austen.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
