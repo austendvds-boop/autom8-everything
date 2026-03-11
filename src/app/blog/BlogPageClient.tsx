@@ -110,6 +110,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
                   },
                 }}
                 initial={prefersReducedMotion ? false : "hidden"}
+                animate="visible"
                 whileInView="visible"
                 viewport={viewportOnce}
               >
