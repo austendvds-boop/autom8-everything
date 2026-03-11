@@ -4,26 +4,74 @@ import { execSync } from "node:child_process";
 
 const rootDir = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
 const poolPath = path.join(rootDir, "scripts/blog-keyword-pool.json");
-const outputDir = path.join(rootDir, "content/blog");
-const moonshotApiUrl = "https://api.moonshot.cn/v1/chat/completions";
-const moonshotApiKeyPath = "C:/Users/austen/.openclaw/credentials/moonshot-api-key.txt";
-const moonshotModel = "moonshot-v1-8k";
+const blogDir = path.join(rootDir, "content/blog");
+const openaiKeyPath = "C:/Users/austen/.openclaw/credentials/openai-api-key.txt";
+const vercelTokenPath = "C:/Users/austen/.openclaw/credentials/vercel-token.txt";
+const OPENAI_MODEL = "gpt-4.1";
+const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
-const categoryDisplayNames = {
-  cadence: "AI Voice & Answering",
-  "review-funnel": "Review Automation",
-  website: "Website Creation",
-  seo: "Local SEO",
-  newlywed: "Small Business Tips",
+const categoryConfig = {
+  "ai-receptionist": {
+    display: "AI Voice & Answering",
+    serviceUrl: "/services/cadence",
+    serviceName: "Cadence",
+    serviceDesc: "AI voice receptionist that answers calls 24/7, books appointments, and handles FAQs - starting at $79/mo",
+  },
+  "review-automation": {
+    display: "Review Automation",
+    serviceUrl: "/services/review-funnel",
+    serviceName: "Review Funnel",
+    serviceDesc: "automated review collection system that sends follow-up texts after every job and guides happy customers to leave Google reviews - $79/mo",
+  },
+  "small-business-websites": {
+    display: "Website Design",
+    serviceUrl: "/services/websites",
+    serviceName: "Website Creation",
+    serviceDesc: "professional websites for local businesses starting at $799, always bundled with monthly SEO",
+  },
+  "local-seo": {
+    display: "Local SEO",
+    serviceUrl: "/services/seo",
+    serviceName: "SEO & Content",
+    serviceDesc: "monthly SEO and blog content for local businesses at $299-$599/mo",
+  },
+  "business-automation": {
+    display: "Business Automation",
+    serviceUrl: "/services/custom-apps",
+    serviceName: "Custom Apps",
+    serviceDesc: "custom business software and workflow automation tailored to how your business actually runs",
+  },
 };
 
-const promptsByCategory = {
-  cadence: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 offers Cadence - an AI voice receptionist that answers business calls 24/7, routes urgent calls, and sends call summaries, for $199/mo. Topic: {keyword}. Include: the problem it solves, how Cadence specifically helps, a real example scenario, CTA to try Cadence free. Plain professional tone. No emojis. Output ONLY the markdown content.",
-  "review-funnel": "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 offers a Review Funnel - automated SMS follow-ups after every job that guide happy customers to leave Google reviews, for $79/mo. Topic: {keyword}. Include: why Google reviews matter, how the funnel works, a realistic example, CTA to get more reviews. Plain professional tone. No emojis. Output ONLY the markdown content.",
-  website: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 builds professional websites for local businesses starting at $799, always bundled with monthly SEO. Topic: {keyword}. Include: what local businesses actually need in a website, why SEO must be built in from day one, how Autom8 delivers both, CTA to get a free quote. Plain professional tone. No emojis. Output ONLY the markdown content.",
-  seo: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 offers monthly SEO and blog content for local businesses at $299-$599/mo. Topic: {keyword}. Include: what local SEO actually involves, why ongoing content matters, how small businesses can compete, CTA to get started. Plain professional tone. No emojis. Output ONLY the markdown content.",
-  newlywed: "Write a 600-800 word SEO blog post for autom8everything.com. Autom8 builds professional websites and handles digital marketing for new business owners, starting at $799. Topic: {keyword}. Include: why the post-wedding period is great for starting a business, what digital presence new business owners need, how Autom8 makes it simple, CTA to get a free quote. Warm, practical tone. No emojis. Output ONLY the markdown content.",
+const featuredImages = {
+  "ai-receptionist": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=80",
+  "review-automation": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80",
+  "small-business-websites": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80",
+  "local-seo": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1600&q=80",
+  "business-automation": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80",
 };
+
+const stopWords = new Set([
+  "a",
+  "an",
+  "the",
+  "for",
+  "in",
+  "of",
+  "to",
+  "is",
+  "and",
+  "or",
+  "how",
+  "your",
+  "with",
+  "that",
+  "from",
+  "what",
+  "does",
+  "do",
+  "can",
+]);
 
 function toSlug(value) {
   return value
@@ -34,96 +82,179 @@ function toSlug(value) {
     .replace(/-+/g, "-");
 }
 
-function keywordToTags(keyword, category) {
-  const keywordTags = keyword
-    .toLowerCase()
-    .split(/\s+/)
-    .map((part) => toSlug(part))
-    .filter(Boolean);
-  return [...new Set([...keywordTags, toSlug(category)])];
-}
-
-function pickImage(keyword) {
-  const lower = keyword.toLowerCase();
-  if (lower.includes("review") || lower.includes("google")) {
-    return "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80";
-  }
-  if (lower.includes("website")) {
-    return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80";
-  }
-  if (lower.includes("seo")) {
-    return "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1600&q=80";
-  }
-  if (lower.includes("call") || lower.includes("phone") || lower.includes("receptionist")) {
-    return "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=80";
-  }
-  return "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80";
-}
-
-function makeMetaDescription(keyword) {
-  const raw = `Learn how ${keyword} helps small businesses grow with practical guidance from Autom8 Everything.`;
-  return raw.length <= 155 ? raw : `${raw.slice(0, 152)}...`;
-}
-
 function escapeYaml(value) {
   return String(value).replace(/"/g, '\\"');
 }
 
-function getSortedEntries(entries) {
-  return [...entries].sort((left, right) => {
-    const leftPriority = Number.isFinite(left?.priority) ? left.priority : Number.MAX_SAFE_INTEGER;
-    const rightPriority = Number.isFinite(right?.priority) ? right.priority : Number.MAX_SAFE_INTEGER;
-    return leftPriority - rightPriority;
-  });
+function truncate(value, maxLength) {
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength - 3).trimEnd()}...`;
 }
 
-function selectKeyword(poolData) {
-  const rotation = Array.isArray(poolData.categoryRotation) ? poolData.categoryRotation : [];
-  const published = new Set(Array.isArray(poolData.published) ? poolData.published : []);
+function buildTags(keyword, category) {
+  const keywordTags = keyword
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word) => toSlug(word))
+    .filter((word) => word && !stopWords.has(word));
 
-  if (rotation.length === 0) {
-    return null;
+  return [...new Set([...keywordTags, category])];
+}
+
+function parseFrontmatter(raw) {
+  if (!raw.startsWith("---")) {
+    return { data: {}, content: raw };
   }
 
-  const lastIndex = rotation.indexOf(poolData.lastCategory);
-  const startIndex = lastIndex === -1 ? 0 : (lastIndex + 1) % rotation.length;
+  const parts = raw.split("---");
+  if (parts.length < 3) {
+    return { data: {}, content: raw };
+  }
+
+  const frontmatter = parts[1];
+  const content = parts.slice(2).join("---").trimStart();
+  const data = {};
+  const lines = frontmatter.split(/\r?\n/);
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+
+    const match = trimmed.match(/^([A-Za-z0-9_]+):\s*(.*)$/);
+    if (!match) continue;
+
+    const [, key, rawValue] = match;
+    const value = rawValue.trim();
+
+    if (key === "tags") {
+      if (value.startsWith("[") && value.endsWith("]")) {
+        data.tags = value
+          .slice(1, -1)
+          .split(",")
+          .map((item) => item.trim().replace(/^["']|["']$/g, ""))
+          .filter(Boolean);
+        continue;
+      }
+
+      const tags = [];
+      let nextIndex = index + 1;
+      while (nextIndex < lines.length) {
+        const nextLine = lines[nextIndex];
+        const tagMatch = nextLine.match(/^\s*-\s*(.+)\s*$/);
+        if (!tagMatch) break;
+        tags.push(tagMatch[1].trim().replace(/^["']|["']$/g, ""));
+        nextIndex += 1;
+      }
+      data.tags = tags;
+      index = nextIndex - 1;
+      continue;
+    }
+
+    data[key] = value.replace(/^["']|["']$/g, "");
+  }
+
+  return { data, content };
+}
+
+function selectKeyword(pool) {
+  const rotation = pool.categoryRotation;
+  const lastCat = pool.lastCategory;
+  const startIdx = lastCat ? (rotation.indexOf(lastCat) + 1) % rotation.length : 0;
 
   for (let offset = 0; offset < rotation.length; offset += 1) {
-    const category = rotation[(startIndex + offset) % rotation.length];
-    const entries = Array.isArray(poolData.pool?.[category]) ? getSortedEntries(poolData.pool[category]) : [];
-    const match = entries.find((entry) => !published.has(entry.keyword));
-    if (match) {
-      return { category, entry: match };
-    }
+    const category = rotation[(startIdx + offset) % rotation.length];
+    const candidates = pool.pool.filter((entry) => entry.category === category && !entry.used);
+    if (candidates.length === 0) continue;
+
+    const cityHist = pool.cityHistory || {};
+    candidates.sort((a, b) => {
+      const aLast = cityHist[`${category}:${a.city}`] || 0;
+      const bLast = cityHist[`${category}:${b.city}`] || 0;
+      return aLast - bLast;
+    });
+
+    return { entry: candidates[0], category };
   }
 
   return null;
 }
 
-async function generateBody(category, keyword, moonshotApiKey) {
-  const template = promptsByCategory[category];
+function findRelatedPosts(entry) {
+  if (!fs.existsSync(blogDir)) return [];
 
-  if (!template) {
+  const currentTags = new Set(buildTags(entry.keyword, entry.category));
+  const related = fs
+    .readdirSync(blogDir)
+    .filter((file) => file.endsWith(".md"))
+    .map((file) => {
+      const slug = file.replace(/\.md$/, "");
+      const raw = fs.readFileSync(path.join(blogDir, file), "utf8");
+      const { data } = parseFrontmatter(raw);
+      const title = typeof data.title === "string" ? data.title : slug;
+      const category = typeof data.category === "string" ? data.category : "";
+      const tags = Array.isArray(data.tags) ? data.tags.map(String) : [];
+      const tagOverlap = tags.filter((tag) => currentTags.has(toSlug(tag))).length;
+      const categoryMatch = category === categoryConfig[entry.category]?.display ? 1 : 0;
+      const score = categoryMatch * 10 + tagOverlap;
+
+      return { slug, title, score };
+    })
+    .filter((post) => post.score > 0)
+    .sort((left, right) => right.score - left.score || left.title.localeCompare(right.title))
+    .slice(0, 3)
+    .map(({ slug, title }) => ({ slug, title }));
+
+  return related.slice(0, related.length >= 2 ? 3 : related.length);
+}
+
+async function generatePost({ keyword, title, city, category, relatedPosts }) {
+  const config = categoryConfig[category];
+  if (!config) {
     throw new Error(`Unsupported category: ${category}`);
   }
 
-  const prompt = template.replace("{keyword}", keyword);
-  const response = await fetch(moonshotApiUrl, {
+  const relatedPostsPromptSection =
+    relatedPosts.length > 0
+      ? `- Naturally include these internal links somewhere in the body (as markdown links):\n${relatedPosts
+          .map((post) => `  - [${post.title}](/blog/${post.slug})`)
+          .join("\n")}`
+      : "";
+
+  const prompt = `You are a blog writer for Autom8 Everything (autom8everything.com), a small business automation agency in ${city}, Arizona.
+
+Write a blog post targeting the keyword "${keyword}".
+
+Title: ${title}
+
+Requirements:
+- 900-1100 words
+- Structure: engaging intro (2-3 paragraphs), 3-4 H2 sections with practical content, FAQ section with 3 questions and answers, CTA paragraph
+- Plain English. Write for busy small business owners who are not technical. If a mom wouldn't understand a sentence, rewrite it.
+- Mention ${city} and the Phoenix metro area naturally - don't force it
+- The CTA should mention Autom8 Everything's ${config.serviceName} (${config.serviceDesc}) and link to ${config.serviceUrl}
+- DO NOT use the word "leverage". DO NOT use emojis. DO NOT use "In today's..." openers.
+- Outcome-focused: talk about what the reader gets, not how the tech works
+${relatedPostsPromptSection ? `${relatedPostsPromptSection}\n` : ""}Output ONLY the markdown body content (no frontmatter, no title heading). Start with the first paragraph.`;
+
+  const openaiKey = fs.readFileSync(openaiKeyPath, "utf8").trim();
+  const response = await fetch(OPENAI_API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${moonshotApiKey}`,
+      Authorization: `Bearer ${openaiKey}`,
     },
     body: JSON.stringify({
-      model: moonshotModel,
+      model: OPENAI_MODEL,
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
+      max_tokens: 2000,
     }),
   });
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Moonshot API error ${response.status}: ${text}`);
+    throw new Error(`OpenAI API error ${response.status}: ${text}`);
   }
 
   const json = await response.json();
@@ -131,8 +262,8 @@ async function generateBody(category, keyword, moonshotApiKey) {
 }
 
 async function main() {
-  if (!fs.existsSync(moonshotApiKeyPath)) {
-    console.log("Missing Moonshot API key at C:/Users/austen/.openclaw/credentials/moonshot-api-key.txt");
+  if (!fs.existsSync(openaiKeyPath)) {
+    console.log(`Missing OpenAI key at ${openaiKeyPath}`);
     process.exit(0);
   }
 
@@ -140,64 +271,76 @@ async function main() {
     throw new Error(`Pool file not found at ${poolPath}`);
   }
 
-  const poolData = JSON.parse(fs.readFileSync(poolPath, "utf8"));
-  const selection = selectKeyword(poolData);
+  const pool = JSON.parse(fs.readFileSync(poolPath, "utf8"));
+  const selection = selectKeyword(pool);
 
   if (!selection) {
     console.log("Keyword pool exhausted");
     process.exit(0);
   }
 
-  const { category, entry } = selection;
-  const { keyword, title } = entry;
-  const slug = toSlug(keyword);
-  const displayCategory = categoryDisplayNames[category] || "General";
-  const tags = keywordToTags(keyword, category);
-  const publishedAt = new Date().toISOString().slice(0, 10);
-  const seoTitle = `${title} | Autom8 Everything`;
-  const metaDescription = makeMetaDescription(keyword);
-  const featuredImage = pickImage(keyword);
+  const { entry, category } = selection;
+  const poolEntry = pool.pool.find(
+    (item) => item.keyword === entry.keyword && item.category === category && item.city === entry.city,
+  );
 
-  const moonshotApiKey = fs.readFileSync(moonshotApiKeyPath, "utf8").trim();
-  const body = await generateBody(category, keyword, moonshotApiKey);
-
-  if (!body) {
-    throw new Error("Moonshot returned empty content");
+  if (!poolEntry) {
+    throw new Error(`Selected keyword entry not found in pool: ${entry.keyword}`);
   }
 
-  poolData.lastCategory = category;
-  poolData.published = [...(Array.isArray(poolData.published) ? poolData.published : []), keyword];
-  fs.writeFileSync(poolPath, JSON.stringify(poolData, null, 2) + "\n", "utf8");
+  poolEntry.used = true;
+  pool.lastCategory = category;
+  pool.cityHistory = pool.cityHistory || {};
+  pool.cityHistory[`${category}:${entry.city}`] = Date.now();
+  fs.writeFileSync(poolPath, `${JSON.stringify(pool, null, 2)}\n`, "utf8");
 
-  const markdown = [
+  const relatedPosts = findRelatedPosts(entry);
+  const body = await generatePost({ ...entry, category, relatedPosts });
+  if (!body) {
+    throw new Error("OpenAI returned empty content");
+  }
+
+  const slug = toSlug(entry.keyword);
+  const metaDescription = truncate(
+    `Learn how ${entry.keyword} can help your ${entry.city} business grow. Practical tips from Autom8 Everything.`,
+    155,
+  );
+  const tags = buildTags(entry.keyword, category);
+  const publishedAt = new Date().toISOString().slice(0, 10);
+  const frontmatter = [
     "---",
-    `title: \"${escapeYaml(title)}\"`,
-    `seoTitle: \"${escapeYaml(seoTitle)}\"`,
-    `metaDescription: \"${escapeYaml(metaDescription)}\"`,
-    `category: \"${escapeYaml(displayCategory)}\"`,
-    `tags: [${tags.map((tag) => `\"${escapeYaml(tag)}\"`).join(", ")}]`,
+    `title: "${escapeYaml(entry.title)}"`,
+    `seoTitle: "${escapeYaml(`${entry.title} | Autom8 Everything`)}"`,
+    `metaDescription: "${escapeYaml(metaDescription)}"`,
+    `category: "${categoryConfig[category].display}"`,
+    `tags: [${tags.map((tag) => `"${escapeYaml(tag)}"`).join(", ")}]`,
     `publishedAt: ${publishedAt}`,
-    `featuredImage: \"${escapeYaml(featuredImage)}\"`,
+    `featuredImage: "${featuredImages[category]}"`,
     "draft: false",
     "---",
     "",
-    body,
-    "",
   ].join("\n");
 
-  fs.mkdirSync(outputDir, { recursive: true });
-  const postPath = path.join(outputDir, `${slug}.md`);
-  fs.writeFileSync(postPath, markdown, "utf8");
+  fs.mkdirSync(blogDir, { recursive: true });
+  const postPath = path.join(blogDir, `${slug}.md`);
+  fs.writeFileSync(postPath, `${frontmatter}${body.trim()}\n`, "utf8");
 
   execSync(`git add content/blog/${slug}.md scripts/blog-keyword-pool.json`, { stdio: "inherit" });
-  execSync(`git commit -m \"Auto-publish: ${title}\"`, { stdio: "inherit" });
-  execSync("git push origin master", { stdio: "inherit" });
+  execSync(`git commit -m "Auto-publish: ${entry.title}"`, { stdio: "inherit" });
+  execSync("git push origin feature/blog-pipeline", { stdio: "inherit" });
 
-  console.log(`Published: ${slug}`);
+  const vercelToken = fs.readFileSync(vercelTokenPath, "utf8").trim();
+  execSync(`npx vercel --prod --yes --token ${vercelToken}`, { cwd: rootDir, stdio: "inherit" });
+
+  try {
+    await fetch("https://www.google.com/ping?sitemap=https://autom8everything.com/sitemap.xml");
+    console.log("Sitemap ping sent");
+  } catch (error) {
+    console.log("Sitemap ping failed (non-fatal):", error.message);
+  }
 }
 
 main().catch((error) => {
   console.error(error.message);
   process.exit(1);
 });
-

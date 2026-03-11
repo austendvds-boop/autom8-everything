@@ -7,7 +7,7 @@ export type BlogPost = {
   title: string;
   seoTitle: string;
   metaDescription: string;
-  category: "Automation Strategy" | "CRM Automation" | "Local SEO" | "Comparisons" | "Phoenix Local";
+  category: "Automation Strategy" | "CRM Automation" | "Local SEO" | "Comparisons" | "Phoenix Local" | "AI Voice & Answering" | "Review Automation" | "Website Design" | "Business Automation";
   tags: string[];
   publishedAt: string;
   readingMinutes: number;
