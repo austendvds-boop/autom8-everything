@@ -31,9 +31,9 @@ const products: Product[] = [
     eyebrow: "AI Receptionist",
     productName: "Cadence",
     valueProp:
-      "Cadence answers your phone like a real receptionist - 24/7. It handles questions, books appointments, and takes messages so no call goes unanswered.",
+      "Cadence answers your phone like a real receptionist — 24/7. It handles questions, books appointments, and takes messages so no call goes unanswered.",
     price: "$199/mo",
-    priceContext: "7-day free trial - No contracts - Setup in 5 minutes",
+    priceContext: "7-day free trial · No contracts · Setup in 5 minutes",
     priceAriaLabel: "Price: 199 dollars per month with a seven day free trial",
     microProof: "Never miss a customer call.",
     features: [
@@ -66,9 +66,9 @@ const products: Product[] = [
     productName: "Web + Monthly SEO",
     valueProp:
       "A professional website built to turn visitors into calls, plus monthly content and local SEO so customers find you instead of your competition.",
-    price: "From $499",
+    price: "From $500",
     priceContext: "One-time build + optional monthly plans",
-    priceAriaLabel: "Websites start at 499 dollars",
+    priceAriaLabel: "Websites start at 500 dollars",
     microProof: "Show up when customers search for what you do.",
     icon: Globe,
     cta: { href: "/contact", label: "Get a Free Quote" },
@@ -78,7 +78,7 @@ const products: Product[] = [
     eyebrow: "Built for You",
     productName: "Custom Apps",
     valueProp:
-      "Scrapers, dashboards, automations, internal tools - if it saves you time or makes you money, we can build it.",
+      "Scrapers, dashboards, automations, internal tools — if it saves you time or makes you money, we can build it.",
     price: "Custom Quote",
     priceContext: "Scoped after a short call",
     priceAriaLabel: "Custom Apps pricing is provided by quote",
@@ -257,7 +257,7 @@ export default function ServicesBento() {
             Products That Keep Your Business <span className="gradient-text">Running Smoothly</span>
           </h2>
           <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">
-            Start with one or combine a few. Each one works on its own - no bundles, no upsells.
+            Start with one or combine a few. Each one works on its own — no bundles, no upsells.
           </p>
         </motion.div>
 
