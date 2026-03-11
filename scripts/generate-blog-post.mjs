@@ -5,8 +5,9 @@ import { execSync } from "node:child_process";
 const rootDir = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
 const poolPath = path.join(rootDir, "scripts/blog-keyword-pool.json");
 const outputDir = path.join(rootDir, "content/blog");
-const gatewayUrl = "https://api.openai.com/v1/chat/completions";
-const gatewayTokenPath = "C:/Users/austen/.openclaw/credentials/openai-api-key.txt";
+const moonshotApiUrl = "https://api.moonshot.cn/v1/chat/completions";
+const moonshotApiKeyPath = "C:/Users/austen/.openclaw/credentials/moonshot-api-key.txt";
+const moonshotModel = "moonshot-v1-8k";
 
 const categoryDisplayNames = {
   cadence: "AI Voice & Answering",
@@ -99,7 +100,7 @@ function selectKeyword(poolData) {
   return null;
 }
 
-async function generateBody(category, keyword, gatewayToken) {
+async function generateBody(category, keyword, moonshotApiKey) {
   const template = promptsByCategory[category];
 
   if (!template) {
@@ -107,14 +108,14 @@ async function generateBody(category, keyword, gatewayToken) {
   }
 
   const prompt = template.replace("{keyword}", keyword);
-  const response = await fetch(gatewayUrl, {
+  const response = await fetch(moonshotApiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${gatewayToken}`,
+      Authorization: `Bearer ${moonshotApiKey}`,
     },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: moonshotModel,
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     }),
@@ -122,7 +123,7 @@ async function generateBody(category, keyword, gatewayToken) {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Gateway API error ${response.status}: ${text}`);
+    throw new Error(`Moonshot API error ${response.status}: ${text}`);
   }
 
   const json = await response.json();
@@ -130,8 +131,8 @@ async function generateBody(category, keyword, gatewayToken) {
 }
 
 async function main() {
-  if (!fs.existsSync(gatewayTokenPath)) {
-    console.log("Missing gateway token at credentials/openclaw-gateway-token.txt");
+  if (!fs.existsSync(moonshotApiKeyPath)) {
+    console.log("Missing Moonshot API key at C:/Users/austen/.openclaw/credentials/moonshot-api-key.txt");
     process.exit(0);
   }
 
@@ -157,8 +158,8 @@ async function main() {
   const metaDescription = makeMetaDescription(keyword);
   const featuredImage = pickImage(keyword);
 
-  const gatewayToken = fs.readFileSync(gatewayTokenPath, "utf8").trim();
-  const body = await generateBody(category, keyword, gatewayToken);
+  const moonshotApiKey = fs.readFileSync(moonshotApiKeyPath, "utf8").trim();
+  const body = await generateBody(category, keyword, moonshotApiKey);
 
   if (!body) {
     throw new Error("Moonshot returned empty content");
@@ -199,3 +200,4 @@ main().catch((error) => {
   console.error(error.message);
   process.exit(1);
 });
+

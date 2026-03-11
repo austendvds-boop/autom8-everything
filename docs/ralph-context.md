@@ -1,5 +1,11 @@
 # Ralph Context — Autom8 CRO Passover
 
+## 2026-03-10: blog generator Moonshot direct API fix
+- Updated `scripts/generate-blog-post.mjs` to use Moonshot directly instead of the local gateway naming path.
+- Reads the API key from `C:/Users/austen/.openclaw/credentials/moonshot-api-key.txt`, posts to `https://api.moonshot.cn/v1/chat/completions`, and uses `moonshot-v1-8k`.
+- Blog keyword rotation, markdown/frontmatter generation, and git publish flow remain unchanged.
+- Verification target for this batch: `node --check scripts/generate-blog-post.mjs`
+
 ## B3-0 (2026-03-07): portal usage limits + overage UX
 - Updated Cadence API typing in `src/lib/platform/services/cadence-api.ts`:
   - `CadenceUsageResponse.plan` now includes optional overage pricing fields:
@@ -106,3 +112,4 @@
 - Gotchas for next batch:
   - `ReactLenis` is now client-only (`ssr: false`) by design; avoid moving it back to a static import or enabling SSR.
   - Dynamic imports intentionally do not include custom loading placeholders to keep section rendering behavior simple.
+
