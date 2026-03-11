@@ -10,10 +10,10 @@ import BrandLogo from "@/components/BrandLogo";
 import { fadeUp, staggerContainer, staggerItem, viewportOnce } from "@/lib/motion";
 
 const values = [
-  { icon: Target, title: "Focus", description: "We automate low-value tasks so your team can focus on growth." },
-  { icon: Zap, title: "Speed", description: "Fast implementation cycles with measurable outcomes." },
-  { icon: Shield, title: "Security", description: "Automation architecture built with reliability and governance." },
-  { icon: Heart, title: "Care", description: "We care about business outcomes, not just technical deliverables." },
+  { icon: Target, title: "Focus", description: "We cut the noise. You get tools that do one thing and do it well." },
+  { icon: Zap, title: "Speed", description: "Built fast, shipped fast. No 6-month implementation projects." },
+  { icon: Shield, title: "Security", description: "Your data stays yours. No surprises, no third-party selling your info." },
+  { icon: Heart, title: "Care", description: "We actually pick up the phone. Real support from the people who built it." },
 ];
 
 export default function AboutPageClient() {
@@ -43,7 +43,7 @@ export default function AboutPageClient() {
               animate="visible"
               transition={prefersReducedMotion ? undefined : { delay: 0.12 }}
             >
-              We are a Phoenix automation consultancy focused on custom automation, AI execution systems, and local SEO growth infrastructure.
+              Phoenix-based. Built for businesses that are tired of paying for software nobody knows how to use.
             </motion.p>
           </div>
         </section>
@@ -52,22 +52,17 @@ export default function AboutPageClient() {
           <div className="mx-auto max-w-4xl px-6">
             <motion.div variants={staggerContainer} initial={prefersReducedMotion ? false : "hidden"} whileInView="visible" viewport={viewportOnce}>
               <motion.h2 variants={staggerItem} className="mb-6 text-3xl font-semibold will-change-transform" style={{ fontFamily: "var(--font-playfair), serif" }}>
-                Our Story and Mission
+                Our Story
               </motion.h2>
               <motion.p variants={staggerItem} className="mb-6 text-lg leading-relaxed text-[#A1A1AA] will-change-transform">
-                <BrandLogo as="span" size="xs" showMark={false} showDescriptor={false} className="mr-1 align-[-0.08em]" screenReaderText="Autom8" />
-                was built after seeing high-growth teams waste hours each week on repetitive tasks. We now design and deploy systems that automate execution while protecting quality and brand consistency.
+                Autom8 Everything started with a simple frustration. As a business owner, the tools that were supposed to make life easier - didn&apos;t. They were bloated, overpriced, and built for someone with an IT department. Not for the person running the show.
+              </motion.p>
+              <motion.p variants={staggerItem} className="mb-6 text-lg leading-relaxed text-[#A1A1AA] will-change-transform">
+                So we built our own. Simple tools that do exactly what you need - answer calls, get more reviews, show up online - without the learning curve or the tech headache.
               </motion.p>
               <motion.p variants={staggerItem} className="text-lg leading-relaxed text-[#A1A1AA] will-change-transform">
-                We partner with businesses that want practical automation wins first, then scale into AI workflows and compounding SEO growth. Explore our{" "}
-                <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">
-                  core services
-                </Link>{" "}
-                or review real client outcomes in{" "}
-                <Link href="/blog" className="text-[#8B5CF6] hover:text-[#A78BFA]">
-                  automation case studies
-                </Link>
-                .
+                <span className="mb-2 block text-base font-semibold text-white">Who We Help:</span>
+                Whether you&apos;re a one-person shop or scaling a multi-location operation, if your current software is working against you, you&apos;re in the right place.
               </motion.p>
             </motion.div>
           </div>
@@ -95,8 +90,8 @@ export default function AboutPageClient() {
             >
               {values.map((value) => (
                 <motion.div key={value.title} className="rounded-2xl border border-white/5 bg-[#1A1A23] p-6 text-center will-change-transform" variants={staggerItem}>
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[#8B5CF6]/20">
-                    <value.icon className="h-7 w-7 text-[#8B5CF6]" />
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[#D4A030]/15">
+                    <value.icon className="h-7 w-7 text-[#D4A030]" />
                   </div>
                   <h3 className="mb-2 text-xl font-semibold">{value.title}</h3>
                   <p className="text-[#A1A1AA]">{value.description}</p>
@@ -113,9 +108,9 @@ export default function AboutPageClient() {
                 Ready to Get Started?
               </motion.h2>
               <motion.p variants={staggerItem} className="mb-8 text-lg text-[#A1A1AA] will-change-transform">
-                Let us map your first high-impact automation build.
+                Tell us about your business and we&apos;ll point you in the right direction.
               </motion.p>
-              <Link href="/contact" className="inline-block rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 font-semibold text-white">
+              <Link href="/contact" className="inline-block rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-8 py-4 font-semibold text-[#0E1015]">
                 Contact Us
               </Link>
             </motion.div>

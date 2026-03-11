@@ -622,7 +622,7 @@ export default function GetStartedClient() {
 
       <section className="mesh-bg pb-20 pt-32">
         <div className="mx-auto max-w-5xl px-6">
-          <motion.p className="mb-3 text-sm uppercase tracking-wide text-[#8B5CF6] will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible">
+          <motion.p className="mb-3 text-sm uppercase tracking-wide text-[#D4A030] will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible">
             Cadence Onboarding
           </motion.p>
           <motion.h1 className="mb-4 text-4xl font-semibold md:text-5xl will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible">
@@ -647,7 +647,7 @@ export default function GetStartedClient() {
 
               <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] transition-all duration-300"
+                  className="h-full rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] transition-all duration-300"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -663,9 +663,9 @@ export default function GetStartedClient() {
                       <span
                         className={`mx-auto inline-flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold ${
                           isActive
-                            ? "border-[#8B5CF6] bg-[#8B5CF6] text-white"
+                            ? "border-[#D4A030] bg-[#D4A030] text-white"
                             : isDone
-                              ? "border-[#8B5CF6]/60 bg-[#8B5CF6]/20 text-[#DDD6FE]"
+                              ? "border-[#D4A030]/60 bg-[#D4A030]/20 text-[#F0D78C]"
                               : "border-white/20 text-[#A1A1AA]"
                         }`}
                       >
@@ -771,7 +771,7 @@ export default function GetStartedClient() {
                                     isClosed: event.target.checked,
                                   })
                                 }
-                                className="h-4 w-4 accent-[#8B5CF6]"
+                                className="h-4 w-4 accent-[#D4A030]"
                               />
                               Closed
                             </label>
@@ -811,7 +811,7 @@ export default function GetStartedClient() {
                       <button
                         type="button"
                         onClick={addService}
-                        className="rounded-lg border border-white/20 px-3 py-1.5 text-sm hover:border-[#8B5CF6]/60"
+                        className="rounded-lg border border-white/20 px-3 py-1.5 text-sm hover:border-[#D4A030]/60"
                       >
                         Add service
                       </button>
@@ -875,7 +875,7 @@ export default function GetStartedClient() {
                             key={option}
                             className={`block cursor-pointer rounded-xl border p-3 transition-colors ${
                               form.greetingTemplate === option
-                                ? "border-[#8B5CF6]/70 bg-[#8B5CF6]/10"
+                                ? "border-[#D4A030]/70 bg-[#D4A030]/10"
                                 : "border-white/10 bg-[#0A0A0F] hover:border-white/20"
                             }`}
                           >
@@ -884,14 +884,14 @@ export default function GetStartedClient() {
                                 type="radio"
                                 checked={form.greetingTemplate === option}
                                 onChange={() => handleGreetingTemplateChange(option)}
-                                className="mt-1 h-4 w-4 accent-[#8B5CF6]"
+                                className="mt-1 h-4 w-4 accent-[#D4A030]"
                               />
 
                               <div>
                                 <p className="text-sm font-medium text-[#E4E4E7]">
                                   {TEMPLATE_LABELS[option]}
                                   {isRecommended && (
-                                    <span className="ml-2 rounded-full border border-[#8B5CF6]/60 px-2 py-0.5 text-[10px] uppercase tracking-wide text-[#C4B5FD]">
+                                    <span className="ml-2 rounded-full border border-[#D4A030]/60 px-2 py-0.5 text-[10px] uppercase tracking-wide text-[#E8C068]">
                                       Recommended
                                     </span>
                                   )}
@@ -950,7 +950,7 @@ export default function GetStartedClient() {
                       type="button"
                       onClick={loadSuggestedFaqs}
                       disabled={!form.businessType}
-                      className="rounded-lg border border-white/20 px-3 py-1.5 text-sm hover:border-[#8B5CF6]/60 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="rounded-lg border border-white/20 px-3 py-1.5 text-sm hover:border-[#D4A030]/60 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       Reload examples
                     </button>
@@ -992,7 +992,7 @@ export default function GetStartedClient() {
                   <button
                     type="button"
                     onClick={addFaq}
-                    className="rounded-lg border border-white/20 px-3 py-2 text-sm hover:border-[#8B5CF6]/60"
+                    className="rounded-lg border border-white/20 px-3 py-2 text-sm hover:border-[#D4A030]/60"
                   >
                     Add question
                   </button>
@@ -1009,7 +1009,7 @@ export default function GetStartedClient() {
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="text-sm text-[#C4B5FD] hover:text-[#DDD6FE]"
+                        className="text-sm text-[#E8C068] hover:text-[#F0D78C]"
                       >
                         Edit
                       </button>
@@ -1040,7 +1040,7 @@ export default function GetStartedClient() {
                       <button
                         type="button"
                         onClick={() => setStep(2)}
-                        className="text-sm text-[#C4B5FD] hover:text-[#DDD6FE]"
+                        className="text-sm text-[#E8C068] hover:text-[#F0D78C]"
                       >
                         Edit
                       </button>
@@ -1070,7 +1070,7 @@ export default function GetStartedClient() {
                       <button
                         type="button"
                         onClick={() => setStep(3)}
-                        className="text-sm text-[#C4B5FD] hover:text-[#DDD6FE]"
+                        className="text-sm text-[#E8C068] hover:text-[#F0D78C]"
                       >
                         Edit
                       </button>
@@ -1095,7 +1095,7 @@ export default function GetStartedClient() {
                       <button
                         type="button"
                         onClick={() => setStep(4)}
-                        className="text-sm text-[#C4B5FD] hover:text-[#DDD6FE]"
+                        className="text-sm text-[#E8C068] hover:text-[#F0D78C]"
                       >
                         Edit
                       </button>
@@ -1135,7 +1135,7 @@ export default function GetStartedClient() {
                   type="button"
                   onClick={goNext}
                   disabled={isSubmitting}
-                  className="rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-lg bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-5 py-3 font-medium text-[#0E1015] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Continue
                 </button>
@@ -1144,7 +1144,7 @@ export default function GetStartedClient() {
                   type="button"
                   onClick={submit}
                   disabled={isSubmitting}
-                  className="rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-lg bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-5 py-3 font-medium text-[#0E1015] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {isSubmitting ? "Submitting..." : "Submit onboarding"}
                 </button>

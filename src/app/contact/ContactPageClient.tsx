@@ -90,7 +90,7 @@ export default function ContactPageClient() {
                             type="button"
                             key={option}
                             onClick={() => toggleHelp(option)}
-                            className={`rounded-full border px-3 py-2 text-sm ${formState.helpWith.includes(option) ? "border-[#8B5CF6] bg-[#8B5CF6]/20 text-white" : "border-white/15 text-[#A1A1AA]"}`}
+                            className={`rounded-full border px-3 py-2 text-sm ${formState.helpWith.includes(option) ? "border-[#D4A030] bg-[#D4A030]/20 text-white" : "border-white/15 text-[#A1A1AA]"}`}
                           >
                             {option}
                           </button>
@@ -100,7 +100,7 @@ export default function ContactPageClient() {
 
                     <textarea required rows={5} value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className="w-full resize-none rounded-lg border border-white/10 bg-[#1A1A23] px-4 py-3" placeholder="Anything else we should know? *" />
 
-                    <motion.button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] py-4 font-semibold text-white disabled:opacity-50 will-change-transform" {...(prefersReducedMotion ? {} : buttonHover)}>
+                    <motion.button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] py-4 font-semibold text-[#0E1015] disabled:opacity-50 will-change-transform" {...(prefersReducedMotion ? {} : buttonHover)}>
                       {isSubmitting ? "Sending..." : <><Send className="h-5 w-5" /> Send Intake</>}
                     </motion.button>
                   </form>
@@ -111,18 +111,18 @@ export default function ContactPageClient() {
                 <div className="rounded-2xl border border-white/5 bg-[#12121A] p-8">
                   <h3 className="mb-4 text-xl font-semibold">Prefer to try something first?</h3>
                   <p className="mb-6 text-[#A1A1AA]">Start Cadence free and see live phone answering in minutes.</p>
-                  <Link href="/get-started" className="inline-block rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-[#8B5CF6]/60">Start Free Trial</Link>
+                  <Link href="/get-started" className="inline-block rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-[#D4A030]/60">Start Free Trial</Link>
                 </div>
 
                 <div className="rounded-2xl border border-white/5 bg-[#12121A] p-8">
                   <h2 className="mb-6 text-2xl font-semibold">Business Info</h2>
                   <div className="space-y-5 text-[#A1A1AA]">
-                    <p className="flex items-center gap-3"><Mail className="h-5 w-5 text-[#8B5CF6]" />{businessProfile.email}</p>
-                    {businessProfile.phoneDisplay && <p className="flex items-center gap-3"><Phone className="h-5 w-5 text-[#8B5CF6]" />{businessProfile.phoneDisplay}</p>}
-                    <p className="flex items-center gap-3"><MapPin className="h-5 w-5 text-[#8B5CF6]" />{businessProfile.city}, {businessProfile.state}</p>
-                    <p className="flex items-center gap-3"><Clock className="h-5 w-5 text-[#8B5CF6]" />Response within 24 hours</p>
+                    <p className="flex items-center gap-3"><Mail className="h-5 w-5 text-[#D4A030]" />{businessProfile.email}</p>
+                    {businessProfile.phoneDisplay && <p className="flex items-center gap-3"><Phone className="h-5 w-5 text-[#D4A030]" />{businessProfile.phoneDisplay}</p>}
+                    <p className="flex items-center gap-3"><MapPin className="h-5 w-5 text-[#D4A030]" />{businessProfile.city}, {businessProfile.state}</p>
+                    <p className="flex items-center gap-3"><Clock className="h-5 w-5 text-[#D4A030]" />Response within 24 hours</p>
                   </div>
-                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%20call`} className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-[#8B5CF6]/60">Book a Call</Link>
+                  <Link href={`mailto:${businessProfile.email}?subject=Book%20a%20call`} className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-[#D4A030]/60">Book a Call</Link>
                 </div>
               </div>
             </div>
