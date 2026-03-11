@@ -79,7 +79,7 @@ export default function SuccessClient({ email, product }: SuccessClientProps) {
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="/portal"
-                className="inline-flex justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+                className="inline-flex select-none justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
               >
                 Go to Portal Dashboard
               </a>

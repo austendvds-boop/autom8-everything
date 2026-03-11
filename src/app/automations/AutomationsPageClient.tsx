@@ -154,7 +154,7 @@ export default function AutomationsPageClient() {
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
+                className="inline-flex select-none items-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-4 font-semibold text-white"
               >
 Build Strategy Call <ArrowRight className="w-5 h-5" />
               </Link>

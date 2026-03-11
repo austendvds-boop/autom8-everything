@@ -37,7 +37,7 @@ export default function ReviewFunnelSignupSuccessPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/review-funnel/login"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-6 py-3 font-semibold text-white"
+                className="inline-flex select-none items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-6 py-3 font-semibold text-white"
               >
                 Connect My Calendar
               </Link>

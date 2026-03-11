@@ -78,13 +78,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <article className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6">
-          <p className="text-sm text-[#8B5CF6] mb-4">{post.category}</p>
+          <p className="text-sm text-[#D4A030] mb-4">{post.category}</p>
           <h1 className="text-4xl md:text-6xl font-semibold mb-6" style={{ fontFamily: "var(--font-playfair), serif" }}>
             {post.title}
           </h1>
           <div className="flex flex-wrap gap-2 mb-5">
             {post.tags.map((tag) => (
-              <span key={`${post.slug}-${tag}`} className="text-xs rounded-full px-3 py-1 bg-[#8B5CF6]/10 text-[#C4B5FD]">
+              <span key={`${post.slug}-${tag}`} className="text-xs rounded-full px-3 py-1 bg-[rgba(212,160,48,0.10)] text-[#E8C068]">
                 {tag}
               </span>
             ))}
@@ -108,20 +108,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <section className="mt-14 rounded-2xl border border-white/10 p-8 bg-[#12121A]">
             <h2 className="text-2xl font-semibold mb-4">Ready to implement this in your business?</h2>
             <p className="text-[#A1A1AA] mb-6">
-              Explore our <Link href="/pricing" className="text-[#8B5CF6] hover:text-[#A78BFA]">automation services</Link>, review
-              Phoenix-area coverage in the <Link href="/locations" className="text-[#8B5CF6] hover:text-[#A78BFA]">location hub</Link>, or
-              <Link href="/contact" className="text-[#8B5CF6] hover:text-[#A78BFA]"> request a quote</Link>.
+              Explore our <Link href="/pricing" className="text-[#D4A030] hover:text-[#E5B544]">automation services</Link>, review
+              Phoenix-area coverage in the <Link href="/locations" className="text-[#D4A030] hover:text-[#E5B544]">location hub</Link>, or
+              <Link href="/contact" className="text-[#D4A030] hover:text-[#E5B544]"> request a quote</Link>.
             </p>
             <Link
               href="/contact"
-              className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
+              className="inline-block select-none rounded-full bg-gradient-to-r from-[#D4A030] to-[#E8C068] px-6 py-3 font-semibold text-[#0E1015]"
             >
               Book Your Free Audit
             </Link>
           </section>
 
           <div className="mt-12">
-            <Link href="/blog" className="text-[#8B5CF6] hover:text-[#A78BFA]">
+            <Link href="/blog" className="text-[#D4A030] hover:text-[#E5B544]">
               ← Back to all articles
             </Link>
           </div>

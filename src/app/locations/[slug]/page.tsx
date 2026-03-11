@@ -92,7 +92,7 @@ export default async function LocationDetailPage({ params }: { params: Promise<{
             </p>
             <Link
               href="/contact"
-              className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white font-semibold"
+              className="inline-block select-none rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-6 py-3 font-semibold text-white"
             >
               Request a Quote
             </Link>

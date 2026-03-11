@@ -51,15 +51,13 @@ function BrandMark({ size = "md" }: { size?: BrandLogoSize }) {
     >
       <svg viewBox="0 0 32 32" className="h-full w-full" role="img">
         <defs>
-          <linearGradient id="autom8-mark-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#D4A030" />
-            <stop offset="100%" stopColor="#E8C068" />
+          <linearGradient id="autom8-mark-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#C9A84C" />
+            <stop offset="100%" stopColor="#8B6914" />
           </linearGradient>
         </defs>
-        {/* Three stacked chevrons — forward motion / automation flow */}
-        <path d="M8 6 L18 16 L8 26" stroke="url(#autom8-mark-gradient)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        <path d="M14 6 L24 16 L14 26" stroke="url(#autom8-mark-gradient)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.7" />
-        <path d="M20 6 L30 16 L20 26" stroke="url(#autom8-mark-gradient)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.4" />
+        <path d="M7 6 L16 16 L7 26" stroke="url(#autom8-mark-gradient)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M15 6 L24 16 L15 26" stroke="url(#autom8-mark-gradient)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.7" />
       </svg>
     </span>
   );

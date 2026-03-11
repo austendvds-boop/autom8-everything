@@ -1,16 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Autom8 mark">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#D4A030" />
-      <stop offset="100%" stop-color="#E8C068" />
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C9A84C" />
+      <stop offset="100%" stop-color="#8B6914" />
     </linearGradient>
   </defs>
   <rect width="128" height="128" rx="28" fill="#0E1015" />
-  <rect x="4" y="4" width="120" height="120" rx="24" fill="rgba(212,160,48,0.08)" />
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M32 24 L72 64 L32 104" stroke="url(#g)" stroke-width="14" />
-    <path d="M56 24 L96 64 L56 104" stroke="url(#g)" stroke-width="14" opacity="0.65" />
-    <path d="M80 24 L120 64 L80 104" stroke="url(#g)" stroke-width="14" opacity="0.3" />
+    <path d="M28 28 L64 64 L28 100" stroke="url(#g)" stroke-width="16" />
+    <path d="M60 28 L96 64 L60 100" stroke="url(#g)" stroke-width="16" opacity="0.75" />
   </g>
-  <rect x="1" y="1" width="126" height="126" rx="27" fill="none" stroke="rgba(212,160,48,0.18)" stroke-width="1" />
 </svg>
