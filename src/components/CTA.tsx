@@ -41,12 +41,9 @@ export default function CTA() {
           Start with Cadence today. Add reviews, a website, and SEO when you're ready. No contracts, no risk.
         </motion.p>
 
-        <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4" {...(prefersReducedMotion ? revealReduced : reveal)}>
+        <motion.div className="flex items-center justify-center" {...(prefersReducedMotion ? revealReduced : reveal)}>
           <ShimmerButton href="tel:+14806313993" size="lg" variant="primary">
             Call Cadence Live {"\u2014"} (480) 631-3993
-          </ShimmerButton>
-          <ShimmerButton href="/contact" size="lg" variant="secondary">
-            Book a 15-Minute Demo
           </ShimmerButton>
         </motion.div>
 

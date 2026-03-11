@@ -19,7 +19,6 @@ const startHereLinks = [
   { label: "Try Cadence Free", href: "tel:+14806313993" },
   { label: "See Our Products", href: "/#services" },
   { label: "Get a Free Quote", href: "/contact" },
-  { label: "Book a Demo", href: "/contact" },
 ];
 
 const companyLinks = [

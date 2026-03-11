@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Calendar, PhoneCall } from "lucide-react";
+import { PhoneCall } from "lucide-react";
 import ShimmerButton from "@/components/ShimmerButton";
 import { springSmooth } from "@/lib/motion";
 
@@ -35,19 +34,11 @@ export default function StickyMobileCTA() {
         borderTop: "1px solid rgba(255, 255, 255, 0.1)",
       }}
     >
-      <div className="flex gap-3 px-4 py-3 max-w-lg mx-auto">
-        <ShimmerButton href="tel:+14806313993" ariaLabel="Call Cadence" className="flex-1 py-3">
+      <div className="flex px-4 py-3 max-w-lg mx-auto">
+        <ShimmerButton href="tel:+14806313993" ariaLabel="Call Cadence" className="w-full py-3">
           <PhoneCall className="w-4 h-4" />
-          Call Now
+          Call Now — (480) 631-3993
         </ShimmerButton>
-        <Link
-          href="/contact"
-          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full border border-white/20 text-white font-semibold text-sm"
-          aria-label="Book a demo"
-        >
-          <Calendar className="w-4 h-4" />
-          Book Demo
-        </Link>
       </div>
     </motion.div>
   );
