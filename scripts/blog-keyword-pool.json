@@ -7,11 +7,12 @@
     "local-seo",
     "business-automation"
   ],
-  "lastCategory": "small-business-websites",
+  "lastCategory": "local-seo",
   "cityHistory": {
     "ai-receptionist:Phoenix": 1773212389937,
     "review-automation:Phoenix": 1773212740212,
-    "small-business-websites:Phoenix": 1773226219762
+    "small-business-websites:Phoenix": 1773226219762,
+    "local-seo:Phoenix": 1773228620207
   },
   "pool": [
     {
@@ -313,7 +314,7 @@
       "title": "Local SEO for Phoenix Small Businesses: A Practical Guide",
       "city": "Phoenix",
       "category": "local-seo",
-      "used": false
+      "used": true
     },
     {
       "keyword": "google business profile optimization scottsdale",
