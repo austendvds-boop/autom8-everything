@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { LucideIcon, ClipboardList, Wrench, PhoneCall } from "lucide-react";
-import { fadeUp, slideInLeft, slideInRight, springSnappy, staggerContainer, viewportOnce } from "@/lib/motion";
+import { buttonHover, fadeUp, slideInLeft, slideInRight, springSnappy, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type Step = {
   number: string;
@@ -40,9 +39,9 @@ export default function HowItWorks() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="pt-16 pb-24 md:pt-20 md:pb-24 relative overflow-hidden bg-[#0A0A0F]">
+    <section className="pt-16 pb-24 md:pt-20 md:pb-24 relative overflow-hidden bg-[#0E1015]">
       <div className="absolute inset-0 opacity-30 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[#8B5CF6]/10 blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[#D4A030]/10 blur-[100px]" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
@@ -53,10 +52,10 @@ export default function HowItWorks() {
           whileInView="visible"
           viewport={viewportOnce}
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-manrope), sans-serif" }}>
             How It <span className="gradient-text">Works</span>
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">Simple steps. Clear timeline. No technical work on your side.</p>
+          <p className="text-[#9B978F] text-lg md:text-xl max-w-2xl mx-auto">Simple steps. Clear timeline. No technical work on your side.</p>
         </motion.div>
 
         <motion.div
@@ -80,7 +79,7 @@ export default function HowItWorks() {
                 {!isLast && (
                   <div className="hidden md:block absolute top-16 left-full w-full h-0.5">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#06B6D4]"
+                      className="h-full bg-gradient-to-r from-[#D4A030] to-[#E8C068]"
                       initial={{ scaleX: 0 }}
                       whileInView={{ scaleX: 1 }}
                       viewport={{ once: true }}
@@ -91,20 +90,20 @@ export default function HowItWorks() {
                 )}
 
                 <div className="text-center">
-                  <motion.div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#8B5CF6]/20 text-[#8B5CF6] font-mono text-sm mb-6">
+                  <motion.div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#D4A030]/20 text-[#D4A030] font-mono text-sm mb-6">
                     {step.number}
                   </motion.div>
 
                   <motion.div
-                    className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-[#111118] border border-white/[0.04] flex items-center justify-center"
+                    className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-[#D4A030]/[0.12] border border-white/[0.04] flex items-center justify-center"
                     whileHover={prefersReducedMotion ? undefined : { scale: 1.1, rotate: 5 }}
                     transition={springSnappy}
                   >
-                    <Icon className="w-10 h-10 text-[#8B5CF6]" />
+                    <Icon className="w-10 h-10 text-[#D4A030]" />
                   </motion.div>
 
                   <h3 className="text-2xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-[#A1A1AA] text-[15px] leading-relaxed">{step.description}</p>
+                  <p className="text-[#9B978F] text-[15px] leading-relaxed">{step.description}</p>
                 </div>
               </motion.div>
             );
@@ -118,9 +117,13 @@ export default function HowItWorks() {
           whileInView="visible"
           viewport={viewportOnce}
         >
-          <Link href="#services" className="btn-secondary px-8 py-4">
+          <motion.a
+            href="#services"
+            className="btn-secondary px-8 py-4"
+            {...(prefersReducedMotion ? {} : buttonHover)}
+          >
             See Our Products
-          </Link>
+          </motion.a>
         </motion.div>
       </div>
     </section>

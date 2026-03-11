@@ -29,7 +29,7 @@ export default function StickyMobileCTA() {
       animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
       transition={prefersReducedMotion ? undefined : springSmooth}
       style={{
-        background: "rgba(10, 10, 15, 0.85)",
+        background: "rgba(14, 16, 21, 0.85)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderTop: "1px solid rgba(255, 255, 255, 0.1)",

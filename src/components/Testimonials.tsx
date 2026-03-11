@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Star } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
-import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
+import { cardHover, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type Testimonial = {
   quote: ReactNode;
@@ -59,10 +59,10 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={viewportOnce}
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-playfair), serif" }}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-manrope), sans-serif" }}>
             What Business Owners <span className="gradient-text">Say</span>
           </h2>
-          <p className="text-[#A1A1AA] text-lg md:text-xl max-w-2xl mx-auto">What business owners say about working with Autom8.</p>
+          <p className="text-[#9B978F] text-lg md:text-xl max-w-2xl mx-auto">What business owners say about working with Autom8.</p>
         </motion.div>
 
         <motion.div
@@ -78,26 +78,27 @@ export default function Testimonials() {
               className="h-full"
               variants={testimonialReveal}
               initial={prefersReducedMotion ? false : undefined}
+              {...(prefersReducedMotion ? {} : cardHover)}
             >
-              <div className="bg-[#111118] border border-white/[0.04] rounded-3xl p-8 h-full">
+              <div className="bg-[#161920] border border-white/[0.06] hover:shadow-[0_0_40px_rgba(212,160,48,0.20)] hover:border-[rgba(212,160,48,0.30)] transition-all duration-300 rounded-3xl p-8 h-full">
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-[#F59E0B] text-[#F59E0B]" />
                   ))}
                 </div>
 
-                <p className="text-[#A1A1AA] mb-6 leading-relaxed text-[15px]">
+                <p className="text-[#EDEBE8] mb-6 leading-relaxed text-[15px]">
                   <span aria-hidden="true">&ldquo;</span>
                   {testimonial.quote}
                   <span aria-hidden="true">&rdquo;</span>
                 </p>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8B5CF6] to-[#06B6D4] flex items-center justify-center text-white font-semibold">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4A030] to-[#E8C068] flex items-center justify-center text-white font-semibold">
                     {testimonial.image}
                   </div>
                   <div>
-                    <p className="text-sm text-[#D4D4D8]">{testimonial.attribution}</p>
+                    <p className="text-sm text-[#9B978F]">{testimonial.attribution}</p>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BlogPageClient from "./BlogPageClient";
 import { buildMetadata } from "@/lib/seo";
+import { getAllPosts } from "@/lib/blog";
 
 export const metadata: Metadata = buildMetadata({
   title: "Business Automation Blog for Phoenix, AZ Service Companies",
@@ -16,5 +17,6 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function BlogPage() {
-  return <BlogPageClient />;
+  const posts = getAllPosts();
+  return <BlogPageClient posts={posts} />;
 }

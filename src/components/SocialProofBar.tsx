@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { Star } from "lucide-react";
-import { reveal, revealReduced, revealStagger } from "@/lib/motion";
+import { fadeUp, staggerContainer, staggerItem, viewportOnce } from "@/lib/motion";
 
 const stats = [
   { value: "Local Businesses", label: "Active Clients" },
@@ -14,30 +14,48 @@ export default function SocialProofBar() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="py-8 bg-[#0A0A0F] border-y border-white/5">
+    <section className="py-8 bg-[#0E1015] border-y border-white/5">
       <div className="max-w-6xl mx-auto px-6">
         <motion.p
-          className="text-center text-[#A1A1AA] text-sm uppercase tracking-widest mb-6"
-          {...(prefersReducedMotion ? revealReduced : reveal)}
+          className="text-center text-[#9B978F] text-sm uppercase tracking-widest mb-6"
+          style={{ fontFamily: "var(--font-manrope), sans-serif" }}
+          variants={fadeUp}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
         >
           Trusted by local teams that want growth without extra busywork
         </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-4 gap-4"
+          variants={staggerContainer}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              className="rounded-2xl border border-white/[0.06] bg-[#111118] px-6 py-4 text-center"
-              {...revealStagger(index, prefersReducedMotion)}
+              className="rounded-2xl border border-white/[0.06] bg-[#161920] px-6 py-4 text-center"
+              variants={staggerItem}
             >
-              <p className="text-2xl font-bold gradient-text">{stat.value}</p>
-              <p className="text-sm text-[#A1A1AA]">{stat.label}</p>
+              <motion.p
+                className="text-2xl font-bold gradient-text"
+                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={viewportOnce}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: index * 0.15 }}
+              >
+                {stat.value}
+              </motion.p>
+              <p className="text-sm text-[#9B978F]">{stat.label}</p>
             </motion.div>
           ))}
 
           <motion.div
-            className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111118] px-6 py-4"
-            {...revealStagger(3, prefersReducedMotion)}
+            className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#161920] px-6 py-4"
+            variants={staggerItem}
           >
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(245,158,11,0.24),transparent_62%)]"
@@ -59,10 +77,10 @@ export default function SocialProofBar() {
                   </motion.span>
                 ))}
               </div>
-              <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">5-Star Client Feedback</p>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#9B978F]">5-Star Client Feedback</p>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* TODO: Replace text labels with real integration logos */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-6 opacity-50">

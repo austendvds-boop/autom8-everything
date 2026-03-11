@@ -4,16 +4,18 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { getAllPosts } from "@/lib/blog";
+import type { BlogPost } from "@/lib/blog";
 import { fadeUp, staggerContainer, staggerItem, viewportOnce } from "@/lib/motion";
 
-const posts = getAllPosts();
-const featuredPosts = posts.slice(0, 4);
-const trendingPosts = posts.slice(0, 6);
-const categories = [...new Set(posts.map((post) => post.category))];
-const tags = [...new Set(posts.flatMap((post) => post.tags))].slice(0, 18);
+interface BlogPageClientProps {
+  posts: BlogPost[];
+}
 
-export default function BlogPageClient() {
+export default function BlogPageClient({ posts }: BlogPageClientProps) {
+  const featuredPosts = posts.slice(0, 4);
+  const trendingPosts = posts.slice(0, 6);
+  const categories = [...new Set(posts.map((post) => post.category))];
+  const tags = [...new Set(posts.flatMap((post) => post.tags))].slice(0, 18);
   const prefersReducedMotion = useReducedMotion();
 
   return (

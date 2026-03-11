@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
+import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 import { businessProfile, businessSameAs } from "@/lib/business";
 import { defaultDescription, defaultOgImage, defaultTitle, siteName, siteUrl } from "@/lib/seo";
@@ -18,10 +18,11 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
   display: "swap",
+  weight: ["600", "700", "800"],
 });
 
 const localBusinessSchema = {
@@ -150,7 +151,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${playfair.variable} antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${manrope.variable} antialiased`}
         style={{
           fontFamily: "var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif",
         }}

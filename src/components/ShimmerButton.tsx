@@ -21,8 +21,8 @@ const sizeClasses = {
 } as const;
 
 const variantClasses = {
-  primary: "bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white shimmer-btn",
-  secondary: "bg-transparent border border-white/20 text-white",
+  primary: "bg-gradient-to-r from-[#D4A030] to-[#E8C068] text-[#0E1015] shimmer-btn",
+  secondary: "bg-transparent border border-white/20 text-white hover:border-[#D4A030]/50",
 } as const;
 
 export default function ShimmerButton({

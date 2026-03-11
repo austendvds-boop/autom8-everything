@@ -46,21 +46,20 @@ const sizeClasses = {
 function BrandMark({ size = "md" }: { size?: BrandLogoSize }) {
   return (
     <span
-      className={`${sizeClasses[size].mark} shrink-0 rounded-xl border border-white/20 bg-[#12121A] p-1.5 shadow-[0_0_24px_rgba(139,92,246,0.2)]`}
+      className={`${sizeClasses[size].mark} shrink-0 rounded-xl border border-white/10 bg-[rgba(212,160,48,0.10)] p-1.5 shadow-[0_0_20px_rgba(212,160,48,0.12)] transition-shadow hover:shadow-[0_0_28px_rgba(212,160,48,0.22)]`}
       aria-hidden="true"
     >
-      <svg viewBox="0 0 100 100" className="h-full w-full" role="img">
+      <svg viewBox="0 0 32 32" className="h-full w-full" role="img">
         <defs>
           <linearGradient id="autom8-mark-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#8B5CF6" />
-            <stop offset="100%" stopColor="#06B6D4" />
+            <stop offset="0%" stopColor="#D4A030" />
+            <stop offset="100%" stopColor="#E8C068" />
           </linearGradient>
         </defs>
-        <rect x="4" y="4" width="92" height="92" rx="24" fill="url(#autom8-mark-gradient)" opacity="0.2" />
-        <path
-          d="M50 15C34 15 23 25 23 38c0 8 4 15 11 19-8 4-13 12-13 21 0 14 12 24 29 24s29-10 29-24c0-9-5-17-13-21 7-4 11-11 11-19 0-13-11-23-27-23zm0 10c10 0 16 6 16 14s-6 14-16 14-16-6-16-14 6-14 16-14zm0 37c11 0 18 7 18 16s-7 16-18 16-18-7-18-16 7-16 18-16z"
-          fill="url(#autom8-mark-gradient)"
-        />
+        {/* Three stacked chevrons — forward motion / automation flow */}
+        <path d="M8 6 L18 16 L8 26" stroke="url(#autom8-mark-gradient)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M14 6 L24 16 L14 26" stroke="url(#autom8-mark-gradient)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.7" />
+        <path d="M20 6 L30 16 L20 26" stroke="url(#autom8-mark-gradient)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.4" />
       </svg>
     </span>
   );
@@ -70,15 +69,26 @@ function BrandWordmark({ size = "md", showDescriptor = true }: { size?: BrandLog
   return (
     <span className="flex flex-col leading-none whitespace-nowrap">
       <span className="flex items-center gap-0.5 tracking-tight">
-        <span className={`${sizeClasses[size].autom} font-semibold text-white`} style={{ fontFamily: "var(--font-playfair), serif" }}>
-          autom
+        <span
+          className={`${sizeClasses[size].autom} font-bold text-[#EDEBE8]`}
+          style={{ fontFamily: "var(--font-manrope), sans-serif" }}
+        >
+          Autom
         </span>
-        <span className={`${sizeClasses[size].eight} font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#06B6D4] bg-clip-text text-transparent`}>
+        <span
+          className={`${sizeClasses[size].eight} font-bold bg-gradient-to-r from-[#D4A030] to-[#E8C068] bg-clip-text text-transparent`}
+          style={{ fontFamily: "var(--font-manrope), sans-serif" }}
+        >
           8
         </span>
       </span>
       {showDescriptor ? (
-        <span className={`${sizeClasses[size].descriptor} uppercase tracking-[0.22em] text-[#A1A1AA]`}>everything</span>
+        <span
+          className={`${sizeClasses[size].descriptor} font-semibold uppercase tracking-[0.22em] text-[#9B978F]`}
+          style={{ fontFamily: "var(--font-inter), sans-serif" }}
+        >
+          everything
+        </span>
       ) : null}
     </span>
   );
