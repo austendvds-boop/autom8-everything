@@ -9,7 +9,7 @@ export default function CTA() {
 
   return (
     <section className="py-40 relative overflow-hidden min-h-[70vh] flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6] via-[#A78BFA] to-[#06B6D4]">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#D4A030] via-[#B8892A] to-[#0E1015]">
         <motion.div
           className="absolute inset-0 opacity-30"
           animate={
@@ -17,21 +17,21 @@ export default function CTA() {
               ? undefined
               : {
                   background: [
-                    "radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.5) 0%, transparent 50%)",
-                    "radial-gradient(circle at 70% 60%, rgba(6, 182, 212, 0.5) 0%, transparent 50%)",
-                    "radial-gradient(circle at 40% 80%, rgba(167, 139, 250, 0.5) 0%, transparent 50%)",
-                    "radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.5) 0%, transparent 50%)",
+                    "radial-gradient(circle at 30% 30%, rgba(212, 160, 48, 0.5) 0%, transparent 50%)",
+                    "radial-gradient(circle at 70% 60%, rgba(232, 192, 104, 0.5) 0%, transparent 50%)",
+                    "radial-gradient(circle at 40% 80%, rgba(184, 137, 42, 0.5) 0%, transparent 50%)",
+                    "radial-gradient(circle at 30% 30%, rgba(212, 160, 48, 0.5) 0%, transparent 50%)",
                   ],
                 }
           }
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <motion.h2
           className="text-5xl md:text-7xl font-semibold text-white mb-6"
-          style={{ fontFamily: "var(--font-playfair), serif" }}
+          style={{ fontFamily: "var(--font-manrope), sans-serif" }}
           {...(prefersReducedMotion ? revealReduced : reveal)}
         >
           Your Competitors Are Already Answering Their Calls.

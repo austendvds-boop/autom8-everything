@@ -13,7 +13,7 @@ export default function ScrollFade() {
 
   return (
     <motion.div ref={ref} className="relative h-32 overflow-hidden pointer-events-none" style={{ opacity }}>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#8B5CF6]/[0.05] to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#D4A030]/[0.05] to-transparent" />
     </motion.div>
   );
 }
