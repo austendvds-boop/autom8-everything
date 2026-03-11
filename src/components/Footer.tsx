@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { businessProfile } from "@/lib/business";
-import { fadeUp, viewportOnce } from "@/lib/motion";
+import { buttonHover, fadeUp, viewportOnce } from "@/lib/motion";
 
 const productLinks = [
   { label: "Cadence", href: "/services/cadence" },
@@ -67,16 +67,17 @@ export default function Footer() {
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
-                  <a
+                  <motion.a
                     key={social.label}
                     href={social.href}
                     className="w-10 h-10 rounded-full bg-[#1E2028] border border-white/5 flex items-center justify-center text-[#9B978F] hover:text-[#D4A030] hover:border-[#D4A030]/50 transition-colors"
                     aria-label={social.label}
                     target={social.href.startsWith("http") ? "_blank" : undefined}
                     rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    {...(prefersReducedMotion ? {} : buttonHover)}
                   >
                     <Icon className="w-5 h-5" />
-                  </a>
+                  </motion.a>
                 );
               })}
             </div>

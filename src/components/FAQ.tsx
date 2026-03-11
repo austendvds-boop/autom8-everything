@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
-import { reveal, revealReduced, revealStagger } from "@/lib/motion";
+import { fadeUp, revealStagger, viewportOnce } from "@/lib/motion";
 
 const faqs = [
   {
@@ -45,7 +45,13 @@ export default function FAQ() {
     <section className="py-32 bg-transparent relative" id="faq">
       <div className="section-glow section-glow--mixed -top-20 right-0" />
       <div className="max-w-3xl mx-auto px-6 relative z-10">
-        <motion.div className="text-center mb-20" {...(prefersReducedMotion ? revealReduced : reveal)}>
+        <motion.div
+          className="text-center mb-20"
+          variants={fadeUp}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.02em] font-semibold mb-4" style={{ fontFamily: "var(--font-manrope), sans-serif" }}>
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
@@ -73,8 +79,8 @@ export default function FAQ() {
                         initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
                         animate={prefersReducedMotion ? { opacity: 1 } : { height: "auto", opacity: 1 }}
                         exit={prefersReducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
+                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                        style={{ overflow: "hidden" }}
                       >
                         <p className="pt-4 text-[#9B978F] leading-relaxed text-[15px]">{faq.answer}</p>
                       </motion.div>

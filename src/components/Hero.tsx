@@ -91,7 +91,7 @@ export default function Hero() {
             href="tel:+14806313993"
             className="btn-primary text-lg gap-2 px-10 py-4 shadow-[0_0_30px_rgba(212,160,48,0.3)]"
             variants={prefersReducedMotion ? undefined : staggerItem}
-            {...buttonHover}
+            {...(prefersReducedMotion ? {} : buttonHover)}
           >
             <PhoneCall className="w-5 h-5" />
             Try Cadence Free
@@ -101,7 +101,7 @@ export default function Hero() {
             href="#services"
             className="btn-secondary text-lg px-8 py-4"
             variants={prefersReducedMotion ? undefined : staggerItem}
-            {...buttonHover}
+            {...(prefersReducedMotion ? {} : buttonHover)}
           >
             Explore Products
           </motion.a>

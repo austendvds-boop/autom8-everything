@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { LucideIcon, ClipboardList, Wrench, PhoneCall } from "lucide-react";
-import { fadeUp, slideInLeft, slideInRight, springSnappy, staggerContainer, viewportOnce } from "@/lib/motion";
+import { buttonHover, fadeUp, slideInLeft, slideInRight, springSnappy, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type Step = {
   number: string;
@@ -118,9 +117,13 @@ export default function HowItWorks() {
           whileInView="visible"
           viewport={viewportOnce}
         >
-          <Link href="#services" className="btn-secondary px-8 py-4">
+          <motion.a
+            href="#services"
+            className="btn-secondary px-8 py-4"
+            {...(prefersReducedMotion ? {} : buttonHover)}
+          >
             See Our Products
-          </Link>
+          </motion.a>
         </motion.div>
       </div>
     </section>

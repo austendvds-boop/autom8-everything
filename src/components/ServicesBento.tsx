@@ -1,11 +1,10 @@
 "use client";
 
 import type { ComponentType } from "react";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Check, Globe, MessageSquareHeart, PhoneCall, Wrench } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
-import { fadeUp, scaleIn, staggerContainer, viewportOnce } from "@/lib/motion";
+import { buttonHover, cardHover, fadeUp, scaleIn, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type ProductTier = "hero" | "small";
 
@@ -145,19 +144,21 @@ export default function ServicesBento() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-            <a
+            <motion.a
               href={hero.cta.href}
               className="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] text-[#0E1015] text-sm font-semibold"
+              {...(prefersReducedMotion ? {} : buttonHover)}
             >
               {hero.cta.label}
-            </a>
+            </motion.a>
             {hero.secondaryCta && (
-              <Link
-                href={hero.secondaryCta.href}
+              <motion.a
+                href={hero.secondaryCta.href as string}
                 className="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full border border-white/20 text-[#EDEBE8] text-sm font-semibold hover:border-[#D4A030]/50 transition-colors"
+                {...(prefersReducedMotion ? {} : buttonHover)}
               >
                 {hero.secondaryCta.label}
-              </Link>
+              </motion.a>
             )}
           </div>
         </div>
@@ -185,9 +186,10 @@ export default function ServicesBento() {
     return (
       <motion.article
         aria-label={product.productName}
-        className="glass-card group relative overflow-hidden bg-[#161920] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[320px] hover:border-[#D4A030]/30 hover:shadow-[0_0_0_1px_rgba(212,160,48,0.32),0_0_40px_rgba(212,160,48,0.20)] transition-[box-shadow,border-color] duration-300"
+        className="glass-card group relative overflow-hidden bg-[#161920] border border-white/[0.06] rounded-3xl p-7 md:p-9 min-h-[320px] hover:shadow-[0_0_40px_rgba(212,160,48,0.20)] hover:border-[rgba(212,160,48,0.30)] transition-all duration-300"
         variants={scaleIn}
         initial={prefersReducedMotion ? false : undefined}
+        {...(prefersReducedMotion ? {} : cardHover)}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-[#D4A030]/0 to-transparent group-hover:from-[#D4A030]/[0.04] transition-opacity duration-500" />
         <div className="relative z-10 h-full flex flex-col">
@@ -227,12 +229,13 @@ export default function ServicesBento() {
           </div>
 
           <div className="mt-auto pt-2">
-            <Link
+            <motion.a
               href={product.cta.href}
               className="inline-flex items-center justify-center min-h-11 px-5 py-2.5 rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] text-[#0E1015] text-sm font-semibold"
+              {...(prefersReducedMotion ? {} : buttonHover)}
             >
               {product.cta.label}
-            </Link>
+            </motion.a>
           </div>
         </div>
       </motion.article>

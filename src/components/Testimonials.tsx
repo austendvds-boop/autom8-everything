@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Star } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
-import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
+import { cardHover, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 type Testimonial = {
   quote: ReactNode;
@@ -78,8 +78,9 @@ export default function Testimonials() {
               className="h-full"
               variants={testimonialReveal}
               initial={prefersReducedMotion ? false : undefined}
+              {...(prefersReducedMotion ? {} : cardHover)}
             >
-              <div className="bg-[#161920] border border-white/[0.04] hover:border-[#D4A030]/30 rounded-3xl p-8 h-full">
+              <div className="bg-[#161920] border border-white/[0.06] hover:shadow-[0_0_40px_rgba(212,160,48,0.20)] hover:border-[rgba(212,160,48,0.30)] transition-all duration-300 rounded-3xl p-8 h-full">
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-[#F59E0B] text-[#F59E0B]" />
