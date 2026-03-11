@@ -76,7 +76,7 @@ function BrandWordmark({ size = "md", showDescriptor = true }: { size?: BrandLog
           Autom
         </span>
         <span
-          className={`${sizeClasses[size].eight} font-bold bg-gradient-to-r from-[#D4A030] to-[#E8C068] bg-clip-text text-transparent`}
+          className={`${sizeClasses[size].eight} font-bold bg-gradient-to-r from-[#D4A030] to-[#E8C068] bg-clip-text text-transparent inline-block`}
           style={{ fontFamily: "var(--font-manrope), sans-serif" }}
         >
           8

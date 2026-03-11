@@ -56,7 +56,7 @@ export default function Navigation() {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         <motion.div
-          className={`mx-auto flex h-16 items-center justify-between gap-3 border border-transparent px-6 transition-[background-color,border-color,backdrop-filter] duration-300 ${isScrolled ? "glass max-w-4xl rounded-full border-white/10 px-5" : "max-w-7xl"}`}
+          className={`mx-auto flex h-16 items-center justify-between gap-3 border border-transparent px-6 transition-[background-color,border-color,backdrop-filter] duration-300 ${isScrolled ? "glass max-w-4xl rounded-full border-white/10 px-5 overflow-visible" : "max-w-7xl"}`}
           style={
             prefersReducedMotion
               ? undefined
