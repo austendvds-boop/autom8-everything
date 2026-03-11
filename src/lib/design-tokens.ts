@@ -1,4 +1,4 @@
-/** Shared design tokens for consistent section spacing and card styling */
+/** Shared design tokens — warm amber/charcoal system */
 
 export const SECTION_PY = {
   sm: 'py-20',
@@ -6,19 +6,25 @@ export const SECTION_PY = {
   lg: 'py-32',
 } as const;
 
-export const CARD_BASE = 'rounded-2xl border border-white/[0.06] bg-[#111118]';
+export const CARD_BASE = 'rounded-2xl border border-white/[0.06] bg-[#161920]';
 
 export const CARD_ELEVATED =
-  'rounded-3xl border border-white/[0.06] bg-[#111118] hover:border-[#8B5CF6]/35 hover:shadow-[0_0_0_1px_rgba(139,92,246,0.32),0_0_78px_rgba(139,92,246,0.12)] transition-all duration-300';
+  'rounded-3xl border border-white/[0.06] bg-[#161920] hover:border-[#D4A030]/30 hover:shadow-[0_0_40px_rgba(212,160,48,0.20)] transition-all duration-300';
 
 export const COLORS = {
-  bgPrimary: '#0A0A0F',
-  bgSurface: '#12121A',
-  bgElevated: '#1A1A23',
-  accentPrimary: '#8B5CF6',
-  accentSecondary: '#06B6D4',
-  accentTertiary: '#A78BFA',
-  textPrimary: '#FFFFFF',
-  textSecondary: '#A1A1AA',
-  textMuted: '#52525B',
+  bgPrimary: '#0E1015',
+  bgSurface: '#161920',
+  bgElevated: '#1E2028',
+  accent: '#D4A030',
+  accentHover: '#E5B544',
+  accentMuted: '#B8892A',
+  accentSubtle: 'rgba(212, 160, 48, 0.10)',
+  accentGlow: 'rgba(212, 160, 48, 0.20)',
+  textPrimary: '#EDEBE8',
+  textSecondary: '#9B978F',
+  textMuted: '#5E5B56',
+  borderDefault: 'rgba(255, 255, 255, 0.06)',
+  borderHover: 'rgba(212, 160, 48, 0.30)',
+  borderActive: 'rgba(212, 160, 48, 0.50)',
+  star: '#F59E0B',
 } as const;
