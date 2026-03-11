@@ -95,7 +95,21 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
             <h2 className="mb-8 text-3xl font-semibold" style={{ fontFamily: "var(--font-playfair), serif" }}>
               All articles ({posts.length})
             </h2>
-            <motion.div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" variants={staggerContainer} initial={prefersReducedMotion ? false : "hidden"} whileInView="visible" viewport={viewportOnce}>
+            <motion.div
+              className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.04,
+                    delayChildren: 0.02,
+                  },
+                },
+              }}
+              initial={prefersReducedMotion ? false : "hidden"}
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
               {posts.map((post) => (
                 <motion.article key={post.slug} className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#12121A] p-6 will-change-transform" variants={staggerItem}>
                   <p className="mb-3 text-sm text-[#8B5CF6]">{post.category}</p>

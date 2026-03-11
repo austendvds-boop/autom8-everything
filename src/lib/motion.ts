@@ -9,12 +9,12 @@ export const springSnappy = { type: "spring" as const, stiffness: 400, damping: 
 export const springDramatic = { type: "spring" as const, stiffness: 80, damping: 15 };
 
 // Viewport config
-export const viewportOnce = { once: true, margin: "-80px" as const };
+export const viewportOnce = { once: true, margin: "-40px" as const };
 
 // Variant objects
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easeExpoOut } },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeExpoOut } },
 };
 
 export const fadeIn: Variants = {
@@ -28,35 +28,35 @@ export const scaleIn: Variants = {
 };
 
 export const slideInLeft: Variants = {
-  hidden: { opacity: 0, x: -40 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: easeExpoOut } },
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: easeExpoOut } },
 };
 
 export const slideInRight: Variants = {
-  hidden: { opacity: 0, x: 40 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: easeExpoOut } },
+  hidden: { opacity: 0, x: 20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: easeExpoOut } },
 };
 
 export const staggerContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.05,
+      staggerChildren: 0.07,
+      delayChildren: 0.03,
     },
   },
 };
 
 export const staggerItem: Variants = {
-  hidden: { opacity: 0, y: 30, scale: 0.97 },
+  hidden: { opacity: 0, y: 16, scale: 0.97 },
   visible: { opacity: 1, y: 0, scale: 1, transition: springSmooth },
 };
 
 export const reveal = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: viewportOnce,
-  transition: { duration: 0.8, ease: easeExpoOut },
+  transition: { duration: 0.6, ease: easeExpoOut },
 };
 
 export const revealReduced = {
@@ -85,10 +85,10 @@ export const buttonHover = {
 };
 
 export const textLineReveal = (lineIndex: number): Variants => ({
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: easeExpoOut, delay: lineIndex * 0.06 },
+    transition: { duration: 0.5, ease: easeExpoOut, delay: lineIndex * 0.05 },
   },
 });

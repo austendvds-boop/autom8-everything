@@ -260,7 +260,7 @@ export default function PricingPageClient() {
           <motion.div
             className="space-y-4"
             variants={staggerContainer}
-            initial="hidden"
+            initial={prefersReducedMotion ? false : "hidden"}
             whileInView="visible"
             viewport={viewportOnce}
           >
