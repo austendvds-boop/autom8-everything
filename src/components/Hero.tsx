@@ -76,7 +76,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex items-center justify-center"
           {...(prefersReducedMotion
             ? revealReduced
             : {
@@ -87,17 +87,8 @@ export default function Hero() {
               })}
         >
           <motion.a
-            href="/contact"
-            className="btn-primary text-lg px-10 py-4 shadow-[0_0_30px_rgba(212,160,48,0.3)]"
-            variants={prefersReducedMotion ? undefined : staggerItem}
-            {...(prefersReducedMotion ? {} : buttonHover)}
-          >
-            Try Cadence Free
-          </motion.a>
-
-          <motion.a
             href="#services"
-            className="btn-secondary text-lg px-8 py-4"
+            className="btn-primary text-lg px-12 py-4 shadow-[0_0_30px_rgba(212,160,48,0.3)]"
             variants={prefersReducedMotion ? undefined : staggerItem}
             {...(prefersReducedMotion ? {} : buttonHover)}
           >
