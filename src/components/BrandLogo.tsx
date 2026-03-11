@@ -67,8 +67,8 @@ function BrandMark({ size = "md" }: { size?: BrandLogoSize }) {
 
 function BrandWordmark({ size = "md", showDescriptor = true }: { size?: BrandLogoSize; showDescriptor?: boolean }) {
   return (
-    <span className="flex flex-col leading-none whitespace-nowrap">
-      <span className="flex items-center gap-0.5 tracking-tight">
+    <span className="flex flex-col leading-none whitespace-nowrap overflow-visible">
+      <span className="flex items-center gap-0.5 tracking-tight overflow-visible">
         <span
           className={`${sizeClasses[size].autom} font-bold text-[#EDEBE8]`}
           style={{ fontFamily: "var(--font-manrope), sans-serif" }}
@@ -84,7 +84,7 @@ function BrandWordmark({ size = "md", showDescriptor = true }: { size?: BrandLog
       </span>
       {showDescriptor ? (
         <span
-          className={`${sizeClasses[size].descriptor} font-semibold uppercase tracking-[0.22em] text-[#9B978F]`}
+          className={`${sizeClasses[size].descriptor} font-semibold uppercase tracking-[0.22em] pr-[0.22em] text-[#9B978F]`}
           style={{ fontFamily: "var(--font-inter), sans-serif" }}
         >
           everything

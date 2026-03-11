@@ -202,7 +202,7 @@ export default function PricingPageClient() {
             <motion.p className="text-[#A1A1AA] mb-6 will-change-transform" variants={fadeUp}>
               Keep your site running and growing after launch.
             </motion.p>
-            <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" variants={staggerContainer}>
+            <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" variants={staggerContainer} initial={prefersReducedMotion ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0 }}>
               <motion.div variants={staggerItem} className="rounded-xl p-5 border border-white/10 bg-[#0F0F16] h-full flex flex-col will-change-transform">
                 <p className="text-sm uppercase tracking-wide text-[#D4A030] mb-1">Hosting</p>
                 <p className="text-2xl font-semibold mb-3">$50<span className="text-base text-[#A1A1AA]">/mo</span></p>

@@ -46,7 +46,7 @@ export default function Footer() {
       <motion.div
         className="max-w-7xl mx-auto px-6 will-change-transform"
         variants={fadeUp}
-        initial={prefersReducedMotion ? false : "hidden"}
+        initial={false}
         whileInView="visible"
         viewport={viewportOnce}
       >

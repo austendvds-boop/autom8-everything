@@ -25,10 +25,10 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
       <section className="mesh-bg pt-32 pb-16">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <motion.h1 className="mb-6 text-5xl font-semibold will-change-transform md:text-7xl" style={{ fontFamily: "var(--font-playfair), serif" }} variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible">
-            Business Automation <span className="gradient-text">Blog</span>
+            Helpful Reads for <span className="gradient-text">Local Business Owners</span>
           </motion.h1>
           <motion.p className="mx-auto max-w-3xl text-xl text-[#A1A1AA] will-change-transform" variants={fadeUp} initial={prefersReducedMotion ? false : "hidden"} animate="visible" transition={prefersReducedMotion ? undefined : { delay: 0.12 }}>
-            Tactical playbooks for Phoenix and Arizona businesses that want better lead response, cleaner CRM operations, and measurable local SEO growth.
+            Tips and guides to help you answer more calls, get more reviews, and grow without the tech headache.
           </motion.p>
         </div>
       </section>

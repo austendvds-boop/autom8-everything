@@ -9,7 +9,7 @@ export const springSnappy = { type: "spring" as const, stiffness: 400, damping: 
 export const springDramatic = { type: "spring" as const, stiffness: 80, damping: 15 };
 
 // Viewport config
-export const viewportOnce = { once: true, margin: "-40px" as const };
+export const viewportOnce = { once: true, amount: 0 as const };
 
 // Variant objects
 export const fadeUp: Variants = {

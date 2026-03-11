@@ -68,7 +68,7 @@ export default function AboutPageClient() {
           </div>
         </section>
 
-        <section className="py-20">
+        <section className="pb-20">
           <div className="mx-auto max-w-6xl px-6">
             <motion.h2
               className="mb-12 text-center text-3xl font-semibold will-change-transform"
