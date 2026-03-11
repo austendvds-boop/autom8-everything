@@ -17,7 +17,8 @@ import { buttonHover, scaleIn } from "@/lib/motion";
 const productLinks = [
   { href: "/services/cadence", label: "Cadence" },
   { href: "/services/review-funnel", label: "Review Funnel" },
-  { href: "/services/websites", label: "Web + Monthly SEO" },
+  { href: "/services/website-creation", label: "Website Creation" },
+  { href: "/services/seo-content", label: "SEO & Content" },
   { href: "/services/custom-apps", label: "Custom Apps" },
 ];
 
@@ -38,7 +39,7 @@ export default function Navigation() {
   const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.1]);
   const blur = useTransform(scrollY, [0, 100], [0, 12]);
   const navScale = useTransform(scrollY, [0, 100], [1, 0.98]);
-  const background = useMotionTemplate`rgba(10, 10, 15, ${bgOpacity})`;
+  const background = useMotionTemplate`rgba(14, 16, 21, ${bgOpacity})`;
   const backdropFilter = useMotionTemplate`blur(${blur}px)`;
   const border = useMotionTemplate`1px solid rgba(255, 255, 255, ${borderOpacity})`;
 
@@ -82,9 +83,9 @@ export default function Navigation() {
                 }
               }}
             >
-              <button className="relative inline-flex items-center gap-1 text-[#A1A1AA] transition-colors hover:text-white">
+              <button className="relative inline-flex items-center gap-1 text-[#9B978F] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A030]">
                 Products <span className="text-xs">▼</span>
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-[#8B5CF6] transition-[width] duration-300 ${isProductsOpen ? "w-full" : "w-0"}`} />
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-[#D4A030] transition-[width] duration-300 ${isProductsOpen ? "w-full" : "w-0"}`} />
               </button>
               <AnimatePresence>
                 {isProductsOpen && (
@@ -95,12 +96,12 @@ export default function Navigation() {
                     exit={prefersReducedMotion ? { opacity: 0 } : "hidden"}
                     variants={prefersReducedMotion ? undefined : scaleIn}
                   >
-                    <div className="w-64 rounded-2xl border border-white/10 bg-[#111118] p-3 shadow-xl">
+                    <div className="w-64 rounded-2xl border border-white/10 bg-[#161920] p-3 shadow-xl">
                       {productLinks.map((link) => (
                         <Link
                           key={link.href}
                           href={link.href}
-                          className="block rounded-xl px-3 py-2 text-[#A1A1AA] transition-colors hover:bg-white/5 hover:text-white"
+                          className="block rounded-xl px-3 py-2 text-[#9B978F] transition-colors hover:bg-white/5 hover:text-[#EDEBE8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A030]"
                         >
                           {link.label}
                         </Link>
@@ -112,9 +113,13 @@ export default function Navigation() {
             </div>
 
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="group relative text-[#A1A1AA] transition-colors hover:text-white">
+              <Link
+                key={link.href}
+                href={link.href}
+                className="group relative text-[#9B978F] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A030]"
+              >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-[#8B5CF6] transition-[width] duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-[#D4A030] transition-[width] duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
@@ -122,13 +127,13 @@ export default function Navigation() {
           <div className="hidden items-center gap-4 md:flex">
             <Link
               href="https://cadence-m48n.onrender.com/login"
-              className="text-sm text-[#A1A1AA] transition-colors hover:text-white"
+              className="text-sm text-[#9B978F] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A030]"
             >
               Client Login
             </Link>
             <Link href="/get-started">
               <motion.button
-                className="rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-6 py-2.5 text-sm font-medium text-white will-change-transform"
+                className="rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-6 py-2.5 text-sm font-semibold text-[#0E1015] will-change-transform"
                 {...(prefersReducedMotion ? {} : buttonHover)}
               >
                 Get Started
@@ -149,7 +154,7 @@ export default function Navigation() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-[#0A0A0F] md:hidden"
+            className="fixed inset-0 z-40 bg-[#0E1015] md:hidden"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -161,8 +166,8 @@ export default function Navigation() {
                 <motion.div key={link.href} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }}>
                   <Link
                     href={link.href}
-                    className="text-2xl font-semibold"
-                    style={{ fontFamily: "var(--font-playfair), serif" }}
+                    className="text-2xl font-semibold text-[#9B978F] transition-colors hover:text-white"
+                    style={{ fontFamily: "var(--font-manrope), sans-serif" }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
@@ -173,8 +178,8 @@ export default function Navigation() {
                 <motion.div key={link.href} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 + index * 0.08 }}>
                   <Link
                     href={link.href}
-                    className="text-3xl font-semibold"
-                    style={{ fontFamily: "var(--font-playfair), serif" }}
+                    className="text-3xl font-semibold text-[#9B978F] transition-colors hover:text-white"
+                    style={{ fontFamily: "var(--font-manrope), sans-serif" }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
@@ -189,7 +194,7 @@ export default function Navigation() {
               >
                 <Link
                   href="https://cadence-m48n.onrender.com/login"
-                  className="text-sm text-[#A1A1AA] transition-colors hover:text-white"
+                  className="text-sm text-[#9B978F] transition-colors hover:text-white"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Client Login
@@ -198,7 +203,7 @@ export default function Navigation() {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.78 }}>
                 <Link
                   href="/get-started"
-                  className="mt-8 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-8 py-3 font-medium text-white"
+                  className="mt-8 rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-8 py-3 font-semibold text-[#0E1015]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Get Started
