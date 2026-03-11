@@ -7,10 +7,11 @@
     "local-seo",
     "business-automation"
   ],
-  "lastCategory": "review-automation",
+  "lastCategory": "small-business-websites",
   "cityHistory": {
     "ai-receptionist:Phoenix": 1773212389937,
-    "review-automation:Phoenix": 1773212740212
+    "review-automation:Phoenix": 1773212740212,
+    "small-business-websites:Phoenix": 1773226219762
   },
   "pool": [
     {
@@ -214,7 +215,7 @@
       "title": "Affordable Website Design in Phoenix AZ: What to Expect in 2026",
       "city": "Phoenix",
       "category": "small-business-websites",
-      "used": false
+      "used": true
     },
     {
       "keyword": "small business website scottsdale",
