@@ -16,7 +16,7 @@ const productLinks = [
 ];
 
 const startHereLinks = [
-  { label: "Try Cadence Free", href: "/cadence/get-started" },
+  { label: "Try Cadence Free", href: "/portal/checkout?product=cadence" },
   { label: "See Our Products", href: "/#services" },
   { label: "Get a Free Quote", href: "/contact" },
 ];

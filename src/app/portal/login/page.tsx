@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   },
 }
 
-export default function PortalLoginPage() {
-  return <PortalLoginClient />
+interface PortalLoginPageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>
+}
+
+export default async function PortalLoginPage({ searchParams }: PortalLoginPageProps) {
+  const resolvedSearchParams = (await searchParams) ?? {}
+  const errorParam = resolvedSearchParams.error
+  const oauthError = Array.isArray(errorParam) ? errorParam[0] : errorParam
+
+  return <PortalLoginClient oauthError={oauthError} />
 }

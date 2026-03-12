@@ -107,7 +107,7 @@ export default function CadenceLandingClient() {
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <ShimmerButton href="/cadence/get-started" size="lg">
+            <ShimmerButton href="/portal/checkout?product=cadence" size="lg">
               Start Your 7-Day Free Trial
             </ShimmerButton>
             <ShimmerButton href="tel:+14806313993" variant="secondary" size="lg">
@@ -283,7 +283,7 @@ export default function CadenceLandingClient() {
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <ShimmerButton href="/cadence/get-started">Start Your Free Trial</ShimmerButton>
+            <ShimmerButton href="/portal/checkout?product=cadence">Start Your Free Trial</ShimmerButton>
           </motion.div>
         </div>
       </section>
@@ -315,7 +315,7 @@ export default function CadenceLandingClient() {
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <ShimmerButton href="/cadence/get-started" size="lg">
+            <ShimmerButton href="/portal/checkout?product=cadence" size="lg">
               Start Free Trial
             </ShimmerButton>
             <ShimmerButton href="tel:+14806313993" variant="secondary" size="lg">

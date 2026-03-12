@@ -5,13 +5,21 @@ import { createPortalCheckoutSession } from "@/lib/platform/services/stripe-port
 const checkoutRequestSchema = z
   .object({
     email: z.string().trim().email(),
-    businessName: z.string().trim().min(1).max(255),
+    businessName: z.string().trim().min(1).max(255).optional(),
     phone: z.string().trim().max(32).optional(),
     areaCode: z.string().trim().regex(/^\d{3}$/).optional(),
     product: z.enum(["cadence", "review_funnel"]),
     plan: z.enum(["starter", "growth"]).optional(),
   })
   .superRefine((value, ctx) => {
+    if (value.product === "review_funnel" && !value.businessName) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["businessName"],
+        message: "Business name is required",
+      })
+    }
+
     if (value.product === "review_funnel" && value.plan && !["starter", "growth"].includes(value.plan)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -82,11 +90,12 @@ export async function POST(request: Request) {
   }
 
   const payload = parsed.data
+  const businessName = payload.businessName?.trim() || payload.email.split("@")[0] || "Business"
 
   try {
     const session = await createPortalCheckoutSession({
       email: payload.email,
-      businessName: payload.businessName,
+      businessName,
       phone: payload.phone,
       areaCode: payload.areaCode,
       product: payload.product,

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -228,8 +229,17 @@ export default function CadenceGetStartedClient() {
           <p className="text-sm uppercase tracking-wide text-[#D4A030] mb-3">Cadence Onboarding</p>
           <h1 className="mb-4 text-4xl font-semibold text-[#EDEBE8] md:text-5xl">Get Your AI Receptionist Live</h1>
           <p className="text-[#9B978F] mb-8">
-            Takes about 5 minutes. After checkout, we start provisioning your AI receptionist automatically.
+            Takes about 5 minutes. After checkout, sign in to the portal to finish setup and launch your AI receptionist.
           </p>
+
+          <div className="mb-8 rounded-2xl border border-[#D4A030]/20 bg-[#161920] px-5 py-4">
+            <p className="text-sm text-[#EDEBE8]">
+              Looking for the quick signup?{" "}
+              <Link href="/portal/checkout?product=cadence" className="font-semibold text-[#D4A030] hover:text-[#E5B544]">
+                Start your free trial →
+              </Link>
+            </p>
+          </div>
 
           <div className="rounded-2xl border border-white/[0.06] bg-[#161920] p-6 md:p-8 space-y-4">
             <p className="text-sm text-[#D4A030]">Step {step} of 4</p>

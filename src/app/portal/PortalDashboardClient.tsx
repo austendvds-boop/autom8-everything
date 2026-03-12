@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Phone, Star } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import PortalNav from "@/components/portal/PortalNav"
 import { PortalPageSkeleton } from "@/components/portal/LoadingSkeleton"
 import { PortalSessionExpiredError, portalFetch } from "@/lib/platform/portal-fetch"
 
@@ -137,6 +138,14 @@ function getReviewPlanLabel(service: PortalService | undefined): string | null {
   return null
 }
 
+function isOnboardingIncomplete(service: PortalService | undefined): boolean {
+  if (!service?.metadata || typeof service.metadata !== "object") {
+    return false
+  }
+
+  return service.metadata.onboardingComplete === false
+}
+
 export default function PortalDashboardClient() {
   const router = useRouter()
   const [client, setClient] = useState<PortalClient | null>(null)
@@ -209,13 +218,14 @@ export default function PortalDashboardClient() {
   )
 
   const reviewPlanLabel = useMemo(() => getReviewPlanLabel(reviewService), [reviewService])
+  const showCadenceOnboardingBanner = useMemo(() => isOnboardingIncomplete(cadenceService), [cadenceService])
 
   const isMissingCadence = !cadenceService
   const isMissingReviewFunnel = !reviewService
   const showMoreProducts = isMissingCadence || isMissingReviewFunnel
 
   useEffect(() => {
-    if (!cadenceService || cadenceService.status !== "active") {
+    if (!cadenceService || cadenceService.status !== "active" || showCadenceOnboardingBanner) {
       setCadenceCallsThisMonth(null)
       setCadencePhoneNumber(null)
       return
@@ -285,7 +295,7 @@ export default function PortalDashboardClient() {
     return () => {
       isActive = false
     }
-  }, [cadenceService])
+  }, [cadenceService, router, showCadenceOnboardingBanner])
 
   async function handleManageBilling() {
     setIsOpeningBilling(true)
@@ -322,11 +332,14 @@ export default function PortalDashboardClient() {
 
   if (errorMessage) {
     return (
-      <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-red-300">
-          {errorMessage}
-        </div>
-      </main>
+      <div className="min-h-screen bg-[#0E1015]">
+        <PortalNav />
+        <main className="px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-red-300">
+            {errorMessage}
+          </div>
+        </main>
+      </div>
     )
   }
 
@@ -334,159 +347,179 @@ export default function PortalDashboardClient() {
   const businessName = client?.businessName || "your business"
 
   return (
-    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl space-y-6">
-        <header>
-          <h1 className="text-3xl font-semibold text-[#EDEBE8]">Welcome back, {contactName}</h1>
-          <p className="mt-2 text-sm text-[#9B978F]">{businessName}</p>
-        </header>
+    <div className="min-h-screen bg-[#0E1015]">
+      <PortalNav />
+      <main className="px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl space-y-6">
+          <header>
+            <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Client Portal</p>
+            <h1 className="text-3xl font-semibold text-[#EDEBE8]">Welcome back, {contactName}</h1>
+            <p className="mt-2 text-sm text-[#9B978F]">{businessName}</p>
+          </header>
 
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {cadenceService ? (
-            <article className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-2xl" aria-hidden>
-                    📞
-                  </p>
-                  <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Cadence — AI Receptionist</h2>
-                </div>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-xs text-[#EDEBE8]">
-                  <span className={`h-2 w-2 rounded-full ${statusBadge(cadenceService.status).dot}`} />
-                  {statusBadge(cadenceService.status).label}
-                </span>
-              </div>
-
-              <p className="mt-4 text-sm text-[#9B978F]">
-                {isLoadingCadenceStats
-                  ? "Loading call activity..."
-                  : cadenceCallsThisMonth !== null
-                    ? `${cadenceCallsThisMonth} calls this month`
-                    : "View calls and settings"}
+          {showCadenceOnboardingBanner ? (
+            <section className="card-elevated border border-[#D4A030]/30 p-6">
+              <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Complete Your Setup</p>
+              <h2 className="mt-2 text-2xl font-semibold text-[#EDEBE8]">Your Cadence AI receptionist is almost ready.</h2>
+              <p className="mt-2 text-sm text-[#9B978F]">
+                Finish setting up your business details to go live.
               </p>
+              <Link
+                href="/portal/onboarding"
+                className="mt-5 inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)]"
+              >
+                Complete Setup →
+              </Link>
+            </section>
+          ) : null}
 
-              {cadencePhoneNumber ? (
-                <p className="mt-2 text-sm text-[#EDEBE8]">Your Cadence number: {cadencePhoneNumber}</p>
-              ) : null}
+          <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {cadenceService ? (
+              <article className="card-elevated p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <Phone className="h-6 w-6 text-[#D4A030]" aria-hidden />
+                    <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Cadence - AI Receptionist</h2>
+                  </div>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-xs text-[#EDEBE8]">
+                    <span className={`h-2 w-2 rounded-full ${statusBadge(cadenceService.status).dot}`} />
+                    {statusBadge(cadenceService.status).label}
+                  </span>
+                </div>
 
+                <p className="mt-4 text-sm text-[#9B978F]">
+                  {isLoadingCadenceStats
+                    ? "Loading call activity..."
+                    : cadenceCallsThisMonth !== null
+                      ? `${cadenceCallsThisMonth} calls this month`
+                      : "View calls and settings"}
+                </p>
+
+                {cadencePhoneNumber ? (
+                  <p className="mt-2 text-sm text-[#EDEBE8]">Your Cadence number: {cadencePhoneNumber}</p>
+                ) : null}
+
+                <button
+                  type="button"
+                  onClick={() => router.push(showCadenceOnboardingBanner ? "/portal/onboarding" : "/portal/cadence")}
+                  className="mt-5 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
+                >
+                  {showCadenceOnboardingBanner ? "Complete Setup" : "Manage Settings"}
+                </button>
+              </article>
+            ) : null}
+
+            {reviewService ? (
+              <article className="card-elevated p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <Star className="h-6 w-6 text-[#D4A030]" aria-hidden />
+                    <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Review Funnel - Automated Reviews</h2>
+                  </div>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-xs text-[#EDEBE8]">
+                    <span className={`h-2 w-2 rounded-full ${statusBadge(reviewService.status).dot}`} />
+                    {statusBadge(reviewService.status).label}
+                  </span>
+                </div>
+
+                {reviewPlanLabel ? <p className="mt-4 text-sm text-[#EDEBE8]">Plan: {reviewPlanLabel}</p> : null}
+                <p className="mt-2 text-sm text-[#9B978F]">
+                  Open your dashboard to check text message usage and customer feedback.
+                </p>
+
+                <Link
+                  href="/portal/review-funnel"
+                  className="mt-5 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
+                >
+                  Open Dashboard
+                </Link>
+              </article>
+            ) : null}
+
+            {!cadenceService && !reviewService ? (
+              <div className="card-base p-6 text-sm text-[#9B978F]">No services are active on this account yet.</div>
+            ) : null}
+          </section>
+
+          {showMoreProducts ? (
+            <section className="space-y-3">
+              <h2 className="text-lg font-semibold text-[#EDEBE8]">More Products</h2>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {isMissingCadence ? (
+                  <article className="rounded-2xl border border-dashed border-white/[0.06] p-[1px]">
+                    <div className="card-base h-full p-6 opacity-80">
+                      <Phone className="h-6 w-6 text-[#D4A030]" aria-hidden />
+                      <h3 className="mt-3 text-lg font-semibold text-[#EDEBE8]">Cadence - AI Receptionist</h3>
+                      <p className="mt-2 text-sm text-[#9B978F]">
+                        Never miss a call. AI answers 24/7, books appointments, answers FAQs.
+                      </p>
+                      <p className="mt-3 text-sm font-medium text-[#EDEBE8]">$199/mo - 7-day free trial</p>
+                      <Link
+                        href="/portal/checkout?product=cadence"
+                        className="mt-4 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
+                      >
+                        Get Started
+                      </Link>
+                    </div>
+                  </article>
+                ) : null}
+
+                {isMissingReviewFunnel ? (
+                  <article className="rounded-2xl border border-dashed border-white/[0.06] p-[1px]">
+                    <div className="card-base h-full p-6 opacity-80">
+                      <Star className="h-6 w-6 text-[#D4A030]" aria-hidden />
+                      <h3 className="mt-3 text-lg font-semibold text-[#EDEBE8]">Review Funnel - Automated Reviews</h3>
+                      <p className="mt-2 text-sm text-[#9B978F]">
+                        Turn every appointment into a 5-star review. Automated follow-ups via text.
+                      </p>
+                      <p className="mt-3 text-sm font-medium text-[#EDEBE8]">From $79/mo</p>
+                      <Link
+                        href="/portal/checkout?product=review_funnel"
+                        className="mt-4 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
+                      >
+                        Get Started
+                      </Link>
+                    </div>
+                  </article>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
+
+          <section className="card-base p-6">
+            <h2 className="text-lg font-semibold text-[#EDEBE8]">Account</h2>
+            <dl className="mt-4 space-y-2 text-sm">
+              <div>
+                <dt className="text-[#9B978F]">Name</dt>
+                <dd className="text-[#EDEBE8]">{client?.contactName || "Not available"}</dd>
+              </div>
+              <div>
+                <dt className="text-[#9B978F]">Email</dt>
+                <dd className="text-[#EDEBE8]">{client?.email || "Not available"}</dd>
+              </div>
+            </dl>
+
+            {billingError ? <p className="mt-4 text-sm text-red-300">{billingError}</p> : null}
+
+            <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
                 type="button"
-                onClick={() => router.push("/portal/cadence")}
-                className="mt-5 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
+                onClick={() => void handleManageBilling()}
+                disabled={isOpeningBilling}
+                className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Manage Settings
+                {isOpeningBilling ? "Opening billing..." : "Manage Billing"}
               </button>
-            </article>
-          ) : null}
-
-          {reviewService ? (
-            <article className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-2xl" aria-hidden>
-                    ⭐
-                  </p>
-                  <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Review Funnel — Automated Reviews</h2>
-                </div>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-xs text-[#EDEBE8]">
-                  <span className={`h-2 w-2 rounded-full ${statusBadge(reviewService.status).dot}`} />
-                  {statusBadge(reviewService.status).label}
-                </span>
-              </div>
-
-              {reviewPlanLabel ? <p className="mt-4 text-sm text-[#EDEBE8]">Plan: {reviewPlanLabel}</p> : null}
-              <p className="mt-2 text-sm text-[#9B978F]">Open your dashboard to check text message usage and customer feedback.</p>
-
               <Link
-                href="/portal/review-funnel"
-                className="mt-5 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
+                href="/contact"
+                className="inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
               >
-                Open Dashboard
+                Need help?
               </Link>
-            </article>
-          ) : null}
-
-          {!cadenceService && !reviewService ? (
-            <div className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-[#9B978F]">
-              No services are active on this account yet.
-            </div>
-          ) : null}
-        </section>
-
-        {showMoreProducts ? (
-          <section className="space-y-3">
-            <h2 className="text-lg font-semibold text-[#EDEBE8]">More Products</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {isMissingCadence ? (
-                <article className="rounded-2xl border border-dashed border-white/[0.06] bg-[#161920]/70 p-6 opacity-80">
-                  <Phone className="h-6 w-6 text-[#D4A030]" aria-hidden />
-                  <h3 className="mt-3 text-lg font-semibold text-[#EDEBE8]">Cadence — AI Receptionist</h3>
-                  <p className="mt-2 text-sm text-[#9B978F]">
-                    Never miss a call. AI answers 24/7, books appointments, answers FAQs.
-                  </p>
-                  <p className="mt-3 text-sm font-medium text-[#EDEBE8]">$199/mo · 7-day free trial</p>
-                  <Link
-                    href="/portal/checkout?product=cadence"
-                    className="mt-4 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
-                  >
-                    Get Started
-                  </Link>
-                </article>
-              ) : null}
-
-              {isMissingReviewFunnel ? (
-                <article className="rounded-2xl border border-dashed border-white/[0.06] bg-[#161920]/70 p-6 opacity-80">
-                  <Star className="h-6 w-6 text-[#D4A030]" aria-hidden />
-                  <h3 className="mt-3 text-lg font-semibold text-[#EDEBE8]">Review Funnel — Automated Reviews</h3>
-                  <p className="mt-2 text-sm text-[#9B978F]">
-                    Turn every appointment into a 5-star review. Automated follow-ups via text.
-                  </p>
-                  <p className="mt-3 text-sm font-medium text-[#EDEBE8]">From $79/mo</p>
-                  <Link
-                    href="/portal/checkout?product=review_funnel"
-                    className="mt-4 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
-                  >
-                    Get Started
-                  </Link>
-                </article>
-              ) : null}
             </div>
           </section>
-        ) : null}
-
-        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
-          <h2 className="text-lg font-semibold text-[#EDEBE8]">Account</h2>
-          <dl className="mt-4 space-y-2 text-sm">
-            <div>
-              <dt className="text-[#9B978F]">Name</dt>
-              <dd className="text-[#EDEBE8]">{client?.contactName || "Not available"}</dd>
-            </div>
-            <div>
-              <dt className="text-[#9B978F]">Email</dt>
-              <dd className="text-[#EDEBE8]">{client?.email || "Not available"}</dd>
-            </div>
-          </dl>
-
-          {billingError ? <p className="mt-4 text-sm text-red-300">{billingError}</p> : null}
-
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => void handleManageBilling()}
-              disabled={isOpeningBilling}
-              className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#EDEBE8] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isOpeningBilling ? "Opening billing..." : "Manage Billing"}
-            </button>
-            <Link
-              href="/contact"
-              className="inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
-            >
-              Need help?
-            </Link>
-          </div>
-        </section>
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
   )
 }

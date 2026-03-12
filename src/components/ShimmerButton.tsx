@@ -9,6 +9,7 @@ export interface ShimmerButtonProps {
   href?: string;
   onClick?: () => void;
   ariaLabel?: string;
+  type?: "button" | "submit";
   variant?: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
   className?: string;
@@ -30,6 +31,7 @@ export default function ShimmerButton({
   href,
   onClick,
   ariaLabel,
+  type = "button",
   variant = "primary",
   size = "md",
   className,
@@ -61,7 +63,7 @@ export default function ShimmerButton({
   }
 
   return (
-    <motion.button type="button" onClick={onClick} className={classes} aria-label={ariaLabel} {...interactionProps}>
+    <motion.button type={type} onClick={onClick} className={classes} aria-label={ariaLabel} {...interactionProps}>
       {children}
     </motion.button>
   );
