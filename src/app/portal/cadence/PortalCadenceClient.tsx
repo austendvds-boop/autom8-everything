@@ -11,6 +11,7 @@ interface PortalMeService {
   serviceType: string
   status: string
   cadenceTenantId?: string | null
+  metadata?: Record<string, unknown>
 }
 
 interface PortalMeClient {
@@ -326,6 +327,15 @@ function serviceIsCadenceActive(services: PortalMeService[]): boolean {
   return services.some((service) => service.serviceType === "cadence" && service.status === "active")
 }
 
+function serviceNeedsCadenceOnboarding(services: PortalMeService[]): boolean {
+  return services.some(
+    (service) =>
+      service.serviceType === "cadence" &&
+      service.status === "active" &&
+      service.metadata?.onboardingComplete === false,
+  )
+}
+
 function findCadenceTenantId(services: PortalMeService[]): string {
   const service = services.find((item) => item.serviceType === "cadence" && item.status === "active")
   return service?.cadenceTenantId?.trim() || ""
@@ -498,6 +508,11 @@ export default function PortalCadenceClient() {
 
         if (!serviceIsCadenceActive(authPayload.services ?? [])) {
           throw new Error("Cadence is not active on this account.")
+        }
+
+        if (serviceNeedsCadenceOnboarding(authPayload.services ?? [])) {
+          router.replace("/portal/onboarding")
+          return
         }
 
         const activeCadenceTenantId = findCadenceTenantId(authPayload.services ?? [])

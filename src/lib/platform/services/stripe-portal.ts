@@ -2,7 +2,7 @@ import Stripe from "stripe"
 import { and, eq, sql } from "drizzle-orm"
 import { platformDb } from "../db/client"
 import { a8Clients, a8ClientServices } from "../db/schema"
-import { provisionCadenceTenant, provisionService } from "./provisioning"
+import { provisionService } from "./provisioning"
 import { generatePortalMagicLink } from "./auth"
 import { sendWelcomeEmail } from "./email"
 
@@ -203,14 +203,11 @@ export async function handlePortalWebhookEvent(event: Stripe.Event): Promise<voi
     }
 
     if (product === "cadence") {
-      const { clientId: cadenceTenantId } = await provisionCadenceTenant({
-        businessName,
-        email: normalizedEmail,
-        phone: phone || undefined,
+      await provisionService(client.id, "cadence", {
+        cadenceTenantId: null,
+        onboardingComplete: false,
         areaCode,
       })
-
-      await provisionService(client.id, "cadence", { cadenceTenantId })
     } else {
       // RF customer records are created by RF's own Stripe webhook.
       // If that record is not available yet, this will be retried manually later.

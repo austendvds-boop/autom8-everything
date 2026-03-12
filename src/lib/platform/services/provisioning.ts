@@ -69,18 +69,14 @@ async function buildServiceRecord(
   if (serviceType === "cadence") {
     const cadenceTenantId = getStringMetadataField(normalizedMetadata, "cadenceTenantId")
 
-    if (!cadenceTenantId) {
-      throw new Error("cadenceTenantId is required to provision Cadence")
-    }
-
     return {
       clientId,
       serviceType,
       status: "active",
-      provisionedAt: now,
+      provisionedAt: cadenceTenantId ? now : null,
       pausedAt: null,
       cancelledAt: null,
-      cadenceTenantId,
+      cadenceTenantId: cadenceTenantId ?? null,
       rfTenantId: null,
       metadata: normalizedMetadata,
       updatedAt: now,
@@ -178,6 +174,10 @@ interface CadenceOnboardResponse {
 export async function provisionCadenceTenant(params: {
   businessName: string
   email: string
+  businessDescription?: string
+  hours?: string
+  faqs?: string
+  transferNumber?: string
   phone?: string
   areaCode?: string
 }): Promise<{ clientId: string; phoneNumber: string }> {
@@ -195,11 +195,11 @@ export async function provisionCadenceTenant(params: {
       phone: params.phone || "",
       email: params.email,
       website: "",
-      hours: "Mon-Fri 9-5",
-      services: params.businessName,
+      hours: params.hours || "Mon-Fri 9-5",
+      services: params.businessDescription || params.businessName,
       greeting: "",
-      transferNumber: null,
-      faqs: "",
+      transferNumber: params.transferNumber || null,
+      faqs: params.faqs || "",
     }),
     cache: "no-store",
   })

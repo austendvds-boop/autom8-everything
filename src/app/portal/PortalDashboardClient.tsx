@@ -138,6 +138,14 @@ function getReviewPlanLabel(service: PortalService | undefined): string | null {
   return null
 }
 
+function isOnboardingIncomplete(service: PortalService | undefined): boolean {
+  if (!service?.metadata || typeof service.metadata !== "object") {
+    return false
+  }
+
+  return service.metadata.onboardingComplete === false
+}
+
 export default function PortalDashboardClient() {
   const router = useRouter()
   const [client, setClient] = useState<PortalClient | null>(null)
@@ -210,13 +218,14 @@ export default function PortalDashboardClient() {
   )
 
   const reviewPlanLabel = useMemo(() => getReviewPlanLabel(reviewService), [reviewService])
+  const showCadenceOnboardingBanner = useMemo(() => isOnboardingIncomplete(cadenceService), [cadenceService])
 
   const isMissingCadence = !cadenceService
   const isMissingReviewFunnel = !reviewService
   const showMoreProducts = isMissingCadence || isMissingReviewFunnel
 
   useEffect(() => {
-    if (!cadenceService || cadenceService.status !== "active") {
+    if (!cadenceService || cadenceService.status !== "active" || showCadenceOnboardingBanner) {
       setCadenceCallsThisMonth(null)
       setCadencePhoneNumber(null)
       return
@@ -286,7 +295,7 @@ export default function PortalDashboardClient() {
     return () => {
       isActive = false
     }
-  }, [cadenceService, router])
+  }, [cadenceService, router, showCadenceOnboardingBanner])
 
   async function handleManageBilling() {
     setIsOpeningBilling(true)
@@ -348,6 +357,22 @@ export default function PortalDashboardClient() {
             <p className="mt-2 text-sm text-[#9B978F]">{businessName}</p>
           </header>
 
+          {showCadenceOnboardingBanner ? (
+            <section className="card-elevated border border-[#D4A030]/30 p-6">
+              <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Complete Your Setup</p>
+              <h2 className="mt-2 text-2xl font-semibold text-[#EDEBE8]">Your Cadence AI receptionist is almost ready.</h2>
+              <p className="mt-2 text-sm text-[#9B978F]">
+                Finish setting up your business details to go live.
+              </p>
+              <Link
+                href="/portal/onboarding"
+                className="mt-5 inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)]"
+              >
+                Complete Setup →
+              </Link>
+            </section>
+          ) : null}
+
           <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {cadenceService ? (
               <article className="card-elevated p-6">
@@ -376,10 +401,10 @@ export default function PortalDashboardClient() {
 
                 <button
                   type="button"
-                  onClick={() => router.push("/portal/cadence")}
+                  onClick={() => router.push(showCadenceOnboardingBanner ? "/portal/onboarding" : "/portal/cadence")}
                   className="mt-5 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
                 >
-                  Manage Settings
+                  {showCadenceOnboardingBanner ? "Complete Setup" : "Manage Settings"}
                 </button>
               </article>
             ) : null}

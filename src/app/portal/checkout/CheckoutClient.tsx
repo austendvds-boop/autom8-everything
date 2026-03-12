@@ -9,19 +9,13 @@ import Navigation from "@/components/Navigation"
 type ProductType = "cadence" | "review_funnel"
 type ReviewPlan = "starter" | "growth"
 
-const AREA_CODES = [
-  { value: "480", label: "480 (Phoenix, AZ)" },
-  { value: "602", label: "602 (Phoenix, AZ)" },
-  { value: "623", label: "623 (West Valley, AZ)" },
-  { value: "520", label: "520 (Tucson, AZ)" },
-  { value: "303", label: "303 (Denver, CO)" },
-  { value: "702", label: "702 (Las Vegas, NV)" },
-  { value: "214", label: "214 (Dallas, TX)" },
-  { value: "305", label: "305 (Miami, FL)" },
-]
-
 function isProduct(value: string | null): value is ProductType {
   return value === "cadence" || value === "review_funnel"
+}
+
+function getFallbackBusinessName(email: string): string {
+  const [prefix] = email.trim().split("@")
+  return prefix?.trim() || email.trim()
 }
 
 export default function CheckoutClient() {
@@ -38,10 +32,9 @@ export default function CheckoutClient() {
   const [businessName, setBusinessName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
-  const [areaCode, setAreaCode] = useState("480")
-
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const isCadence = product === "cadence"
 
   useEffect(() => {
     if (requestedProduct) {
@@ -52,7 +45,7 @@ export default function CheckoutClient() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (!businessName.trim()) {
+    if (!isCadence && !businessName.trim()) {
       setErrorMessage("Please enter your business name.")
       return
     }
@@ -72,12 +65,11 @@ export default function CheckoutClient() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          businessName: businessName.trim(),
+          businessName: isCadence ? getFallbackBusinessName(email) : businessName.trim(),
           email: email.trim(),
-          phone: phone.trim() || undefined,
-          areaCode: product === "cadence" ? areaCode : undefined,
+          phone: isCadence ? undefined : phone.trim() || undefined,
           product,
-          plan: product === "review_funnel" ? plan : undefined,
+          plan: isCadence ? undefined : plan,
         }),
       })
 
@@ -121,7 +113,9 @@ export default function CheckoutClient() {
             <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Client Portal</p>
             <h1 className="text-3xl font-semibold text-[#EDEBE8] sm:text-4xl">Start your account</h1>
             <p className="text-sm text-[#9B978F]">
-              Pick your service, enter your details, and we&apos;ll take you to secure checkout.
+              {isCadence
+                ? "Start your 7-day free trial. Just enter your email - we'll set everything up after."
+                : "Pick your service, enter your details, and we'll take you to secure checkout."}
             </p>
           </header>
 
@@ -158,19 +152,8 @@ export default function CheckoutClient() {
           </section>
 
           <form onSubmit={handleSubmit} className="card-base space-y-5 p-6 sm:p-7">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="sm:col-span-2">
-                <span className="mb-2 block text-sm text-[#EDEBE8]">Business name</span>
-                <input
-                  type="text"
-                  value={businessName}
-                  onChange={(event) => setBusinessName(event.target.value)}
-                  placeholder="Sunrise Plumbing"
-                  className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
-                />
-              </label>
-
-              <label>
+            {isCadence ? (
+              <label className="block">
                 <span className="mb-2 block text-sm text-[#EDEBE8]">Email</span>
                 <input
                   type="email"
@@ -181,66 +164,76 @@ export default function CheckoutClient() {
                   className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                 />
               </label>
-
-              <label>
-                <span className="mb-2 block text-sm text-[#EDEBE8]">Phone (optional)</span>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(event) => setPhone(event.target.value)}
-                  placeholder="(480) 555-1234"
-                  autoComplete="tel"
-                  className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
-                />
-              </label>
-            </div>
-
-            {product === "cadence" ? (
-              <label>
-                <span className="mb-2 block text-sm text-[#EDEBE8]">Area code for your new line</span>
-                <select
-                  value={areaCode}
-                  onChange={(event) => setAreaCode(event.target.value)}
-                  className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
-                >
-                  {AREA_CODES.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
             ) : (
-              <fieldset>
-                <legend className="mb-2 block text-sm text-[#EDEBE8]">Choose your plan</legend>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <button
-                    type="button"
-                    onClick={() => setPlan("starter")}
-                    className={`rounded-xl border p-4 text-left transition ${
-                      plan === "starter"
-                        ? "border-[#D4A030] bg-[#0E1015]"
-                        : "border-white/[0.06] bg-[#0E1015]/60 hover:border-[#D4A030]/30"
-                    }`}
-                  >
-                    <p className="text-sm font-semibold text-[#EDEBE8]">Starter</p>
-                    <p className="mt-1 text-sm text-[#9B978F]">$79/month</p>
-                  </button>
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="sm:col-span-2">
+                    <span className="mb-2 block text-sm text-[#EDEBE8]">Business name</span>
+                    <input
+                      type="text"
+                      value={businessName}
+                      onChange={(event) => setBusinessName(event.target.value)}
+                      placeholder="Sunrise Plumbing"
+                      className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
+                    />
+                  </label>
 
-                  <button
-                    type="button"
-                    onClick={() => setPlan("growth")}
-                    className={`rounded-xl border p-4 text-left transition ${
-                      plan === "growth"
-                        ? "border-[#D4A030] bg-[#0E1015]"
-                        : "border-white/[0.06] bg-[#0E1015]/60 hover:border-[#D4A030]/30"
-                    }`}
-                  >
-                    <p className="text-sm font-semibold text-[#EDEBE8]">Growth</p>
-                    <p className="mt-1 text-sm text-[#9B978F]">$149/month</p>
-                  </button>
+                  <label>
+                    <span className="mb-2 block text-sm text-[#EDEBE8]">Email</span>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="you@business.com"
+                      autoComplete="email"
+                      className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
+                    />
+                  </label>
+
+                  <label>
+                    <span className="mb-2 block text-sm text-[#EDEBE8]">Phone (optional)</span>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(event) => setPhone(event.target.value)}
+                      placeholder="(480) 555-1234"
+                      autoComplete="tel"
+                      className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
+                    />
+                  </label>
                 </div>
-              </fieldset>
+
+                <fieldset>
+                  <legend className="mb-2 block text-sm text-[#EDEBE8]">Choose your plan</legend>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={() => setPlan("starter")}
+                      className={`rounded-xl border p-4 text-left transition ${
+                        plan === "starter"
+                          ? "border-[#D4A030] bg-[#0E1015]"
+                          : "border-white/[0.06] bg-[#0E1015]/60 hover:border-[#D4A030]/30"
+                      }`}
+                    >
+                      <p className="text-sm font-semibold text-[#EDEBE8]">Starter</p>
+                      <p className="mt-1 text-sm text-[#9B978F]">$79/month</p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPlan("growth")}
+                      className={`rounded-xl border p-4 text-left transition ${
+                        plan === "growth"
+                          ? "border-[#D4A030] bg-[#0E1015]"
+                          : "border-white/[0.06] bg-[#0E1015]/60 hover:border-[#D4A030]/30"
+                      }`}
+                    >
+                      <p className="text-sm font-semibold text-[#EDEBE8]">Growth</p>
+                      <p className="mt-1 text-sm text-[#9B978F]">$149/month</p>
+                    </button>
+                  </div>
+                </fieldset>
+              </>
             )}
 
             {errorMessage ? (
