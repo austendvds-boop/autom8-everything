@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Fragment, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import PortalNav from "@/components/portal/PortalNav"
 import { PortalPageSkeleton } from "@/components/portal/LoadingSkeleton"
 import { PortalSessionExpiredError, portalFetch } from "@/lib/platform/portal-fetch"
 
@@ -830,16 +831,21 @@ export default function PortalCadenceClient() {
 
   if (settingsError) {
     return (
-      <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-red-300">
-          {settingsError}
-        </div>
-      </main>
+      <div className="min-h-screen bg-[#0E1015]">
+        <PortalNav />
+        <main className="px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-red-300">
+            {settingsError}
+          </div>
+        </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#0E1015]">
+      <PortalNav />
+      <main className="px-4 py-10 sm:px-6 lg:px-8">
       {toastMessage ? (
         <div className="fixed bottom-4 right-4 z-40 rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-200">
           {toastMessage}
@@ -851,11 +857,12 @@ export default function PortalCadenceClient() {
           <Link href="/portal" className="text-sm text-[#D4A030] transition hover:text-[#E5B544]">
             ← Back to portal
           </Link>
-          <h1 className="mt-3 text-3xl font-semibold text-[#EDEBE8]">Cadence Settings</h1>
+          <p className="mt-3 text-xs uppercase tracking-[0.16em] text-[#D4A030]">Cadence Settings</p>
+          <h1 className="mt-2 text-3xl font-semibold text-[#EDEBE8]">Cadence Settings</h1>
           <p className="mt-2 text-sm text-[#9B978F]">Update how your receptionist answers calls for your business.</p>
         </div>
 
-        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 space-y-4">
+        <section className="card-elevated space-y-4 p-6">
           <div className="flex items-start justify-between gap-3">
             <h2 className="text-lg font-semibold text-[#EDEBE8]">Plan Usage</h2>
             <Link href="/portal/billing" className="text-sm text-[#D4A030] transition hover:text-[#E5B544]">
@@ -914,7 +921,7 @@ export default function PortalCadenceClient() {
         </section>
 
         {!isChecklistDismissed ? (
-          <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 space-y-4">
+          <section className="card-base space-y-4 p-6">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold text-[#EDEBE8]">Getting Started Checklist</h2>
               <p className="text-sm text-[#9B978F]">
@@ -924,8 +931,15 @@ export default function PortalCadenceClient() {
 
             <div className="space-y-2">
               {checklistSteps.map((step) => (
-                <div key={step.key} className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.01] px-3 py-2.5">
-                  <span className={`mt-0.5 text-sm ${step.complete ? "text-emerald-400" : "text-[#5E5B56]"}`}>
+                <div
+                  key={step.key}
+                  className={`flex items-start gap-3 rounded-xl border px-3 py-2.5 ${
+                    step.complete
+                      ? "border-white/[0.06] bg-white/[0.01]"
+                      : "border-[rgba(212,160,48,0.18)] bg-[rgba(212,160,48,0.07)]"
+                  }`}
+                >
+                  <span className={`mt-0.5 text-sm ${step.complete ? "text-emerald-400" : "text-[#D4A030]"}`}>
                     {step.complete ? "✓" : "○"}
                   </span>
 
@@ -960,7 +974,7 @@ export default function PortalCadenceClient() {
           </section>
         ) : null}
 
-        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 space-y-6">
+        <section className="card-base space-y-6 p-6">
           <div id="cadence-greeting">
             <label className="mb-2 block text-sm text-[#EDEBE8]">Greeting</label>
             <textarea
@@ -972,7 +986,7 @@ export default function PortalCadenceClient() {
             />
           </div>
 
-          <div>
+          <div className="border-t border-white/[0.06] pt-6">
             <label className="mb-2 block text-sm text-[#EDEBE8]">AI Personality & Instructions</label>
             <p className="mb-3 text-sm text-[#9B978F]">
               This is the script your AI receptionist follows. It determines how calls are handled, what information is collected, and how callers are helped.
@@ -988,7 +1002,7 @@ export default function PortalCadenceClient() {
             <p className="mt-1 text-xs text-amber-200">Changes take effect on the next incoming call.</p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 border-t border-white/[0.06] pt-6 md:grid-cols-3">
             <label className="block">
               <span className="mb-2 block text-sm text-[#EDEBE8]">Transfer Number</span>
               <input
@@ -1012,7 +1026,7 @@ export default function PortalCadenceClient() {
             </label>
           </div>
 
-          <div>
+          <div className="border-t border-white/[0.06] pt-6">
             <label className="mb-2 block text-sm text-[#EDEBE8]">Timezone</label>
             <select
               value={settings.timezone}
@@ -1027,7 +1041,7 @@ export default function PortalCadenceClient() {
             </select>
           </div>
 
-          <div id="cadence-hours">
+          <div id="cadence-hours" className="border-t border-white/[0.06] pt-6">
             <h2 className="text-lg font-semibold text-[#EDEBE8]">Business Hours</h2>
             <div className="mt-3 space-y-3">
               {settings.hours.map((hourRow, index) => (
@@ -1084,7 +1098,7 @@ export default function PortalCadenceClient() {
             </div>
           </div>
 
-          <div id="cadence-services">
+          <div id="cadence-services" className="border-t border-white/[0.06] pt-6">
             <div className="mb-3 flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold text-[#EDEBE8]">Services</h2>
               <button
@@ -1168,7 +1182,7 @@ export default function PortalCadenceClient() {
             </div>
           </div>
 
-          <div id="cadence-faqs">
+          <div id="cadence-faqs" className="border-t border-white/[0.06] pt-6">
             <div className="mb-3 flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold text-[#EDEBE8]">Frequently Asked Questions</h2>
               <button
@@ -1237,38 +1251,40 @@ export default function PortalCadenceClient() {
             </div>
           </div>
 
-          <section id="cadence-test-mode" className="rounded-xl border border-white/[0.06] bg-white/[0.01] p-4 space-y-3">
-            <h2 className="text-lg font-semibold text-[#EDEBE8]">Test Your AI Receptionist</h2>
-            <p className="text-sm text-[#9B978F]">
-              Hear exactly what your callers will hear. We&apos;ll call you and connect to your Cadence number.
-            </p>
+          <section id="cadence-test-mode" className="border-t border-white/[0.06] pt-6">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.01] p-4 space-y-3">
+              <h2 className="text-lg font-semibold text-[#EDEBE8]">Test Your AI Receptionist</h2>
+              <p className="text-sm text-[#9B978F]">
+                Hear exactly what your callers will hear. We&apos;ll call you and connect to your Cadence number.
+              </p>
 
-            <label className="block">
-              <span className="mb-2 block text-sm text-[#EDEBE8]">Your phone number</span>
-              <input
-                type="text"
-                value={testCallPhone}
-                onChange={(event) => setTestCallPhone(event.target.value)}
-                placeholder="Where we should call you"
-                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-2.5 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
-              />
-            </label>
+              <label className="block">
+                <span className="mb-2 block text-sm text-[#EDEBE8]">Your phone number</span>
+                <input
+                  type="text"
+                  value={testCallPhone}
+                  onChange={(event) => setTestCallPhone(event.target.value)}
+                  placeholder="Where we should call you"
+                  className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-2.5 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
+                />
+              </label>
 
-            <button
-              type="button"
-              onClick={() => void handleTestCall()}
-              disabled={testCallStatus === "calling"}
-              className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#EDEBE8] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {testCallStatus === "calling"
-                ? "Calling..."
-                : testCallStatus === "success"
-                  ? "Call initiated! Pick up your phone."
-                  : "Call Me"}
-            </button>
+              <button
+                type="button"
+                onClick={() => void handleTestCall()}
+                disabled={testCallStatus === "calling"}
+                className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {testCallStatus === "calling"
+                  ? "Calling..."
+                  : testCallStatus === "success"
+                    ? "Call initiated! Pick up your phone."
+                    : "Call Me"}
+              </button>
 
-            {testCallError ? <p className="text-sm text-red-300">{testCallError}</p> : null}
-            <p className="text-xs text-[#9B978F]">You can test up to 3 times per hour.</p>
+              {testCallError ? <p className="text-sm text-red-300">{testCallError}</p> : null}
+              <p className="text-xs text-[#9B978F]">You can test up to 3 times per hour.</p>
+            </div>
           </section>
 
           {saveError ? <p className="text-sm text-red-300">{saveError}</p> : null}
@@ -1277,13 +1293,13 @@ export default function PortalCadenceClient() {
             type="button"
             onClick={() => void handleSave()}
             disabled={isSaving || !hasUnsavedChanges}
-            className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#EDEBE8] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSaving ? "Saving..." : hasUnsavedChanges ? "Save changes" : "Saved"}
           </button>
         </section>
 
-        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
+        <section className="card-base p-6">
           <h2 className="text-lg font-semibold text-[#EDEBE8]">Recent Calls</h2>
 
           <div className="mt-4 overflow-x-auto">
@@ -1361,7 +1377,8 @@ export default function PortalCadenceClient() {
           ) : null}
         </section>
       </div>
-    </main>
+      </main>
+    </div>
   )
 }
 

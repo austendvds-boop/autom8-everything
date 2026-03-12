@@ -1,7 +1,8 @@
 "use client"
 
-import Link from "next/link"
 import { useEffect, useState } from "react"
+import BrandLogo from "@/components/BrandLogo"
+import PortalNav from "@/components/portal/PortalNav"
 import { PortalSessionExpiredError, portalFetch } from "@/lib/platform/portal-fetch"
 
 interface UsagePayload {
@@ -104,37 +105,38 @@ export default function PortalBillingClient() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-lg space-y-4">
-        <Link href="/portal" className="inline-flex text-sm text-[#D4A030] transition hover:text-[#E5B544]">
-          ← Back to portal
-        </Link>
+    <div className="min-h-screen bg-[#0E1015]">
+      <PortalNav />
+      <main className="px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-lg space-y-4">
+          {overageCard ? (
+            <div className="card-elevated p-6">
+              <h2 className="text-lg font-semibold text-[#EDEBE8]">Current Month Overage</h2>
+              <p className="mt-2 text-2xl font-bold text-amber-400">${(overageCard.billedCents / 100).toFixed(2)}</p>
+              <p className="mt-1 text-sm text-[#9B978F]">
+                {overageCard.overageMinutes} minutes over your {overageCard.minuteLimit} minute limit
+              </p>
+              <p className="mt-1 text-xs text-[#9B978F]">Rate: $0.15/min - Max: $75.00/mo</p>
+            </div>
+          ) : null}
 
-        {overageCard ? (
-          <div className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
-            <h2 className="text-lg font-semibold text-[#EDEBE8]">Current Month Overage</h2>
-            <p className="mt-2 text-2xl font-bold text-amber-400">${(overageCard.billedCents / 100).toFixed(2)}</p>
-            <p className="mt-1 text-sm text-[#9B978F]">
-              {overageCard.overageMinutes} minutes over your {overageCard.minuteLimit} minute limit
-            </p>
-            <p className="mt-1 text-xs text-[#9B978F]">Rate: $0.15/min · Max: $75.00/mo</p>
+          <div className="card-base p-6 text-center">
+            <BrandLogo size="sm" showDescriptor={false} as="span" />
+            <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[#D4A030]">Client Portal</p>
+            {errorMessage ? (
+              <>
+                <h1 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Billing</h1>
+                <p className="mt-3 text-sm text-[#FCA5A5]">{errorMessage}</p>
+              </>
+            ) : (
+              <>
+                <h1 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Opening billing...</h1>
+                <p className="mt-3 text-sm text-[#9B978F]">Please wait while we open your secure billing page.</p>
+              </>
+            )}
           </div>
-        ) : null}
-
-        <div className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-center">
-          {errorMessage ? (
-            <>
-              <h1 className="text-xl font-semibold text-[#EDEBE8]">Billing</h1>
-              <p className="mt-3 text-sm text-[#FCA5A5]">{errorMessage}</p>
-            </>
-          ) : (
-            <>
-              <h1 className="text-xl font-semibold text-[#EDEBE8]">Opening billing...</h1>
-              <p className="mt-3 text-sm text-[#9B978F]">Please wait while we open your secure billing page.</p>
-            </>
-          )}
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }
