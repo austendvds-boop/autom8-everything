@@ -15,7 +15,7 @@ import BrandLogo from "@/components/BrandLogo";
 import { buttonHover, scaleIn } from "@/lib/motion";
 
 const productLinks = [
-  { href: "/services/cadence", label: "Cadence" },
+  { href: "/cadence", label: "Cadence" },
   { href: "/services/review-funnel", label: "Review Funnel" },
   { href: "/services/website-creation", label: "Website Creation" },
   { href: "/services/seo-content", label: "SEO & Content" },
@@ -126,7 +126,7 @@ export default function Navigation() {
 
           <div className="hidden items-center gap-4 md:flex">
             <Link
-              href="https://cadence-m48n.onrender.com/login"
+              href="/portal/login"
               className="text-sm text-[#9B978F] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A030]"
             >
               Client Login
@@ -193,7 +193,7 @@ export default function Navigation() {
                 transition={{ delay: 0.68 }}
               >
                 <Link
-                  href="https://cadence-m48n.onrender.com/login"
+                  href="/portal/login"
                   className="text-sm text-[#9B978F] transition-colors hover:text-white"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

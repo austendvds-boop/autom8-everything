@@ -8,7 +8,7 @@ import { businessProfile } from "@/lib/business";
 import { buttonHover, fadeUp, viewportOnce } from "@/lib/motion";
 
 const productLinks = [
-  { label: "Cadence", href: "/services/cadence" },
+  { label: "Cadence", href: "/cadence" },
   { label: "Review Funnel", href: "/services/review-funnel" },
   { label: "Web + Monthly SEO", href: "/services/websites" },
   { label: "Custom Apps", href: "/services/custom-apps" },
@@ -16,7 +16,7 @@ const productLinks = [
 ];
 
 const startHereLinks = [
-  { label: "Try Cadence Free", href: "tel:+14806313993" },
+  { label: "Try Cadence Free", href: "/cadence/get-started" },
   { label: "See Our Products", href: "/#services" },
   { label: "Get a Free Quote", href: "/contact" },
 ];
@@ -24,7 +24,7 @@ const startHereLinks = [
 const companyLinks = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
-  { label: "Client Login", href: "https://cadence-m48n.onrender.com/login" },
+  { label: "Client Login", href: "/portal/login" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "Security", href: "/security" },
