@@ -830,8 +830,8 @@ export default function PortalCadenceClient() {
 
   if (settingsError) {
     return (
-      <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 text-sm text-red-300">
+      <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-red-300">
           {settingsError}
         </div>
       </main>
@@ -839,7 +839,7 @@ export default function PortalCadenceClient() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
       {toastMessage ? (
         <div className="fixed bottom-4 right-4 z-40 rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-200">
           {toastMessage}
@@ -848,26 +848,26 @@ export default function PortalCadenceClient() {
 
       <div className="mx-auto max-w-6xl space-y-6">
         <div>
-          <Link href="/portal" className="text-sm text-[#C4B5FD] transition hover:text-[#DDD6FE]">
+          <Link href="/portal" className="text-sm text-[#D4A030] transition hover:text-[#E5B544]">
             ← Back to portal
           </Link>
-          <h1 className="mt-3 text-3xl font-semibold text-white">Cadence Settings</h1>
-          <p className="mt-2 text-sm text-[#A1A1AA]">Update how your receptionist answers calls for your business.</p>
+          <h1 className="mt-3 text-3xl font-semibold text-[#EDEBE8]">Cadence Settings</h1>
+          <p className="mt-2 text-sm text-[#9B978F]">Update how your receptionist answers calls for your business.</p>
         </div>
 
-        <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 space-y-4">
+        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 space-y-4">
           <div className="flex items-start justify-between gap-3">
-            <h2 className="text-lg font-semibold text-white">Plan Usage</h2>
-            <Link href="/portal/billing" className="text-sm text-[#C4B5FD] transition hover:text-[#DDD6FE]">
+            <h2 className="text-lg font-semibold text-[#EDEBE8]">Plan Usage</h2>
+            <Link href="/portal/billing" className="text-sm text-[#D4A030] transition hover:text-[#E5B544]">
               Manage Billing
             </Link>
           </div>
 
           {usageUnavailable || !usage ? (
-            <p className="text-sm text-[#A1A1AA]">Usage data unavailable</p>
+            <p className="text-sm text-[#9B978F]">Usage data unavailable</p>
           ) : (
             <div className="space-y-3">
-              <p className="text-sm text-[#D4D4D8]">
+              <p className="text-sm text-[#EDEBE8]">
                 {minuteLimit > 0
                   ? `${formatWholeNumber(minutesUsed)} of ${formatWholeNumber(minuteLimit)} minutes used this month`
                   : `${formatWholeNumber(minutesUsed)} minutes used this month`}
@@ -914,37 +914,37 @@ export default function PortalCadenceClient() {
         </section>
 
         {!isChecklistDismissed ? (
-          <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 space-y-4">
+          <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-lg font-semibold text-white">Getting Started Checklist</h2>
-              <p className="text-sm text-[#A1A1AA]">
+              <h2 className="text-lg font-semibold text-[#EDEBE8]">Getting Started Checklist</h2>
+              <p className="text-sm text-[#9B978F]">
                 {completedChecklistCount} of {checklistSteps.length} complete
               </p>
             </div>
 
             <div className="space-y-2">
               {checklistSteps.map((step) => (
-                <div key={step.key} className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/[0.01] px-3 py-2.5">
-                  <span className={`mt-0.5 text-sm ${step.complete ? "text-emerald-400" : "text-[#71717A]"}`}>
+                <div key={step.key} className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.01] px-3 py-2.5">
+                  <span className={`mt-0.5 text-sm ${step.complete ? "text-emerald-400" : "text-[#5E5B56]"}`}>
                     {step.complete ? "✓" : "○"}
                   </span>
 
                   <div className="flex-1 text-sm">
                     {step.complete ? (
-                      <p className="text-[#D4D4D8]">{step.title}</p>
+                      <p className="text-[#EDEBE8]">{step.title}</p>
                     ) : step.sectionId ? (
                       <button
                         type="button"
                         onClick={() => scrollToSection(step.sectionId as string)}
-                        className="text-left text-[#C4B5FD] transition hover:text-[#DDD6FE]"
+                        className="text-left text-[#D4A030] transition hover:text-[#E5B544]"
                       >
                         {step.title}
                       </button>
                     ) : (
-                      <p className="text-[#D4D4D8]">{step.title}</p>
+                      <p className="text-[#EDEBE8]">{step.title}</p>
                     )}
 
-                    {step.detail ? <p className="mt-1 text-xs text-[#A1A1AA]">{step.detail}</p> : null}
+                    {step.detail ? <p className="mt-1 text-xs text-[#9B978F]">{step.detail}</p> : null}
                   </div>
                 </div>
               ))}
@@ -953,71 +953,71 @@ export default function PortalCadenceClient() {
             <button
               type="button"
               onClick={handleDismissChecklist}
-              className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-[#D4D4D8] transition hover:border-white/30"
+              className="rounded-full border border-white/[0.06] px-4 py-2 text-xs font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
             >
               Dismiss checklist
             </button>
           </section>
         ) : null}
 
-        <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 space-y-6">
+        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 space-y-6">
           <div id="cadence-greeting">
-            <label className="mb-2 block text-sm text-[#D4D4D8]">Greeting</label>
+            <label className="mb-2 block text-sm text-[#EDEBE8]">Greeting</label>
             <textarea
               rows={4}
               value={settings.greeting}
               onChange={(event) => setSettings((prev) => ({ ...prev, greeting: event.target.value }))}
-              className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white focus:border-[#8B5CF6] focus:outline-none"
+              className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
               placeholder="How should Cadence greet callers?"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm text-[#D4D4D8]">AI Personality & Instructions</label>
-            <p className="mb-3 text-sm text-[#A1A1AA]">
+            <label className="mb-2 block text-sm text-[#EDEBE8]">AI Personality & Instructions</label>
+            <p className="mb-3 text-sm text-[#9B978F]">
               This is the script your AI receptionist follows. It determines how calls are handled, what information is collected, and how callers are helped.
             </p>
             <textarea
               rows={8}
               value={settings.systemPrompt}
               onChange={(event) => setSettings((prev) => ({ ...prev, systemPrompt: event.target.value }))}
-              className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white focus:border-[#8B5CF6] focus:outline-none"
+              className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
               placeholder="Describe how your receptionist should handle calls."
             />
-            <p className="mt-2 text-xs text-[#A1A1AA]">{settings.systemPrompt.length} characters</p>
+            <p className="mt-2 text-xs text-[#9B978F]">{settings.systemPrompt.length} characters</p>
             <p className="mt-1 text-xs text-amber-200">Changes take effect on the next incoming call.</p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <label className="block">
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Transfer Number</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Transfer Number</span>
               <input
                 type="text"
                 value={settings.transferNumber}
                 onChange={(event) => setSettings((prev) => ({ ...prev, transferNumber: event.target.value }))}
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-2.5 text-white focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-2.5 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
                 placeholder="Where to transfer live calls"
               />
             </label>
 
             <label className="block md:col-span-2">
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Booking URL</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Booking URL</span>
               <input
                 type="text"
                 value={settings.bookingUrl}
                 onChange={(event) => setSettings((prev) => ({ ...prev, bookingUrl: event.target.value }))}
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-2.5 text-white focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-2.5 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
                 placeholder="Where callers can book online"
               />
             </label>
           </div>
 
           <div>
-            <label className="mb-2 block text-sm text-[#D4D4D8]">Timezone</label>
+            <label className="mb-2 block text-sm text-[#EDEBE8]">Timezone</label>
             <select
               value={settings.timezone}
               onChange={(event) => setSettings((prev) => ({ ...prev, timezone: event.target.value }))}
-              className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-2.5 text-white focus:border-[#8B5CF6] focus:outline-none"
+              className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-2.5 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
             >
               {TIMEZONE_OPTIONS.map((option) => (
                 <option key={option} value={option}>
@@ -1028,16 +1028,16 @@ export default function PortalCadenceClient() {
           </div>
 
           <div id="cadence-hours">
-            <h2 className="text-lg font-semibold text-white">Business Hours</h2>
+            <h2 className="text-lg font-semibold text-[#EDEBE8]">Business Hours</h2>
             <div className="mt-3 space-y-3">
               {settings.hours.map((hourRow, index) => (
                 <div
                   key={hourRow.dayKey}
-                  className="grid grid-cols-1 items-center gap-3 rounded-xl border border-white/8 bg-white/[0.01] p-3 md:grid-cols-[1fr_auto_1fr_1fr]"
+                  className="grid grid-cols-1 items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.01] p-3 md:grid-cols-[1fr_auto_1fr_1fr]"
                 >
-                  <p className="text-sm font-medium text-white">{hourRow.dayLabel}</p>
+                  <p className="text-sm font-medium text-[#EDEBE8]">{hourRow.dayLabel}</p>
 
-                  <label className="inline-flex items-center gap-2 text-sm text-[#D4D4D8]">
+                  <label className="inline-flex items-center gap-2 text-sm text-[#EDEBE8]">
                     <input
                       type="checkbox"
                       checked={hourRow.isOpen}
@@ -1063,7 +1063,7 @@ export default function PortalCadenceClient() {
                       })
                     }
                     disabled={!hourRow.isOpen}
-                    className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-3 py-2 text-white disabled:opacity-50"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] px-3 py-2 text-[#EDEBE8] disabled:opacity-50"
                   />
 
                   <input
@@ -1077,7 +1077,7 @@ export default function PortalCadenceClient() {
                       })
                     }
                     disabled={!hourRow.isOpen}
-                    className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-3 py-2 text-white disabled:opacity-50"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] px-3 py-2 text-[#EDEBE8] disabled:opacity-50"
                   />
                 </div>
               ))}
@@ -1086,7 +1086,7 @@ export default function PortalCadenceClient() {
 
           <div id="cadence-services">
             <div className="mb-3 flex items-center justify-between gap-3">
-              <h2 className="text-lg font-semibold text-white">Services</h2>
+              <h2 className="text-lg font-semibold text-[#EDEBE8]">Services</h2>
               <button
                 type="button"
                 onClick={() =>
@@ -1095,7 +1095,7 @@ export default function PortalCadenceClient() {
                     services: [...prev.services, { name: "", description: "", price: "" }],
                   }))
                 }
-                className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:border-white/30"
+                className="rounded-full border border-white/[0.06] px-4 py-2 text-xs font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
               >
                 Add service
               </button>
@@ -1103,10 +1103,10 @@ export default function PortalCadenceClient() {
 
             <div className="space-y-3">
               {settings.services.length === 0 ? (
-                <p className="text-sm text-[#A1A1AA]">No services added yet.</p>
+                <p className="text-sm text-[#9B978F]">No services added yet.</p>
               ) : (
                 settings.services.map((service, index) => (
-                  <div key={`service-${index}`} className="rounded-xl border border-white/8 bg-white/[0.01] p-3 space-y-3">
+                  <div key={`service-${index}`} className="rounded-xl border border-white/[0.06] bg-white/[0.01] p-3 space-y-3">
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                       <input
                         type="text"
@@ -1119,7 +1119,7 @@ export default function PortalCadenceClient() {
                           })
                         }
                         placeholder="Service name"
-                        className="rounded-lg border border-white/10 bg-[#0A0A0F] px-3 py-2 text-white"
+                        className="rounded-lg border border-white/[0.06] bg-[#0E1015] px-3 py-2 text-[#EDEBE8]"
                       />
                       <input
                         type="text"
@@ -1132,7 +1132,7 @@ export default function PortalCadenceClient() {
                           })
                         }
                         placeholder="Price"
-                        className="rounded-lg border border-white/10 bg-[#0A0A0F] px-3 py-2 text-white"
+                        className="rounded-lg border border-white/[0.06] bg-[#0E1015] px-3 py-2 text-[#EDEBE8]"
                       />
                     </div>
 
@@ -1147,7 +1147,7 @@ export default function PortalCadenceClient() {
                         })
                       }
                       placeholder="Short description"
-                      className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-3 py-2 text-white"
+                      className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] px-3 py-2 text-[#EDEBE8]"
                     />
 
                     <button
@@ -1170,7 +1170,7 @@ export default function PortalCadenceClient() {
 
           <div id="cadence-faqs">
             <div className="mb-3 flex items-center justify-between gap-3">
-              <h2 className="text-lg font-semibold text-white">Frequently Asked Questions</h2>
+              <h2 className="text-lg font-semibold text-[#EDEBE8]">Frequently Asked Questions</h2>
               <button
                 type="button"
                 onClick={() =>
@@ -1179,7 +1179,7 @@ export default function PortalCadenceClient() {
                     faqs: [...prev.faqs, { question: "", answer: "" }],
                   }))
                 }
-                className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:border-white/30"
+                className="rounded-full border border-white/[0.06] px-4 py-2 text-xs font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
               >
                 Add question
               </button>
@@ -1187,10 +1187,10 @@ export default function PortalCadenceClient() {
 
             <div className="space-y-3">
               {settings.faqs.length === 0 ? (
-                <p className="text-sm text-[#A1A1AA]">No questions added yet.</p>
+                <p className="text-sm text-[#9B978F]">No questions added yet.</p>
               ) : (
                 settings.faqs.map((faq, index) => (
-                  <div key={`faq-${index}`} className="rounded-xl border border-white/8 bg-white/[0.01] p-3 space-y-3">
+                  <div key={`faq-${index}`} className="rounded-xl border border-white/[0.06] bg-white/[0.01] p-3 space-y-3">
                     <input
                       type="text"
                       value={faq.question}
@@ -1202,7 +1202,7 @@ export default function PortalCadenceClient() {
                         })
                       }
                       placeholder="Question"
-                      className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-3 py-2 text-white"
+                      className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] px-3 py-2 text-[#EDEBE8]"
                     />
 
                     <textarea
@@ -1216,7 +1216,7 @@ export default function PortalCadenceClient() {
                         })
                       }
                       placeholder="Answer"
-                      className="w-full rounded-lg border border-white/10 bg-[#0A0A0F] px-3 py-2 text-white"
+                      className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] px-3 py-2 text-[#EDEBE8]"
                     />
 
                     <button
@@ -1237,20 +1237,20 @@ export default function PortalCadenceClient() {
             </div>
           </div>
 
-          <section id="cadence-test-mode" className="rounded-xl border border-white/8 bg-white/[0.01] p-4 space-y-3">
-            <h2 className="text-lg font-semibold text-white">Test Your AI Receptionist</h2>
-            <p className="text-sm text-[#A1A1AA]">
+          <section id="cadence-test-mode" className="rounded-xl border border-white/[0.06] bg-white/[0.01] p-4 space-y-3">
+            <h2 className="text-lg font-semibold text-[#EDEBE8]">Test Your AI Receptionist</h2>
+            <p className="text-sm text-[#9B978F]">
               Hear exactly what your callers will hear. We&apos;ll call you and connect to your Cadence number.
             </p>
 
             <label className="block">
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Your phone number</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Your phone number</span>
               <input
                 type="text"
                 value={testCallPhone}
                 onChange={(event) => setTestCallPhone(event.target.value)}
                 placeholder="Where we should call you"
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-2.5 text-white focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-2.5 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
               />
             </label>
 
@@ -1258,7 +1258,7 @@ export default function PortalCadenceClient() {
               type="button"
               onClick={() => void handleTestCall()}
               disabled={testCallStatus === "calling"}
-              className="inline-flex rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#EDEBE8] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {testCallStatus === "calling"
                 ? "Calling..."
@@ -1268,7 +1268,7 @@ export default function PortalCadenceClient() {
             </button>
 
             {testCallError ? <p className="text-sm text-red-300">{testCallError}</p> : null}
-            <p className="text-xs text-[#A1A1AA]">You can test up to 3 times per hour.</p>
+            <p className="text-xs text-[#9B978F]">You can test up to 3 times per hour.</p>
           </section>
 
           {saveError ? <p className="text-sm text-red-300">{saveError}</p> : null}
@@ -1277,29 +1277,29 @@ export default function PortalCadenceClient() {
             type="button"
             onClick={() => void handleSave()}
             disabled={isSaving || !hasUnsavedChanges}
-            className="inline-flex rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#EDEBE8] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSaving ? "Saving..." : hasUnsavedChanges ? "Save changes" : "Saved"}
           </button>
         </section>
 
-        <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6">
-          <h2 className="text-lg font-semibold text-white">Recent Calls</h2>
+        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
+          <h2 className="text-lg font-semibold text-[#EDEBE8]">Recent Calls</h2>
 
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full divide-y divide-white/10">
               <thead>
-                <tr className="text-left text-xs uppercase tracking-wide text-[#A1A1AA]">
+                <tr className="text-left text-xs uppercase tracking-wide text-[#9B978F]">
                   <th className="pb-3 pr-4">Date</th>
                   <th className="pb-3 pr-4">Caller</th>
                   <th className="pb-3 pr-4">Duration</th>
                   <th className="pb-3">Summary</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-sm text-[#D4D4D8]">
+              <tbody className="divide-y divide-white/5 text-sm text-[#EDEBE8]">
                 {calls.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="py-4 text-[#A1A1AA]">
+                    <td colSpan={4} className="py-4 text-[#9B978F]">
                       No calls yet.
                     </td>
                   </tr>
@@ -1320,13 +1320,13 @@ export default function PortalCadenceClient() {
                           <td className="py-3 max-w-xl">
                             <div className="flex items-center justify-between gap-3">
                               <span className="truncate">{firstSummaryLine(call.summaryLines)}</span>
-                              <span className="text-xs text-[#A1A1AA]">{isExpanded ? "▾" : "▸"}</span>
+                              <span className="text-xs text-[#9B978F]">{isExpanded ? "▾" : "▸"}</span>
                             </div>
                           </td>
                         </tr>
                         {isExpanded ? (
                           <tr key={`${call.id}-expanded`}>
-                            <td colSpan={4} className="pb-4 pl-4 pr-4 text-[#CFCFE1]">
+                            <td colSpan={4} className="pb-4 pl-4 pr-4 text-[#EDEBE8]">
                               {summaryLines.length > 0 ? (
                                 <ul className="list-disc space-y-1 pl-5 text-sm">
                                   {summaryLines.map((line, lineIndex) => (
@@ -1334,7 +1334,7 @@ export default function PortalCadenceClient() {
                                   ))}
                                 </ul>
                               ) : (
-                                <p className="text-sm text-[#A1A1AA]">No summary available</p>
+                                <p className="text-sm text-[#9B978F]">No summary available</p>
                               )}
                             </td>
                           </tr>
@@ -1354,7 +1354,7 @@ export default function PortalCadenceClient() {
               type="button"
               onClick={() => void handleLoadMoreCalls()}
               disabled={isLoadingCalls}
-              className="mt-4 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-4 rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoadingCalls ? "Loading..." : "Load more"}
             </button>

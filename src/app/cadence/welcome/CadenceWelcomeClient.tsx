@@ -28,15 +28,15 @@ export default function CadenceWelcomeClient() {
   }, [router, searchParams]);
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F]">
+    <main className="min-h-screen bg-[#0E1015]">
       <Navigation />
       <section className="pt-32 pb-20 mesh-bg">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-3">Cadence Setup</p>
+          <p className="text-sm uppercase tracking-wide text-[#D4A030] mb-3">Cadence Setup</p>
           <h1 className="text-4xl md:text-5xl font-semibold mb-4">Redirecting to Your Portal Setup</h1>
 
-          <div className="rounded-2xl border border-white/10 bg-[#12121A] p-8 space-y-4">
-            <p className="text-[#A1A1AA]">
+          <div className="rounded-2xl border border-white/[0.06] bg-[#161920] p-8 space-y-4">
+            <p className="text-[#9B978F]">
               Provisioning happens after payment. Redirecting you to the portal checkout success page now.
             </p>
           </div>

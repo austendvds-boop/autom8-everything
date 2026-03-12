@@ -104,33 +104,33 @@ export default function PortalBillingClient() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg space-y-4">
-        <Link href="/portal" className="inline-flex text-sm text-[#C4B5FD] transition hover:text-[#DDD6FE]">
+        <Link href="/portal" className="inline-flex text-sm text-[#D4A030] transition hover:text-[#E5B544]">
           ← Back to portal
         </Link>
 
         {overageCard ? (
-          <div className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6">
-            <h2 className="text-lg font-semibold text-white">Current Month Overage</h2>
+          <div className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
+            <h2 className="text-lg font-semibold text-[#EDEBE8]">Current Month Overage</h2>
             <p className="mt-2 text-2xl font-bold text-amber-400">${(overageCard.billedCents / 100).toFixed(2)}</p>
-            <p className="mt-1 text-sm text-[#A1A1AA]">
+            <p className="mt-1 text-sm text-[#9B978F]">
               {overageCard.overageMinutes} minutes over your {overageCard.minuteLimit} minute limit
             </p>
-            <p className="mt-1 text-xs text-[#A1A1AA]">Rate: $0.15/min · Max: $75.00/mo</p>
+            <p className="mt-1 text-xs text-[#9B978F]">Rate: $0.15/min · Max: $75.00/mo</p>
           </div>
         ) : null}
 
-        <div className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 text-center">
+        <div className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-center">
           {errorMessage ? (
             <>
-              <h1 className="text-xl font-semibold text-white">Billing</h1>
+              <h1 className="text-xl font-semibold text-[#EDEBE8]">Billing</h1>
               <p className="mt-3 text-sm text-[#FCA5A5]">{errorMessage}</p>
             </>
           ) : (
             <>
-              <h1 className="text-xl font-semibold text-white">Opening billing...</h1>
-              <p className="mt-3 text-sm text-[#A1A1AA]">Please wait while we open your secure billing page.</p>
+              <h1 className="text-xl font-semibold text-[#EDEBE8]">Opening billing...</h1>
+              <p className="mt-3 text-sm text-[#9B978F]">Please wait while we open your secure billing page.</p>
             </>
           )}
         </div>

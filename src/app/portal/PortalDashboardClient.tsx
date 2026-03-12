@@ -322,8 +322,8 @@ export default function PortalDashboardClient() {
 
   if (errorMessage) {
     return (
-      <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 text-sm text-red-300">
+      <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-red-300">
           {errorMessage}
         </div>
       </main>
@@ -334,30 +334,30 @@ export default function PortalDashboardClient() {
   const businessName = client?.businessName || "your business"
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl space-y-6">
         <header>
-          <h1 className="text-3xl font-semibold text-white">Welcome back, {contactName}</h1>
-          <p className="mt-2 text-sm text-[#A1A1AA]">{businessName}</p>
+          <h1 className="text-3xl font-semibold text-[#EDEBE8]">Welcome back, {contactName}</h1>
+          <p className="mt-2 text-sm text-[#9B978F]">{businessName}</p>
         </header>
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {cadenceService ? (
-            <article className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6">
+            <article className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-2xl" aria-hidden>
                     📞
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-white">Cadence — AI Receptionist</h2>
+                  <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Cadence — AI Receptionist</h2>
                 </div>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-[#D4D4D8]">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-xs text-[#EDEBE8]">
                   <span className={`h-2 w-2 rounded-full ${statusBadge(cadenceService.status).dot}`} />
                   {statusBadge(cadenceService.status).label}
                 </span>
               </div>
 
-              <p className="mt-4 text-sm text-[#A1A1AA]">
+              <p className="mt-4 text-sm text-[#9B978F]">
                 {isLoadingCadenceStats
                   ? "Loading call activity..."
                   : cadenceCallsThisMonth !== null
@@ -366,13 +366,13 @@ export default function PortalDashboardClient() {
               </p>
 
               {cadencePhoneNumber ? (
-                <p className="mt-2 text-sm text-[#D4D4D8]">Your Cadence number: {cadencePhoneNumber}</p>
+                <p className="mt-2 text-sm text-[#EDEBE8]">Your Cadence number: {cadencePhoneNumber}</p>
               ) : null}
 
               <button
                 type="button"
                 onClick={() => router.push("/portal/cadence")}
-                className="mt-5 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+                className="mt-5 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
               >
                 Manage Settings
               </button>
@@ -380,26 +380,26 @@ export default function PortalDashboardClient() {
           ) : null}
 
           {reviewService ? (
-            <article className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6">
+            <article className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-2xl" aria-hidden>
                     ⭐
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-white">Review Funnel — Automated Reviews</h2>
+                  <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Review Funnel — Automated Reviews</h2>
                 </div>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-[#D4D4D8]">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-xs text-[#EDEBE8]">
                   <span className={`h-2 w-2 rounded-full ${statusBadge(reviewService.status).dot}`} />
                   {statusBadge(reviewService.status).label}
                 </span>
               </div>
 
-              {reviewPlanLabel ? <p className="mt-4 text-sm text-[#D4D4D8]">Plan: {reviewPlanLabel}</p> : null}
-              <p className="mt-2 text-sm text-[#A1A1AA]">Open your dashboard to check text message usage and customer feedback.</p>
+              {reviewPlanLabel ? <p className="mt-4 text-sm text-[#EDEBE8]">Plan: {reviewPlanLabel}</p> : null}
+              <p className="mt-2 text-sm text-[#9B978F]">Open your dashboard to check text message usage and customer feedback.</p>
 
               <Link
                 href="/portal/review-funnel"
-                className="mt-5 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+                className="mt-5 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
               >
                 Open Dashboard
               </Link>
@@ -407,7 +407,7 @@ export default function PortalDashboardClient() {
           ) : null}
 
           {!cadenceService && !reviewService ? (
-            <div className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 text-sm text-[#A1A1AA]">
+            <div className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 text-sm text-[#9B978F]">
               No services are active on this account yet.
             </div>
           ) : null}
@@ -415,19 +415,19 @@ export default function PortalDashboardClient() {
 
         {showMoreProducts ? (
           <section className="space-y-3">
-            <h2 className="text-lg font-semibold text-white">More Products</h2>
+            <h2 className="text-lg font-semibold text-[#EDEBE8]">More Products</h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {isMissingCadence ? (
-                <article className="rounded-2xl border border-dashed border-white/15 bg-[#12121A]/70 p-6 opacity-80">
-                  <Phone className="h-6 w-6 text-[#C4B5FD]" aria-hidden />
-                  <h3 className="mt-3 text-lg font-semibold text-white">Cadence — AI Receptionist</h3>
-                  <p className="mt-2 text-sm text-[#A1A1AA]">
+                <article className="rounded-2xl border border-dashed border-white/[0.06] bg-[#161920]/70 p-6 opacity-80">
+                  <Phone className="h-6 w-6 text-[#D4A030]" aria-hidden />
+                  <h3 className="mt-3 text-lg font-semibold text-[#EDEBE8]">Cadence — AI Receptionist</h3>
+                  <p className="mt-2 text-sm text-[#9B978F]">
                     Never miss a call. AI answers 24/7, books appointments, answers FAQs.
                   </p>
-                  <p className="mt-3 text-sm font-medium text-[#D4D4D8]">$199/mo · 7-day free trial</p>
+                  <p className="mt-3 text-sm font-medium text-[#EDEBE8]">$199/mo · 7-day free trial</p>
                   <Link
                     href="/portal/checkout?product=cadence"
-                    className="mt-4 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+                    className="mt-4 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
                   >
                     Get Started
                   </Link>
@@ -435,16 +435,16 @@ export default function PortalDashboardClient() {
               ) : null}
 
               {isMissingReviewFunnel ? (
-                <article className="rounded-2xl border border-dashed border-white/15 bg-[#12121A]/70 p-6 opacity-80">
-                  <Star className="h-6 w-6 text-[#C4B5FD]" aria-hidden />
-                  <h3 className="mt-3 text-lg font-semibold text-white">Review Funnel — Automated Reviews</h3>
-                  <p className="mt-2 text-sm text-[#A1A1AA]">
+                <article className="rounded-2xl border border-dashed border-white/[0.06] bg-[#161920]/70 p-6 opacity-80">
+                  <Star className="h-6 w-6 text-[#D4A030]" aria-hidden />
+                  <h3 className="mt-3 text-lg font-semibold text-[#EDEBE8]">Review Funnel — Automated Reviews</h3>
+                  <p className="mt-2 text-sm text-[#9B978F]">
                     Turn every appointment into a 5-star review. Automated follow-ups via text.
                   </p>
-                  <p className="mt-3 text-sm font-medium text-[#D4D4D8]">From $79/mo</p>
+                  <p className="mt-3 text-sm font-medium text-[#EDEBE8]">From $79/mo</p>
                   <Link
                     href="/portal/checkout?product=review_funnel"
-                    className="mt-4 inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+                    className="mt-4 inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
                   >
                     Get Started
                   </Link>
@@ -454,16 +454,16 @@ export default function PortalDashboardClient() {
           </section>
         ) : null}
 
-        <section className="rounded-2xl border border-white/8 bg-[#12121A]/90 p-6">
-          <h2 className="text-lg font-semibold text-white">Account</h2>
+        <section className="rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6">
+          <h2 className="text-lg font-semibold text-[#EDEBE8]">Account</h2>
           <dl className="mt-4 space-y-2 text-sm">
             <div>
-              <dt className="text-[#A1A1AA]">Name</dt>
-              <dd className="text-[#E4E4E7]">{client?.contactName || "Not available"}</dd>
+              <dt className="text-[#9B978F]">Name</dt>
+              <dd className="text-[#EDEBE8]">{client?.contactName || "Not available"}</dd>
             </div>
             <div>
-              <dt className="text-[#A1A1AA]">Email</dt>
-              <dd className="text-[#E4E4E7]">{client?.email || "Not available"}</dd>
+              <dt className="text-[#9B978F]">Email</dt>
+              <dd className="text-[#EDEBE8]">{client?.email || "Not available"}</dd>
             </div>
           </dl>
 
@@ -474,13 +474,13 @@ export default function PortalDashboardClient() {
               type="button"
               onClick={() => void handleManageBilling()}
               disabled={isOpeningBilling}
-              className="inline-flex rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-2.5 text-sm font-semibold text-[#EDEBE8] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isOpeningBilling ? "Opening billing..." : "Manage Billing"}
             </button>
             <Link
               href="/contact"
-              className="inline-flex rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30"
+              className="inline-flex rounded-full border border-white/[0.06] px-4 py-2 text-sm font-semibold text-[#EDEBE8] transition hover:border-[#D4A030]/30"
             >
               Need help?
             </Link>

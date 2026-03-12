@@ -221,18 +221,18 @@ export default function CadenceGetStartedClient() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F]">
+    <main className="min-h-screen bg-[#0E1015]">
       <Navigation />
       <section className="pt-32 pb-20 mesh-bg">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-sm uppercase tracking-wide text-[#8B5CF6] mb-3">Cadence Onboarding</p>
-          <h1 className="text-4xl md:text-5xl font-semibold mb-4">Get Your AI Receptionist Live</h1>
-          <p className="text-[#A1A1AA] mb-8">
+          <p className="text-sm uppercase tracking-wide text-[#D4A030] mb-3">Cadence Onboarding</p>
+          <h1 className="mb-4 text-4xl font-semibold text-[#EDEBE8] md:text-5xl">Get Your AI Receptionist Live</h1>
+          <p className="text-[#9B978F] mb-8">
             Takes about 5 minutes. After checkout, we start provisioning your AI receptionist automatically.
           </p>
 
-          <div className="rounded-2xl border border-white/10 bg-[#12121A] p-6 md:p-8 space-y-4">
-            <p className="text-sm text-[#8B5CF6]">Step {step} of 4</p>
+          <div className="rounded-2xl border border-white/[0.06] bg-[#161920] p-6 md:p-8 space-y-4">
+            <p className="text-sm text-[#D4A030]">Step {step} of 4</p>
 
             {step === 1 && (
               <>
@@ -240,7 +240,7 @@ export default function CadenceGetStartedClient() {
                   <input
                     aria-invalid={Boolean(errors.business_name)}
                     aria-describedby={errors.business_name ? "business_name-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Business name"
                     value={form.business_name}
                     onChange={(event) => update("business_name", event.target.value)}
@@ -253,7 +253,7 @@ export default function CadenceGetStartedClient() {
                   <textarea
                     aria-invalid={Boolean(errors.business_description)}
                     aria-describedby={errors.business_description ? "business_description-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Business description"
                     value={form.business_description}
                     onChange={(event) => update("business_description", event.target.value)}
@@ -270,7 +270,7 @@ export default function CadenceGetStartedClient() {
                   <textarea
                     aria-invalid={Boolean(errors.hours)}
                     aria-describedby={errors.hours ? "hours-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Hours of operation"
                     value={form.hours}
                     onChange={(event) => update("hours", event.target.value)}
@@ -283,7 +283,7 @@ export default function CadenceGetStartedClient() {
                   <textarea
                     aria-invalid={Boolean(errors.faqs)}
                     aria-describedby={errors.faqs ? "faqs-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="FAQs"
                     value={form.faqs}
                     onChange={(event) => update("faqs", event.target.value)}
@@ -300,7 +300,7 @@ export default function CadenceGetStartedClient() {
                   <input
                     aria-invalid={Boolean(errors.owner_name)}
                     aria-describedby={errors.owner_name ? "owner_name-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Owner name"
                     value={form.owner_name}
                     onChange={(event) => update("owner_name", event.target.value)}
@@ -313,7 +313,7 @@ export default function CadenceGetStartedClient() {
                   <input
                     aria-invalid={Boolean(errors.owner_email)}
                     aria-describedby={errors.owner_email ? "owner_email-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Owner email"
                     value={form.owner_email}
                     onChange={(event) => update("owner_email", event.target.value)}
@@ -326,7 +326,7 @@ export default function CadenceGetStartedClient() {
                   <input
                     aria-invalid={Boolean(errors.owner_phone)}
                     aria-describedby={errors.owner_phone ? "owner_phone-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Owner phone (+1XXXXXXXXXX)"
                     value={form.owner_phone}
                     onChange={(event) => update("owner_phone", event.target.value)}
@@ -339,7 +339,7 @@ export default function CadenceGetStartedClient() {
                   <input
                     aria-invalid={Boolean(errors.transfer_number)}
                     aria-describedby={errors.transfer_number ? "transfer_number-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Transfer number (+1XXXXXXXXXX)"
                     value={form.transfer_number}
                     onChange={(event) => update("transfer_number", event.target.value)}
@@ -356,7 +356,7 @@ export default function CadenceGetStartedClient() {
                   <input
                     aria-invalid={Boolean(errors.area_code)}
                     aria-describedby={errors.area_code ? "area_code-error" : undefined}
-                    className="w-full p-3 rounded-lg bg-[#0A0A0F] border border-white/10"
+                    className="w-full rounded-lg border border-white/[0.06] bg-[#0E1015] p-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
                     placeholder="Preferred area code (e.g. 602)"
                     value={form.area_code}
                     onChange={(event) => update("area_code", event.target.value)}
@@ -364,7 +364,7 @@ export default function CadenceGetStartedClient() {
                   />
                   <FieldError field="area_code" error={errors.area_code} />
                 </div>
-                <p className="text-sm text-[#A1A1AA]">You&apos;ll start a 7-day free trial, then $199/month.</p>
+                <p className="text-sm text-[#9B978F]">You&apos;ll start a 7-day free trial, then $199/month.</p>
               </>
             )}
 
@@ -374,7 +374,7 @@ export default function CadenceGetStartedClient() {
               <button
                 onClick={() => setStep((currentStep) => Math.max(1, currentStep - 1))}
                 disabled={step === 1 || loading}
-                className="px-5 py-3 rounded-lg border border-white/20 disabled:opacity-40"
+                className="rounded-lg border border-white/[0.06] px-5 py-3 text-[#EDEBE8] transition hover:border-[#D4A030]/30 disabled:opacity-40"
               >
                 Back
               </button>
@@ -382,7 +382,7 @@ export default function CadenceGetStartedClient() {
                 <button
                   onClick={handleContinue}
                   disabled={!canContinue || loading}
-                  className="px-5 py-3 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] disabled:opacity-40"
+                  className="rounded-lg bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-3 font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)] disabled:opacity-40"
                 >
                   Continue
                 </button>
@@ -390,7 +390,7 @@ export default function CadenceGetStartedClient() {
                 <button
                   onClick={submit}
                   disabled={!canContinue || loading}
-                  className="px-5 py-3 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] disabled:opacity-40"
+                  className="rounded-lg bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-5 py-3 font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)] disabled:opacity-40"
                 >
                   {loading ? "Creating checkout..." : "Start 7-Day Trial"}
                 </button>

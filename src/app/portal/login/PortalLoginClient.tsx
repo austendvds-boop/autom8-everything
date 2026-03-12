@@ -45,25 +45,25 @@ export default function PortalLoginClient() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto flex min-h-[80vh] max-w-md items-center">
-        <div className="w-full rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 sm:p-8">
-          <p className="text-xs uppercase tracking-[0.16em] text-[#8B5CF6]">Autom8 Client Portal</p>
-          <h1 className="mt-2 text-2xl font-semibold text-white">Sign in with your email</h1>
-          <p className="mt-2 text-sm text-[#A1A1AA]">
+        <div className="w-full rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 sm:p-8">
+          <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Autom8 Client Portal</p>
+          <h1 className="mt-2 text-2xl font-semibold text-[#EDEBE8]">Sign in with your email</h1>
+          <p className="mt-2 text-sm text-[#9B978F]">
             Enter the email for your account and we will send you a secure sign-in link.
           </p>
 
           <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
             <label className="block">
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Email address</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Email address</span>
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 autoComplete="email"
                 placeholder="you@business.com"
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white placeholder:text-[#71717A] focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
               />
             </label>
 
@@ -73,7 +73,7 @@ export default function PortalLoginClient() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-6 py-3 text-sm font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? "Sending link..." : "Send login link"}
             </button>

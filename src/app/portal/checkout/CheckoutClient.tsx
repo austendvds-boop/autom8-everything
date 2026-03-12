@@ -108,15 +108,15 @@ export default function CheckoutClient() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0F] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#0E1015] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl space-y-6">
         <header className="space-y-2">
-          <Link href="/portal" className="inline-flex text-sm text-[#C4B5FD] transition hover:text-[#DDD6FE]">
+          <Link href="/portal" className="inline-flex text-sm text-[#D4A030] transition hover:text-[#E5B544]">
             ← Back to portal
           </Link>
-          <p className="text-xs uppercase tracking-[0.18em] text-[#8B5CF6]">Autom8 Client Portal</p>
-          <h1 className="text-3xl font-semibold text-white sm:text-4xl">Start your account</h1>
-          <p className="text-sm text-[#A1A1AA]">
+          <p className="text-xs uppercase tracking-[0.18em] text-[#D4A030]">Autom8 Client Portal</p>
+          <h1 className="text-3xl font-semibold text-[#EDEBE8] sm:text-4xl">Start your account</h1>
+          <p className="text-sm text-[#9B978F]">
             Pick your service, enter your details, and we&apos;ll take you to secure checkout.
           </p>
         </header>
@@ -127,14 +127,14 @@ export default function CheckoutClient() {
             onClick={() => setProduct("cadence")}
             className={`rounded-2xl border p-5 text-left transition ${
               product === "cadence"
-                ? "border-[#8B5CF6] bg-[#12121A]/90"
-                : "border-white/8 bg-[#12121A]/90 hover:border-white/25"
+                ? "border-[#D4A030] bg-[#161920]/90"
+                : "border-white/[0.06] bg-[#161920]/90 hover:border-[#D4A030]/30"
             }`}
           >
-            <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">Cadence</p>
-            <h2 className="mt-2 text-xl font-semibold text-white">AI Receptionist</h2>
-            <p className="mt-1 text-sm text-[#D4D4D8]">$199/month</p>
-            <p className="mt-2 text-sm text-[#A1A1AA]">Includes a 7-day free trial before billing starts.</p>
+            <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Cadence</p>
+            <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">AI Receptionist</h2>
+            <p className="mt-1 text-sm text-[#EDEBE8]">$199/month</p>
+            <p className="mt-2 text-sm text-[#9B978F]">Includes a 7-day free trial before billing starts.</p>
           </button>
 
           <button
@@ -142,62 +142,62 @@ export default function CheckoutClient() {
             onClick={() => setProduct("review_funnel")}
             className={`rounded-2xl border p-5 text-left transition ${
               product === "review_funnel"
-                ? "border-[#8B5CF6] bg-[#12121A]/90"
-                : "border-white/8 bg-[#12121A]/90 hover:border-white/25"
+                ? "border-[#D4A030] bg-[#161920]/90"
+                : "border-white/[0.06] bg-[#161920]/90 hover:border-[#D4A030]/30"
             }`}
           >
-            <p className="text-xs uppercase tracking-[0.16em] text-[#A1A1AA]">Review Funnel</p>
-            <h2 className="mt-2 text-xl font-semibold text-white">Review Growth</h2>
-            <p className="mt-1 text-sm text-[#D4D4D8]">Starter $79/month • Growth $149/month</p>
-            <p className="mt-2 text-sm text-[#A1A1AA]">Automatically asks happy customers for fresh reviews.</p>
+            <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Review Funnel</p>
+            <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Review Growth</h2>
+            <p className="mt-1 text-sm text-[#EDEBE8]">Starter $79/month • Growth $149/month</p>
+            <p className="mt-2 text-sm text-[#9B978F]">Automatically asks happy customers for fresh reviews.</p>
           </button>
         </section>
 
-        <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-white/8 bg-[#12121A]/90 p-6 sm:p-7">
+        <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-white/[0.06] bg-[#161920]/90 p-6 sm:p-7">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="sm:col-span-2">
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Business name</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Business name</span>
               <input
                 type="text"
                 value={businessName}
                 onChange={(event) => setBusinessName(event.target.value)}
                 placeholder="Sunrise Plumbing"
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white placeholder:text-[#71717A] focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Email</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Email</span>
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="you@business.com"
                 autoComplete="email"
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white placeholder:text-[#71717A] focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Phone (optional)</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Phone (optional)</span>
               <input
                 type="tel"
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
                 placeholder="(480) 555-1234"
                 autoComplete="tel"
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white placeholder:text-[#71717A] focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] placeholder:text-[#5E5B56] focus:border-[#D4A030] focus:outline-none"
               />
             </label>
           </div>
 
           {product === "cadence" ? (
             <label>
-              <span className="mb-2 block text-sm text-[#D4D4D8]">Area code for your new line</span>
+              <span className="mb-2 block text-sm text-[#EDEBE8]">Area code for your new line</span>
               <select
                 value={areaCode}
                 onChange={(event) => setAreaCode(event.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-[#0A0A0F] px-4 py-3 text-white focus:border-[#8B5CF6] focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.06] bg-[#0E1015] px-4 py-3 text-[#EDEBE8] focus:border-[#D4A030] focus:outline-none"
               >
                 {AREA_CODES.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -208,19 +208,19 @@ export default function CheckoutClient() {
             </label>
           ) : (
             <fieldset>
-              <legend className="mb-2 block text-sm text-[#D4D4D8]">Choose your plan</legend>
+              <legend className="mb-2 block text-sm text-[#EDEBE8]">Choose your plan</legend>
               <div className="grid gap-3 sm:grid-cols-2">
                 <button
                   type="button"
                   onClick={() => setPlan("starter")}
                   className={`rounded-xl border p-4 text-left transition ${
                     plan === "starter"
-                      ? "border-[#8B5CF6] bg-[#0A0A0F]"
-                      : "border-white/10 bg-[#0A0A0F]/60 hover:border-white/25"
+                      ? "border-[#D4A030] bg-[#0E1015]"
+                      : "border-white/[0.06] bg-[#0E1015]/60 hover:border-[#D4A030]/30"
                   }`}
                 >
-                  <p className="text-sm font-semibold text-white">Starter</p>
-                  <p className="mt-1 text-sm text-[#A1A1AA]">$79/month</p>
+                  <p className="text-sm font-semibold text-[#EDEBE8]">Starter</p>
+                  <p className="mt-1 text-sm text-[#9B978F]">$79/month</p>
                 </button>
 
                 <button
@@ -228,12 +228,12 @@ export default function CheckoutClient() {
                   onClick={() => setPlan("growth")}
                   className={`rounded-xl border p-4 text-left transition ${
                     plan === "growth"
-                      ? "border-[#8B5CF6] bg-[#0A0A0F]"
-                      : "border-white/10 bg-[#0A0A0F]/60 hover:border-white/25"
+                      ? "border-[#D4A030] bg-[#0E1015]"
+                      : "border-white/[0.06] bg-[#0E1015]/60 hover:border-[#D4A030]/30"
                   }`}
                 >
-                  <p className="text-sm font-semibold text-white">Growth</p>
-                  <p className="mt-1 text-sm text-[#A1A1AA]">$149/month</p>
+                  <p className="text-sm font-semibold text-[#EDEBE8]">Growth</p>
+                  <p className="mt-1 text-sm text-[#9B978F]">$149/month</p>
                 </button>
               </div>
             </fieldset>
@@ -255,7 +255,7 @@ export default function CheckoutClient() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-full bg-[linear-gradient(135deg,#D4A030,#E8C068)] px-6 py-3 text-sm font-semibold text-[#0E1015] transition hover:shadow-[0_0_30px_rgba(212,160,48,0.2)] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? "Redirecting to secure checkout..." : "Continue to checkout"}
           </button>
