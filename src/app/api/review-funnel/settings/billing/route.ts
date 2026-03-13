@@ -39,6 +39,8 @@ export async function GET(request: NextRequest) {
     isActive: authResult.tenant.isActive,
     stripeCustomerId: authResult.tenant.stripeCustomerId,
     stripeSubscriptionId: authResult.tenant.stripeSubscriptionId,
+    overageBillingEnabled: authResult.tenant.overageBillingEnabled,
+    followUpNudgeEnabled: authResult.tenant.followUpNudgeEnabled,
     smsLimitMonthly:
       authResult.tenant.smsLimitMonthly >= PRO_SMS_LIMIT_SENTINEL
         ? null

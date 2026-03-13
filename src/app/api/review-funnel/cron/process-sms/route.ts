@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
-import { and, asc, eq, lte, sql } from "drizzle-orm"
+import { and, asc, eq, gt, isNull, lte, sql } from "drizzle-orm"
 import twilio from "twilio"
 import { rfDb } from "@/lib/review-funnel/db/client"
-import { rfPendingSms, rfReviewRequests } from "@/lib/review-funnel/db/schema"
+import { rfPendingSms, rfReviewRequests, rfTenants } from "@/lib/review-funnel/db/schema"
 import { sendReviewRequestEmail } from "@/lib/review-funnel/services/email-review-request"
-import { sendReviewRequest } from "@/lib/review-funnel/services/sms"
+import { sendNudge, sendReviewRequest } from "@/lib/review-funnel/services/sms"
 
 export const dynamic = "force-dynamic"
 
@@ -66,6 +66,7 @@ export async function GET(request: NextRequest) {
   }
 
   const now = new Date()
+  const nudgeCutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000)
 
   const queuedRows = await rfDb
     .select({
@@ -91,6 +92,8 @@ export async function GET(request: NextRequest) {
   let failed = 0
   let rescheduled = 0
   let sentEmail = 0
+  let nudgesSent = 0
+  let nudgesSkipped = 0
 
   for (const row of queuedRows) {
     try {
@@ -206,6 +209,41 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  const nudgeRows = await rfDb
+    .select({
+      reviewRequestId: rfReviewRequests.id,
+    })
+    .from(rfReviewRequests)
+    .innerJoin(rfTenants, eq(rfReviewRequests.tenantId, rfTenants.id))
+    .where(
+      and(
+        lte(rfReviewRequests.smsSentAt, nudgeCutoff),
+        isNull(rfReviewRequests.smsReplyRating),
+        isNull(rfReviewRequests.nudgeSentAt),
+        gt(rfReviewRequests.expiresAt, now),
+        eq(rfReviewRequests.smsStatus, "sent"),
+        eq(rfTenants.plan, "growth"),
+        eq(rfTenants.followUpNudgeEnabled, true),
+        eq(rfTenants.isActive, true),
+      ),
+    )
+    .orderBy(asc(rfReviewRequests.smsSentAt))
+    .limit(50)
+
+  for (const row of nudgeRows) {
+    try {
+      const result = await sendNudge(row.reviewRequestId)
+
+      if (result.status === "sent") {
+        nudgesSent += 1
+      } else {
+        nudgesSkipped += 1
+      }
+    } catch {
+      nudgesSkipped += 1
+    }
+  }
+
   return NextResponse.json({
     processed: queuedRows.length,
     sent,
@@ -213,5 +251,7 @@ export async function GET(request: NextRequest) {
     skipped,
     failed,
     rescheduled,
+    nudgesSent,
+    nudgesSkipped,
   })
 }

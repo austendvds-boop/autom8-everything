@@ -5,21 +5,23 @@ import { requireReviewFunnelDashboardAuth } from "@/lib/review-funnel/middleware
 import { rfDb } from "@/lib/review-funnel/db/client"
 import { rfCalendarWatches, rfGoogleOauthTokens, rfTenants, type NewRfTenant } from "@/lib/review-funnel/db/schema"
 
-const nullableTrimmedString = z.preprocess(
-  (value) => {
-    if (value === null || value === undefined) {
-      return null
-    }
+function nullableTrimmedString(schema: z.ZodString) {
+  return z.preprocess(
+    (value) => {
+      if (value === null || value === undefined) {
+        return null
+      }
 
-    if (typeof value !== "string") {
-      return value
-    }
+      if (typeof value !== "string") {
+        return value
+      }
 
-    const trimmed = value.trim()
-    return trimmed.length > 0 ? trimmed : null
-  },
-  z.string().nullable().optional(),
-)
+      const trimmed = value.trim()
+      return trimmed.length > 0 ? trimmed : null
+    },
+    schema.nullable().optional(),
+  )
+}
 
 const reviewPlatformSchema = z.enum(["google", "yelp", "both"])
 
@@ -29,13 +31,16 @@ const profilePatchSchema = z
     ownerName: z.string().trim().min(1).max(255).optional(),
     ownerPhone: z.string().trim().min(3).max(20).optional(),
     promoOffer: z.string().trim().min(1).max(500).optional(),
-    promoCode: nullableTrimmedString,
-    logoUrl: nullableTrimmedString,
-    gmbReviewUrl: nullableTrimmedString,
-    yelpReviewUrl: nullableTrimmedString,
+    promoCode: nullableTrimmedString(z.string()),
+    promoMessage: nullableTrimmedString(z.string().max(500)),
+    logoUrl: nullableTrimmedString(z.string()),
+    gmbReviewUrl: nullableTrimmedString(z.string()),
+    yelpReviewUrl: nullableTrimmedString(z.string()),
     reviewPlatform: reviewPlatformSchema.optional(),
     primaryColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/).optional(),
     accentColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+    overageBillingEnabled: z.boolean().optional(),
+    followUpNudgeEnabled: z.boolean().optional(),
   })
   .strict()
 
@@ -113,11 +118,14 @@ export async function GET(request: NextRequest) {
       accentColor: authResult.tenant.accentColor,
       promoOffer: authResult.tenant.promoOffer,
       promoCode: authResult.tenant.promoCode,
+      promoMessage: authResult.tenant.promoMessage,
       googlePlaceId: authResult.tenant.googlePlaceId,
       gmbReviewUrl: authResult.tenant.gmbReviewUrl,
       yelpReviewUrl: authResult.tenant.yelpReviewUrl,
       reviewPlatform: authResult.tenant.reviewPlatform,
       plan: authResult.tenant.plan,
+      overageBillingEnabled: authResult.tenant.overageBillingEnabled,
+      followUpNudgeEnabled: authResult.tenant.followUpNudgeEnabled,
     },
     calendar,
   })
@@ -154,6 +162,17 @@ export async function PATCH(request: NextRequest) {
 
   const payload = parsed.data
 
+  if (
+    payload.followUpNudgeEnabled === true &&
+    authResult.tenant.plan !== "growth" &&
+    authResult.tenant.plan !== "pro"
+  ) {
+    return NextResponse.json(
+      { error: "followUpNudgeEnabled is only available on Growth and Pro plans" },
+      { status: 400 },
+    )
+  }
+
   if (!isValidUrlOrNull(payload.logoUrl) || !isValidUrlOrNull(payload.gmbReviewUrl) || !isValidUrlOrNull(payload.yelpReviewUrl)) {
     return NextResponse.json(
       { error: "logoUrl, gmbReviewUrl, and yelpReviewUrl must be valid http(s) URLs" },
@@ -187,6 +206,10 @@ export async function PATCH(request: NextRequest) {
     updateData.promoCode = payload.promoCode ?? null
   }
 
+  if (hasOwn("promoMessage")) {
+    updateData.promoMessage = payload.promoMessage ?? null
+  }
+
   if (hasOwn("logoUrl")) {
     updateData.logoUrl = payload.logoUrl ?? null
   }
@@ -211,6 +234,14 @@ export async function PATCH(request: NextRequest) {
     updateData.accentColor = payload.accentColor
   }
 
+  if (hasOwn("overageBillingEnabled") && payload.overageBillingEnabled !== undefined) {
+    updateData.overageBillingEnabled = payload.overageBillingEnabled
+  }
+
+  if (hasOwn("followUpNudgeEnabled") && payload.followUpNudgeEnabled !== undefined) {
+    updateData.followUpNudgeEnabled = payload.followUpNudgeEnabled
+  }
+
   if (Object.keys(updateData).length === 1) {
     return NextResponse.json({ error: "No profile fields provided" }, { status: 400 })
   }
@@ -229,9 +260,12 @@ export async function PATCH(request: NextRequest) {
       accentColor: rfTenants.accentColor,
       promoOffer: rfTenants.promoOffer,
       promoCode: rfTenants.promoCode,
+      promoMessage: rfTenants.promoMessage,
       gmbReviewUrl: rfTenants.gmbReviewUrl,
       yelpReviewUrl: rfTenants.yelpReviewUrl,
       reviewPlatform: rfTenants.reviewPlatform,
+      overageBillingEnabled: rfTenants.overageBillingEnabled,
+      followUpNudgeEnabled: rfTenants.followUpNudgeEnabled,
     })
 
   const calendar = await getCalendarSnapshot(authResult.tenant.id)

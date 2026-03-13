@@ -7,6 +7,8 @@ import { normalizePhone } from "../utils/phone"
 
 const DEFAULT_REVIEW_SMS_TEMPLATE =
   "Hi {customer_name}! Thanks for visiting {business_name}. How was your experience? Reply 1-5 (5 = great!)\n\nReply STOP to opt out."
+const DEFAULT_NUDGE_SMS_TEMPLATE =
+  "Hi {customer_name}! We'd still love your feedback on your visit to {business_name}. Reply 1-5 (5 = great!)\n\nReply STOP to opt out."
 const PRO_SMS_LIMIT_SENTINEL = 999_999
 
 let cachedTwilioClient: Twilio | null = null
@@ -29,6 +31,27 @@ export type SmsSendResult =
   | { status: "opted_out" }
   | { status: "limit_reached"; used: number; limit: number | null }
   | { status: "no_phone" }
+
+interface ReviewRequestSmsContext {
+  reviewRequest: {
+    id: string
+    tenantId: string
+    locationId: string | null
+    customerName: string | null
+    customerPhone: string | null
+  }
+  tenant: {
+    id: string
+    businessName: string
+    smsTemplate: string | null
+    smsSenderNumber: string | null
+    followUpNudgeEnabled: boolean
+    plan: string
+  }
+  location: {
+    smsSenderNumber: string | null
+  } | null
+}
 
 function getTwilioClient(): Twilio {
   if (cachedTwilioClient) {
@@ -114,6 +137,7 @@ export async function checkMonthlyLimit(tenantId: string): Promise<MonthlyLimitC
     columns: {
       plan: true,
       smsLimitMonthly: true,
+      overageBillingEnabled: true,
     },
   })
 
@@ -137,6 +161,14 @@ export async function checkMonthlyLimit(tenantId: string): Promise<MonthlyLimitC
 
   const used = usage?.count ?? 0
   const limit = tenant.smsLimitMonthly
+
+  if (tenant.overageBillingEnabled) {
+    return {
+      allowed: true,
+      used,
+      limit,
+    }
+  }
 
   return {
     allowed: used < limit,
@@ -182,7 +214,7 @@ export async function handleOptOut(phone: string): Promise<boolean> {
   return true
 }
 
-export async function sendReviewRequest(reviewRequestId: string): Promise<SmsSendResult> {
+async function getReviewRequestSmsContext(reviewRequestId: string): Promise<ReviewRequestSmsContext> {
   const reviewRequest = await rfDb.query.rfReviewRequests.findFirst({
     where: eq(rfReviewRequests.id, reviewRequestId),
     columns: {
@@ -205,6 +237,8 @@ export async function sendReviewRequest(reviewRequestId: string): Promise<SmsSen
       businessName: true,
       smsTemplate: true,
       smsSenderNumber: true,
+      followUpNudgeEnabled: true,
+      plan: true,
     },
   })
 
@@ -221,51 +255,78 @@ export async function sendReviewRequest(reviewRequestId: string): Promise<SmsSen
       })
     : null
 
-  const toPhone = normalizePhone(reviewRequest.customerPhone)
+  return {
+    reviewRequest,
+    tenant,
+    location: location ?? null,
+  }
+}
+
+function resolveSmsSenderNumber(context: ReviewRequestSmsContext): string | undefined {
+  return (
+    context.location?.smsSenderNumber?.trim() ||
+    context.tenant.smsSenderNumber?.trim() ||
+    reviewFunnelConfig.RF_TWILIO_PHONE_NUMBER?.trim() ||
+    undefined
+  )
+}
+
+async function sendOutboundMessage({
+  context,
+  messageBody,
+  now,
+  metadata,
+  buildReviewRequestUpdate,
+  updateSmsStatusOnSkip = true,
+}: {
+  context: ReviewRequestSmsContext
+  messageBody: string
+  now: Date
+  metadata: Record<string, string>
+  buildReviewRequestUpdate: (messageSid: string) => Partial<typeof rfReviewRequests.$inferInsert>
+  updateSmsStatusOnSkip?: boolean
+}): Promise<SmsSendResult> {
+  const toPhone = normalizePhone(context.reviewRequest.customerPhone)
 
   if (!toPhone) {
-    await rfDb
-      .update(rfReviewRequests)
-      .set({
-        smsStatus: "no_phone",
-      })
-      .where(eq(rfReviewRequests.id, reviewRequest.id))
+    if (updateSmsStatusOnSkip) {
+      await rfDb
+        .update(rfReviewRequests)
+        .set({
+          smsStatus: "no_phone",
+        })
+        .where(eq(rfReviewRequests.id, context.reviewRequest.id))
+    }
 
     return { status: "no_phone" }
-  }
-
-  const now = new Date()
-  const nextAllowedSendTime = getNextAllowedSendTime(now)
-
-  if (nextAllowedSendTime.getTime() !== now.getTime()) {
-    return {
-      status: "quiet_hours",
-      sendAfter: nextAllowedSendTime,
-    }
   }
 
   const optedOut = await checkOptOut(toPhone)
 
   if (optedOut) {
-    await rfDb
-      .update(rfReviewRequests)
-      .set({
-        smsStatus: "opted_out",
-      })
-      .where(eq(rfReviewRequests.id, reviewRequest.id))
+    if (updateSmsStatusOnSkip) {
+      await rfDb
+        .update(rfReviewRequests)
+        .set({
+          smsStatus: "opted_out",
+        })
+        .where(eq(rfReviewRequests.id, context.reviewRequest.id))
+    }
 
     return { status: "opted_out" }
   }
 
-  const monthlyLimit = await checkMonthlyLimit(tenant.id)
+  const monthlyLimit = await checkMonthlyLimit(context.tenant.id)
 
   if (!monthlyLimit.allowed) {
-    await rfDb
-      .update(rfReviewRequests)
-      .set({
-        smsStatus: "limit_reached",
-      })
-      .where(eq(rfReviewRequests.id, reviewRequest.id))
+    if (updateSmsStatusOnSkip) {
+      await rfDb
+        .update(rfReviewRequests)
+        .set({
+          smsStatus: "limit_reached",
+        })
+        .where(eq(rfReviewRequests.id, context.reviewRequest.id))
+    }
 
     return {
       status: "limit_reached",
@@ -274,25 +335,12 @@ export async function sendReviewRequest(reviewRequestId: string): Promise<SmsSen
     }
   }
 
-  const senderNumber =
-    location?.smsSenderNumber?.trim() ||
-    tenant.smsSenderNumber?.trim() ||
-    reviewFunnelConfig.RF_TWILIO_PHONE_NUMBER?.trim() ||
-    undefined
-
+  const senderNumber = resolveSmsSenderNumber(context)
   const messagingServiceSid = reviewFunnelConfig.RF_TWILIO_MESSAGING_SERVICE_SID?.trim() || undefined
 
   if (!senderNumber && !messagingServiceSid) {
     throw new Error("Missing SMS sender configuration (RF_TWILIO_PHONE_NUMBER or RF_TWILIO_MESSAGING_SERVICE_SID)")
   }
-
-  const template = tenant.smsTemplate?.trim() || DEFAULT_REVIEW_SMS_TEMPLATE
-  const funnelUrl = new URL(`/r/${reviewRequest.id}`, reviewFunnelConfig.NEXT_PUBLIC_SITE_URL).toString()
-  const messageBody = interpolateTemplate(template, {
-    customer_name: reviewRequest.customerName?.trim() || "there",
-    business_name: tenant.businessName,
-    funnel_url: funnelUrl,
-  })
 
   const statusCallback = new URL(
     "/api/review-funnel/webhooks/twilio/status",
@@ -317,25 +365,77 @@ export async function sendReviewRequest(reviewRequestId: string): Promise<SmsSen
 
   await rfDb
     .update(rfReviewRequests)
-    .set({
-      smsStatus: "sent",
-      smsSentAt: now,
-      smsSid: message.sid,
-    })
-    .where(eq(rfReviewRequests.id, reviewRequest.id))
+    .set(buildReviewRequestUpdate(message.sid))
+    .where(eq(rfReviewRequests.id, context.reviewRequest.id))
 
-  await incrementUsage(tenant.id)
+  await incrementUsage(context.tenant.id)
 
   await rfDb.insert(rfConsentLog).values({
     phone: toPhone,
-    tenantId: tenant.id,
+    tenantId: context.tenant.id,
     consentType: "sms_sent",
     source: "cron_process",
-    metadata: JSON.stringify({ reviewRequestId: reviewRequest.id, smsSid: message.sid }),
+    metadata: JSON.stringify({ reviewRequestId: context.reviewRequest.id, smsSid: message.sid, ...metadata }),
   })
 
   return {
     status: "sent",
     sid: message.sid,
   }
+}
+
+export async function sendReviewRequest(reviewRequestId: string): Promise<SmsSendResult> {
+  const context = await getReviewRequestSmsContext(reviewRequestId)
+  const { reviewRequest, tenant } = context
+
+  const now = new Date()
+  const nextAllowedSendTime = getNextAllowedSendTime(now)
+
+  if (nextAllowedSendTime.getTime() !== now.getTime()) {
+    return {
+      status: "quiet_hours",
+      sendAfter: nextAllowedSendTime,
+    }
+  }
+
+  const template = tenant.smsTemplate?.trim() || DEFAULT_REVIEW_SMS_TEMPLATE
+  const funnelUrl = new URL(`/r/${reviewRequest.id}`, reviewFunnelConfig.NEXT_PUBLIC_SITE_URL).toString()
+  const messageBody = interpolateTemplate(template, {
+    customer_name: reviewRequest.customerName?.trim() || "there",
+    business_name: tenant.businessName,
+    funnel_url: funnelUrl,
+  })
+
+  return sendOutboundMessage({
+    context,
+    messageBody,
+    now,
+    metadata: { messageType: "review_request" },
+    buildReviewRequestUpdate: (messageSid) => ({
+      smsStatus: "sent",
+      smsSentAt: now,
+      smsSid: messageSid,
+    }),
+  })
+}
+
+export async function sendNudge(reviewRequestId: string): Promise<SmsSendResult> {
+  const context = await getReviewRequestSmsContext(reviewRequestId)
+  const now = new Date()
+  const messageBody = interpolateTemplate(DEFAULT_NUDGE_SMS_TEMPLATE, {
+    customer_name: context.reviewRequest.customerName?.trim() || "there",
+    business_name: context.tenant.businessName,
+    funnel_url: "",
+  })
+
+  return sendOutboundMessage({
+    context,
+    messageBody,
+    now,
+    metadata: { messageType: "follow_up_nudge" },
+    buildReviewRequestUpdate: () => ({
+      nudgeSentAt: now,
+    }),
+    updateSmsStatusOnSkip: false,
+  })
 }
