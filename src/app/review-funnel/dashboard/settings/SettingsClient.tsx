@@ -13,6 +13,7 @@ interface ProfileResponse {
   profile: {
     businessName: string
     promoOffer: string
+    promoMessage: string | null
     promoCode: string | null
     primaryColor: string
     accentColor: string
@@ -22,6 +23,8 @@ interface ProfileResponse {
     ownerPhone: string
     reviewPlatform: ReviewPlatform
     yelpReviewUrl: string | null
+    overageBillingEnabled: boolean
+    followUpNudgeEnabled: boolean
   }
   calendar: {
     connected: boolean
@@ -47,17 +50,22 @@ interface BillingResponse {
   smsLimitMonthly: number | null
   smsLimitUnlimited: boolean
   usageMonth: string
+  overageBillingEnabled: boolean
+  followUpNudgeEnabled: boolean
 }
 
 interface ProfileFormState {
   businessName: string
   promoOffer: string
+  promoMessage: string
   promoCode: string
   primaryColor: string
   accentColor: string
   reviewPlatform: ReviewPlatform
   yelpReviewUrl: string
 }
+
+type BillingPreferenceKey = "overageBillingEnabled" | "followUpNudgeEnabled"
 
 interface SmsFormState {
   smsTemplate: string
@@ -74,6 +82,7 @@ const TAB_ORDER: Array<{ key: SettingsTab; label: string }> = [
 const DEFAULT_PROFILE: ProfileFormState = {
   businessName: "",
   promoOffer: "",
+  promoMessage: "",
   promoCode: "",
   primaryColor: "#8B5CF6",
   accentColor: "#06B6D4",
@@ -102,11 +111,51 @@ function toCalendarConnectErrorMessage(message: string | null | undefined): stri
     return "We couldn't connect your calendar. Please try again."
   }
 
-  if (normalizedMessage.includes("unlimited calendars")) {
-    return "Unlimited calendars are included on all plans."
-  }
-
   return "We couldn't connect your calendar. Please try again."
+}
+
+function BillingToggle({
+  label,
+  description,
+  checked,
+  disabled = false,
+  isSaving = false,
+  onToggle,
+}: {
+  label: string
+  description: string
+  checked: boolean
+  disabled?: boolean
+  isSaving?: boolean
+  onToggle: () => void
+}) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-[#0A0A0F] p-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-1">
+          <p className="text-sm font-medium text-[#D4D4D8]">{label}</p>
+          <p className="text-sm text-[#A1A1AA]">{description}</p>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          onClick={onToggle}
+          disabled={disabled || isSaving}
+          className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition ${
+            checked
+              ? "border-[#06B6D4]/70 bg-gradient-to-r from-[#8B5CF6] to-[#06B6D4]"
+              : "border-white/10 bg-white/10"
+          } ${disabled || isSaving ? "cursor-not-allowed opacity-60" : ""}`}
+        >
+          <span
+            className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition ${checked ? "translate-x-6" : "translate-x-1"}`}
+          />
+        </button>
+      </div>
+      {isSaving ? <p className="mt-3 text-xs text-[#A1A1AA]">Saving...</p> : null}
+    </div>
+  )
 }
 
 export default function SettingsClient() {
@@ -134,6 +183,7 @@ export default function SettingsClient() {
   const [isSavingSms, setIsSavingSms] = useState(false)
   const [isCalendarBusy, setIsCalendarBusy] = useState(false)
   const [isBillingBusy, setIsBillingBusy] = useState(false)
+  const [savingBillingPreference, setSavingBillingPreference] = useState<BillingPreferenceKey | null>(null)
 
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -169,6 +219,7 @@ export default function SettingsClient() {
       setProfile({
         businessName: profilePayload.profile.businessName,
         promoOffer: profilePayload.profile.promoOffer,
+        promoMessage: profilePayload.profile.promoMessage ?? "",
         promoCode: profilePayload.profile.promoCode ?? "",
         primaryColor: profilePayload.profile.primaryColor,
         accentColor: profilePayload.profile.accentColor,
@@ -186,7 +237,13 @@ export default function SettingsClient() {
         smsDelayMinutes: smsPayload.smsDelayMinutes,
       })
 
-      setBilling(billingPayload)
+      setBilling({
+        ...billingPayload,
+        overageBillingEnabled:
+          billingPayload.overageBillingEnabled ?? profilePayload.profile.overageBillingEnabled ?? false,
+        followUpNudgeEnabled:
+          billingPayload.followUpNudgeEnabled ?? profilePayload.profile.followUpNudgeEnabled ?? false,
+      })
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Failed to load your settings")
     } finally {
@@ -253,11 +310,14 @@ export default function SettingsClient() {
         body: JSON.stringify({
           businessName: profile.businessName,
           promoOffer: profile.promoOffer,
+          promoMessage: profile.promoMessage,
           promoCode: profile.promoCode,
           primaryColor: profile.primaryColor,
           accentColor: profile.accentColor,
           reviewPlatform: profile.reviewPlatform,
           yelpReviewUrl: profile.reviewPlatform === "google" ? null : profile.yelpReviewUrl,
+          overageBillingEnabled: billing?.overageBillingEnabled ?? false,
+          followUpNudgeEnabled: billing?.followUpNudgeEnabled ?? false,
         }),
       })
 
@@ -277,6 +337,7 @@ export default function SettingsClient() {
           ...current,
           businessName: nextProfile.businessName,
           promoOffer: nextProfile.promoOffer,
+          promoMessage: nextProfile.promoMessage ?? "",
           promoCode: nextProfile.promoCode ?? "",
           primaryColor: nextProfile.primaryColor,
           accentColor: nextProfile.accentColor,
@@ -284,6 +345,15 @@ export default function SettingsClient() {
           yelpReviewUrl: nextProfile.yelpReviewUrl ?? "",
         }))
         setLogoUrl(nextProfile.logoUrl ?? null)
+        setBilling((current) =>
+          current
+            ? {
+                ...current,
+                overageBillingEnabled: nextProfile.overageBillingEnabled,
+                followUpNudgeEnabled: nextProfile.followUpNudgeEnabled,
+              }
+            : current
+        )
       }
 
       setStatusMessage("Your business settings were saved.")
@@ -459,17 +529,108 @@ export default function SettingsClient() {
     }
   }
 
+  async function handleBillingPreferenceToggle(key: BillingPreferenceKey) {
+    if (!billing) {
+      return
+    }
+
+    const nextValue = !billing[key]
+    const previousBilling = billing
+
+    setSavingBillingPreference(key)
+    setStatusMessage(null)
+    setErrorMessage(null)
+    setBilling({
+      ...billing,
+      [key]: nextValue,
+    })
+
+    try {
+      const response = await fetch("/api/review-funnel/settings/profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          businessName: profile.businessName,
+          promoOffer: profile.promoOffer,
+          promoMessage: profile.promoMessage,
+          promoCode: profile.promoCode,
+          primaryColor: profile.primaryColor,
+          accentColor: profile.accentColor,
+          reviewPlatform: profile.reviewPlatform,
+          yelpReviewUrl: profile.reviewPlatform === "google" ? null : profile.yelpReviewUrl,
+          overageBillingEnabled:
+            key === "overageBillingEnabled" ? nextValue : previousBilling.overageBillingEnabled,
+          followUpNudgeEnabled:
+            key === "followUpNudgeEnabled" ? nextValue : previousBilling.followUpNudgeEnabled,
+        }),
+      })
+
+      const payload = (await response.json().catch(() => null)) as
+        | ProfileResponse
+        | { profile?: ProfileResponse["profile"]; error?: string }
+        | null
+
+      if (!response.ok) {
+        throw new Error((payload as { error?: string } | null)?.error || "Failed to update billing preferences")
+      }
+
+      if (payload && "profile" in payload && payload.profile) {
+        const nextProfile = payload.profile
+
+        setProfile((current) => ({
+          ...current,
+          businessName: nextProfile.businessName,
+          promoOffer: nextProfile.promoOffer,
+          promoMessage: nextProfile.promoMessage ?? "",
+          promoCode: nextProfile.promoCode ?? "",
+          primaryColor: nextProfile.primaryColor,
+          accentColor: nextProfile.accentColor,
+          reviewPlatform: nextProfile.reviewPlatform ?? current.reviewPlatform,
+          yelpReviewUrl: nextProfile.yelpReviewUrl ?? "",
+        }))
+        setBilling((current) =>
+          current
+            ? {
+                ...current,
+                overageBillingEnabled: nextProfile.overageBillingEnabled,
+                followUpNudgeEnabled: nextProfile.followUpNudgeEnabled,
+              }
+            : current
+        )
+      }
+
+      setStatusMessage("Billing preferences updated.")
+    } catch (error) {
+      setBilling(previousBilling)
+      setErrorMessage(error instanceof Error ? error.message : "Failed to update billing preferences")
+    } finally {
+      setSavingBillingPreference(null)
+    }
+  }
+
   const billingUsageText = useMemo(() => {
     if (!billing) {
-      return "—"
+      return "-"
     }
 
-    if (billing.smsLimitUnlimited) {
-      return `${billing.smsUsedThisMonth.toLocaleString()} text messages sent (unlimited plan)`
-    }
-
-    return `${billing.smsUsedThisMonth.toLocaleString()} / ${(billing.smsLimitMonthly ?? 0).toLocaleString()} text messages sent`
+    return `${billing.smsUsedThisMonth.toLocaleString()} text messages sent`
   }, [billing])
+
+  const billingLimitText = useMemo(() => {
+    if (!billing) {
+      return "-"
+    }
+
+    if (billing.plan === "pro" || billing.smsLimitUnlimited) {
+      return "Unlimited"
+    }
+
+    return (billing.smsLimitMonthly ?? 0).toLocaleString()
+  }, [billing])
+
+  const followUpNudgeLocked = billing?.plan === "starter"
 
   return (
     <div className="space-y-6">
@@ -564,6 +725,24 @@ export default function SettingsClient() {
                   rows={3}
                   className="w-full rounded-lg border border-white/15 bg-[#0D0D13] px-3 py-2 text-sm text-white focus:border-[#8B5CF6] focus:outline-none"
                 />
+              </label>
+
+              <label className="block sm:col-span-2">
+                <span className="mb-1 block text-xs uppercase tracking-wide text-[#D4D4D8]">Promo message template</span>
+                <p className="mb-2 text-xs text-[#D4D4D8]">Message sent to customers who rate 1-4 stars</p>
+                <p className="mb-2 text-xs text-[#A1A1AA]">
+                  This is what customers see when they give less-than-perfect feedback. Use {"{code}"} to insert your
+                  promo code.
+                </p>
+                <textarea
+                  value={profile.promoMessage}
+                  onChange={(event) => setProfile((prev) => ({ ...prev, promoMessage: event.target.value.slice(0, 500) }))}
+                  rows={4}
+                  maxLength={500}
+                  placeholder="We appreciate your feedback. We'd love to make it right — here's {code} for your next visit."
+                  className="w-full rounded-lg border border-white/15 bg-[#0D0D13] px-3 py-2 text-sm text-white focus:border-[#8B5CF6] focus:outline-none"
+                />
+                <p className="mt-2 text-right text-xs text-[#A1A1AA]">{profile.promoMessage.length}/500</p>
               </label>
 
               <label className="block">
@@ -729,10 +908,10 @@ export default function SettingsClient() {
           <h3 className="text-lg font-semibold text-white">Billing</h3>
           <p className="mt-1 text-sm text-[#A1A1AA]">Review your plan details and open your secure billing page.</p>
 
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 text-sm">
+          <div className="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 xl:grid-cols-4">
             <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
               <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Current plan</span>
-              {billing ? normalizePlan(billing.plan) : "—"}
+              {billing ? normalizePlan(billing.plan) : "-"}
             </p>
             <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
               <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Plan price</span>
@@ -742,9 +921,36 @@ export default function SettingsClient() {
               <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">Text message usage</span>
               {billingUsageText}
             </p>
+            <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-[#E4E4E7]">
+              <span className="block text-xs uppercase tracking-wide text-[#A1A1AA]">SMS limit</span>
+              {billingLimitText}
+            </p>
           </div>
 
           <p className="mt-3 text-sm text-[#A1A1AA]">Account status: {billing?.isActive ? "Active" : "Inactive"}</p>
+
+          <div className="mt-5 space-y-3">
+            <BillingToggle
+              label="Allow overage texts"
+              description="When enabled, texts continue beyond your monthly limit and are billed per-text. When disabled, texts stop at your limit."
+              checked={billing?.overageBillingEnabled ?? false}
+              isSaving={savingBillingPreference === "overageBillingEnabled"}
+              onToggle={() => void handleBillingPreferenceToggle("overageBillingEnabled")}
+            />
+
+            <BillingToggle
+              label="24-hour follow-up nudge"
+              description={
+                followUpNudgeLocked
+                  ? "Available on Growth plan"
+                  : "Send one reminder text 24 hours after the initial message if the customer hasn't replied."
+              }
+              checked={billing?.followUpNudgeEnabled ?? false}
+              disabled={followUpNudgeLocked}
+              isSaving={savingBillingPreference === "followUpNudgeEnabled"}
+              onToggle={() => void handleBillingPreferenceToggle("followUpNudgeEnabled")}
+            />
+          </div>
 
           <div className="mt-5">
             <button
