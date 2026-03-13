@@ -1,5 +1,5 @@
 import crypto from "node:crypto"
-import { and, eq } from "drizzle-orm"
+import { and, eq, gt } from "drizzle-orm"
 import { google, type calendar_v3 } from "googleapis"
 import { rfDb } from "../db/client"
 import {
@@ -374,6 +374,19 @@ async function queueReviewRequestFromEvent(params: {
   const smsScheduledAt = new Date(appointmentEnd.getTime() + tenant.smsDelayMinutes * 60_000)
 
   return rfDb.transaction(async (tx) => {
+    const recentRequest = await tx.query.rfReviewRequests.findFirst({
+      where: and(
+        eq(rfReviewRequests.tenantId, tenant.id),
+        eq(rfReviewRequests.customerPhone, customerPhone),
+        gt(rfReviewRequests.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)),
+      ),
+      columns: { id: true },
+    })
+
+    if (recentRequest) {
+      return false
+    }
+
     const [createdReviewRequest] = await tx
       .insert(rfReviewRequests)
       .values({
@@ -385,6 +398,7 @@ async function queueReviewRequestFromEvent(params: {
         calendarEventId,
         appointmentEnd,
         smsScheduledAt,
+        expiresAt: new Date(smsScheduledAt.getTime() + 7 * 24 * 60 * 60 * 1000),
       })
       .onConflictDoNothing({
         target: [rfReviewRequests.tenantId, rfReviewRequests.calendarEventId],

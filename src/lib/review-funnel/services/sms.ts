@@ -6,7 +6,7 @@ import { rfConsentLog, rfLocations, rfReviewRequests, rfSmsOptOuts, rfSmsUsage, 
 import { normalizePhone } from "../utils/phone"
 
 const DEFAULT_REVIEW_SMS_TEMPLATE =
-  "Hi {customer_name}! Thanks for choosing {business_name}. We'd love your feedback — it takes 30 seconds: {funnel_url}\n\nReply STOP to opt out."
+  "Hi {customer_name}! Thanks for visiting {business_name}. How was your experience? Reply 1-5 (5 = great!)\n\nReply STOP to opt out."
 const PRO_SMS_LIMIT_SENTINEL = 999_999
 
 let cachedTwilioClient: Twilio | null = null
