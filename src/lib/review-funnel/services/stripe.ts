@@ -10,18 +10,15 @@ const MAX_SLUG_LENGTH = 63
 const PLAN_CONFIG = {
   starter: {
     amountMonthlyUsd: 79,
-    smsLimitMonthly: 150,
-    calendarLimit: 1,
+    smsLimitMonthly: 200,
   },
   growth: {
     amountMonthlyUsd: 149,
-    smsLimitMonthly: 600,
-    calendarLimit: 5,
+    smsLimitMonthly: 500,
   },
   pro: {
     amountMonthlyUsd: null,
     smsLimitMonthly: PRO_SMS_LIMIT_SENTINEL,
-    calendarLimit: PRO_SMS_LIMIT_SENTINEL,
   },
 } as const
 
@@ -135,10 +132,6 @@ function getPlanForPrice(price: Stripe.Price | null | undefined): ReviewFunnelPl
 
 function getPlanSmsLimit(plan: ReviewFunnelPlan): number {
   return PLAN_CONFIG[plan].smsLimitMonthly
-}
-
-function getPlanCalendarLimit(plan: ReviewFunnelPlan): number {
-  return PLAN_CONFIG[plan].calendarLimit
 }
 
 function normalizeEmail(value: string | null | undefined): string | null {
@@ -420,7 +413,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session):
         stripeSubscriptionId: subscriptionId,
         plan,
         smsLimitMonthly: getPlanSmsLimit(plan),
-        calendarLimit: getPlanCalendarLimit(plan),
+        calendarLimit: 999999,
         isActive: true,
         updatedAt: new Date(),
       })
@@ -445,7 +438,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session):
     stripeSubscriptionId: subscriptionId,
     plan,
     smsLimitMonthly: getPlanSmsLimit(plan),
-    calendarLimit: getPlanCalendarLimit(plan),
+    calendarLimit: 999999,
     isActive: true,
   })
 }
@@ -471,7 +464,6 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription): Pro
       stripeSubscriptionId: subscription.id,
       plan,
       smsLimitMonthly: getPlanSmsLimit(plan),
-      calendarLimit: getPlanCalendarLimit(plan),
       isActive: subscription.status !== "canceled" && subscription.status !== "unpaid",
       updatedAt: new Date(),
     })

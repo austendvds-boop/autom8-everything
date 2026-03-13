@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import {
-  CALENDAR_LIMIT_REACHED_MESSAGE,
-  handleCallback,
-  parseGoogleOAuthState,
-} from "@/lib/review-funnel/services/calendar"
+import { handleCallback, parseGoogleOAuthState } from "@/lib/review-funnel/services/calendar"
 
 function buildDashboardRedirect(request: NextRequest, status: "connected" | "error", reason?: string) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || new URL(request.url).origin
@@ -19,11 +15,7 @@ function buildDashboardRedirect(request: NextRequest, status: "connected" | "err
 
 function toCalendarRedirectReason(error: unknown): string {
   if (error instanceof Error) {
-    const message = error.message.trim()
-
-    if (message === CALENDAR_LIMIT_REACHED_MESSAGE) {
-      return message
-    }
+    return error.message.trim() || "We couldn't connect your calendar. Please try again."
   }
 
   return "We couldn't connect your calendar. Please try again."

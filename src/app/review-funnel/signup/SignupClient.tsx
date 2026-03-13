@@ -443,7 +443,11 @@ export default function SignupClient() {
                       key: "starter" as const,
                       title: "Starter",
                       price: "$79/month",
-                      features: ["1 connected calendar", "150 text messages per month", "Automatic review requests after every appointment"],
+                      features: [
+                        "Unlimited calendars",
+                        "200 text messages per month",
+                        "Automatic review requests after every appointment",
+                      ],
                       ctaLabel: "Get Started",
                     },
                     {
@@ -451,7 +455,12 @@ export default function SignupClient() {
                       title: "Growth",
                       price: "$149/month",
                       badge: "Most Popular",
-                      features: ["Up to 5 connected calendars", "600 text messages per month", "Automatic review requests after every appointment"],
+                      features: [
+                        "Unlimited calendars",
+                        "500 text messages per month",
+                        "24-hour follow-up nudge for non-replies",
+                        "Automatic review requests after every appointment",
+                      ],
                       ctaLabel: "Get Started",
                     },
                     {

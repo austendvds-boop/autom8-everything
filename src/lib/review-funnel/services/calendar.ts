@@ -1,5 +1,5 @@
 import crypto from "node:crypto"
-import { and, eq, sql } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { google, type calendar_v3 } from "googleapis"
 import { rfDb } from "../db/client"
 import {
@@ -22,8 +22,6 @@ const GOOGLE_CALENDAR_WEBHOOK_PATH = "/api/review-funnel/webhooks/google-calenda
 const GOOGLE_WATCH_TTL_SECONDS = 7 * 24 * 60 * 60
 const COMPLETED_APPOINTMENT_LOOKBACK_MS = 24 * 60 * 60 * 1000
 const OAUTH_STATE_TTL_MS = 15 * 60 * 1000
-
-export const CALENDAR_LIMIT_REACHED_MESSAGE = "You've reached your calendar limit for your current plan. Upgrade to connect more calendars."
 
 type GoogleOAuthClient = ReturnType<typeof createOAuthClient>
 
@@ -165,37 +163,8 @@ async function ensureActiveTenant(tenantId: string): Promise<RfTenant> {
   return tenant
 }
 
-function toCount(value: number | string | null | undefined): number {
-  if (typeof value === "number") {
-    return value
-  }
-
-  if (typeof value === "string") {
-    const parsed = Number(value)
-    return Number.isFinite(parsed) ? parsed : 0
-  }
-
-  return 0
-}
-
-async function countActiveWatches(tenantId: string): Promise<number> {
-  const [watchCount] = await rfDb
-    .select({
-      count: sql<number>`count(*)`,
-    })
-    .from(rfCalendarWatches)
-    .where(and(eq(rfCalendarWatches.tenantId, tenantId), eq(rfCalendarWatches.isActive, true)))
-
-  return toCount(watchCount?.count)
-}
-
 export async function ensureCalendarConnectionAllowed(tenantId: string): Promise<void> {
-  const tenant = await ensureActiveTenant(tenantId)
-  const activeWatchCount = await countActiveWatches(tenant.id)
-
-  if (activeWatchCount >= tenant.calendarLimit) {
-    throw new Error(CALENDAR_LIMIT_REACHED_MESSAGE)
-  }
+  await ensureActiveTenant(tenantId)
 }
 
 async function getGoogleTokenRow(tenantId: string): Promise<RfGoogleOauthToken | null> {
@@ -536,7 +505,6 @@ export async function handleCallback(code: string, tenantId: string): Promise<Rf
 }
 
 interface CreateWatchOptions {
-  skipLimitCheck?: boolean
   ignoreExistingCalendarWatch?: boolean
 }
 
@@ -559,14 +527,6 @@ export async function createWatch(
 
     if (existingWatch) {
       return existingWatch
-    }
-  }
-
-  if (!options.skipLimitCheck) {
-    const activeWatchCount = await countActiveWatches(tenant.id)
-
-    if (activeWatchCount >= tenant.calendarLimit) {
-      throw new Error(CALENDAR_LIMIT_REACHED_MESSAGE)
     }
   }
 
@@ -622,7 +582,6 @@ export async function renewWatch(watchId: string): Promise<RfCalendarWatch> {
   }
 
   const renewedWatch = await createWatch(existingWatch.tenantId, existingWatch.calendarId, {
-    skipLimitCheck: true,
     ignoreExistingCalendarWatch: true,
   })
 

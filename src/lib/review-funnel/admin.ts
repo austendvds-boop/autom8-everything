@@ -6,14 +6,14 @@ export const REVIEW_FUNNEL_PLAN_CONFIG = {
   starter: {
     label: "Starter",
     amountMonthlyUsd: 79,
-    smsLimitMonthly: 150,
-    calendarLimit: 1,
+    smsLimitMonthly: 200,
+    calendarLimit: PRO_SMS_LIMIT_SENTINEL,
   },
   growth: {
     label: "Growth",
     amountMonthlyUsd: 149,
-    smsLimitMonthly: 600,
-    calendarLimit: 5,
+    smsLimitMonthly: 500,
+    calendarLimit: PRO_SMS_LIMIT_SENTINEL,
   },
   pro: {
     label: "Pro",

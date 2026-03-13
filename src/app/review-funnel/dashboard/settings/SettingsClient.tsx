@@ -102,8 +102,8 @@ function toCalendarConnectErrorMessage(message: string | null | undefined): stri
     return "We couldn't connect your calendar. Please try again."
   }
 
-  if (normalizedMessage.includes("calendar limit") || normalizedMessage.includes("Upgrade your plan")) {
-    return "You've reached your calendar limit for your current plan. Upgrade to connect more calendars."
+  if (normalizedMessage.includes("unlimited calendars")) {
+    return "Unlimited calendars are included on all plans."
   }
 
   return "We couldn't connect your calendar. Please try again."

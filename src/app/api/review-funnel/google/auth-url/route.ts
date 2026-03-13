@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { requireReviewFunnelDashboardAuth } from "@/lib/review-funnel/middleware"
-import {
-  CALENDAR_LIMIT_REACHED_MESSAGE,
-  ensureCalendarConnectionAllowed,
-  generateAuthUrl,
-} from "@/lib/review-funnel/services/calendar"
+import { ensureCalendarConnectionAllowed, generateAuthUrl } from "@/lib/review-funnel/services/calendar"
 
 export async function GET(request: NextRequest) {
   const authResult = await requireReviewFunnelDashboardAuth(request)
@@ -18,7 +14,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ url })
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to generate Google Calendar connection link"
-    const status = message === CALENDAR_LIMIT_REACHED_MESSAGE ? 400 : 500
-    return NextResponse.json({ error: message }, { status })
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
