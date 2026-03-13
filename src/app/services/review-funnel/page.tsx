@@ -6,6 +6,10 @@ const reviewFunnelFaqs = [
   { question: "How long does setup take?", answer: "Most businesses can connect everything in about 5 minutes." },
   { question: "Do I need to learn new software?", answer: "No. We keep it simple so you can run this without the tech headache." },
   { question: "Can I edit the review text message?", answer: "Yes. You can customize the message so it sounds like your business." },
+  {
+    question: "What happens with negative feedback?",
+    answer: "Instead of a public 1-star review, unhappy customers get a promo code to come back. You keep the feedback private and turn a bad experience into a second chance.",
+  },
   { question: "Can I cancel anytime?", answer: "Yes. Plans are month-to-month and you can cancel whenever you need to." },
 ];
 

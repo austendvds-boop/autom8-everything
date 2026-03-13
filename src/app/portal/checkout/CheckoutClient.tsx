@@ -147,7 +147,7 @@ export default function CheckoutClient() {
               <p className="text-xs uppercase tracking-[0.16em] text-[#D4A030]">Review Funnel</p>
               <h2 className="mt-2 text-xl font-semibold text-[#EDEBE8]">Review Growth</h2>
               <p className="mt-1 text-sm text-[#EDEBE8]">Starter $79/month - Growth $149/month</p>
-              <p className="mt-2 text-sm text-[#9B978F]">Automatically asks happy customers for fresh reviews.</p>
+              <p className="mt-2 text-sm text-[#9B978F]">Auto-text after appointments. 5-star -&gt; Google review. 1-4 -&gt; promo code to win them back.</p>
             </button>
           </section>
 
@@ -216,7 +216,7 @@ export default function CheckoutClient() {
                       }`}
                     >
                       <p className="text-sm font-semibold text-[#EDEBE8]">Starter</p>
-                      <p className="mt-1 text-sm text-[#9B978F]">$79/month</p>
+                      <p className="mt-1 text-sm text-[#9B978F]">$79/month · 200 texts</p>
                     </button>
 
                     <button
@@ -229,7 +229,7 @@ export default function CheckoutClient() {
                       }`}
                     >
                       <p className="text-sm font-semibold text-[#EDEBE8]">Growth</p>
-                      <p className="mt-1 text-sm text-[#9B978F]">$149/month</p>
+                      <p className="mt-1 text-sm text-[#9B978F]">$149/month · 500 texts + follow-up nudge</p>
                     </button>
                   </div>
                 </fieldset>

@@ -121,24 +121,28 @@ export default function PricingPageClient() {
               <TiltCard className="h-full">
                 <article className="glass-card rounded-2xl border border-white/10 bg-[#12121A] p-8 h-full flex flex-col">
                   <p className="text-sm uppercase tracking-wide text-[#D4A030] mb-2">Review Funnel</p>
-                  <h2 className="text-3xl font-semibold mb-2">$79/mo</h2>
-                  <p className="text-[#A1A1AA] mb-4">Automatic review follow-ups after every job. Set it and forget it.</p>
+                  <h2 className="text-3xl font-semibold mb-2">Starting at $79/mo</h2>
+                  <p className="text-[#A1A1AA] mb-4">SMS review funnel that routes happy customers to Google and gives unhappy ones a reason to come back.</p>
                   <ul className="space-y-2 text-sm text-[#A1A1AA] mb-6 flex-1">
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#D4A030]" aria-hidden />
-                      <span>Automatic follow-up after every job</span>
+                      <span>Automatic text after every appointment</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#D4A030]" aria-hidden />
-                      <span>Captures internal feedback</span>
+                      <span>5-star customers -&gt; Google review link</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#D4A030]" aria-hidden />
-                      <span>Guides happy customers to Google</span>
+                      <span>1-4 star customers -&gt; promo code to come back</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#D4A030]" aria-hidden />
-                      <span>Set it and forget it</span>
+                      <span>Unlimited calendars</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 shrink-0 mt-0.5 text-[#D4A030]" aria-hidden />
+                      <span>Starter: 200 texts/mo · Growth: 500 texts/mo</span>
                     </li>
                   </ul>
                   <div className="mt-auto flex flex-col sm:flex-row gap-3">
